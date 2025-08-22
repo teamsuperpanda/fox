@@ -1,0 +1,132 @@
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:fox/services/repository.dart';
+import 'package:fox/services/notes_controller.dart';
+
+class MemoryRepo implements NoteRepository {
+  final List<Note> _data = [];
+  bool _inited = false;
+
+  @override
+  Future<void> init() async {
+    _inited = true;
+  }
+
+  @override
+  Future<void> clear() async {
+    _data.clear();
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    _data.removeWhere((e) => e.id == id);
+  }
+
+  @override
+  Future<List<Note>> getAll() async {
+    if (!_inited) throw StateError('init not called');
+    return List.unmodifiable(_data);
+  }
+
+  @override
+  Future<Note?> getById(String id) async {
+    try {
+      return _data.firstWhere((e) => e.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> upsert(Note note) async {
+    _data.removeWhere((e) => e.id == note.id);
+    _data.add(note);
+  }
+}
+
+void main() {
+  group('NotesController', () {
+    late MemoryRepo repo;
+    late NotesController controller;
+
+    setUp(() {
+      repo = MemoryRepo();
+      controller = NotesController(repo);
+    });
+
+    test('initial load -> empty list', () async {
+      expect(controller.loading, isFalse);
+      await controller.load();
+      expect(controller.loading, isFalse);
+      expect(controller.notes, isEmpty);
+    });
+
+    test('add note -> appears in list', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'A', content: 'content');
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.title, 'A');
+      expect(controller.notes.first.pinned, isFalse);
+    });
+
+    test('update note keeps id and changes fields', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'A', content: 'c1');
+      final first = controller.notes.first;
+      await controller.addOrUpdate(
+          id: first.id, title: 'B', content: 'c2', pinned: true);
+      final updated = controller.notes.firstWhere((n) => n.id == first.id);
+      expect(updated.title, 'B');
+      expect(updated.content, 'c2');
+      expect(updated.pinned, isTrue);
+    });
+
+    test('pinning sorts pinned first', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'N1', content: '');
+      await controller.addOrUpdate(title: 'N2', content: '');
+      final n1 = controller.notes.firstWhere((n) => n.title == 'N1');
+      await controller.setPinned(n1.id, true);
+      expect(controller.notes.first.title, 'N1'); // pinned to top
+    });
+
+    test('newest non-pinned appears before older', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Old', content: '');
+      // Ensure a different updatedAt
+      await Future<void>.delayed(const Duration(milliseconds: 5));
+      await controller.addOrUpdate(title: 'New', content: '');
+      final titles = controller.notes.map((e) => e.title).toList();
+      expect(titles, ['New', 'Old']);
+    });
+
+    test('remove deletes note', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'ToDelete', content: '');
+      final id = controller.notes.first.id;
+      await controller.remove(id);
+      expect(controller.notes.any((n) => n.id == id), isFalse);
+    });
+
+    test('find returns note or null', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'A', content: '');
+      final id = controller.notes.first.id;
+      expect(controller.find(id)?.title, 'A');
+      expect(controller.find('missing'), isNull);
+    });
+
+    test('notifies listeners on changes', () async {
+      int notified = 0;
+      controller.addListener(() => notified++);
+      await controller.load();
+      final afterLoad = notified;
+      await controller.addOrUpdate(title: 'A', content: '');
+      expect(notified, greaterThan(afterLoad));
+      // Clean up listener by removing a stored callback.
+      void cb() {}
+      controller.addListener(cb);
+      controller.removeListener(cb);
+    });
+  });
+}

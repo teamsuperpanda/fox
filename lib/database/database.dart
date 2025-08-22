@@ -1,0 +1,1 @@
+export 'package:fox/database/database_mobile.dart' if (dart.library.html) 'package:fox/database/database_web.dart';
