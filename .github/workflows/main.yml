@@ -1,11 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches: ['**']
   pull_request:
-    branches: ['**']
-  workflow_dispatch:
+    branches: ['dev']
 
 jobs:
   analyze_and_test:
