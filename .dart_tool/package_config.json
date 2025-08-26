@@ -3,15 +3,15 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-85.0.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-88.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.7"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/analyzer-7.7.1",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/analyzer-8.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.7"
     },
     {
       "name": "ansicolor",
@@ -39,9 +39,9 @@
     },
     {
       "name": "awesome_snackbar_content",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/awesome_snackbar_content-0.1.6",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/awesome_snackbar_content-0.1.8",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.9"
     },
     {
       "name": "boolean_selector",
@@ -51,15 +51,15 @@
     },
     {
       "name": "build",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build-3.0.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_config",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_config-1.1.2",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_config-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.7"
     },
     {
       "name": "build_daemon",
@@ -69,19 +69,19 @@
     },
     {
       "name": "build_resolvers",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_resolvers-3.0.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_resolvers-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_runner",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_runner-2.6.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_runner-2.7.0",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
     {
       "name": "build_runner_core",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_runner_core-9.2.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/build_runner_core-9.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -93,7 +93,7 @@
     },
     {
       "name": "built_value",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/built_value-8.11.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/built_value-8.11.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -159,7 +159,7 @@
     },
     {
       "name": "dart_style",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/dart_style-3.1.1",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/dart_style-3.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -201,9 +201,9 @@
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/flutter_lints-3.0.2",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/flutter_lints-6.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.8"
     },
     {
       "name": "flutter_localizations",
@@ -267,7 +267,7 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/http-1.4.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/http-1.5.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -333,9 +333,9 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/lints-3.0.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/lints-6.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.8"
     },
     {
       "name": "logging",
@@ -405,9 +405,9 @@
     },
     {
       "name": "path_provider_foundation",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.2",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.7"
     },
     {
       "name": "path_provider_linux",
@@ -429,9 +429,9 @@
     },
     {
       "name": "petitparser",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/petitparser-6.1.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/petitparser-7.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.8"
     },
     {
       "name": "platform",
@@ -459,7 +459,7 @@
     },
     {
       "name": "provider",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/provider-6.1.5",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/provider-6.1.5+1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -489,7 +489,7 @@
     },
     {
       "name": "shared_preferences_android",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.10",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.11",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },
@@ -555,9 +555,9 @@
     },
     {
       "name": "sqflite_android",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/sqflite_android-2.4.1",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/sqflite_android-2.4.2+2",
       "packageUri": "lib/",
-      "languageVersion": "3.7"
+      "languageVersion": "3.9"
     },
     {
       "name": "sqflite_common",
@@ -651,9 +651,9 @@
     },
     {
       "name": "vector_graphics_compiler",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.17",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.19",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.7"
     },
     {
       "name": "vector_math",
@@ -663,13 +663,13 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/vm_service-15.0.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/vm_service-15.0.2",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.5"
     },
     {
       "name": "watcher",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/watcher-1.1.2",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/watcher-1.1.3",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
@@ -699,9 +699,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/xml-6.5.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/xml-6.6.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.8"
     },
     {
       "name": "yaml",
