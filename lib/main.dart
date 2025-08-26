@@ -20,8 +20,11 @@ void main() async {
 
   final notesController = NotesController(repo)..load();
 
-  runApp(ChangeNotifierProvider(
-    create: (_) => ThemeProvider(),
+  // Create ThemeProvider and load saved preferences before building the app.
+  final themeProvider = await ThemeProvider.create();
+
+  runApp(ChangeNotifierProvider.value(
+    value: themeProvider,
     child: MyApp(controller: notesController),
   ));
 }
