@@ -37,7 +37,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   }
 
   void _saveAndPop() {
-    // Capture a local navigator to avoid using BuildContext after any async work.
     final navigator = Navigator.of(context);
 
     widget.controller.addOrUpdate(
@@ -47,11 +46,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       pinned: _pinned,
     );
 
-    // Safe to use locally captured objects without relying on context after potential async gaps.
     navigator
-        .pop(true); // return a value so caller can await and refresh if needed
-
-    // No snackbar here; deletion flow handles snackbar explicitly using a local capture as well.
+        .pop(true);
   }
 
   @override
@@ -99,7 +95,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   heroTag: 'delete',
                   backgroundColor: Theme.of(context).colorScheme.error,
                   onPressed: () async {
-                    // Capture navigator, messenger, and theme outside of the async gap.
                     final navigator = Navigator.of(context);
                     final messenger = ScaffoldMessenger.maybeOf(context);
                     final theme = Theme.of(context);
@@ -131,8 +126,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     if (confirmed == true) {
                       widget.controller.remove(widget.existing!.id);
 
-                      // Use captured instances to avoid using BuildContext across async gaps.
-                      navigator.pop(true); // Pop back to home page
+                      navigator.pop(true);
                       messenger?.showSnackBar(
                         SnackBar(
                           content: const Text('Note deleted'),
