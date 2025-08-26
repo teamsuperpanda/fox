@@ -20,8 +20,12 @@ void main() async {
 
   final notesController = NotesController(repo)..load();
 
-  runApp(ChangeNotifierProvider(
-    create: (_) => ThemeProvider(),
+  // Create theme provider and load persisted preference before building the app.
+  final themeProvider = ThemeProvider();
+  await themeProvider.load();
+
+  runApp(ChangeNotifierProvider.value(
+    value: themeProvider,
     child: MyApp(controller: notesController),
   ));
 }
@@ -58,7 +62,7 @@ class MyApp extends StatelessWidget {
       textTheme: GoogleFonts.interTextTheme(
       ThemeData.light().textTheme.copyWith(
           bodyMedium: GoogleFonts.inter(
-            textStyle: ThemeData.light().textTheme.bodyMedium),
+            textStyle: ThemeData.light().textTheme.bodyMedium?.copyWith(fontSize: 18)),
           bodySmall: GoogleFonts.inter(
             textStyle: ThemeData.light().textTheme.bodySmall),
           titleLarge: GoogleFonts.inter(
@@ -107,7 +111,7 @@ class MyApp extends StatelessWidget {
       textTheme: GoogleFonts.interTextTheme(
       ThemeData.dark().textTheme.copyWith(
           bodyMedium: GoogleFonts.inter(
-            textStyle: ThemeData.dark().textTheme.bodyMedium),
+            textStyle: ThemeData.dark().textTheme.bodyMedium?.copyWith(fontSize: 18)),
           bodySmall: GoogleFonts.inter(
             textStyle: ThemeData.dark()
               .textTheme
