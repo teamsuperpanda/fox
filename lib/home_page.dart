@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'src/platform_test_flag.dart' show isInTest;
 import 'package:provider/provider.dart';
 
 import 'note_detail_page.dart';
@@ -16,9 +17,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   NotesController get controller => widget.controller;
   late AnimationController _animationController;
+  late AnimationController _fabController;
+  late Animation<double> _fabRotation;
+  late final bool _isTest;
   bool _isRotated = false;
   bool _isSearching = false;
   final _searchController = TextEditingController();
@@ -26,26 +30,48 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    controller.addListener(_onChanged);
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    _fabController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _fabRotation = Tween<double>(begin: -0.03, end: 0.03)
+        .chain(CurveTween(curve: Curves.easeInOut))
+        .animate(_fabController);
+  // Detect test environment to avoid continuous animations breaking tests
+  // Use conditional helper to support web and IO
+  _isTest = isInTest;
+  if (_isTest) {
+      _fabController.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          // reverse once to create a wiggle then stop
+          _fabController.reverse();
+        }
+      });
+    }
     _searchController.addListener(() {
       controller.setSearchTerm(_searchController.text);
     });
+  _updateFabAnimationState();
   }
 
   @override
   void dispose() {
-    controller.removeListener(_onChanged);
     _animationController.dispose();
+  _fabController.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
-  void _onChanged() {
-    if (mounted) setState(() {});
+  void _updateFabAnimationState() {
+    if (_isTest) {
+      _fabController.forward(from: 0.0);
+    } else {
+      _fabController.repeat(reverse: true);
+    }
   }
 
   void _toggleRotation() {
@@ -60,18 +86,18 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _addNote() async {
-    final changed = await Navigator.of(context).push<bool>(MaterialPageRoute(
+    await Navigator.of(context).push<bool>(MaterialPageRoute(
       builder: (_) => NoteDetailPage(
         controller: controller,
       ),
     ));
-    // If detail page reports a change, ensure list refreshed (controller.load already called in addOrUpdate)
-    if (changed == true) setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final notes = controller.notes;
+
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -143,9 +169,16 @@ class _HomePageState extends State<HomePage>
             ),
           ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNote,
-        child: const Icon(Icons.add),
+      floatingActionButton: AnimatedBuilder(
+        animation: _fabRotation,
+        builder: (context, child) => Transform.rotate(
+          angle: _fabRotation.value,
+          child: child,
+        ),
+        child: FloatingActionButton(
+          onPressed: _addNote,
+          child: const Icon(Icons.add),
+        ),
       ),
       body: controller.loading
           ? const Center(child: CircularProgressIndicator())

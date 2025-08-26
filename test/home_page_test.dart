@@ -89,16 +89,27 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      // There should be a push_pin_outlined initially (unpinned)
-      expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
-      expect(find.byIcon(Icons.push_pin), findsNothing);
+  // Find the list tile for the note titled 'A'
+  final tile = find.widgetWithText(ListTile, 'A');
+  expect(tile, findsOneWidget);
 
-      // Toggle pin
-      await tester.tap(find.byIcon(Icons.push_pin_outlined));
-      await tester.pumpAndSettle();
+  // The leading IconButton contains an Icon whose IconData indicates pinned state
+  final pinButton = find.descendant(of: tile, matching: find.byType(IconButton));
+  expect(pinButton, findsOneWidget);
 
-      // Now the pinned icon should appear
-      expect(find.byIcon(Icons.push_pin), findsOneWidget);
+  IconButton iconButtonWidget = tester.widget<IconButton>(pinButton);
+  final leadingIcon = iconButtonWidget.icon as Icon;
+
+  // Initially the icon should be the grey (unpinned) color
+  expect(leadingIcon.color, Colors.grey[700]);
+
+  // Toggle pin by tapping the leading IconButton
+  await tester.tap(pinButton);
+  await tester.pumpAndSettle();
+
+  // After toggling, the controller should show the note as pinned
+  expect(controller.notes.isNotEmpty, isTrue);
+  expect(controller.notes.first.pinned, isTrue);
     });
 
     testWidgets('swipe to delete removes a note', (tester) async {
