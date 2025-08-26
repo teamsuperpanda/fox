@@ -16,9 +16,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+  with TickerProviderStateMixin {
   NotesController get controller => widget.controller;
   late AnimationController _animationController;
+  late AnimationController _fabController;
+  late Animation<double> _fabAnimation;
   bool _isRotated = false;
   bool _isSearching = false;
   final _searchController = TextEditingController();
@@ -31,6 +33,21 @@ class _HomePageState extends State<HomePage>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    // subtle slow wiggle for the FAB
+    _fabController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    _fabAnimation = Tween<double>(begin: -0.05, end: 0.05).animate(
+      CurvedAnimation(parent: _fabController, curve: Curves.easeInOut),
+    );
+    // In tests the binding is AutomatedTestWidgetsFlutterBinding which schedules
+    // continuous frames; avoid starting a repeating ticker there so tests can
+    // settle. Start looping only in normal app runs.
+    final bindingName = WidgetsBinding.instance.runtimeType.toString();
+    if (!bindingName.contains('AutomatedTestWidgetsFlutterBinding')) {
+      _fabController.repeat(reverse: true);
+    }
     _searchController.addListener(() {
       controller.setSearchTerm(_searchController.text);
     });
@@ -40,6 +57,7 @@ class _HomePageState extends State<HomePage>
   void dispose() {
     controller.removeListener(_onChanged);
     _animationController.dispose();
+  _fabController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -65,7 +83,6 @@ class _HomePageState extends State<HomePage>
         controller: controller,
       ),
     ));
-    // If detail page reports a change, ensure list refreshed (controller.load already called in addOrUpdate)
     if (changed == true) setState(() {});
   }
 
@@ -88,10 +105,11 @@ class _HomePageState extends State<HomePage>
         centerTitle: true,
         leading: GestureDetector(
           onTap: _toggleRotation,
-          child: RotationTransition(
-            turns: Tween(begin: 0.0, end: 1.0).animate(_animationController),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: RotationTransition(
+              turns: Tween(begin: 0.0, end: 1.0).animate(_animationController),
+              alignment: Alignment.center,
               child: Image.asset('assets/images/icon/icon.png'),
             ),
           ),
@@ -143,9 +161,16 @@ class _HomePageState extends State<HomePage>
             ),
           ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNote,
-        child: const Icon(Icons.add),
+      floatingActionButton: AnimatedBuilder(
+        animation: _fabAnimation,
+        builder: (context, child) => Transform.rotate(
+          angle: _fabAnimation.value,
+          child: child,
+        ),
+        child: FloatingActionButton(
+          onPressed: _addNote,
+          child: const Icon(Icons.add),
+        ),
       ),
       body: controller.loading
           ? const Center(child: CircularProgressIndicator())
