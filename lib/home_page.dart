@@ -88,10 +88,13 @@ class _HomePageState extends State<HomePage>
         centerTitle: true,
         leading: GestureDetector(
           onTap: _toggleRotation,
-          child: RotationTransition(
-            turns: Tween(begin: 0.0, end: 1.0).animate(_animationController),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: RotationTransition(
+              // rotate the image itself (padding is outside) so the image
+              // rotates around its own center instead of an off-center box
+              turns: Tween(begin: 0.0, end: 1.0).animate(_animationController),
+              alignment: Alignment.center,
               child: Image.asset('assets/images/icon/icon.png'),
             ),
           ),
