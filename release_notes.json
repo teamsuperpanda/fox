@@ -1,7 +1,90 @@
 [
   {
     "language": "en-US",
-    "text": "Release 1.1.0 (build 4): Fox has evolved from an old checklist app into a clean, local-first notes app. Notes remain stored only on your device (no cloud sync by default). Highlights: redesigned notes UI, improved dark mode, pinning, and clearer timestamps."
+    "text": "What's new in 1.2.0:\n• Improved readability with a slightly larger default note font.\n• Home screen empty state updated and a subtle wiggle added to the new-note button.\n• Dark mode preference now persists between launches.\n• Updated packages and small UI fixes."
+  },
+  {
+    "language": "en-GB",
+    "text": "What's new in 1.2.0:\n• Improved readability with a slightly larger default note font.\n• Home screen empty state updated and a subtle wiggle added to the new-note button.\n• Dark mode preference now persists between launches.\n• Updated packages and small UI fixes."
+  },
+  {
+    "language": "es-ES",
+    "text": "Novedades en la versión 1.2.0:\n• Mejor legibilidad con una fuente de nota predeterminada ligeramente mayor.\n• Mensaje vacío de la pantalla principal actualizado y una sutil animación en el botón de nueva nota.\n• La preferencia de modo oscuro ahora se guarda entre ejecuciones.\n• Actualización de paquetes y pequeñas correcciones de interfaz."
+  },
+  {
+    "language": "fr-FR",
+  "text": "Nouveautés de la version 1.2.0 :\n• Meilleure lisibilité grâce à une taille de police des notes légèrement augmentée.\n• Message d'écran d'accueil mis à jour et petite animation \"wiggle\" ajoutée au bouton de nouvelle note.\n• Le choix du mode sombre est maintenant conservé entre les lancements.\n• Mise à jour des paquets et petites corrections d'interface."
+  },
+  {
+    "language": "de-DE",
+    "text": "Neu in Version 1.2.0:\n• Verbesserte Lesbarkeit durch leicht größere Standard-Schriftgröße für Notizen.\n• Leere Startbildschirmnachricht aktualisiert und dezentes Wackeln des neuen-Notiz-Buttons hinzugefügt.\n• Dunkelmodus-Einstellung bleibt jetzt zwischen Starts erhalten.\n• Pakete aktualisiert und kleine UI-Fehler behoben."
+  },
+  {
+    "language": "pt-BR",
+    "text": "Novidades na versão 1.2.0:\n• Melhor legibilidade com fonte de nota padrão ligeiramente maior.\n• Mensagem da tela inicial atualizada e uma leve animação no botão de nova nota.\n• A preferência do modo escuro agora persiste entre execuções.\n• Atualização de pacotes e pequenas correções de interface."
+  },
+  {
+    "language": "it-IT",
+    "text": "Novità nella versione 1.2.0:\n• Migliore leggibilità con una dimensione del font delle note predefinita leggermente maggiore.\n• Messaggio della schermata principale aggiornato e leggera animazione sul pulsante per creare una nuova nota.\n• L'impostazione della modalità scura ora persiste tra i riavvii.\n• Aggiornamento dei pacchetti e piccole correzioni UI."
+  },
+  {
+    "language": "ja-JP",
+    "text": "バージョン1.2.0の新機能：\n• デフォルトのノートフォントをやや大きくして読みやすさを向上しました。\n• ホーム画面の空の状態メッセージを更新し、新規ノートボタンにさりげない揺れアニメーションを追加しました。\n• ダークモードの設定が起動間で保持されるようになりました。\n• パッケージを更新し、小さなUI修正を行いました。"
+  },
+  {
+    "language": "ko-KR",
+    "text": "버전 1.2.0 변경사항:\n• 기본 노트 글꼴을 조금 키워 가독성을 향상했습니다.\n• 홈 화면의 빈 상태 메시지를 업데이트하고 새 노트 버튼에 미세한 흔들림 애니메이션을 추가했습니다.\n• 다크 모드 설정이 앱 재실행 간에 유지됩니다.\n• 패키지 업데이트 및 작은 UI 수정이 포함됩니다."
+  },
+  {
+    "language": "zh-CN",
+    "text": "1.2.0 更新：\n• 将默认笔记字体略微放大以提高可读性。\n• 更新了主屏幕空状态消息，并为新建笔记按钮添加了轻微的摇晃动画。\n• 深色模式偏好现在会在启动间保持。\n• 更新依赖并修复一些小的界面问题。"
+  },
+  {
+    "language": "zh-TW",
+    "text": "1.2.0 更新：\n• 將預設筆記字體略微放大以提升可讀性。\n• 更新主畫面空狀態文字，並於新增筆記按鈕加入細微搖動動畫。\n• 深色模式偏好會在啟動間保留。\n• 更新套件並修復一些小的介面問題。"
+  },
+  {
+    "language": "ru-RU",
+  "text": "Что нового в версии 1.2.0:\n• Улучшена читаемость за счёт немного увеличенного шрифта заметок по умолчанию.\n• Обновлено сообщение на главном экране для пустого состояния и добавлена лёгкая анимация \"wiggle\" для кнопки создания заметки.\n• Настройка тёмной темы теперь сохраняется между запусками.\n• Обновлены пакеты и внесены небольшие правки интерфейса."
+  },
+  {
+    "language": "tr-TR",
+    "text": "1.2.0 sürümündeki yenilikler:\n• Varsayılan not yazı tipi biraz büyütülerek okunabilirlik artırıldı.\n• Ana ekran boş durum mesajı güncellendi ve yeni not düğmesine hafif bir sallanma animasyonu eklendi.\n• Karanlık mod tercihi artık uygulama yeniden başlasa bile korunuyor.\n• Paketler güncellendi ve küçük arayüz düzeltmeleri yapıldı."
+  },
+  {
+    "language": "nl-NL",
+    "text": "Wat is nieuw in 1.2.0:\n• Betere leesbaarheid door een iets groter standaard lettertype voor notities.\n• Leeg schermbericht bijgewerkt en een subtiele wiebel toegevoegd aan de nieuwe-notitieknop.\n• Donkere modus voorkeur blijft nu behouden tussen sessies.\n• Pakketten bijgewerkt en kleine UI-fixes."
+  },
+  {
+    "language": "sv-SE",
+    "text": "Nyheter i 1.2.0:\n• Bättre läsbarhet med något större standardteckensnitt för anteckningar.\n• Tomt startsida-meddelande uppdaterat och en subtil vickning på nya anteckningsknappen.\n• Inställning för mörkt läge sparas nu mellan starter.\n• Paket uppdaterade och små UI-fixar."
+  },
+  {
+    "language": "pl-PL",
+  "text": "Co nowego w wersji 1.2.0:\n• Lepsza czytelność dzięki nieco większemu domyślnemu rozmiarowi czcionki notatek.\n• Zaktualizowano komunikat dla pustego stanu ekranu głównego i dodano subtelne \"wiggle\" przycisku nowej notatki.\n• Ustawienie trybu ciemnego jest teraz zapamiętywane między uruchomieniami.\n• Zaktualizowano pakiety i wprowadzono drobne poprawki UI."
+  },
+  {
+    "language": "ar-SA",
+    "text": "الجديد في الإصدار 1.2.0:\n• تحسين إمكانية القراءة بزيادة حجم خط الملاحظات الافتراضي قليلاً.\n• تم تحديث رسالة الشاشة الرئيسية للحالة الفارغة وإضافة اهتزاز بسيط لزر إنشاء ملاحظة جديدة.\n• يتم الآن الاحتفاظ بتفضيل الوضع الداكن بين التشغيلات.\n• تحديث الحزم وإصلاح تعديلات بسيطة في واجهة المستخدم."
+  },
+  {
+    "language": "hi-IN",
+    "text": "वर्ज़न 1.2.0 में नया:\n• डिफ़ॉल्ट नोट फ़ॉन्ट को हल्का बड़ा करके पठनीयता बेहतर की गई।\n• होम स्क्रीन का खाली संदेश अपडेट किया गया और नई-नोट बटन में हल्की हिलन एनिमेशन जोड़ी गई।\n• डार्क मोड प्राथमिकता अब लॉन्च के बीच बनी रहती है।\n• पैकेज अपडेट और छोटे UI फिक्स किए गए।"
+  },
+  {
+    "language": "id-ID",
+    "text": "Yang baru di 1.2.0:\n• Keterbacaan ditingkatkan dengan ukuran font catatan bawaan yang sedikit lebih besar.\n• Pesan layar beranda untuk keadaan kosong diperbarui dan ditambahkan efek goyang halus pada tombol catatan baru.\n• Preferensi mode gelap sekarang tersimpan antar peluncuran.\n• Paket diperbarui dan perbaikan kecil pada antarmuka."
+  },
+  {
+    "language": "vi-VN",
+    "text": "Có gì mới trong 1.2.0:\n• Cải thiện độ đọc với kích thước chữ mặc định của ghi chú lớn hơn một chút.\n• Cập nhật thông báo trạng thái trống trên màn hình chính và thêm hiệu ứng rung nhẹ cho nút tạo ghi chú mới.\n• Tùy chọn chế độ tối giờ sẽ được giữ giữa các lần khởi động.\n• Cập nhật gói và sửa một số lỗi giao diện nhỏ."
+  },
+  {
+    "language": "pt-PT",
+    "text": "Novidades na versão 1.2.0:\n• Melhor legibilidade com uma fonte padrão de nota ligeiramente maior.\n• Mensagem do ecrã inicial actualizada e uma leve animação no botão de nova nota.\n• A preferência do modo escuro agora persiste entre lançamentos.\n• Pacotes atualizados e pequenas correções de interface."
+  },
+  {
+    "language": "es-419",
+    "text": "Novedades en la versión 1.2.0:\n• Mejor legibilidad con una fuente predeterminada de notas ligeramente mayor.\n• Mensaje de pantalla principal actualizado y una sutil animación en el botón de nueva nota.\n• La preferencia de modo oscuro ahora se mantiene entre lanzamientos.\n• Se actualizaron paquetes y se hicieron pequeñas correcciones de la interfaz."
   }
 ]
-

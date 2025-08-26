@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "fox",
-      "version": "1.1.0+4",
+      "version": "1.2.0+5",
       "dependencies": [
         "awesome_snackbar_content",
         "cupertino_icons",
