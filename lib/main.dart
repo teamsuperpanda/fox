@@ -1,23 +1,26 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'home_page.dart';
 import 'providers/theme_provider.dart';
+import 'services/storage_service.dart';
+import 'migrations/migrate_prefs.dart';
+import 'migrations/migrate_notes.dart';
 import 'services/notes_controller.dart';
 import 'services/repository.dart';
-import 'services/repository_idb_web.dart';
-import 'services/repository_sqlite.dart';
+import 'services/repository_hive.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Hive storage and run migrations first.
+  await StorageService.init();
+  await migratePrefsToHive();
+  await migrateNotesToHive();
 
-  // Choose repository per platform.
-  final NoteRepository repo = kIsWeb
-      ? await WebIdbNoteRepository.create()
-      : await SqliteNoteRepository.create();
-
+  // Use Hive repository for all platforms
+  final NoteRepository repo = await HiveNoteRepository.create();
   final notesController = NotesController(repo)..load();
 
   // Create theme provider and load persisted preference before building the app.
