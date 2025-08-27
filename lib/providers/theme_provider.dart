@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/settings_service.dart';
 
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
@@ -9,13 +9,8 @@ class ThemeProvider extends ChangeNotifier {
   /// Load persisted theme mode from shared preferences.
   Future<void> load() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final stored = prefs.getString('themeMode') ?? 'system';
-      _themeMode = switch (stored) {
-        'light' => ThemeMode.light,
-        'dark' => ThemeMode.dark,
-        _ => ThemeMode.system,
-      };
+      final service = SettingsService();
+      _themeMode = service.getThemeMode();
     } catch (_) {
       _themeMode = ThemeMode.system;
     }
@@ -24,13 +19,8 @@ class ThemeProvider extends ChangeNotifier {
   /// Persist the current theme mode.
   Future<void> _save() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final str = switch (_themeMode) {
-        ThemeMode.light => 'light',
-        ThemeMode.dark => 'dark',
-        ThemeMode.system => 'system',
-      };
-      await prefs.setString('themeMode', str);
+      final service = SettingsService();
+      await service.setThemeMode(_themeMode);
     } catch (_) {}
   }
 
