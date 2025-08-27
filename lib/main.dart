@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'home_page.dart';
 import 'providers/theme_provider.dart';
 import 'services/storage_service.dart';
-import 'migrations/migrate_prefs.dart';
-import 'migrations/migrate_notes.dart';
 import 'services/notes_controller.dart';
 import 'services/repository.dart';
 import 'services/repository_hive.dart';
@@ -14,10 +12,8 @@ import 'services/repository_hive.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Hive storage and run migrations first.
+  // Initialize Hive storage
   await StorageService.init();
-  await migratePrefsToHive();
-  await migrateNotesToHive();
 
   // Use Hive repository for all platforms
   final NoteRepository repo = await HiveNoteRepository.create();
