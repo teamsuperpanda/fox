@@ -7,8 +7,6 @@
       "name": "fox",
       "version": "1.3.0+6",
       "dependencies": [
-        "awesome_snackbar_content",
-        "cupertino_icons",
         "flutter",
         "flutter_launcher_icons",
         "flutter_localizations",
@@ -16,13 +14,8 @@
         "google_fonts",
         "hive",
         "hive_flutter",
-        "idb_shim",
         "intl",
-        "path",
-        "path_provider",
-        "provider",
-        "shared_preferences",
-        "sqflite"
+        "provider"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -82,26 +75,6 @@
       ]
     },
     {
-      "name": "idb_shim",
-      "version": "2.6.7",
-      "dependencies": [
-        "collection",
-        "meta",
-        "path",
-        "sembast",
-        "web"
-      ]
-    },
-    {
-      "name": "awesome_snackbar_content",
-      "version": "0.1.8",
-      "dependencies": [
-        "flutter",
-        "flutter_localizations",
-        "flutter_svg"
-      ]
-    },
-    {
       "name": "google_fonts",
       "version": "6.3.0",
       "dependencies": [
@@ -109,48 +82,6 @@
         "flutter",
         "http",
         "path_provider"
-      ]
-    },
-    {
-      "name": "path",
-      "version": "1.9.1",
-      "dependencies": []
-    },
-    {
-      "name": "path_provider",
-      "version": "2.1.5",
-      "dependencies": [
-        "flutter",
-        "path_provider_android",
-        "path_provider_foundation",
-        "path_provider_linux",
-        "path_provider_platform_interface",
-        "path_provider_windows"
-      ]
-    },
-    {
-      "name": "sqflite",
-      "version": "2.4.2",
-      "dependencies": [
-        "flutter",
-        "path",
-        "sqflite_android",
-        "sqflite_common",
-        "sqflite_darwin",
-        "sqflite_platform_interface"
-      ]
-    },
-    {
-      "name": "shared_preferences",
-      "version": "2.5.3",
-      "dependencies": [
-        "flutter",
-        "shared_preferences_android",
-        "shared_preferences_foundation",
-        "shared_preferences_linux",
-        "shared_preferences_platform_interface",
-        "shared_preferences_web",
-        "shared_preferences_windows"
       ]
     },
     {
@@ -182,11 +113,6 @@
         "path",
         "yaml"
       ]
-    },
-    {
-      "name": "cupertino_icons",
-      "version": "1.0.8",
-      "dependencies": []
     },
     {
       "name": "intl",
@@ -277,6 +203,11 @@
       ]
     },
     {
+      "name": "path",
+      "version": "1.9.1",
+      "dependencies": []
+    },
+    {
       "name": "matcher",
       "version": "0.12.17",
       "dependencies": [
@@ -303,6 +234,18 @@
       ]
     },
     {
+      "name": "path_provider",
+      "version": "2.1.5",
+      "dependencies": [
+        "flutter",
+        "path_provider_android",
+        "path_provider_foundation",
+        "path_provider_linux",
+        "path_provider_platform_interface",
+        "path_provider_windows"
+      ]
+    },
+    {
       "name": "crypto",
       "version": "3.0.6",
       "dependencies": [
@@ -317,31 +260,6 @@
       ]
     },
     {
-      "name": "web",
-      "version": "1.1.1",
-      "dependencies": []
-    },
-    {
-      "name": "sembast",
-      "version": "3.8.5+1",
-      "dependencies": [
-        "meta",
-        "path",
-        "synchronized"
-      ]
-    },
-    {
-      "name": "flutter_svg",
-      "version": "2.2.0",
-      "dependencies": [
-        "flutter",
-        "http",
-        "vector_graphics",
-        "vector_graphics_codec",
-        "vector_graphics_compiler"
-      ]
-    },
-    {
       "name": "http",
       "version": "1.5.0",
       "dependencies": [
@@ -349,151 +267,6 @@
         "http_parser",
         "meta",
         "web"
-      ]
-    },
-    {
-      "name": "path_provider_windows",
-      "version": "2.3.0",
-      "dependencies": [
-        "ffi",
-        "flutter",
-        "path",
-        "path_provider_platform_interface"
-      ]
-    },
-    {
-      "name": "path_provider_platform_interface",
-      "version": "2.1.2",
-      "dependencies": [
-        "flutter",
-        "platform",
-        "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "path_provider_linux",
-      "version": "2.2.1",
-      "dependencies": [
-        "ffi",
-        "flutter",
-        "path",
-        "path_provider_platform_interface",
-        "xdg_directories"
-      ]
-    },
-    {
-      "name": "path_provider_foundation",
-      "version": "2.4.2",
-      "dependencies": [
-        "flutter",
-        "path_provider_platform_interface"
-      ]
-    },
-    {
-      "name": "path_provider_android",
-      "version": "2.2.17",
-      "dependencies": [
-        "flutter",
-        "path_provider_platform_interface"
-      ]
-    },
-    {
-      "name": "sqflite_common",
-      "version": "2.5.6",
-      "dependencies": [
-        "meta",
-        "path",
-        "synchronized"
-      ]
-    },
-    {
-      "name": "sqflite_platform_interface",
-      "version": "2.4.0",
-      "dependencies": [
-        "flutter",
-        "meta",
-        "platform",
-        "plugin_platform_interface",
-        "sqflite_common"
-      ]
-    },
-    {
-      "name": "sqflite_darwin",
-      "version": "2.4.2",
-      "dependencies": [
-        "flutter",
-        "meta",
-        "path",
-        "sqflite_common",
-        "sqflite_platform_interface"
-      ]
-    },
-    {
-      "name": "sqflite_android",
-      "version": "2.4.2+2",
-      "dependencies": [
-        "flutter",
-        "path",
-        "sqflite_common",
-        "sqflite_platform_interface"
-      ]
-    },
-    {
-      "name": "shared_preferences_windows",
-      "version": "2.4.1",
-      "dependencies": [
-        "file",
-        "flutter",
-        "path",
-        "path_provider_platform_interface",
-        "path_provider_windows",
-        "shared_preferences_platform_interface"
-      ]
-    },
-    {
-      "name": "shared_preferences_web",
-      "version": "2.4.3",
-      "dependencies": [
-        "flutter",
-        "flutter_web_plugins",
-        "shared_preferences_platform_interface",
-        "web"
-      ]
-    },
-    {
-      "name": "shared_preferences_platform_interface",
-      "version": "2.4.1",
-      "dependencies": [
-        "flutter",
-        "plugin_platform_interface"
-      ]
-    },
-    {
-      "name": "shared_preferences_linux",
-      "version": "2.4.1",
-      "dependencies": [
-        "file",
-        "flutter",
-        "path",
-        "path_provider_linux",
-        "path_provider_platform_interface",
-        "shared_preferences_platform_interface"
-      ]
-    },
-    {
-      "name": "shared_preferences_foundation",
-      "version": "2.5.4",
-      "dependencies": [
-        "flutter",
-        "shared_preferences_platform_interface"
-      ]
-    },
-    {
-      "name": "shared_preferences_android",
-      "version": "2.4.11",
-      "dependencies": [
-        "flutter",
-        "shared_preferences_platform_interface"
       ]
     },
     {
@@ -656,6 +429,52 @@
       ]
     },
     {
+      "name": "path_provider_windows",
+      "version": "2.3.0",
+      "dependencies": [
+        "ffi",
+        "flutter",
+        "path",
+        "path_provider_platform_interface"
+      ]
+    },
+    {
+      "name": "path_provider_platform_interface",
+      "version": "2.1.2",
+      "dependencies": [
+        "flutter",
+        "platform",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "path_provider_linux",
+      "version": "2.2.1",
+      "dependencies": [
+        "ffi",
+        "flutter",
+        "path",
+        "path_provider_platform_interface",
+        "xdg_directories"
+      ]
+    },
+    {
+      "name": "path_provider_foundation",
+      "version": "2.4.2",
+      "dependencies": [
+        "flutter",
+        "path_provider_platform_interface"
+      ]
+    },
+    {
+      "name": "path_provider_android",
+      "version": "2.2.17",
+      "dependencies": [
+        "flutter",
+        "path_provider_platform_interface"
+      ]
+    },
+    {
       "name": "typed_data",
       "version": "1.4.0",
       "dependencies": [
@@ -663,35 +482,9 @@
       ]
     },
     {
-      "name": "synchronized",
-      "version": "3.4.0",
+      "name": "web",
+      "version": "1.1.1",
       "dependencies": []
-    },
-    {
-      "name": "vector_graphics_compiler",
-      "version": "1.1.19",
-      "dependencies": [
-        "args",
-        "meta",
-        "path",
-        "path_parsing",
-        "vector_graphics_codec",
-        "xml"
-      ]
-    },
-    {
-      "name": "vector_graphics_codec",
-      "version": "1.1.13",
-      "dependencies": []
-    },
-    {
-      "name": "vector_graphics",
-      "version": "1.1.19",
-      "dependencies": [
-        "flutter",
-        "http",
-        "vector_graphics_codec"
-      ]
     },
     {
       "name": "http_parser",
@@ -701,39 +494,6 @@
         "source_span",
         "string_scanner",
         "typed_data"
-      ]
-    },
-    {
-      "name": "ffi",
-      "version": "2.1.4",
-      "dependencies": []
-    },
-    {
-      "name": "plugin_platform_interface",
-      "version": "2.1.8",
-      "dependencies": [
-        "meta"
-      ]
-    },
-    {
-      "name": "platform",
-      "version": "3.1.6",
-      "dependencies": []
-    },
-    {
-      "name": "xdg_directories",
-      "version": "1.1.0",
-      "dependencies": [
-        "meta",
-        "path"
-      ]
-    },
-    {
-      "name": "file",
-      "version": "7.0.1",
-      "dependencies": [
-        "meta",
-        "path"
       ]
     },
     {
@@ -766,11 +526,28 @@
       "dependencies": []
     },
     {
-      "name": "path_parsing",
+      "name": "ffi",
+      "version": "2.1.4",
+      "dependencies": []
+    },
+    {
+      "name": "plugin_platform_interface",
+      "version": "2.1.8",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
+      "name": "platform",
+      "version": "3.1.6",
+      "dependencies": []
+    },
+    {
+      "name": "xdg_directories",
       "version": "1.1.0",
       "dependencies": [
         "meta",
-        "vector_math"
+        "path"
       ]
     },
     {
