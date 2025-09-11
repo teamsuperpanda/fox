@@ -1,90 +1,90 @@
 [
   {
     "language": "en-US",
-    "text": "What's new in 1.3.0:\n• Improved readability with a slightly larger default note font.\n• Home screen empty state updated, with a subtle wiggle added to the new-note button.\n• Dark mode preference now persists between launches.\n• Updated packages and small UI fixes.\n• Improved how the app saves your notes and settings so opening notes is faster and the app feels more reliable — your notes are safe and there’s nothing you need to do."
+    "text": "What's new in 1.3.1:\n• New splash screen and bug fixes."
   },
   {
     "language": "en-GB",
-    "text": "What's new in 1.3.0:\n• Improved readability with a slightly larger default note font.\n• Home screen empty state updated, with a subtle wiggle added to the new-note button.\n• Dark mode preference now persists between launches.\n• Updated packages and small UI fixes.\n• Improved how the app saves your notes and settings so opening notes is faster and the app feels more reliable — your notes are safe and there’s nothing you need to do."
+    "text": "What's new in 1.3.1:\n• New splash screen and bug fixes."
   },
   {
     "language": "es-ES",
-    "text": "Novedades en la versión 1.3.0:\n• Mejor legibilidad con una fuente predeterminada de notas ligeramente más grande.\n• Estado vacío de la pantalla de inicio actualizado, con un sutil movimiento añadido al botón de nueva nota.\n• La preferencia de modo oscuro ahora se mantiene entre inicios.\n• Paquetes actualizados y pequeñas correcciones de interfaz.\n• Mejoras en cómo la aplicación guarda tus notas y ajustes, para que abrir notas sea más rápido y la app se sienta más confiable — tus notas están seguras y no necesitas hacer nada."
+    "text": "Novedades en la versión 1.3.1:\n• Nueva pantalla de inicio y correcciones de errores."
   },
   {
     "language": "fr-FR",
-    "text": "Nouveautés de la version 1.3.0 :\n• Lisibilité améliorée avec une police de note par défaut légèrement plus grande.\n• État vide de l'écran d'accueil mis à jour, avec un léger mouvement ajouté au bouton de nouvelle note.\n• La préférence du mode sombre persiste désormais entre les lancements.\n• Paquets mis à jour et petites corrections d’interface.\n• Amélioration de la sauvegarde des notes et paramètres pour une ouverture plus rapide et une fiabilité accrue — vos notes sont en sécurité et vous n’avez rien à faire."
+    "text": "Nouveautés de la version 1.3.1 :\n• Nouvel écran de démarrage et corrections de bogues."
   },
   {
     "language": "de-DE",
-    "text": "Neu in Version 1.3.0:\n• Bessere Lesbarkeit durch eine etwas größere Standardschrift für Notizen.\n• Aktualisierter Leeren-Zustand des Startbildschirms mit einem dezenten Wackeln des Neue-Notiz-Buttons.\n• Dunkelmodus-Einstellung bleibt jetzt zwischen Starts erhalten.\n• Aktualisierte Pakete und kleine UI-Verbesserungen.\n• Verbesserte Speicherung von Notizen und Einstellungen, damit Notizen schneller geöffnet werden und die App zuverlässiger wirkt — deine Notizen sind sicher, du musst nichts tun."
+    "text": "Neu in Version 1.3.1:\n• Neuer Splashscreen und Fehlerbehebungen."
   },
   {
     "language": "pt-BR",
-    "text": "Novidades na versão 1.3.0:\n• Melhor legibilidade com uma fonte de nota padrão um pouco maior.\n• Estado vazio da tela inicial atualizado, com uma leve animação no botão de nova nota.\n• A preferência de modo escuro agora persiste entre os lançamentos.\n• Pacotes atualizados e pequenas correções de interface.\n• Melhoramos a forma como o app salva suas notas e configurações, tornando a abertura de notas mais rápida e o app mais confiável — suas notas estão seguras e você não precisa fazer nada."
+    "text": "Novidades na versão 1.3.1:\n• Nova tela de apresentação e correções de bugs."
   },
   {
     "language": "it-IT",
-    "text": "Novità nella versione 1.3.0:\n• Migliorata la leggibilità con un carattere predefinito per le note leggermente più grande.\n• Stato vuoto della schermata iniziale aggiornato, con una leggera animazione sul pulsante nuova nota.\n• La preferenza per la modalità scura ora persiste tra gli avvii.\n• Pacchetti aggiornati e piccole correzioni dell’interfaccia.\n• Migliorato il salvataggio delle note e delle impostazioni per aprire le note più velocemente e rendere l’app più affidabile — le tue note sono al sicuro e non devi fare nulla."
+    "text": "Novità nella versione 1.3.1:\n• Nuova schermata di avvio e correzioni di bug."
   },
   {
     "language": "ja-JP",
-    "text": "バージョン1.3.0の新機能：\n• デフォルトのノートフォントを少し大きくし、読みやすさを向上しました。\n• ホーム画面の空の状態を更新し、新規ノートボタンにさりげない揺れを追加しました。\n• ダークモードの設定が起動間で保持されるようになりました。\n• パッケージを更新し、UIの細かい修正を行いました。\n• ノートや設定の保存方法を改善し、ノートの読み込みがより速く、アプリがより信頼できるようになりました — ノートは安全で、何もする必要はありません。"
+    "text": "バージョン1.3.1の新機能：\n• 新しいスプラッシュスクリーンとバグ修正。"
   },
   {
     "language": "ko-KR",
-    "text": "버전 1.3.0의 변경사항:\n• 기본 노트 글꼴이 조금 더 커져 가독성이 향상되었습니다.\n• 홈 화면의 빈 상태가 업데이트되었으며, 새 노트 버튼에 미세한 흔들림 효과가 추가되었습니다.\n• 다크 모드 설정이 실행 간에도 유지됩니다.\n• 패키지 업데이트 및 소소한 UI 수정.\n• 노트와 설정 저장 방식을 개선하여 노트를 더 빠르게 열 수 있고 앱이 더욱 안정적으로 느껴집니다 — 노트는 안전하며 사용자가 따로 할 일은 없습니다."
+    "text": "버전 1.3.1의 변경사항:\n• 새로운 스플래시 스크린과 버그 수정."
   },
   {
     "language": "zh-CN",
-    "text": "1.3.0 更新内容：\n• 默认笔记字体稍大，提升了可读性。\n• 更新了主屏幕空状态，新增建笔记按钮带有轻微晃动效果。\n• 深色模式偏好现在会在启动间保持。\n• 更新了软件包并修复了一些小的界面问题。\n• 改进了笔记和设置的保存方式，使打开笔记更快，应用更可靠 — 你的笔记很安全，无需做任何操作。"
+    "text": "1.3.1 更新内容：\n• 新的启动画面和错误修复。"
   },
   {
     "language": "zh-TW",
-    "text": "1.3.0 更新內容：\n• 預設筆記字體稍大，提升了可讀性。\n• 更新了主畫面空狀態，新增建立筆記按鈕有細微的晃動效果。\n• 深色模式偏好現在會在啟動間保持。\n• 更新了套件並修復了一些小的介面問題。\n• 改進了筆記與設定的儲存方式，使開啟筆記更快，應用更可靠 — 你的筆記很安全，不需要額外操作。"
+    "text": "1.3.1 更新內容：\n• 新的啟動畫面和錯誤修復。"
   },
   {
     "language": "ru-RU",
-    "text": "Что нового в версии 1.3.0:\n• Улучшена читаемость благодаря немного увеличенному шрифту заметок по умолчанию.\n• Обновлено пустое состояние домашнего экрана, добавлено лёгкое покачивание кнопки новой заметки.\n• Настройка тёмной темы теперь сохраняется между запусками.\n• Обновлены пакеты и внесены мелкие исправления интерфейса.\n• Улучшен процесс сохранения заметок и настроек, чтобы открытие заметок было быстрее, а приложение казалось надёжнее — ваши заметки в безопасности, и от вас ничего не требуется."
+    "text": "Что нового в версии 1.3.1:\n• Новый экран загрузки и исправления ошибок."
   },
   {
     "language": "tr-TR",
-    "text": "1.3.0 sürümündeki yenilikler:\n• Varsayılan not yazı tipi biraz büyütülerek okunabilirlik artırıldı.\n• Ana ekran boş durumu güncellendi, yeni not düğmesine hafif bir sallanma eklendi.\n• Karanlık mod tercihi artık uygulama başlatmaları arasında korunuyor.\n• Paketler güncellendi ve küçük UI düzeltmeleri yapıldı.\n• Notların ve ayarların kaydedilme yöntemi iyileştirildi, böylece notlar daha hızlı açılıyor ve uygulama daha güvenilir hissediliyor — notlarınız güvende, sizin yapmanız gereken bir şey yok."
+    "text": "1.3.1 sürümündeki yenilikler:\n• Yeni açılış ekranı ve hata düzeltmeleri."
   },
   {
     "language": "nl-NL",
-    "text": "Wat is nieuw in 1.3.0:\n• Betere leesbaarheid met een iets groter standaardlettertype voor notities.\n• Lege startschermstatus bijgewerkt, met een subtiel wiebeltje aan de nieuwe-notitieknop.\n• Donkere-modusvoorkeur blijft nu behouden tussen sessies.\n• Pakketten bijgewerkt en kleine UI-fixes.\n• Verbeterde manier waarop de app notities en instellingen opslaat, zodat notities sneller openen en de app betrouwbaarder aanvoelt — je notities zijn veilig en je hoeft niets te doen."
+    "text": "Wat is nieuw in 1.3.1:\n• Nieuw opstartscherm en bugfixes."
   },
   {
     "language": "sv-SE",
-    "text": "Nyheter i 1.3.0:\n• Förbättrad läsbarhet med något större standardteckensnitt för anteckningar.\n• Tomt läge på hemskärmen uppdaterat, med en subtil vickning på knappen för ny anteckning.\n• Mörkt läge-inställningen sparas nu mellan sessioner.\n• Uppdaterade paket och små UI-fixar.\n• Förbättrat sätt att spara anteckningar och inställningar, så att öppning av anteckningar går snabbare och appen känns mer pålitlig — dina anteckningar är säkra och du behöver inte göra något."
+    "text": "Nyheter i 1.3.1:\n• Nytt startskärm och buggfixar."
   },
   {
     "language": "pl-PL",
-    "text": "Co nowego w wersji 1.3.0:\n• Poprawiona czytelność dzięki nieco większej domyślnej czcionce notatek.\n• Zaktualizowany pusty ekran główny z subtelnym ruchem przycisku nowej notatki.\n• Preferencja trybu ciemnego jest teraz zachowywana między uruchomieniami.\n• Zaktualizowane pakiety i drobne poprawki interfejsu.\n• Ulepszono sposób zapisywania notatek i ustawień, dzięki czemu otwieranie notatek jest szybsze, a aplikacja bardziej niezawodna — twoje notatki są bezpieczne i nie musisz nic robić."
+    "text": "Co nowego w wersji 1.3.1:\n• Nowy ekran powitalny i poprawki błędów."
   },
   {
     "language": "ar-SA",
-    "text": "الجديد في الإصدار 1.3.0:\n• تحسين سهولة القراءة بخط افتراضي أكبر قليلاً للملاحظات.\n• تحديث حالة الشاشة الرئيسية الفارغة، مع إضافة اهتزاز خفيف إلى زر ملاحظة جديدة.\n• تفضيل الوضع الداكن يستمر الآن بين مرات التشغيل.\n• تحديث الحزم وإصلاحات صغيرة في واجهة المستخدم.\n• تحسين طريقة حفظ الملاحظات والإعدادات لتصبح عملية فتح الملاحظات أسرع ويبدو التطبيق أكثر موثوقية — ملاحظاتك آمنة ولا تحتاج إلى القيام بأي شيء."
+    "text": "الجديد في الإصدار 1.3.1:\n• شاشة بدء جديدة وإصلاحات للأخطاء."
   },
   {
     "language": "hi-IN",
-    "text": "वर्ज़न 1.3.0 में नया:\n• डिफ़ॉल्ट नोट फ़ॉन्ट थोड़ा बड़ा कर पढ़ने में आसानी हुई।\n• होम स्क्रीन के खाली दृश्य को अपडेट किया गया, नए नोट बटन में हल्की सी हिलावट जोड़ी गई।\n• डार्क मोड वरीयता अब लॉन्च के बीच बनी रहती है।\n• पैकेज अपडेट किए गए और छोटे UI सुधार किए गए।\n• ऐप अब नोट्स और सेटिंग्स को बेहतर तरीके से सेव करता है, जिससे नोट्स जल्दी खुलते हैं और ऐप अधिक भरोसेमंद लगता है — आपके नोट्स सुरक्षित हैं और आपको कुछ करने की ज़रूरत नहीं।"
+    "text": "वर्ज़न 1.3.1 में नया:\n• नया स्प्लैश स्क्रीन और बग फिक्स।"
   },
   {
     "language": "id-ID",
-    "text": "Yang baru di 1.3.0:\n• Keterbacaan lebih baik dengan font catatan default yang sedikit lebih besar.\n• Status kosong layar beranda diperbarui, dengan sedikit goyangan pada tombol catatan baru.\n• Preferensi mode gelap sekarang bertahan antar-peluncuran.\n• Paket diperbarui dan perbaikan UI kecil.\n• Peningkatan cara aplikasi menyimpan catatan dan pengaturan sehingga membuka catatan lebih cepat dan aplikasi terasa lebih andal — catatan Anda aman dan tidak perlu melakukan apa pun."
+    "text": "Yang baru di 1.3.1:\n• Layar pembuka baru dan perbaikan bug."
   },
   {
     "language": "vi-VN",
-    "text": "Có gì mới trong 1.3.0:\n• Cải thiện khả năng đọc với phông chữ ghi chú mặc định lớn hơn một chút.\n• Cập nhật trạng thái trống màn hình chính, thêm hiệu ứng rung nhẹ cho nút ghi chú mới.\n• Tùy chọn chế độ tối giờ đây sẽ được lưu giữa các lần mở ứng dụng.\n• Cập nhật gói và sửa lỗi giao diện nhỏ.\n• Cải thiện cách ứng dụng lưu ghi chú và cài đặt để mở ghi chú nhanh hơn và ứng dụng đáng tin cậy hơn — ghi chú của bạn được an toàn và bạn không cần làm gì cả."
+    "text": "Có gì mới trong 1.3.1:\n• Màn hình khởi động mới và sửa lỗi."
   },
   {
     "language": "pt-PT",
-    "text": "Novidades na versão 1.3.0:\n• Melhor legibilidade com uma fonte de nota padrão um pouco maior.\n• Estado vazio do ecrã inicial atualizado, com um leve movimento no botão de nova nota.\n• A preferência de modo escuro agora mantém-se entre lançamentos.\n• Pacotes atualizados e pequenas correções na interface.\n• Melhorias na forma como a aplicação guarda as suas notas e definições, tornando a abertura das notas mais rápida e a aplicação mais fiável — as suas notas estão seguras e não precisa de fazer nada."
+    "text": "Novidades na versão 1.3.1:\n• Nova tela de apresentação e correções de bugs."
   },
   {
     "language": "es-419",
-    "text": "Novedades en la versión 1.3.0:\n• Mejor legibilidad con una fuente predeterminada de notas ligeramente más grande.\n• Estado vacío de la pantalla de inicio actualizado, con un sutil movimiento añadido al botón de nueva nota.\n• La preferencia de modo oscuro ahora se mantiene entre inicios.\n• Paquetes actualizados y pequeñas correcciones de interfaz.\n• Mejoras en cómo la aplicación guarda tus notas y ajustes, para que abrir notas sea más rápido y la app se sienta más confiable — tus notas están seguras y no necesitas hacer nada."
+    "text": "Novedades en la versión 1.3.1:\n• Nueva pantalla de inicio y correcciones de errores."
   }
 ]

@@ -129,9 +129,9 @@
     },
     {
       "name": "google_fonts",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/google_fonts-6.3.0",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/google_fonts-6.3.1",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "3.7"
     },
     {
       "name": "hive",
@@ -183,7 +183,7 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/leak_tracker-11.0.1",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/leak_tracker-11.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -243,9 +243,9 @@
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/path_provider_android-2.2.17",
+      "rootUri": "file:///home/howley/.pub-cache/hosted/pub.dev/path_provider_android-2.2.18",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.7"
     },
     {
       "name": "path_provider_foundation",
@@ -392,15 +392,15 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "fox",
+      "name": "Fox",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     }
   ],
   "generator": "pub",
-  "generatorVersion": "3.9.0",
+  "generatorVersion": "3.9.2",
   "flutterRoot": "file:///home/howley/Dev/flutter",
-  "flutterVersion": "3.35.2",
+  "flutterVersion": "3.35.3",
   "pubCache": "file:///home/howley/.pub-cache"
 }

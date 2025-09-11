@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,9 @@ import 'services/repository_hive.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Preserve the splash screen
+  FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   
   // Initialize Hive storage
   await StorageService.init();
@@ -29,9 +33,26 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final NotesController controller;
   const MyApp({super.key, required this.controller});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _removeSplashScreen();
+  }
+
+  void _removeSplashScreen() async {
+    // Wait for 1 second before removing the splash screen
+    await Future.delayed(const Duration(seconds: 1));
+    FlutterNativeSplash.remove();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +160,7 @@ class MyApp extends StatelessWidget {
           secondary: const Color(0xFFC7B8A5),
           error: const Color(0xFFD9534F)),
         ),
-        home: HomePage(controller: controller),
+        home: HomePage(controller: widget.controller),
       ),
     );
   }

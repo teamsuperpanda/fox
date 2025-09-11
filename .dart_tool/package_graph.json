@@ -1,11 +1,11 @@
 {
   "roots": [
-    "fox"
+    "Fox"
   ],
   "packages": [
     {
-      "name": "fox",
-      "version": "1.3.0+6",
+      "name": "Fox",
+      "version": "1.3.1+7",
       "dependencies": [
         "flutter",
         "flutter_launcher_icons",
@@ -76,7 +76,7 @@
     },
     {
       "name": "google_fonts",
-      "version": "6.3.0",
+      "version": "6.3.1",
       "dependencies": [
         "crypto",
         "flutter",
@@ -390,7 +390,7 @@
     },
     {
       "name": "leak_tracker",
-      "version": "11.0.1",
+      "version": "11.0.2",
       "dependencies": [
         "clock",
         "collection",
@@ -468,7 +468,7 @@
     },
     {
       "name": "path_provider_android",
-      "version": "2.2.17",
+      "version": "2.2.18",
       "dependencies": [
         "flutter",
         "path_provider_platform_interface"
