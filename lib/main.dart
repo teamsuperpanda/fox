@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) => MaterialApp(
-        title: 'Fox Notes',
+        title: 'Fox',
         themeMode: themeProvider.themeMode,
         theme: ThemeData(
           useMaterial3: true,
