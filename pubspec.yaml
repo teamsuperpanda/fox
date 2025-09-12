@@ -2,7 +2,7 @@ name: fox
 description: "A simple, local-first notes application."
 
 publish_to: 'none'
-version: 1.3.2+8
+version: 1.3.3+9
 
 environment:
   sdk: ^3.6.0
@@ -42,7 +42,7 @@ flutter_native_splash:
   branding_dark: assets/images/launchscreen/branding_dark.png
 
   android_12: 
-    image: assets/images/launchscreen/logo_dark.png
+    image: assets/images/launchscreen/logo_light.png
     image_dark: assets/images/launchscreen/logo_dark.png
     branding: assets/images/launchscreen/branding_light.png
     branding_dark: assets/images/launchscreen/branding_dark.png
