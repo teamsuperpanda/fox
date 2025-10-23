@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:hive/hive.dart';
 
 import 'repository.dart';
+import '../models/note.dart';
 
 class HiveNoteRepository implements NoteRepository {
   static const _boxName = 'notes_db';
