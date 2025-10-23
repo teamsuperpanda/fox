@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../note_detail_page.dart';
 import '../services/notes_controller.dart';
-import '../services/repository.dart';
+import '../models/note.dart';
 
 class NoteList extends StatelessWidget {
   final NotesController controller;
@@ -111,16 +111,25 @@ class NoteList extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            subtitle: Builder(builder: (context) {
-              final titleColor = DefaultTextStyle.of(context).style.color;
-              return Text(
-                _formatDate(note.updatedAt),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: titleColor),
-              );
-            }),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (note.plainText.trim().isNotEmpty)
+                  Text(
+                    note.plainText.trim(),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                Text(
+                  _formatDate(note.updatedAt),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.7)),
+                ),
+              ],
+            ),
             onTap: () => _editNote(context, note),
           ),
         );

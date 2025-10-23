@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:fox/services/repository.dart';
 import 'package:fox/services/notes_controller.dart';
+import 'package:fox/models/note.dart';
 
 class MemoryRepo implements NoteRepository {
   final List<Note> _data = [];
@@ -63,7 +65,7 @@ void main() {
 
     test('add note -> appears in list', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'A', content: 'content');
+      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{"insert":"content\n"}]));
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'A');
       expect(controller.notes.first.pinned, isFalse);
@@ -71,20 +73,20 @@ void main() {
 
     test('update note keeps id and changes fields', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'A', content: 'c1');
+      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{"insert":"different content\n"}]));
       final first = controller.notes.first;
       await controller.addOrUpdate(
-          id: first.id, title: 'B', content: 'c2', pinned: true);
+          id: first.id, title: 'B', content: Document.fromJson([{"insert":"c2\n"}]), pinned: true);
       final updated = controller.notes.firstWhere((n) => n.id == first.id);
       expect(updated.title, 'B');
-      expect(updated.content, 'c2');
+      expect(updated.plainText, 'c2\n');
       expect(updated.pinned, isTrue);
     });
 
     test('pinning sorts pinned first', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'N1', content: '');
-      await controller.addOrUpdate(title: 'N2', content: '');
+      await controller.addOrUpdate(title: 'N1', content: Document());
+      await controller.addOrUpdate(title: 'N2', content: Document());
       final n1 = controller.notes.firstWhere((n) => n.title == 'N1');
       await controller.setPinned(n1.id, true);
       expect(controller.notes.first.title, 'N1'); // pinned to top
@@ -92,17 +94,17 @@ void main() {
 
     test('newest non-pinned appears before older', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'Old', content: '');
+      await controller.addOrUpdate(title: 'Old', content: Document());
       // Ensure a different updatedAt
       await Future<void>.delayed(const Duration(milliseconds: 5));
-      await controller.addOrUpdate(title: 'New', content: '');
+      await controller.addOrUpdate(title: 'New', content: Document());
       final titles = controller.notes.map((e) => e.title).toList();
       expect(titles, ['New', 'Old']);
     });
 
     test('remove deletes note', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'ToDelete', content: '');
+      await controller.addOrUpdate(title: 'ToDelete', content: Document());
       final id = controller.notes.first.id;
       await controller.remove(id);
       expect(controller.notes.any((n) => n.id == id), isFalse);
@@ -110,7 +112,7 @@ void main() {
 
     test('find returns note or null', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'A', content: '');
+      await controller.addOrUpdate(title: 'A', content: Document());
       final id = controller.notes.first.id;
       expect(controller.find(id)?.title, 'A');
       expect(controller.find('missing'), isNull);
@@ -121,7 +123,7 @@ void main() {
       controller.addListener(() => notified++);
       await controller.load();
       final afterLoad = notified;
-      await controller.addOrUpdate(title: 'A', content: '');
+      await controller.addOrUpdate(title: 'A', content: Document());
       expect(notified, greaterThan(afterLoad));
       // Clean up listener by removing a stored callback.
       void cb() {}

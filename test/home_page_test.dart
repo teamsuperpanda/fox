@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:fox/home_page.dart';
 import 'package:fox/note_detail_page.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository.dart';
+import 'package:fox/models/note.dart';
 
 class MemoryRepo implements NoteRepository {
   final List<Note> _data = [];
@@ -61,7 +63,10 @@ void main() {
     testWidgets('shows empty state initially', (tester) async {
       await tester.pumpWidget(ChangeNotifierProvider(
         create: (_) => ThemeProvider(),
-        child: MaterialApp(home: HomePage(controller: controller)),
+        child: MaterialApp(
+          localizationsDelegates: [FlutterQuillLocalizations.delegate],
+          home: HomePage(controller: controller),
+        ),
       ));
       expect(find.textContaining('No notes yet'), findsOneWidget);
     });
@@ -69,7 +74,10 @@ void main() {
     testWidgets('navigates to NoteDetailPage on FAB tap', (tester) async {
       await tester.pumpWidget(ChangeNotifierProvider(
         create: (_) => ThemeProvider(),
-        child: MaterialApp(home: HomePage(controller: controller)),
+        child: MaterialApp(
+          localizationsDelegates: [FlutterQuillLocalizations.delegate],
+          home: HomePage(controller: controller),
+        ),
       ));
       expect(find.byType(NoteDetailPage), findsNothing);
 
@@ -82,10 +90,13 @@ void main() {
 
     testWidgets('pin toggle updates list item icon', (tester) async {
       // Seed one note
-      await controller.addOrUpdate(title: 'A', content: '');
+      await controller.addOrUpdate(title: 'A', content: Document());
       await tester.pumpWidget(ChangeNotifierProvider(
         create: (_) => ThemeProvider(),
-        child: MaterialApp(home: HomePage(controller: controller)),
+        child: MaterialApp(
+          localizationsDelegates: [FlutterQuillLocalizations.delegate],
+          home: HomePage(controller: controller),
+        ),
       ));
       await tester.pumpAndSettle();
 
@@ -103,10 +114,13 @@ void main() {
 
     testWidgets('swipe to delete removes a note', (tester) async {
       // Seed one note
-      await controller.addOrUpdate(title: 'ToDelete', content: '');
+      await controller.addOrUpdate(title: 'ToDelete', content: Document());
       await tester.pumpWidget(ChangeNotifierProvider(
         create: (_) => ThemeProvider(),
-        child: MaterialApp(home: HomePage(controller: controller)),
+        child: MaterialApp(
+          localizationsDelegates: [FlutterQuillLocalizations.delegate],
+          home: HomePage(controller: controller),
+        ),
       ));
       await tester.pumpAndSettle();
 

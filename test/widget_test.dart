@@ -13,6 +13,7 @@ import 'package:fox/home_page.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository.dart';
+import 'package:fox/models/note.dart';
 
 class MemoryRepo implements NoteRepository {
   final List<Note> _data = [];

@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:fox/services/repository.dart';
 import 'package:fox/models/note_adapter.dart';
 import 'package:fox/services/repository_hive.dart';
+import 'package:fox/models/note.dart';
 
 void main() {
   group('HiveNoteRepository', () {

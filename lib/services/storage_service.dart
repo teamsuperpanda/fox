@@ -2,7 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../models/settings.dart';
 import '../models/settings_adapter.dart';
 import '../models/note_adapter.dart';
-import '../services/repository.dart';
+import '../models/note.dart';
 
 class StorageService {
   static bool _inited = false;

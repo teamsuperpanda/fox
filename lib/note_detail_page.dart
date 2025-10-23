@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'models/note.dart';
 import 'services/notes_controller.dart';
-import 'services/repository.dart';
 
 class NoteDetailPage extends StatefulWidget {
   final Note? existing;
@@ -18,15 +19,20 @@ class NoteDetailPage extends StatefulWidget {
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
   late final TextEditingController _titleCtrl;
-  late final TextEditingController _contentCtrl;
+  late QuillController _contentCtrl;
   late bool _pinned;
+  late bool _showToolbar;
 
   @override
   void initState() {
     super.initState();
     _titleCtrl = TextEditingController(text: widget.existing?.title ?? '');
-    _contentCtrl = TextEditingController(text: widget.existing?.content ?? '');
+    _contentCtrl = QuillController(
+      document: widget.existing?.document ?? Document(),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
     _pinned = widget.existing?.pinned ?? false;
+    _showToolbar = true; // Toolbar visible by default
   }
 
   @override
@@ -38,16 +44,51 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
 
   void _saveAndPop() {
     final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    
+    // Get trimmed values
+    final title = _titleCtrl.text.trim();
+    final content = _contentCtrl.document;
+    final plainText = content.toPlainText().trim();
+    
+    // Validation: reject empty notes
+    if (title.isEmpty && plainText.isEmpty) {
+      messenger?.showSnackBar(
+        SnackBar(
+          content: const Text('Note cannot be empty'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    
+    // Validation: warn about title-only notes (optional)
+    if (title.isNotEmpty && plainText.isEmpty) {
+      messenger?.showSnackBar(
+        SnackBar(
+          content: const Text('Saving note with title only'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    }
 
-    widget.controller.addOrUpdate(
-      id: widget.existing?.id,
-      title: _titleCtrl.text,
-      content: _contentCtrl.text,
-      pinned: _pinned,
-    );
-
-    navigator
-        .pop(true);
+    try {
+      widget.controller.addOrUpdate(
+        id: widget.existing?.id,
+        title: title,
+        content: content,
+        pinned: _pinned,
+      );
+      navigator.pop(true);
+    } catch (e) {
+      messenger?.showSnackBar(
+        SnackBar(
+          content: Text('Error saving note: $e'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override
@@ -77,6 +118,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             tooltip: 'Back',
           ),
           actions: [
+            IconButton(
+              tooltip: _showToolbar ? 'Hide formatting toolbar' : 'Show formatting toolbar',
+              icon: Icon(_showToolbar ? Icons.format_size : Icons.format_size_outlined),
+              onPressed: () => setState(() => _showToolbar = !_showToolbar),
+            ),
             IconButton(
               tooltip: _pinned ? 'Unpin' : 'Pin',
               icon: Icon(_pinned ? Icons.push_pin : Icons.push_pin_outlined),
@@ -156,18 +202,62 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           child: Column(
             children: [
-              Expanded(
-                child: TextField(
+              // Conditionally show toolbar
+              if (_showToolbar)
+                QuillSimpleToolbar(
                   controller: _contentCtrl,
-                  decoration: const InputDecoration(
-                    hintText: 'Start typing...',
-                    border: InputBorder.none,
+                  config: QuillSimpleToolbarConfig(
+                    color: Theme.of(context).appBarTheme.backgroundColor,
+                    multiRowsDisplay: false,
+                    toolbarIconAlignment: WrapAlignment.start,
+                    showDividers: false,
+                    showFontFamily: false,
+                    showFontSize: false,
+                    showBoldButton: true,
+                    showItalicButton: true,
+                    showUnderLineButton: true,
+                    showStrikeThrough: false,
+                    showInlineCode: false,
+                    showColorButton: false,
+                    showBackgroundColorButton: false,
+                    showClearFormat: true,
+                    showAlignmentButtons: false,
+                    showLeftAlignment: false,
+                    showCenterAlignment: false,
+                    showRightAlignment: false,
+                    showJustifyAlignment: false,
+                    showHeaderStyle: false,
+                    showListNumbers: true,
+                    showListBullets: true,
+                    showListCheck: false,
+                    showCodeBlock: false,
+                    showQuote: true,
+                    showIndent: false,
+                    showLink: false,
+                    showUndo: true,
+                    showRedo: true,
+                    buttonOptions: QuillSimpleToolbarButtonOptions(
+                      base: QuillToolbarBaseButtonOptions(
+                        iconTheme: QuillIconTheme(
+                          iconButtonSelectedData: IconButtonData(
+                            style: IconButton.styleFrom(
+                              backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  expands: true,
-                  autofocus: widget.existing?.title.isNotEmpty ?? false,
+                ),
+              if (_showToolbar) const SizedBox(height: 8),
+              Expanded(
+                child: QuillEditor.basic(
+                  controller: _contentCtrl,
+                  config: QuillEditorConfig(
+                    placeholder: 'Start typing...',
+                    padding: EdgeInsets.zero,
+                    autoFocus: widget.existing?.title.isNotEmpty ?? false,
+                  ),
                 ),
               ),
             ],
