@@ -120,7 +120,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           actions: [
             IconButton(
               tooltip: _showToolbar ? 'Hide formatting toolbar' : 'Show formatting toolbar',
-              icon: Icon(_showToolbar ? Icons.format_size : Icons.format_size_outlined),
+              icon: Icon(_showToolbar ? Icons.text_format : Icons.text_format_outlined),
               onPressed: () => setState(() => _showToolbar = !_showToolbar),
             ),
             IconButton(

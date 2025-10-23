@@ -2,7 +2,7 @@ name: fox
 description: "A simple, local-first notes application."
 
 publish_to: 'none'
-version: 1.3.4+10
+version: 1.4.0+10
 
 environment:
   sdk: ^3.6.0
