@@ -26,7 +26,9 @@ class Note {
     if (content.isEmpty) return Document();
     try {
       final decoded = jsonDecode(content);
-      return Document.fromJson(decoded);
+      final ops = decoded is Map ? decoded['ops'] ?? [] : decoded;
+      if (ops is! List || ops.isEmpty) return Document();
+      return Document.fromJson(ops);
     } catch (e) {
       debugPrint('❌ Error parsing note document: $e');
       debugPrint('   Corrupted content: ${content.substring(0, math.min(100, content.length))}...');
