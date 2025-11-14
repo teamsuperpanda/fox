@@ -6,11 +6,13 @@ import 'services/notes_controller.dart';
 class NoteDetailPage extends StatefulWidget {
   final Note? existing;
   final NotesController controller;
+  final bool showToolbar;
 
   const NoteDetailPage({
     super.key,
     this.existing,
     required this.controller,
+    this.showToolbar = true,
   });
 
   @override
@@ -32,7 +34,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       selection: const TextSelection.collapsed(offset: 0),
     );
     _pinned = widget.existing?.pinned ?? false;
-    _showToolbar = true; // Toolbar visible by default
+  _showToolbar = widget.showToolbar; // Toolbar visibility controllable for tests
   }
 
   @override
@@ -51,7 +53,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     final content = _contentCtrl.document;
     final plainText = content.toPlainText().trim();
     
-    // Validation: reject empty notes
+    // If new note is empty, discard it silently
+    if (title.isEmpty && plainText.isEmpty && widget.existing == null) {
+      navigator.pop(false);
+      return;
+    }
+    
+    // Validation: reject empty notes (for existing notes)
     if (title.isEmpty && plainText.isEmpty) {
       messenger?.showSnackBar(
         SnackBar(

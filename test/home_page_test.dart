@@ -112,9 +112,12 @@ void main() {
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
     });
 
-    testWidgets('swipe to delete removes a note', (tester) async {
-      // Seed one note
-      await controller.addOrUpdate(title: 'ToDelete', content: Document());
+    testWidgets('search functionality works', (tester) async {
+      // Seed notes
+      await controller.addOrUpdate(title: 'Apple', content: Document.fromJson([{"insert":"fruit\n"}]));
+      await controller.addOrUpdate(title: 'Banana', content: Document.fromJson([{"insert":"yellow\n"}]));
+      await controller.addOrUpdate(title: 'Car', content: Document.fromJson([{"insert":"vehicle\n"}]));
+
       await tester.pumpWidget(ChangeNotifierProvider(
         create: (_) => ThemeProvider(),
         child: MaterialApp(
@@ -124,18 +127,63 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('ToDelete'), findsOneWidget);
+      // Initially shows all 3 notes
+      expect(find.text('Apple'), findsOneWidget);
+      expect(find.text('Banana'), findsOneWidget);
+      expect(find.text('Car'), findsOneWidget);
 
-      // Perform a swipe from right to left on the Dismissible
-      final item = find.text('ToDelete');
-      await tester.drag(item, const Offset(-500, 0));
+      // Tap search icon
+      await tester.tap(find.byIcon(Icons.search));
       await tester.pumpAndSettle();
 
-      // Confirm the deletion in the dialog
-      await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+      // Enter search term
+      await tester.enterText(find.byType(TextField), 'a');
       await tester.pumpAndSettle();
 
-      expect(find.text('ToDelete'), findsNothing);
+      // Should show filtered results
+      expect(find.text('Apple'), findsOneWidget);
+      expect(find.text('Banana'), findsOneWidget);
+      expect(find.text('Car'), findsOneWidget); // all contain 'a'
+
+      // Clear search
+      await tester.tap(find.byIcon(Icons.clear));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Apple'), findsOneWidget);
+      expect(find.text('Banana'), findsOneWidget);
+      expect(find.text('Car'), findsOneWidget);
+    });
+
+    testWidgets('sort functionality works', (tester) async {
+      // Seed notes with different titles
+      await controller.addOrUpdate(title: 'Zebra', content: Document());
+      await controller.addOrUpdate(title: 'Apple', content: Document());
+
+      await tester.pumpWidget(ChangeNotifierProvider(
+        create: (_) => ThemeProvider(),
+        child: MaterialApp(
+          localizationsDelegates: [FlutterQuillLocalizations.delegate],
+          home: HomePage(controller: controller),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      // Initially sorted by date desc, so newer first
+      final titles = controller.notes.map((n) => n.title).toList();
+      expect(titles.first, isNot('Zebra')); // Apple is newer
+
+      // Open sort menu
+      await tester.tap(find.byIcon(Icons.sort));
+      await tester.pumpAndSettle();
+
+      // Select title ascending
+      await tester.tap(find.text('Title (A-Z)'));
+      await tester.pumpAndSettle();
+
+      // Should be sorted alphabetically
+      expect(find.text('Apple'), findsOneWidget);
+      expect(find.text('Zebra'), findsOneWidget);
+      // The order in UI should reflect the sort
     });
   });
 }

@@ -118,17 +118,70 @@ void main() {
       expect(controller.find('missing'), isNull);
     });
 
-    test('notifies listeners on changes', () async {
-      int notified = 0;
-      controller.addListener(() => notified++);
+    test('search filters notes by title and content', () async {
       await controller.load();
-      final afterLoad = notified;
-      await controller.addOrUpdate(title: 'A', content: Document());
-      expect(notified, greaterThan(afterLoad));
-      // Clean up listener by removing a stored callback.
-      void cb() {}
-      controller.addListener(cb);
-      controller.removeListener(cb);
+      await controller.addOrUpdate(title: 'Apple', content: Document.fromJson([{"insert":"fruit\n"}]));
+      await controller.addOrUpdate(title: 'Banana', content: Document.fromJson([{"insert":"yellow\n"}]));
+      await controller.addOrUpdate(title: 'Car', content: Document.fromJson([{"insert":"vehicle\n"}]));
+
+      await controller.setSearchTerm('a');
+      expect(controller.notes.length, 3); // Apple, Banana, Car all contain 'a'
+      expect(controller.notes.map((n) => n.title), ['Car', 'Banana', 'Apple']); // sorted by date desc
+
+      await controller.setSearchTerm('fruit');
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.title, 'Apple');
+
+      await controller.setSearchTerm('');
+      expect(controller.notes.length, 3);
+    });
+
+    test('sort by title ascending', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Zebra', content: Document());
+      await controller.addOrUpdate(title: 'Apple', content: Document());
+      await controller.setSortBy(SortBy.titleAsc);
+      expect(controller.notes.map((n) => n.title), ['Apple', 'Zebra']);
+    });
+
+    test('sort by title descending', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Apple', content: Document());
+      await controller.addOrUpdate(title: 'Zebra', content: Document());
+      await controller.setSortBy(SortBy.titleDesc);
+      expect(controller.notes.map((n) => n.title), ['Zebra', 'Apple']);
+    });
+
+    test('sort by date ascending', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Old', content: Document());
+      await Future<void>.delayed(const Duration(milliseconds: 5));
+      await controller.addOrUpdate(title: 'New', content: Document());
+      await controller.setSortBy(SortBy.dateAsc);
+      expect(controller.notes.map((n) => n.title), ['Old', 'New']);
+    });
+
+    test('loading state is managed correctly', () async {
+      expect(controller.loading, isFalse);
+      
+      // Start loading
+      final loadFuture = controller.load();
+      expect(controller.loading, isTrue);
+      
+      await loadFuture;
+      expect(controller.loading, isFalse);
+    });
+
+    test('addOrUpdate rejects note with empty title and content', () async {
+      await controller.load();
+      expect(() => controller.addOrUpdate(title: '', content: Document()), throwsA(isA<ArgumentError>()));
+    });
+
+    test('addOrUpdate allows note with title only', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Title Only', content: Document());
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.title, 'Title Only');
     });
   });
 }

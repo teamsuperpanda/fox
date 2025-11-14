@@ -1,7 +1,91 @@
 [
   {
     "language": "en-US",
-    "text": "What's new in 1.4.0:\n• Text styling inside the note."
+    "text": "What's new in 1.5.0:\n• Text styling inside the app\n• Minor bug fixes"
+  },
+  {
+    "language": "en-GB",
+    "text": "What's new in 1.5.0:\n• Text styling inside the app\n• Minor bug fixes"
+  },
+  {
+    "language": "es-ES",
+    "text": "Novedades en la versión 1.5.0:\n• Estilo de texto dentro de la aplicación\n• Corrección de errores menores"
+  },
+  {
+    "language": "fr-FR",
+    "text": "Nouveautés de la version 1.5.0 :\n• Style de texte dans l'application\n• Corrections de bugs mineurs"
+  },
+  {
+    "language": "de-DE",
+    "text": "Neu in Version 1.5.0:\n• Textstil innerhalb der App\n• Kleinere Fehlerbehebungen"
+  },
+  {
+    "language": "pt-BR",
+    "text": "Novidades na versão 1.5.0:\n• Estilo de texto dentro do aplicativo\n• Correções de bugs menores"
+  },
+  {
+    "language": "it-IT",
+    "text": "Novità nella versione 1.5.0:\n• Stile del testo all'interno dell'app\n• Correzioni di bug minori"
+  },
+  {
+    "language": "ja-JP",
+    "text": "バージョン1.5.0の新機能：\n• アプリ内のテキストスタイル\n• 軽微なバグ修正"
+  },
+  {
+    "language": "ko-KR",
+    "text": "버전 1.5.0의 변경사항:\n• 앱 내 텍스트 스타일링\n• 사소한 버그 수정"
+  },
+  {
+    "language": "zh-CN",
+    "text": "1.5.0 更新内容：\n• 应用内的文本样式\n• 小错误修复"
+  },
+  {
+    "language": "zh-TW",
+    "text": "1.5.0 更新內容：\n• 應用程式內的文字樣式\n• 小錯誤修復"
+  },
+  {
+    "language": "ru-RU",
+    "text": "Что нового в версии 1.5.0:\n• Стилизация текста внутри приложения\n• Исправления мелких ошибок"
+  },
+  {
+    "language": "tr-TR",
+    "text": "1.5.0 sürümündeki yenilikler:\n• Uygulama içindeki metin stillendirmesi\n• Küçük hata düzeltmeleri"
+  },
+  {
+    "language": "nl-NL",
+    "text": "Wat is nieuw in 1.5.0:\n• Tekststijling binnen de app\n• Kleine bugfixes"
+  },
+  {
+    "language": "sv-SE",
+    "text": "Nyheter i 1.5.0:\n• Textformatering i appen\n• Mindre buggfixar"
+  },
+  {
+    "language": "pl-PL",
+    "text": "Co nowego w wersji 1.5.0:\n• Stylizacja tekstu w aplikacji\n• Drobne poprawki błędów"
+  },
+  {
+    "language": "ar-SA",
+    "text": "الجديد في الإصدار 1.5.0:\n• تنسيق النص داخل التطبيق\n• إصلاحات أخطاء طفيفة"
+  },
+  {
+    "language": "hi-IN",
+    "text": "वर्ज़न 1.5.0 में नया:\n• ऐप के अंदर टेक्स्ट स्टाइलिंग\n• मामूली बग फिक्स"
+  },
+  {
+    "language": "id-ID",
+    "text": "Yang baru di 1.5.0:\n• Gaya teks di dalam aplikasi\n• Perbaikan bug kecil"
+  },
+  {
+    "language": "vi-VN",
+    "text": "Có gì mới trong 1.5.0:\n• Định dạng văn bản trong ứng dụng\n• Sửa lỗi nhỏ"
+  },
+  {
+    "language": "pt-PT",
+    "text": "Novidades na versão 1.5.0:\n• Estilo de texto dentro da aplicação\n• Correções de bugs menores"
+  },
+  {
+    "language": "es-419",
+    "text": "Novedades en la versión 1.5.0:\n• Estilo de texto dentro de la aplicación\n• Corrección de errores menores"
   },
   {
     "language": "en-GB",
