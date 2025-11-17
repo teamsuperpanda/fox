@@ -2,7 +2,7 @@
 
 <img src="assets/images/icon/icon.png" width="100" alt="Fox Icon">
 
-Fox is a friendly, local-first notes app built with Flutter and Hive. It's designed to be fast, minimal, and private by default. Your notes stay on your device and are always available offline.
+Fox is a friendly, local first notes app built with Flutter and Hive. It's designed to be fast, minimal, and private by default. Your notes stay on your device and are always available offline.
 
 > Built with care by [Team Super Panda](https://www.teamsuperpanda.com)
 
@@ -23,12 +23,12 @@ Fox is a simple notes app for people who want:
 - Quick note-taking: Capture ideas, todos, and drafts in seconds
 - Pinned notes: Keep your most important notes at the top
 - Dark & light themes: Easy on the eyes, day or night
-- Fast search: Find notes by title or content, case-insensitive
+- Fast search: Find notes by title or content, case insensitive
 - Smart sorting: Sort by date or title (asc/desc), with pinned notes always first
-- Local-first storage: All data stays on your device via Hive
-- Zero cloud overhead: No accounts, no sync setup, no third-party services
+- Local first storage: All data stays on your device via Hive
+- Zero cloud overhead: No accounts, no sync setup, no third party services
 
-If you want a focused, distraction‑free place to write that "just works" on your device, Fox is for you.
+If you want a focused, distraction-free place to write that "just works" on your device, Fox is for you.
 
 ---
 
@@ -64,8 +64,7 @@ Fox uses a clean architecture to keep the app reliable and easy to extend.
   - Reusable list widget for rendering notes
 - `ThemeProvider` (`lib/providers/theme_provider.dart`)
   - Toggles and persists light/dark mode using Provider
-
-All state is managed with [Provider](https://pub.dev/packages/provider), so UI widgets automatically rebuild when notes or settings change.
+All state is managed reactively with Provider, so UI widgets automatically rebuild when data changes.
 
 ---
 
@@ -150,11 +149,11 @@ Whether it's a bug report, feature idea, design tweak, or documentation improvem
 
 ### Ways to contribute
 
-- Report bugs – Open a GitHub issue with steps to reproduce
-- Suggest features – Share what you'd like to see next
-- Improve tests – Add or refine unit and widget tests
-- Polish the UI/UX – Small design improvements are very welcome
-- Docs – Help make the project easier to understand
+- Report bugs: Open a GitHub issue with steps to reproduce
+- Suggest features: Share what you'd like to see next
+- Improve tests: Add or refine unit and widget tests
+- Polish the UI/UX: Small design improvements are very welcome
+- Docs: Help make the project easier to understand
 
 ### Contribution flow
 
@@ -202,8 +201,8 @@ See [ASSETS-LICENSE.md](ASSETS-LICENSE.md) for full asset licensing details.
 
 ## Learn more about Team Super Panda
 
-Fox is maintained by **Team Super Panda**, a small group that loves building thoughtful, privacy-friendly tools.
+Fox is maintained by **Team Super Panda**, a small group that loves building thoughtful, privacy friendly tools.
 
 Visit us at **[www.teamsuperpanda.com](https://www.teamsuperpanda.com)** to learn more, follow our work, or say hi.
 
-If you ship something cool with Fox—or build your own spin‑off—let us know. We'd love to see what you create.
+If you ship something cool with Fox or build your own spin-off, let us know. We'd love to see what you create.
