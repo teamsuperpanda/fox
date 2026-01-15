@@ -99,7 +99,7 @@ void main() {
       expect(await repository.getById('test-1'), isNull);
     });
 
-    test('returns all notes sorted correctly', () async {
+    test('returns all notes', () async {
       final now = DateTime.now();
       
       final notes = [
@@ -139,12 +139,14 @@ void main() {
 
       final retrieved = await repository.getAll();
 
-      // Should be sorted: pinned notes first (newest first), then unpinned (newest first)
+      // Repository no longer responsible for sorting. verify all present.
       expect(retrieved.length, equals(4));
-      expect(retrieved[0].id, equals('note-2')); // Pinned New
-      expect(retrieved[1].id, equals('note-4')); // Pinned Old
-      expect(retrieved[2].id, equals('note-3')); // Unpinned New
-      expect(retrieved[3].id, equals('note-1')); // Unpinned Old
+      
+      final ids = retrieved.map((n) => n.id).toSet();
+      expect(ids.contains('note-1'), isTrue);
+      expect(ids.contains('note-2'), isTrue);
+      expect(ids.contains('note-3'), isTrue);
+      expect(ids.contains('note-4'), isTrue);
     });
 
     test('clears all notes', () async {

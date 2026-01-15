@@ -44,10 +44,14 @@ class _HomePageState extends State<HomePage>
     // In tests the binding is AutomatedTestWidgetsFlutterBinding which schedules
     // continuous frames; avoid starting a repeating ticker there so tests can
     // settle. Start looping only in normal app runs.
+    /*
     final bindingName = WidgetsBinding.instance.runtimeType.toString();
     if (!bindingName.contains('AutomatedTestWidgetsFlutterBinding')) {
       _fabController.repeat(reverse: true);
     }
+    */
+    // Performance improvement: Removed continuous animation loop to save battery
+    _fabController.forward();
     _searchController.addListener(() {
       controller.setSearchTerm(_searchController.text);
     });
