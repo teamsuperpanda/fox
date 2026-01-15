@@ -37,7 +37,8 @@ class Note {
   }
 
   // Get plain text from the Document for search/display
-  String get plainText => document.toPlainText();
+  // Cached using late final to avoid parsing JSON repeatedly during search/render
+  late final String plainText = document.toPlainText();
 
   Note copyWith({
     String? id,

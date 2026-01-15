@@ -27,15 +27,7 @@ class HiveNoteRepository implements NoteRepository {
 
   @override
   Future<List<Note>> getAll() async {
-    final notes = _box.values.toList();
-    
-    // Sort by pinned status first, then by updatedAt (newest first)
-    notes.sort((a, b) {
-      if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
-      return b.updatedAt.compareTo(a.updatedAt);
-    });
-    
-    return notes;
+    return _box.values.toList();
   }
 
   @override

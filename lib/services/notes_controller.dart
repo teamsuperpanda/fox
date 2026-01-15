@@ -23,6 +23,7 @@ class NotesController extends ChangeNotifier {
   SortBy _sortBy = SortBy.dateDesc;
   SortBy get sortBy => _sortBy;
 
+  List<Note> _allNotes = const [];
   List<Note> _notes = const [];
   List<Note> get notes => _notes;
 
@@ -36,20 +37,25 @@ class NotesController extends ChangeNotifier {
     _loading = true;
     notifyListeners();
     await _repo.init();
-    final list = await _repo.getAll();
-    _notes = _sorted(list);
+    _allNotes = await _repo.getAll();
+    _updateView();
     _loading = false;
     notifyListeners();
   }
 
+  void _updateView() {
+    _notes = _sorted(_allNotes);
+  }
+
   Future<void> setSearchTerm(String term) async {
     _searchTerm = term;
-    await load();
+    _updateView();
+    notifyListeners();
   }
 
   Future<void> setSortBy(SortBy value) async {
     _sortBy = value;
-    _notes = _sorted(_notes);
+    _updateView();
     notifyListeners();
   }
 
