@@ -237,5 +237,51 @@ void main() {
 
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
     });
+
+    testWidgets('tags dialog allows adding and removing tags', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        home: NoteDetailPage(controller: controller, showToolbar: false),
+      ));
+
+      // Open tags dialog
+      await tester.tap(find.byIcon(Icons.label_outline));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Manage Tags'), findsOneWidget);
+
+      // Add a tag
+      await tester.enterText(find.widgetWithText(TextField, 'New tag...'), 'test-tag');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      expect(find.text('test-tag'), findsOneWidget);
+
+      // Add another tag via add icon
+      await tester.enterText(find.widgetWithText(TextField, 'New tag...'), 'another-tag');
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(find.text('another-tag'), findsOneWidget);
+
+      // Remove a tag
+      await tester.tap(find.byIcon(Icons.cancel).first); // Chip's delete icon
+      await tester.pumpAndSettle();
+
+      expect(find.text('test-tag'), findsNothing);
+      expect(find.text('another-tag'), findsOneWidget);
+
+      // Close dialog
+      await tester.tap(find.text('Close'));
+      await tester.pumpAndSettle();
+
+      // Save note
+      await tester.enterText(find.byType(TextField).first, 'Tagged Note');
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(mockRepo.notes.length, 1);
+      expect(mockRepo.notes.first.tags, contains('another-tag'));
+    });
   });
 }

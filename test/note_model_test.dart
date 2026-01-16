@@ -25,12 +25,14 @@ void main() {
       expect(note.content, equals('{"ops":[{"insert":"Hello World\\n"}]}'));
       expect(note.pinned, equals(false));
       expect(note.updatedAt, equals(testDateTime));
+      expect(note.tags, isEmpty);
     });
 
     test('copyWith creates new note with updated fields', () {
       final updated = note.copyWith(
         title: 'Updated Title',
         pinned: true,
+        tags: ['tag1'],
       );
 
       expect(updated.id, equals(note.id));
@@ -38,6 +40,7 @@ void main() {
       expect(updated.pinned, equals(true));
       expect(updated.content, equals(note.content));
       expect(updated.updatedAt, equals(note.updatedAt));
+      expect(updated.tags, equals(['tag1']));
     });
 
     test('copyWith preserves unchanged fields', () {
@@ -66,6 +69,7 @@ void main() {
       expect(map['content'], equals('{"ops":[{"insert":"Hello World\\n"}]}'));
       expect(map['pinned'], equals(0)); // false -> 0
       expect(map['updatedAt'], equals(testDateTime.millisecondsSinceEpoch));
+      expect(map['tags'], equals([]));
     });
 
     test('toMap converts pinned true to 1', () {
@@ -82,6 +86,7 @@ void main() {
         'content': '{"ops":[{"insert":"Content\\n"}]}',
         'pinned': 1, // 1 -> true
         'updatedAt': testDateTime.millisecondsSinceEpoch,
+        'tags': ['a', 'b'],
       };
 
       final created = Note.fromMap(map);
@@ -91,6 +96,7 @@ void main() {
       expect(created.content, equals('{"ops":[{"insert":"Content\\n"}]}'));
       expect(created.pinned, equals(true));
       expect(created.updatedAt, equals(testDateTime));
+      expect(created.tags, equals(['a', 'b']));
     });
 
     test('fromMap converts 0 to pinned false', () {

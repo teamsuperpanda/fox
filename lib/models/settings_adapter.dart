@@ -17,16 +17,28 @@ class SettingsAdapter extends TypeAdapter<Settings> {
     return Settings(
       themeMode: fields[0] as String? ?? 'system',
       locale: fields[1] as String?,
+      showTags: fields[2] as bool? ?? true,
+      alternatingColors: fields[3] as bool? ?? false,
+      fabAnimation: fields[4] as bool? ?? true,
+      showContent: fields[5] as bool? ?? true,
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
-    writer.writeByte(2);
+    writer.writeByte(6); // Number of fields
     writer.writeByte(0);
     writer.write(obj.themeMode);
     writer.writeByte(1);
     writer.write(obj.locale);
+    writer.writeByte(2);
+    writer.write(obj.showTags);
+    writer.writeByte(3);
+    writer.write(obj.alternatingColors);
+    writer.writeByte(4);
+    writer.write(obj.fabAnimation);
+    writer.writeByte(5);
+    writer.write(obj.showContent);
   }
 
   @override
