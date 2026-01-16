@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "fox",
-      "version": "1.5.0+11",
+      "version": "1.6.0+12",
       "dependencies": [
         "flutter",
         "flutter_launcher_icons",
@@ -108,7 +108,7 @@
     },
     {
       "name": "google_fonts",
-      "version": "6.3.2",
+      "version": "7.0.0",
       "dependencies": [
         "crypto",
         "flutter",

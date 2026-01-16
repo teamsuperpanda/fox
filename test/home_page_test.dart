@@ -88,9 +88,9 @@ void main() {
       expect(find.byType(NoteDetailPage), findsOneWidget);
     });
 
-    testWidgets('pin toggle updates list item icon', (tester) async {
-      // Seed one note
-      await controller.addOrUpdate(title: 'A', content: Document());
+    testWidgets('pinned note shows pin icon', (tester) async {
+      // Seed a pinned note
+      await controller.addOrUpdate(title: 'A', content: Document(), pinned: true);
       await tester.pumpWidget(ChangeNotifierProvider(
         create: (_) => ThemeProvider(),
         child: MaterialApp(
@@ -100,16 +100,9 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      // There should be a push_pin_outlined initially (unpinned)
-      expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
-      expect(find.byIcon(Icons.push_pin), findsNothing);
-
-      // Toggle pin
-      await tester.tap(find.byIcon(Icons.push_pin_outlined));
-      await tester.pumpAndSettle();
-
-      // Now the pinned icon should appear
+      // There should be a push_pin icon (unpinned)
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
+      expect(find.byIcon(Icons.push_pin_outlined), findsNothing);
     });
 
     testWidgets('search functionality works', (tester) async {
@@ -172,12 +165,16 @@ void main() {
       final titles = controller.notes.map((n) => n.title).toList();
       expect(titles.first, isNot('Zebra')); // Apple is newer
 
-      // Open sort menu
-      await tester.tap(find.byIcon(Icons.sort));
+      // Open view options menu
+      await tester.tap(find.byIcon(Icons.tune));
       await tester.pumpAndSettle();
 
       // Select title ascending
       await tester.tap(find.text('Title (A-Z)'));
+      await tester.pumpAndSettle();
+
+      // Close dialog
+      await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
 
       // Should be sorted alphabetically

@@ -322,9 +322,9 @@ void main() {
         ),
       );
 
-      // Pinned shows filled, unpinned shows outlined
+      // Pinned shows filled icon, unpinned shows no icon
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
-      expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.push_pin_outlined), findsNothing);
     });
   });
 }

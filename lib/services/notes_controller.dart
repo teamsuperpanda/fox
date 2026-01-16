@@ -23,6 +23,18 @@ class NotesController extends ChangeNotifier {
   SortBy _sortBy = SortBy.dateDesc;
   SortBy get sortBy => _sortBy;
 
+  bool _showTags = true;
+  bool get showTags => _showTags;
+
+  bool _showContent = true;
+  bool get showContent => _showContent;
+
+  bool _alternatingColors = false;
+  bool get alternatingColors => _alternatingColors;
+
+  bool _fabAnimation = true;
+  bool get fabAnimation => _fabAnimation;
+
   List<Note> _allNotes = const [];
   List<Note> _notes = const [];
   List<Note> get notes => _notes;
@@ -59,11 +71,32 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setShowTags(bool value) {
+    _showTags = value;
+    notifyListeners();
+  }
+
+  void setShowContent(bool value) {
+    _showContent = value;
+    notifyListeners();
+  }
+
+  void setAlternatingColors(bool value) {
+    _alternatingColors = value;
+    notifyListeners();
+  }
+
+  void setFabAnimation(bool value) {
+    _fabAnimation = value;
+    notifyListeners();
+  }
+
   Future<void> addOrUpdate({
     String? id,
     required String title,
     required Document content,
     bool pinned = false,
+    List<String> tags = const [],
   }) async {
     // Validate input
     final trimmedTitle = title.trim();
@@ -79,6 +112,7 @@ class NotesController extends ChangeNotifier {
       content: Note.documentToContent(content),
       pinned: pinned,
       updatedAt: DateTime.now(),
+      tags: tags,
     );
     await _repo.upsert(note);
     await load();
@@ -117,9 +151,11 @@ class NotesController extends ChangeNotifier {
     final copy = [...list];
 
     if (_searchTerm.isNotEmpty) {
+      final term = _searchTerm.toLowerCase();
       copy.retainWhere((note) =>
-          note.title.toLowerCase().contains(_searchTerm.toLowerCase()) ||
-          note.plainText.toLowerCase().contains(_searchTerm.toLowerCase()));
+          note.title.toLowerCase().contains(term) ||
+          note.plainText.toLowerCase().contains(term) ||
+          note.tags.any((tag) => tag.toLowerCase().contains(term)));
     }
 
     copy.sort((a, b) {

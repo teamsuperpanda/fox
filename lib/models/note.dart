@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class Note {
@@ -9,6 +7,7 @@ class Note {
   final String content; // JSON string representing Quill Delta
   final bool pinned;
   final DateTime updatedAt;
+  final List<String> tags;
 
   Note({
     required this.id,
@@ -16,6 +15,7 @@ class Note {
     required this.content,
     required this.pinned,
     required this.updatedAt,
+    this.tags = const [],
   });
 
   // Create content JSON from a Document
@@ -30,8 +30,6 @@ class Note {
       if (ops is! List || ops.isEmpty) return Document();
       return Document.fromJson(ops);
     } catch (e) {
-      debugPrint('❌ Error parsing note document: $e');
-      debugPrint('   Corrupted content: ${content.substring(0, math.min(100, content.length))}...');
       return Document(); // Fallback to empty document
     }
   }
@@ -46,6 +44,7 @@ class Note {
     String? content,
     bool? pinned,
     DateTime? updatedAt,
+    List<String>? tags,
   }) {
     return Note(
       id: id ?? this.id,
@@ -53,6 +52,7 @@ class Note {
       content: content ?? this.content,
       pinned: pinned ?? this.pinned,
       updatedAt: updatedAt ?? this.updatedAt,
+      tags: tags ?? this.tags,
     );
   }
 
@@ -63,6 +63,7 @@ class Note {
       content: (map['content'] as String?) ?? '',
       pinned: (map['pinned'] as int? ?? 0) == 1,
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
+      tags: (map['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const [],
     );
   }
 
@@ -73,6 +74,7 @@ class Note {
       'content': content,
       'pinned': pinned ? 1 : 0,
       'updatedAt': updatedAt.millisecondsSinceEpoch,
+      'tags': tags,
     };
   }
 }

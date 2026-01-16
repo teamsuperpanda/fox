@@ -71,9 +71,11 @@ All state is managed reactively with Provider, so UI widgets automatically rebui
 ## Features
 
 - **Create & edit notes** with rich text (bold, italics, lists, and more)
+- **Organize with tags** to categorize your notes
 - **Pin important notes** so they stay at the top
-- **Search** by title or content (case-insensitive)
+- **Search and filter** by title, content, or tags
 - **Sort** by date or title, ascending or descending
+- **Customizable view** with alternating colors and animation toggles
 - **Dark mode** with persistent theme preference
 - **Local-first storage** using Hive (no network required)
 - **UUID‑based IDs** for unique notes across sessions

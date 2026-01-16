@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'note_detail_page.dart';
 import 'providers/theme_provider.dart';
 import 'services/notes_controller.dart';
+import 'services/settings_service.dart';
 import 'widgets/empty_state.dart';
 import 'widgets/note_list.dart';
 
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage>
     _fabAnimation = Tween<double>(begin: -0.05, end: 0.05).animate(
       CurvedAnimation(parent: _fabController, curve: Curves.easeInOut),
     );
+    
     // In tests the binding is AutomatedTestWidgetsFlutterBinding which schedules
     // continuous frames; avoid starting a repeating ticker there so tests can
     // settle. Start looping only in normal app runs.
@@ -51,10 +53,12 @@ class _HomePageState extends State<HomePage>
     }
     */
     // Performance improvement: Removed continuous animation loop to save battery
-    _fabController.forward();
+    // _fabController.forward(); // Moved to _onChanged to respect initial settings
     _searchController.addListener(() {
       controller.setSearchTerm(_searchController.text);
     });
+    // Load settings after animation controllers are initialized
+    _loadSettings();
   }
 
   @override
@@ -67,7 +71,40 @@ class _HomePageState extends State<HomePage>
   }
 
   void _onChanged() {
-    if (mounted) setState(() {});
+    if (mounted) {
+      if (controller.fabAnimation) {
+        if (!_fabController.isAnimating) {
+          _fabController.repeat(reverse: true);
+        }
+      } else {
+        if (_fabController.isAnimating) {
+          _fabController.stop();
+        }
+        // Force neutral position (0 degrees). Tween is -0.05 to 0.05. Neutral is 0.0, which is t=0.5
+        _fabController.value = 0.5;
+      }
+      setState(() {});
+    }
+  }
+
+  void _loadSettings() {
+    try {
+      final settingsService = SettingsService();
+      controller.setShowTags(settingsService.getShowTags());
+      controller.setShowContent(settingsService.getShowContent());
+      controller.setAlternatingColors(settingsService.getAlternatingColors());
+      controller.setFabAnimation(settingsService.getFabAnimation());
+    } catch (e) {
+      // Settings box may not be initialized in tests
+      controller.setShowTags(true);
+      controller.setShowContent(true);
+      controller.setAlternatingColors(false);
+      controller.setFabAnimation(false);
+    }
+    // Start animation if fabAnimation is enabled after loading settings
+    if (controller.fabAnimation && !_fabController.isAnimating) {
+      _fabController.repeat(reverse: true);
+    }
   }
 
   void _toggleRotation() {
@@ -88,6 +125,146 @@ class _HomePageState extends State<HomePage>
       ),
     ));
     if (changed == true) setState(() {});
+  }
+
+  void _showViewOptions() async {
+    final settingsService = SettingsService();
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('View Options'),
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Sort By', style: Theme.of(context).textTheme.titleSmall),
+                    ListTile(
+                      title: const Text('Date (Newest First)'),
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    leading: Icon(
+                      controller.sortBy == SortBy.dateDesc
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_off,
+                      color: controller.sortBy == SortBy.dateDesc
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                    onTap: () {
+                      controller.setSortBy(SortBy.dateDesc);
+                      setDialogState(() {});
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Date (Oldest First)'),
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    leading: Icon(
+                      controller.sortBy == SortBy.dateAsc
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_off,
+                      color: controller.sortBy == SortBy.dateAsc
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                    onTap: () {
+                      controller.setSortBy(SortBy.dateAsc);
+                      setDialogState(() {});
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Title (A-Z)'),
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    leading: Icon(
+                      controller.sortBy == SortBy.titleAsc
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_off,
+                      color: controller.sortBy == SortBy.titleAsc
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                    onTap: () {
+                      controller.setSortBy(SortBy.titleAsc);
+                      setDialogState(() {});
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Title (Z-A)'),
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    leading: Icon(
+                      controller.sortBy == SortBy.titleDesc
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_off,
+                      color: controller.sortBy == SortBy.titleDesc
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                    onTap: () {
+                      controller.setSortBy(SortBy.titleDesc);
+                      setDialogState(() {});
+                    },
+                  ),
+                  const Divider(),
+                  SwitchListTile(
+                    title: const Text('Show Tags'),
+                    value: controller.showTags,
+                    onChanged: (value) async {
+                      controller.setShowTags(value);
+                      await settingsService.setShowTags(value);
+                      setDialogState(() {});
+                    },
+                  ),
+                  SwitchListTile(
+                    title: const Text('Show Note Previews'),
+                    value: controller.showContent,
+                    onChanged: (value) async {
+                      controller.setShowContent(value);
+                      await settingsService.setShowContent(value);
+                      setDialogState(() {});
+                    },
+                  ),
+                  SwitchListTile(
+                    title: const Text('Alternating Row Colors'),
+                    value: controller.alternatingColors,
+                    onChanged: (value) async {
+                      controller.setAlternatingColors(value);
+                      await settingsService.setAlternatingColors(value);
+                      setDialogState(() {});
+                    },
+                  ),
+                  SwitchListTile(
+                    title: const Text('Animate Add Button'),
+                    value: controller.fabAnimation,
+                    onChanged: (value) async {
+                      controller.setFabAnimation(value);
+                      await settingsService.setFabAnimation(value);
+                      setDialogState(() {});
+                    },
+                  ),
+                ],
+              ),
+            ),
+            ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -119,43 +296,42 @@ class _HomePageState extends State<HomePage>
           ),
         ),
           actions: [
-            if (notes.isNotEmpty) ...[
-              if (_isSearching)
-                IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: notes.isEmpty ? null : () {
+                 if (_isSearching) {
                     _searchController.clear();
                     setState(() => _isSearching = false);
-                  },
-                )
-              else
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () => setState(() => _isSearching = true),
-                ),
-              PopupMenuButton<SortBy>(
-                icon: const Icon(Icons.sort),
-                onSelected: (sortBy) => controller.setSortBy(sortBy),
-                itemBuilder: (context) => const [
-                  PopupMenuItem(
-                    value: SortBy.dateDesc,
-                    child: Text('Date (Newest First)'),
-                  ),
-                  PopupMenuItem(
-                    value: SortBy.dateAsc,
-                    child: Text('Date (Oldest First)'),
-                  ),
-                  PopupMenuItem(
-                    value: SortBy.titleAsc,
-                    child: Text('Title (A-Z)'),
-                  ),
-                  PopupMenuItem(
-                    value: SortBy.titleDesc,
-                    child: Text('Title (Z-A)'),
-                  ),
-                ],
-              ),
-            ],
+                 } else {
+                    setState(() => _isSearching = true);
+                 }
+              },
+               color: notes.isEmpty ? Theme.of(context).disabledColor : null,
+            ),
+             if (_isSearching && notes.isNotEmpty) 
+             // We can just reuse the one search button to toggle or have two if you prefer.
+             // Following your existing logic of swapping icons, let's keep it but just disable when empty.
+             // Wait, your logic swapped icons in place.
+             // Let's refactor:
+            if (_isSearching)
+               IconButton(
+                 icon: const Icon(Icons.clear),
+                 onPressed: () {
+                   _searchController.clear();
+                   setState(() => _isSearching = false);
+                 },
+               )
+             else
+               IconButton(
+                 icon: const Icon(Icons.search),
+                 onPressed: notes.isEmpty ? null : () => setState(() => _isSearching = true),
+               ),
+
+            IconButton(
+              icon: const Icon(Icons.tune),
+              onPressed: notes.isEmpty ? null : _showViewOptions,
+              tooltip: 'View options',
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
               child: IconButton(
@@ -180,7 +356,12 @@ class _HomePageState extends State<HomePage>
           ? const Center(child: CircularProgressIndicator())
           : notes.isEmpty
               ? const EmptyState()
-              : NoteList(controller: controller, notes: notes),
+              : NoteList(
+                  controller: controller,
+                  notes: notes,
+                  showTags: controller.showTags,
+                  showContent: controller.showContent,
+                ),
     );
   }
 }

@@ -136,6 +136,24 @@ void main() {
       expect(controller.notes.length, 3);
     });
 
+    test('search filters notes by tags', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Note 1', content: Document(), tags: ['work', 'important']);
+      await controller.addOrUpdate(title: 'Note 2', content: Document(), tags: ['personal']);
+      await controller.addOrUpdate(title: 'Note 3', content: Document());
+
+      await controller.setSearchTerm('work');
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.title, 'Note 1');
+
+      await controller.setSearchTerm('personal');
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.title, 'Note 2');
+
+      await controller.setSearchTerm('Note');
+      expect(controller.notes.length, 3);
+    });
+
     test('sort by title ascending', () async {
       await controller.load();
       await controller.addOrUpdate(title: 'Zebra', content: Document());

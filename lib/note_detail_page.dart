@@ -24,6 +24,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   late QuillController _contentCtrl;
   late bool _pinned;
   late bool _showToolbar;
+  late List<String> _tags;
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
     _pinned = widget.existing?.pinned ?? false;
   _showToolbar = widget.showToolbar; // Toolbar visibility controllable for tests
+    _tags = List.from(widget.existing?.tags ?? []);
   }
 
   @override
@@ -42,6 +44,79 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     _titleCtrl.dispose();
     _contentCtrl.dispose();
     super.dispose();
+  }
+
+  void _showTagsDialog() async {
+    final tagCtrl = TextEditingController();
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (dialogContext, setDialogState) {
+            return AlertDialog(
+              title: const Text('Manage Tags'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: tagCtrl,
+                      decoration: InputDecoration(
+                        hintText: 'New tag...',
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
+                            final text = tagCtrl.text.trim();
+                            if (text.isNotEmpty && !_tags.contains(text)) {
+                              setState(() {
+                                _tags.add(text);
+                              });
+                              setDialogState(() {});
+                              tagCtrl.clear();
+                            }
+                          },
+                        ),
+                      ),
+                      onSubmitted: (text) {
+                        final trimmed = text.trim();
+                        if (trimmed.isNotEmpty && !_tags.contains(trimmed)) {
+                          setState(() {
+                            _tags.add(trimmed);
+                          });
+                          setDialogState(() {});
+                          tagCtrl.clear();
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 8,
+                      children: _tags.map((tag) {
+                        return Chip(
+                          label: Text(tag),
+                          onDeleted: () {
+                            setState(() {
+                              _tags.remove(tag);
+                            });
+                            setDialogState(() {});
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: const Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   void _saveAndPop() {
@@ -87,6 +162,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         title: title,
         content: content,
         pinned: _pinned,
+        tags: _tags,
       );
       navigator.pop(true);
     } catch (e) {
@@ -126,6 +202,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             tooltip: 'Back',
           ),
           actions: [
+            IconButton(
+              tooltip: 'Tags',
+              icon: const Icon(Icons.label_outline),
+              onPressed: _showTagsDialog,
+            ),
             IconButton(
               tooltip: _showToolbar ? 'Hide formatting toolbar' : 'Show formatting toolbar',
               icon: Icon(_showToolbar ? Icons.text_format : Icons.text_format_outlined),
