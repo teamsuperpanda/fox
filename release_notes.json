@@ -1,90 +1,90 @@
 [
   {
     "language": "en-US",
-    "text": "What's new in 1.6.0:\n• Tag system for organizing notes\n• Search and filter notes by tags\n• New menu with enhanced navigation\n• Improved FAB animation\n• Alternating colors for visual variety"
+    "text": "What's new in 1.7.0:\n• New Themes\n• Trash Page to recover deleted notes\n• New Bottom Bar for quick settings\n• New Links in About Section\n• Bug fixes and small improvements"
   },
   {
     "language": "en-GB",
-    "text": "What's new in 1.6.0:\n• Tag system for organising notes\n• Search and filter notes by tags\n• New menu with enhanced navigation\n• Improved FAB animation\n• Alternating colours for visual variety"
+    "text": "What's new in 1.7.0:\n• New Themes\n• Trash Page to recover deleted notes\n• New Bottom Bar for quick settings\n• New Links in About Section\n• Bug fixes and small improvements"
   },
   {
     "language": "es-ES",
-    "text": "Novedades en la versión 1.6.0:\n• Sistema de etiquetas para organizar notas\n• Buscar y filtrar notas por etiquetas\n• Nuevo menú con navegación mejorada\n• Animación FAB mejorada\n• Colores alternos para variedad visual"
+    "text": "Novedades en la versión 1.7.0:\n• Nuevos Temas\n• Página de Papelera para recuperar notas eliminadas\n• Nueva Barra Inferior para configuraciones rápidas\n• Nuevos Enlaces en la Sección Acerca de\n• Correcciones de errores y pequeñas mejoras"
   },
   {
     "language": "fr-FR",
-    "text": "Nouveautés de la version 1.6.0 :\n• Système d'étiquettes pour organiser les notes\n• Rechercher et filtrer les notes par étiquettes\n• Nouveau menu avec navigation améliorée\n• Animation FAB améliorée\n• Couleurs alternées pour plus de variété"
+    "text": "Nouveautés de la version 1.7.0 :\n• Nouveaux Thèmes\n• Page Corbeille pour récupérer les notes supprimées\n• Nouvelle Barre Inférieure pour les paramètres rapides\n• Nouveaux Liens dans la Section À Propos\n• Corrections de bugs et petites améliorations"
   },
   {
     "language": "de-DE",
-    "text": "Neu in Version 1.6.0:\n• Tag-System zum Organisieren von Notizen\n• Notizen nach Tags durchsuchen und filtern\n• Neues Menü mit verbesserter Navigation\n• Verbesserte FAB-Animation\n• Abwechselnde Farben für optische Vielfalt"
+    "text": "Neu in Version 1.7.0:\n• Neue Themen\n• Papierkorb-Seite zum Wiederherstellen gelöschter Notizen\n• Neue untere Leiste für Schnelleinstellungen\n• Neue Links im Abschnitt Über\n• Fehlerbehebungen und kleine Verbesserungen"
   },
   {
     "language": "pt-BR",
-    "text": "Novidades na versão 1.6.0:\n• Sistema de tags para organizar notas\n• Pesquisar e filtrar notas por tags\n• Novo menu com navegação aprimorada\n• Animação FAB melhorada\n• Cores alternadas para mais variedade visual"
+    "text": "Novidades na versão 1.7.0:\n• Novos Temas\n• Página da Lixeira para recuperar notas excluídas\n• Nova Barra Inferior para configurações rápidas\n• Novos Links na Seção Sobre\n• Correções de bugs e pequenas melhorias"
   },
   {
     "language": "it-IT",
-    "text": "Novità nella versione 1.6.0:\n• Sistema di tag per organizzare le note\n• Cerca e filtra note per tag\n• Nuovo menu con navigazione migliorata\n• Animazione FAB migliorata\n• Colori alternati per una maggiore varietà visiva"
+    "text": "Novità nella versione 1.7.0:\n• Nuovi Temi\n• Pagina Cestino per recuperare le note eliminate\n• Nuova Barra Inferiore per impostazioni rapide\n• Nuovi Link nella Sezione Informazioni\n• Correzioni di bug e piccoli miglioramenti"
   },
   {
     "language": "ja-JP",
-    "text": "バージョン1.6.0の新機能：\n• ノートを整理するタグシステム\n• タグでノートを検索・フィルタリング\n• 強化されたナビゲーションを備えた新メニュー\n• 改善されたFABアニメーション\n• 視覚的バリエーションのための交互色"
+    "text": "バージョン1.7.0の新機能：\n• 新しいテーマ\n• 削除されたノートを回復するためのゴミ箱ページ\n• クイック設定のための新しい下部バー\n• バージョン情報セクションの新しいリンク\n• バグ修正と小さな改善"
   },
   {
     "language": "ko-KR",
-    "text": "버전 1.6.0의 변경사항:\n• 노트 정렬을 위한 태그 시스템\n• 태그로 노트 검색 및 필터링\n• 향상된 네비게이션을 갖춘 새 메뉴\n• 개선된 FAB 애니메이션\n• 시각적 다양성을 위한 교대 색상"
+    "text": "버전 1.7.0의 변경사항:\n• 새로운 테마\n• 삭제된 노트를 복구하기 위한 휴지통 페이지\n• 빠른 설정을 위한 새로운 하단 바\n• 정보 섹션의 새로운 링크\n• 버그 수정 및 작은 개선"
   },
   {
     "language": "zh-CN",
-    "text": "1.6.0 更新内容：\n• 用于组织笔记的标签系统\n• 按标签搜索和过滤笔记\n• 具有增强导航功能的新菜单\n• 改进的FAB动画\n• 交替颜色以增加视觉多样性"
+    "text": "1.7.0 更新内容：\n• 新主题\n• 用于恢复已删除笔记的垃圾箱页面\n• 用于快速设置的新底部栏\n• 关于部分的新链接\n• 错误修复和小改进"
   },
   {
     "language": "zh-TW",
-    "text": "1.6.0 更新內容：\n• 用於組織筆記的標籤系統\n• 按標籤搜尋和篩選筆記\n• 具有增強導航功能的新選單\n• 改進的FAB動畫\n• 交替顏色以增加視覺多樣性"
+    "text": "1.7.0 更新內容：\n• 新主題\n• 用於恢復已刪除筆記的垃圾桶頁面\n• 用於快速設定新的底部欄\n• 關於部分的新連結\n• 錯誤修復和小改進"
   },
   {
     "language": "ru-RU",
-    "text": "Что нового в версии 1.6.0:\n• Система тегов для организации заметок\n• Поиск и фильтрация заметок по тегам\n• Новое меню с улучшенной навигацией\n• Улучшенная анимация FAB\n• Чередующиеся цвета для визуального разнообразия"
+    "text": "Что нового в версии 1.7.0:\n• Новые Темы\n• Страница Корзины для восстановления удаленных заметок\n• Новая Нижняя Панель для быстрых настроек\n• Новые Ссылки в Разделе О Программе\n• Исправления ошибок и небольшие улучшения"
   },
   {
     "language": "tr-TR",
-    "text": "1.6.0 sürümündeki yenilikler:\n• Notları düzenlemek için etiket sistemi\n• Etiketlere göre notları arama ve filtreleme\n• Geliştirilmiş navigasyonlu yeni menü\n• İyileştirilmiş FAB animasyonu\n• Görsel çeşitlilik için dönen renkler"
+    "text": "1.7.0 sürümündeki yenilikler:\n• Yeni Temalar\n• Silinen notları kurtarmak için Çöp Kutusu Sayfası\n• Hızlı ayarlar için Yeni Alt Çubuk\n• Hakkında Bölümünde Yeni Bağlantılar\n• Hata düzeltmeleri ve küçük iyileştirmeler"
   },
   {
     "language": "nl-NL",
-    "text": "Wat is nieuw in 1.6.0:\n• Tag-systeem voor het organiseren van notities\n• Notities zoeken en filteren op tags\n• Nieuw menu met verbeterde navigatie\n• Verbeterde FAB-animatie\n• Afwisselende kleuren voor visuele variatie"
+    "text": "Wat is nieuw in 1.7.0:\n• Nieuwe Thema's\n• Prullenbak Pagina voor het herstellen van verwijderde notities\n• Nieuwe Onderste Balk voor snelle instellingen\n• Nieuwe Links in de Over Sectie\n• Bugfixes en kleine verbeteringen"
   },
   {
     "language": "sv-SE",
-    "text": "Nyheter i 1.6.0:\n• Taggsystem för att organisera anteckningar\n• Sök och filtrera anteckningar efter taggar\n• Ny meny med förbättrad navigering\n• Förbättrad FAB-animation\n• Växlande färger för visuell variation"
+    "text": "Nyheter i 1.7.0:\n• Nya Teman\n• Papperskorgssida för att återställa raderade anteckningar\n• Ny Nedre Fält för snabba inställningar\n• Nya Länkar i Om Avsnittet\n• Bugfixar och små förbättringar"
   },
   {
     "language": "pl-PL",
-    "text": "Co nowego w wersji 1.6.0:\n• System tagów do organizowania notatek\n• Wyszukiwanie i filtrowanie notatek według tagów\n• Nowe menu z ulepszoną nawigacją\n• Ulepszona animacja FAB\n• Naprzemienne kolory dla wizualnej różnorodności"
+    "text": "Co nowego w wersji 1.7.0:\n• Nowe Motywy\n• Strona Kosza na śmieci do odzyskiwania usuniętych notatek\n• Nowy Dolny Pasek dla szybkich ustawień\n• Nowe Linki w Sekcji Informacje\n• Poprawki błędów i małe ulepszenia"
   },
   {
     "language": "ar-SA",
-    "text": "الجديد في الإصدار 1.6.0:\n• نظام العلامات لتنظيم الملاحظات\n• البحث والتصفية حسب العلامات\n• قائمة جديدة مع ملاحة محسنة\n• تحسين حركة FAB\n• ألوان متبادلة للتنوع البصري"
+    "text": "الجديد في الإصدار 1.7.0:\n• مواضيع جديدة\n• صفحة سلة المهملات لاستعادة الملاحظات المحذوفة\n• شريط سفلي جديد للإعدادات السريعة\n• روابط جديدة في قسم حول\n• إصلاحات الأخطاء وتحسينات صغيرة"
   },
   {
     "language": "hi-IN",
-    "text": "वर्ज़न 1.6.0 में नया:\n• नोट्स को व्यवस्थित करने के लिए टैग सिस्टम\n• टैग के अनुसार नोट्स खोजें और फ़िल्टर करें\n• बेहतर नेविगेशन के साथ नया मेनू\n• बेहतर FAB एनिमेशन\n• दृश्य विविधता के लिए वैकल्पिक रंग"
+    "text": "वर्ज़न 1.7.0 में नया:\n• नए थीम\n• हटाई गई नोट्स को पुनर्प्राप्त करने के लिए ट्रैश पेज\n• त्वरित सेटिंग्स के लिए नया बॉटम बार\n• एबाउट सेक्शन में नए लिंक\n• बग फिक्स और छोटे सुधार"
   },
   {
     "language": "id-ID",
-    "text": "Yang baru di 1.6.0:\n• Sistem tag untuk mengorganisir catatan\n• Cari dan saring catatan berdasarkan tag\n• Menu baru dengan navigasi yang ditingkatkan\n• Animasi FAB yang ditingkatkan\n• Warna bergantian untuk variasi visual"
+    "text": "Yang baru di 1.7.0:\n• Tema Baru\n• Halaman Sampah untuk memulihkan catatan yang dihapus\n• Bilah Bawah Baru untuk pengaturan cepat\n• Tautan Baru di Bagian Tentang\n• Perbaikan bug dan peningkatan kecil"
   },
   {
     "language": "vi-VN",
-    "text": "Có gì mới trong 1.6.0:\n• Hệ thống thẻ để tổ chức ghi chú\n• Tìm kiếm và lọc ghi chú theo thẻ\n• Menu mới với điều hướng được cải thiện\n• Hoạt ảnh FAB được cải thiện\n• Màu xen kẽ để đa dạng hóa hình ảnh"
+    "text": "Có gì mới trong 1.7.0:\n• Chủ đề Mới\n• Trang Thùng Rác để khôi phục ghi chú đã xóa\n• Thanh Dưới Mới cho cài đặt nhanh\n• Liên kết Mới trong Phần Giới thiệu\n• Sửa lỗi và cải tiến nhỏ"
   },
   {
     "language": "pt-PT",
-    "text": "Novidades na versão 1.6.0:\n• Sistema de etiquetas para organizar notas\n• Procurar e filtrar notas por etiquetas\n• Novo menu com navegação melhorada\n• Animação FAB melhorada\n• Cores alternadas para variedade visual"
+    "text": "Novidades na versão 1.7.0:\n• Novos Temas\n• Página do Lixo para recuperar notas eliminadas\n• Nova Barra Inferior para definições rápidas\n• Novos Links na Secção Sobre\n• Correções de bugs e pequenas melhorias"
   },
   {
     "language": "es-419",
-    "text": "Novedades en la versión 1.6.0:\n• Sistema de etiquetas para organizar notas\n• Buscar y filtrar notas por etiquetas\n• Nuevo menú con navegación mejorada\n• Animación FAB mejorada\n• Colores alternos para variedad visual"
+    "text": "Novedades en la versión 1.7.0:\n• Nuevos Temas\n• Página de Papelera para recuperar notas eliminadas\n• Nueva Barra Inferior para configuraciones rápidas\n• Nuevos Enlaces en la Sección Acerca de\n• Correcciones de errores y pequeñas mejoras"
   }
 ]
