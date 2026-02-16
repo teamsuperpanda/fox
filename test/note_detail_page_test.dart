@@ -5,6 +5,7 @@ import 'package:fox/models/note.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository.dart';
 import 'package:fox/note_detail_page.dart';
+import 'dart:async';
 
 class MockRepository implements NoteRepository {
   final List<Note> notes = [];
@@ -32,12 +33,47 @@ class MockRepository implements NoteRepository {
 
   @override
   Future<Note?> getById(String id) async {
-    return notes.firstWhere((n) => n.id == id, orElse: () => throw Exception());
+    try {
+      return notes.firstWhere((n) => n.id == id);
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
   Future<void> clear() async {
     notes.clear();
+  }
+}
+
+class FailingSaveRepository extends MockRepository {
+  @override
+  Future<void> upsert(Note note) async {
+    throw Exception('save failed');
+  }
+}
+
+class FailingDeleteRepository extends MockRepository {
+  @override
+  Future<void> delete(String id) async {
+    throw Exception('delete failed');
+  }
+}
+
+class DelayedRepository extends MockRepository {
+  final Completer<void> upsertCompleter = Completer<void>();
+  final Completer<void> deleteCompleter = Completer<void>();
+
+  @override
+  Future<void> upsert(Note note) async {
+    await upsertCompleter.future;
+    return super.upsert(note);
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    await deleteCompleter.future;
+    return super.delete(id);
   }
 }
 
@@ -282,6 +318,105 @@ void main() {
 
       expect(mockRepo.notes.length, 1);
       expect(mockRepo.notes.first.tags, contains('another-tag'));
+    });
+
+    testWidgets('save failure keeps user on page and shows error', (tester) async {
+      final failingRepo = FailingSaveRepository();
+      final failingController = NotesController(failingRepo);
+
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        home: NoteDetailPage(controller: failingController),
+      ));
+
+      await tester.enterText(find.byType(TextField).first, 'Will Fail');
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pump();
+
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+      expect(failingRepo.notes, isEmpty);
+    });
+
+    testWidgets('save pops only after awaited write success', (tester) async {
+      final delayedRepo = DelayedRepository();
+      final delayedController = NotesController(delayedRepo);
+
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        home: NoteDetailPage(controller: delayedController),
+      ));
+
+      await tester.enterText(find.byType(TextField).first, 'Delayed Save');
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pump();
+
+      // Still on page while write is pending
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+
+      delayedRepo.upsertCompleter.complete();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
+    });
+
+    testWidgets('delete failure does not pop detail page', (tester) async {
+      final failingRepo = FailingDeleteRepository();
+      final failingController = NotesController(failingRepo);
+
+      await failingController.load();
+      await failingController.addOrUpdate(
+        title: 'Delete Me',
+        content: Document(),
+      );
+      final existing = failingController.notes.first;
+
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        home: NoteDetailPage(existing: existing, controller: failingController),
+      ));
+
+      await tester.tap(find.byIcon(Icons.delete));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete'));
+      await tester.pump();
+
+      expect(find.textContaining('Error deleting note'), findsOneWidget);
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+    });
+
+    testWidgets('delete pops only after awaited delete success', (tester) async {
+      final delayedRepo = DelayedRepository();
+      final delayedController = NotesController(delayedRepo);
+
+      await delayedController.load();
+      delayedRepo.upsertCompleter.complete();
+      await delayedController.addOrUpdate(
+        title: 'Delayed Delete',
+        content: Document(),
+      );
+      final existing = delayedController.notes.first;
+
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        home: NoteDetailPage(existing: existing, controller: delayedController),
+      ));
+
+      await tester.tap(find.byIcon(Icons.delete));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete'));
+      await tester.pump();
+
+      // Still on page while delete is pending
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+
+      delayedRepo.deleteCompleter.complete();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
     });
   });
 }

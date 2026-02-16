@@ -219,7 +219,7 @@
     },
     {
       "name": "google_fonts",
-      "rootUri": "file:///home/adam/.pub-cache/hosted/pub.dev/google_fonts-7.0.0",
+      "rootUri": "file:///home/adam/.pub-cache/hosted/pub.dev/google_fonts-8.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -603,8 +603,8 @@
     }
   ],
   "generator": "pub",
-  "generatorVersion": "3.10.4",
+  "generatorVersion": "3.10.7",
   "flutterRoot": "file:///home/adam/flutter",
-  "flutterVersion": "3.38.5",
+  "flutterVersion": "3.38.7",
   "pubCache": "file:///home/adam/.pub-cache"
 }

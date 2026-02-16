@@ -119,9 +119,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
   }
 
-  void _saveAndPop() {
+  Future<void> _saveAndPop() async {
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.maybeOf(context);
+    final errorColor = Theme.of(context).colorScheme.error;
     
     // Get trimmed values
     final title = _titleCtrl.text.trim();
@@ -139,7 +140,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       messenger?.showSnackBar(
         SnackBar(
           content: const Text('Note cannot be empty'),
-          backgroundColor: Theme.of(context).colorScheme.error,
+          backgroundColor: errorColor,
           duration: const Duration(seconds: 2),
         ),
       );
@@ -157,7 +158,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
 
     try {
-      widget.controller.addOrUpdate(
+      await widget.controller.addOrUpdate(
         id: widget.existing?.id,
         title: title,
         content: content,
@@ -169,7 +170,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       messenger?.showSnackBar(
         SnackBar(
           content: Text('Error saving note: $e'),
-          backgroundColor: Theme.of(context).colorScheme.error,
+          backgroundColor: errorColor,
         ),
       );
     }
@@ -233,6 +234,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     final navigator = Navigator.of(context);
                     final messenger = ScaffoldMessenger.maybeOf(context);
                     final theme = Theme.of(context);
+                    final errorColor = theme.colorScheme.error;
 
                     final confirmed = await showDialog<bool>(
                       context: context,
@@ -259,19 +261,28 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                       },
                     );
                     if (confirmed == true) {
-                      widget.controller.remove(widget.existing!.id);
+                      try {
+                        await widget.controller.remove(widget.existing!.id);
 
-                      navigator.pop(true);
-                      messenger?.showSnackBar(
-                        SnackBar(
-                          content: const Text('Note deleted'),
-                          action: SnackBarAction(
-                            label: 'Undo',
-                            textColor: theme.colorScheme.primary,
-                            onPressed: () => widget.controller.undoRemove(),
+                        navigator.pop(true);
+                        messenger?.showSnackBar(
+                          SnackBar(
+                            content: const Text('Note deleted'),
+                            action: SnackBarAction(
+                              label: 'Undo',
+                              textColor: theme.colorScheme.primary,
+                              onPressed: () => widget.controller.undoRemove(),
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } catch (e) {
+                        messenger?.showSnackBar(
+                          SnackBar(
+                            content: Text('Error deleting note: $e'),
+                            backgroundColor: errorColor,
+                          ),
+                        );
+                      }
                     }
                   },
                   child: Icon(

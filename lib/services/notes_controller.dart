@@ -115,27 +115,41 @@ class NotesController extends ChangeNotifier {
       tags: tags,
     );
     await _repo.upsert(note);
-    await load();
+    _allNotes = [
+      ...(_allNotes.where((n) => n.id != note.id)),
+      note,
+    ];
+    _updateView();
+    notifyListeners();
   }
 
   Future<void> setPinned(String id, bool pinned) async {
-    final note = _notes.firstWhere((n) => n.id == id);
-    await _repo
-        .upsert(note.copyWith(pinned: pinned, updatedAt: DateTime.now()));
-    await load();
+    final note = _allNotes.firstWhere((n) => n.id == id);
+    final updated = note.copyWith(pinned: pinned, updatedAt: DateTime.now());
+    await _repo.upsert(updated);
+    _allNotes = [
+      ...(_allNotes.where((n) => n.id != id)),
+      updated,
+    ];
+    _updateView();
+    notifyListeners();
   }
 
   Future<void> remove(String id) async {
-    _lastRemovedNote = _notes.firstWhere((n) => n.id == id);
+    _lastRemovedNote = _allNotes.firstWhere((n) => n.id == id);
     await _repo.delete(id);
-    await load();
+    _allNotes = _allNotes.where((n) => n.id != id).toList();
+    _updateView();
+    notifyListeners();
   }
 
   Future<void> undoRemove() async {
     if (_lastRemovedNote != null) {
       await _repo.upsert(_lastRemovedNote!);
+      _allNotes = [..._allNotes, _lastRemovedNote!];
       _lastRemovedNote = null;
-      await load();
+      _updateView();
+      notifyListeners();
     }
   }
 

@@ -296,37 +296,21 @@ class _HomePageState extends State<HomePage>
           ),
         ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: notes.isEmpty ? null : () {
-                 if (_isSearching) {
-                    _searchController.clear();
-                    setState(() => _isSearching = false);
-                 } else {
-                    setState(() => _isSearching = true);
-                 }
-              },
-               color: notes.isEmpty ? Theme.of(context).disabledColor : null,
-            ),
-             if (_isSearching && notes.isNotEmpty) 
-             // We can just reuse the one search button to toggle or have two if you prefer.
-             // Following your existing logic of swapping icons, let's keep it but just disable when empty.
-             // Wait, your logic swapped icons in place.
-             // Let's refactor:
             if (_isSearching)
-               IconButton(
-                 icon: const Icon(Icons.clear),
-                 onPressed: () {
-                   _searchController.clear();
-                   setState(() => _isSearching = false);
-                 },
-               )
-             else
-               IconButton(
-                 icon: const Icon(Icons.search),
-                 onPressed: notes.isEmpty ? null : () => setState(() => _isSearching = true),
-               ),
-
+              IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  _searchController.clear();
+                  setState(() => _isSearching = false);
+                },
+              )
+            else
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: notes.isEmpty
+                    ? null
+                    : () => setState(() => _isSearching = true),
+              ),
             IconButton(
               icon: const Icon(Icons.tune),
               onPressed: notes.isEmpty ? null : _showViewOptions,
