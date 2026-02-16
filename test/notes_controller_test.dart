@@ -118,6 +118,20 @@ void main() {
       expect(controller.find('missing'), isNull);
     });
 
+    test('find uses filtered view when search term is active', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Alpha', content: Document());
+      await controller.addOrUpdate(title: 'Beta', content: Document());
+
+      final alphaId = controller.notes.firstWhere((n) => n.title == 'Alpha').id;
+
+      await controller.setSearchTerm('Beta');
+      expect(controller.find(alphaId), isNull);
+
+      await controller.setSearchTerm('');
+      expect(controller.find(alphaId)?.title, 'Alpha');
+    });
+
     test('search filters notes by title and content', () async {
       await controller.load();
       await controller.addOrUpdate(title: 'Apple', content: Document.fromJson([{"insert":"fruit\n"}]));

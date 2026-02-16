@@ -182,5 +182,60 @@ void main() {
       expect(find.text('Zebra'), findsOneWidget);
       // The order in UI should reflect the sort
     });
+
+    testWidgets('search with zero results still allows clear and exit', (tester) async {
+      await controller.addOrUpdate(title: 'Apple', content: Document());
+      await controller.addOrUpdate(title: 'Banana', content: Document());
+
+      await tester.pumpWidget(ChangeNotifierProvider(
+        create: (_) => ThemeProvider(),
+        child: MaterialApp(
+          localizationsDelegates: [FlutterQuillLocalizations.delegate],
+          home: HomePage(controller: controller),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), 'zzz-no-match');
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.clear), findsOneWidget);
+      expect(find.textContaining('No notes yet'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.clear));
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(find.byType(TextField), findsNothing);
+      expect(find.text('Apple'), findsOneWidget);
+      expect(find.text('Banana'), findsOneWidget);
+    });
+
+    testWidgets('app bar has one deterministic search action path', (tester) async {
+      await controller.addOrUpdate(title: 'One', content: Document());
+
+      await tester.pumpWidget(ChangeNotifierProvider(
+        create: (_) => ThemeProvider(),
+        child: MaterialApp(
+          localizationsDelegates: [FlutterQuillLocalizations.delegate],
+          home: HomePage(controller: controller),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      // Not searching: exactly one search icon in app bar actions.
+      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(find.byIcon(Icons.clear), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pumpAndSettle();
+
+      // Searching: no search icon and exactly one clear icon.
+      expect(find.byIcon(Icons.search), findsNothing);
+      expect(find.byIcon(Icons.clear), findsOneWidget);
+    });
   });
 }
