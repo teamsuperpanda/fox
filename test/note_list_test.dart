@@ -4,6 +4,7 @@ import 'package:fox/models/note.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository.dart';
 import 'package:fox/widgets/note_list.dart';
+import 'package:fox/models/folder.dart';
 
 class MockRepository implements NoteRepository {
   final List<Note> notes = [];
@@ -42,6 +43,15 @@ class MockRepository implements NoteRepository {
   Future<void> clear() async {
     notes.clear();
   }
+
+  @override
+  Future<List<Folder>> getAllFolders() async => [];
+
+  @override
+  Future<void> upsertFolder(Folder folder) async {}
+
+  @override
+  Future<void> deleteFolder(String id) async {}
 }
 
 void main() {

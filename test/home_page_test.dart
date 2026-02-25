@@ -9,6 +9,7 @@ import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/folder.dart';
 
 class MemoryRepo implements NoteRepository {
   final List<Note> _data = [];
@@ -49,6 +50,15 @@ class MemoryRepo implements NoteRepository {
     _data.removeWhere((e) => e.id == note.id);
     _data.add(note);
   }
+
+  @override
+  Future<List<Folder>> getAllFolders() async => [];
+
+  @override
+  Future<void> upsertFolder(Folder folder) async {}
+
+  @override
+  Future<void> deleteFolder(String id) async {}
 }
 
 void main() {

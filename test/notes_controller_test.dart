@@ -4,6 +4,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/services/repository.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/folder.dart';
 
 class MemoryRepo implements NoteRepository {
   final List<Note> _data = [];
@@ -44,6 +45,15 @@ class MemoryRepo implements NoteRepository {
     _data.removeWhere((e) => e.id == note.id);
     _data.add(note);
   }
+
+  @override
+  Future<List<Folder>> getAllFolders() async => [];
+
+  @override
+  Future<void> upsertFolder(Folder folder) async {}
+
+  @override
+  Future<void> deleteFolder(String id) async {}
 }
 
 void main() {
@@ -125,10 +135,10 @@ void main() {
 
       final alphaId = controller.notes.firstWhere((n) => n.title == 'Alpha').id;
 
-      await controller.setSearchTerm('Beta');
+      controller.setSearchTerm('Beta');
       expect(controller.find(alphaId), isNull);
 
-      await controller.setSearchTerm('');
+      controller.setSearchTerm('');
       expect(controller.find(alphaId)?.title, 'Alpha');
     });
 
@@ -138,15 +148,15 @@ void main() {
       await controller.addOrUpdate(title: 'Banana', content: Document.fromJson([{"insert":"yellow\n"}]));
       await controller.addOrUpdate(title: 'Car', content: Document.fromJson([{"insert":"vehicle\n"}]));
 
-      await controller.setSearchTerm('a');
+      controller.setSearchTerm('a');
       expect(controller.notes.length, 3); // Apple, Banana, Car all contain 'a'
       expect(controller.notes.map((n) => n.title), ['Car', 'Banana', 'Apple']); // sorted by date desc
 
-      await controller.setSearchTerm('fruit');
+      controller.setSearchTerm('fruit');
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Apple');
 
-      await controller.setSearchTerm('');
+      controller.setSearchTerm('');
       expect(controller.notes.length, 3);
     });
 
@@ -156,15 +166,15 @@ void main() {
       await controller.addOrUpdate(title: 'Note 2', content: Document(), tags: ['personal']);
       await controller.addOrUpdate(title: 'Note 3', content: Document());
 
-      await controller.setSearchTerm('work');
+      controller.setSearchTerm('work');
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Note 1');
 
-      await controller.setSearchTerm('personal');
+      controller.setSearchTerm('personal');
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Note 2');
 
-      await controller.setSearchTerm('Note');
+      controller.setSearchTerm('Note');
       expect(controller.notes.length, 3);
     });
 
@@ -172,7 +182,7 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Zebra', content: Document());
       await controller.addOrUpdate(title: 'Apple', content: Document());
-      await controller.setSortBy(SortBy.titleAsc);
+      controller.setSortBy(SortBy.titleAsc);
       expect(controller.notes.map((n) => n.title), ['Apple', 'Zebra']);
     });
 
@@ -180,7 +190,7 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Apple', content: Document());
       await controller.addOrUpdate(title: 'Zebra', content: Document());
-      await controller.setSortBy(SortBy.titleDesc);
+      controller.setSortBy(SortBy.titleDesc);
       expect(controller.notes.map((n) => n.title), ['Zebra', 'Apple']);
     });
 
@@ -189,7 +199,7 @@ void main() {
       await controller.addOrUpdate(title: 'Old', content: Document());
       await Future<void>.delayed(const Duration(milliseconds: 5));
       await controller.addOrUpdate(title: 'New', content: Document());
-      await controller.setSortBy(SortBy.dateAsc);
+      controller.setSortBy(SortBy.dateAsc);
       expect(controller.notes.map((n) => n.title), ['Old', 'New']);
     });
 

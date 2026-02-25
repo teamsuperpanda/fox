@@ -3,6 +3,26 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'models/note.dart';
 import 'services/notes_controller.dart';
 
+/// Result returned when popping the detail page so the caller can act on it.
+class NoteDetailResult {
+  final bool changed;
+  final bool deleted;
+  const NoteDetailResult({this.changed = false, this.deleted = false});
+}
+
+/// Predefined note color palette.
+const List<String?> noteColorOptions = [
+  null,       // No color (default)
+  '#FF5252',  // Red
+  '#FF7043',  // Deep Orange
+  '#FFCA28',  // Amber
+  '#66BB6A',  // Green
+  '#42A5F5',  // Blue
+  '#AB47BC',  // Purple
+  '#8D6E63',  // Brown
+  '#78909C',  // Blue Grey
+];
+
 class NoteDetailPage extends StatefulWidget {
   final Note? existing;
   final NotesController controller;
@@ -25,6 +45,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   late bool _pinned;
   late bool _showToolbar;
   late List<String> _tags;
+  late String? _folderId;
+  late String? _color;
+  bool _saving = false;
 
   @override
   void initState() {
@@ -35,8 +58,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       selection: const TextSelection.collapsed(offset: 0),
     );
     _pinned = widget.existing?.pinned ?? false;
-  _showToolbar = widget.showToolbar; // Toolbar visibility controllable for tests
+    _showToolbar = widget.showToolbar;
     _tags = List.from(widget.existing?.tags ?? []);
+    _folderId = widget.existing?.folderId;
+    _color = widget.existing?.color;
   }
 
   @override
@@ -44,6 +69,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     _titleCtrl.dispose();
     _contentCtrl.dispose();
     super.dispose();
+  }
+
+  /// Normalizes tag input — trims whitespace, lowercases, and rejects duplicates.
+  String? _normalizeTag(String raw) {
+    final normalized = raw.trim().toLowerCase();
+    if (normalized.isEmpty || _tags.contains(normalized)) return null;
+    return normalized;
   }
 
   void _showTagsDialog() async {
@@ -66,11 +98,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () {
-                            final text = tagCtrl.text.trim();
-                            if (text.isNotEmpty && !_tags.contains(text)) {
-                              setState(() {
-                                _tags.add(text);
-                              });
+                            final tag = _normalizeTag(tagCtrl.text);
+                            if (tag != null) {
+                              setState(() => _tags.add(tag));
                               setDialogState(() {});
                               tagCtrl.clear();
                             }
@@ -78,11 +108,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         ),
                       ),
                       onSubmitted: (text) {
-                        final trimmed = text.trim();
-                        if (trimmed.isNotEmpty && !_tags.contains(trimmed)) {
-                          setState(() {
-                            _tags.add(trimmed);
-                          });
+                        final tag = _normalizeTag(text);
+                        if (tag != null) {
+                          setState(() => _tags.add(tag));
                           setDialogState(() {});
                           tagCtrl.clear();
                         }
@@ -119,7 +147,108 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
   }
 
+  void _showColorPicker() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Note Colour'),
+          content: Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: noteColorOptions.map((hex) {
+              final isSelected = _color == hex;
+              final displayColor = hex != null
+                  ? Color(int.parse('FF${hex.substring(1)}', radix: 16))
+                  : null;
+              return GestureDetector(
+                onTap: () {
+                  setState(() => _color = hex);
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: displayColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.transparent,
+                      width: 3,
+                    ),
+                  ),
+                  child: hex == null
+                      ? Icon(Icons.block, size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant)
+                      : isSelected
+                          ? const Icon(Icons.check, size: 20, color: Colors.white)
+                          : null,
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showFolderPicker() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Move to Folder'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.notes,
+                    color: _folderId == null
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                  ),
+                  title: const Text('No Folder'),
+                  selected: _folderId == null,
+                  contentPadding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                  onTap: () {
+                    setState(() => _folderId = null);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ...widget.controller.folders.map((folder) {
+                  return ListTile(
+                    leading: Icon(
+                      Icons.folder,
+                      color: _folderId == folder.id
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                    title: Text(folder.name),
+                    selected: _folderId == folder.id,
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    onTap: () {
+                      setState(() => _folderId = folder.id);
+                      Navigator.of(context).pop();
+                    },
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _saveAndPop() async {
+    if (_saving) return;
+    _saving = true;
+
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.maybeOf(context);
     final errorColor = Theme.of(context).colorScheme.error;
@@ -131,12 +260,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     
     // If new note is empty, discard it silently
     if (title.isEmpty && plainText.isEmpty && widget.existing == null) {
-      navigator.pop(false);
+      navigator.pop(const NoteDetailResult());
       return;
     }
     
     // Validation: reject empty notes (for existing notes)
     if (title.isEmpty && plainText.isEmpty) {
+      _saving = false;
       messenger?.showSnackBar(
         SnackBar(
           content: const Text('Note cannot be empty'),
@@ -164,9 +294,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         content: content,
         pinned: _pinned,
         tags: _tags,
+        folderId: _folderId,
+        color: _color,
       );
-      navigator.pop(true);
+      navigator.pop(const NoteDetailResult(changed: true));
     } catch (e) {
+      _saving = false;
       messenger?.showSnackBar(
         SnackBar(
           content: Text('Error saving note: $e'),
@@ -204,9 +337,21 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           ),
           actions: [
             IconButton(
+              tooltip: 'Folder',
+              icon: Icon(_folderId != null ? Icons.folder : Icons.folder_outlined),
+              onPressed: _showFolderPicker,
+            ),
+            IconButton(
               tooltip: 'Tags',
               icon: const Icon(Icons.label_outline),
               onPressed: _showTagsDialog,
+            ),
+            IconButton(
+              tooltip: 'Note colour',
+              icon: _color != null
+                  ? Icon(Icons.circle, color: Color(int.parse('FF${_color!.substring(1)}', radix: 16)))
+                  : const Icon(Icons.palette_outlined),
+              onPressed: _showColorPicker,
             ),
             IconButton(
               tooltip: _showToolbar ? 'Hide formatting toolbar' : 'Show formatting toolbar',
@@ -224,7 +369,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: widget.existing != null
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.end,
             children: [
               if (widget.existing != null)
                 FloatingActionButton(
@@ -263,18 +410,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     if (confirmed == true) {
                       try {
                         await widget.controller.remove(widget.existing!.id);
-
-                        navigator.pop(true);
-                        messenger?.showSnackBar(
-                          SnackBar(
-                            content: const Text('Note deleted'),
-                            action: SnackBarAction(
-                              label: 'Undo',
-                              textColor: theme.colorScheme.primary,
-                              onPressed: () => widget.controller.undoRemove(),
-                            ),
-                          ),
-                        );
+                        navigator.pop(const NoteDetailResult(changed: true, deleted: true));
                       } catch (e) {
                         messenger?.showSnackBar(
                           SnackBar(

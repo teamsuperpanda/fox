@@ -5,6 +5,7 @@ import 'package:fox/models/note.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository.dart';
 import 'package:fox/note_detail_page.dart';
+import 'package:fox/models/folder.dart';
 import 'dart:async';
 
 class MockRepository implements NoteRepository {
@@ -44,6 +45,15 @@ class MockRepository implements NoteRepository {
   Future<void> clear() async {
     notes.clear();
   }
+
+  @override
+  Future<List<Folder>> getAllFolders() async => [];
+
+  @override
+  Future<void> upsertFolder(Folder folder) async {}
+
+  @override
+  Future<void> deleteFolder(String id) async {}
 }
 
 class FailingSaveRepository extends MockRepository {

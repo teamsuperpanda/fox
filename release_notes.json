@@ -1,90 +1,90 @@
 [
   {
     "language": "en-US",
-    "text": "What's new in 1.8.0:\n• Improved app stability and user experience with bug fixes and performance enhancements"
+    "text": "What's new in 1.9.0:\n• Folders — Organise your notes into folders. Create, rename and delete folders from the home screen, and assign any note to a folder.\n• Note Colours — Pick a colour for each note. A coloured bar appears in the note list so you can spot it at a glance.\n• Several bug fixes and stability improvements including safer swipe-to-delete, better error handling on startup, and smoother saving."
   },
   {
     "language": "en-GB",
-    "text": "What's new in 1.8.0:\n• Improved app stability and user experience with bug fixes and performance enhancements"
+    "text": "What's new in 1.9.0:\n• Folders — Organise your notes into folders. Create, rename and delete folders from the home screen, and assign any note to a folder.\n• Note Colours — Pick a colour for each note. A coloured bar appears in the note list so you can spot it at a glance.\n• Several bug fixes and stability improvements including safer swipe-to-delete, better error handling on startup, and smoother saving."
   },
   {
     "language": "es-ES",
-    "text": "Novedades en la versión 1.8.0:\n• Mejorada la estabilidad de la aplicación y la experiencia del usuario con correcciones de errores y mejoras de rendimiento"
+    "text": "Novedades en la versión 1.9.0:\n• Carpetas — Organiza tus notas en carpetas. Crea, renombra y elimina carpetas desde la pantalla principal y asigna cualquier nota a una carpeta.\n• Colores de notas — Elige un color para cada nota. Una barra de color aparece en la lista para que las identifiques de un vistazo.\n• Varias correcciones de errores y mejoras de estabilidad, incluyendo un deslizar-para-eliminar más seguro, mejor manejo de errores al iniciar y guardado más fluido."
   },
   {
     "language": "fr-FR",
-    "text": "Nouveautés de la version 1.8.0 :\n• Amélioration de la stabilité de l'application et de l'expérience utilisateur avec des corrections de bugs et des améliorations de performances"
+    "text": "Nouveautés de la version 1.9.0 :\n• Dossiers — Organisez vos notes dans des dossiers. Créez, renommez et supprimez des dossiers depuis l'écran d'accueil, et attribuez chaque note à un dossier.\n• Couleurs de notes — Choisissez une couleur pour chaque note. Une barre colorée apparaît dans la liste pour les repérer d'un coup d'œil.\n• Plusieurs corrections de bugs et améliorations de stabilité, notamment un balayage pour supprimer plus sûr, une meilleure gestion des erreurs au démarrage et une sauvegarde plus fluide."
   },
   {
     "language": "de-DE",
-    "text": "Neu in Version 1.8.0:\n• Verbesserte App-Stabilität und Benutzererfahrung mit Fehlerbehebungen und Leistungsverbesserungen"
+    "text": "Neu in Version 1.9.0:\n• Ordner — Organisiere deine Notizen in Ordnern. Erstelle, benenne um und lösche Ordner vom Startbildschirm und weise jede Notiz einem Ordner zu.\n• Notizfarben — Wähle eine Farbe für jede Notiz. Ein farbiger Balken erscheint in der Liste, damit du sie auf einen Blick erkennst.\n• Mehrere Fehlerbehebungen und Stabilitätsverbesserungen, darunter sichereres Wischen zum Löschen, bessere Fehlerbehandlung beim Start und flüssigeres Speichern."
   },
   {
     "language": "pt-BR",
-    "text": "Novidades na versão 1.8.0:\n• Melhorada a estabilidade do aplicativo e a experiência do usuário com correções de bugs e melhorias de desempenho"
+    "text": "Novidades na versão 1.9.0:\n• Pastas — Organize suas notas em pastas. Crie, renomeie e exclua pastas na tela inicial e atribua qualquer nota a uma pasta.\n• Cores de notas — Escolha uma cor para cada nota. Uma barra colorida aparece na lista para identificá-las rapidamente.\n• Várias correções de bugs e melhorias de estabilidade, incluindo deslizar para excluir mais seguro, melhor tratamento de erros na inicialização e salvamento mais suave."
   },
   {
     "language": "it-IT",
-    "text": "Novità nella versione 1.8.0:\n• Migliorata la stabilità dell'app e l'esperienza utente con correzioni di bug e miglioramenti delle prestazioni"
+    "text": "Novità nella versione 1.9.0:\n• Cartelle — Organizza le tue note in cartelle. Crea, rinomina ed elimina cartelle dalla schermata principale e assegna ogni nota a una cartella.\n• Colori delle note — Scegli un colore per ogni nota. Una barra colorata appare nell'elenco per individuarle a colpo d'occhio.\n• Diverse correzioni di bug e miglioramenti di stabilità, tra cui eliminazione con swipe più sicura, migliore gestione degli errori all'avvio e salvataggio più fluido."
   },
   {
     "language": "ja-JP",
-    "text": "バージョン1.8.0の新機能：\n• バグ修正とパフォーマンス向上により、アプリの安定性とユーザーエクスペリエンスが改善されました"
+    "text": "バージョン1.9.0の新機能：\n• フォルダ — ノートをフォルダに整理できます。ホーム画面からフォルダの作成・名前変更・削除ができ、ノートをフォルダに割り当てられます。\n• ノートの色分け — ノートごとに色を選べます。リストにカラーバーが表示され、ひと目で見分けられます。\n• スワイプ削除の安全性向上、起動時のエラー処理改善、保存の安定性向上など、複数のバグ修正と安定性の改善。"
   },
   {
     "language": "ko-KR",
-    "text": "버전 1.8.0의 변경사항:\n• 버그 수정 및 성능 향상으로 앱 안정성과 사용자 경험 개선"
+    "text": "버전 1.9.0의 변경사항:\n• 폴더 — 노트를 폴더로 정리하세요. 홈 화면에서 폴더를 만들고, 이름을 바꾸고, 삭제하고, 노트를 폴더에 지정할 수 있습니다.\n• 노트 색상 — 각 노트에 색상을 지정하세요. 목록에 색상 막대가 표시되어 한눈에 구분할 수 있습니다.\n• 스와이프 삭제 안전성 향상, 시작 시 오류 처리 개선, 저장 안정성 향상 등 여러 버그 수정 및 안정성 개선."
   },
   {
     "language": "zh-CN",
-    "text": "1.8.0 更新内容：\n• 通过错误修复和性能改进，提升了应用的稳定性和用户体验"
+    "text": "1.9.0 更新内容：\n• 文件夹 — 将笔记整理到文件夹中。在主屏幕创建、重命名和删除文件夹，并将任何笔记分配到文件夹。\n• 笔记颜色 — 为每条笔记选择一种颜色。列表中会显示彩色条，让你一眼就能识别。\n• 多项错误修复和稳定性改进，包括更安全的滑动删除、更好的启动错误处理和更流畅的保存。"
   },
   {
     "language": "zh-TW",
-    "text": "1.8.0 更新內容：\n• 通過錯誤修復和性能改進，提升了應用的穩定性和用戶體驗"
+    "text": "1.9.0 更新內容：\n• 資料夾 — 將筆記整理到資料夾中。在主畫面建立、重新命名和刪除資料夾，並將任何筆記分配到資料夾。\n• 筆記顏色 — 為每則筆記選擇一種顏色。列表中會顯示彩色條，讓你一眼就能識別。\n• 多項錯誤修復和穩定性改進，包括更安全的滑動刪除、更好的啟動錯誤處理和更流暢的儲存。"
   },
   {
     "language": "ru-RU",
-    "text": "Что нового в версии 1.8.0:\n• Улучшена стабильность приложения и пользовательский опыт с исправлениями ошибок и улучшениями производительности"
+    "text": "Что нового в версии 1.9.0:\n• Папки — Организуйте заметки по папкам. Создавайте, переименовывайте и удаляйте папки с главного экрана, назначайте заметки в папки.\n• Цвета заметок — Выберите цвет для каждой заметки. Цветная полоска в списке поможет быстро их различать.\n• Несколько исправлений ошибок и улучшений стабильности, включая более безопасное удаление свайпом, улучшенную обработку ошибок при запуске и более плавное сохранение."
   },
   {
     "language": "tr-TR",
-    "text": "1.8.0 sürümündeki yenilikler:\n• Hata düzeltmeleri ve performans iyileştirmeleri ile uygulama kararlılığı ve kullanıcı deneyimi iyileştirildi"
+    "text": "1.9.0 sürümündeki yenilikler:\n• Klasörler — Notlarınızı klasörlere düzenleyin. Ana ekrandan klasör oluşturun, yeniden adlandırın ve silin, herhangi bir notu bir klasöre atayın.\n• Not Renkleri — Her not için bir renk seçin. Listede renkli bir çubuk görünerek notları bir bakışta ayırt etmenizi sağlar.\n• Daha güvenli kaydırarak silme, başlangıçta daha iyi hata yönetimi ve daha akıcı kaydetme dahil çeşitli hata düzeltmeleri ve kararlılık iyileştirmeleri."
   },
   {
     "language": "nl-NL",
-    "text": "Wat is nieuw in 1.8.0:\n• Verbeterde app-stabiliteit en gebruikerservaring met bugfixes en prestatieverbeteringen"
+    "text": "Wat is nieuw in 1.9.0:\n• Mappen — Organiseer je notities in mappen. Maak, hernoem en verwijder mappen vanaf het startscherm en wijs elke notitie toe aan een map.\n• Notitiekleur — Kies een kleur voor elke notitie. Een gekleurde balk verschijnt in de lijst zodat je ze in één oogopslag herkent.\n• Diverse bugfixes en stabiliteitsverbeteringen, waaronder veiliger vegen om te verwijderen, betere foutafhandeling bij het opstarten en soepeler opslaan."
   },
   {
     "language": "sv-SE",
-    "text": "Nyheter i 1.8.0:\n• Förbättrad appstabilitet och användarupplevelse med buggfixar och prestandaförbättringar"
+    "text": "Nyheter i 1.9.0:\n• Mappar — Organisera dina anteckningar i mappar. Skapa, byt namn på och ta bort mappar från startskärmen och tilldela valfri anteckning till en mapp.\n• Anteckningsfärger — Välj en färg för varje anteckning. En färgad stapel visas i listan så att du snabbt kan identifiera dem.\n• Flera buggfixar och stabilitetsförbättringar, inklusive säkrare svep för att radera, bättre felhantering vid uppstart och smidigare sparande."
   },
   {
     "language": "pl-PL",
-    "text": "Co nowego w wersji 1.8.0:\n• Poprawiona stabilność aplikacji i doświadczenie użytkownika dzięki poprawkom błędów i ulepszeniom wydajności"
+    "text": "Co nowego w wersji 1.9.0:\n• Foldery — Organizuj notatki w foldery. Twórz, zmieniaj nazwy i usuwaj foldery z ekranu głównego, przypisuj notatki do folderów.\n• Kolory notatek — Wybierz kolor dla każdej notatki. Kolorowy pasek w liście pozwoli je szybko rozpoznać.\n• Kilka poprawek błędów i ulepszeń stabilności, w tym bezpieczniejsze usuwanie przesunięciem, lepszą obsługę błędów przy uruchomieniu i płynniejsze zapisywanie."
   },
   {
     "language": "ar-SA",
-    "text": "الجديد في الإصدار 1.8.0:\n• تحسين استقرار التطبيق وتجربة المستخدم مع إصلاحات الأخطاء وتحسينات الأداء"
+    "text": "الجديد في الإصدار 1.9.0:\n• المجلدات — نظّم ملاحظاتك في مجلدات. أنشئ المجلدات وأعد تسميتها واحذفها من الشاشة الرئيسية، وخصّص أي ملاحظة لمجلد.\n• ألوان الملاحظات — اختر لونًا لكل ملاحظة. يظهر شريط ملون في القائمة لتمييزها بنظرة واحدة.\n• إصلاحات عديدة للأخطاء وتحسينات في الاستقرار تشمل حذفًا أكثر أمانًا بالسحب، ومعالجة أفضل للأخطاء عند التشغيل، وحفظًا أكثر سلاسة."
   },
   {
     "language": "hi-IN",
-    "text": "वर्ज़न 1.8.0 में नया:\n• बग फिक्स और परफॉर्मेंस इंहांसमेंट के साथ ऐप की स्थिरता और उपयोगकर्ता अनुभव में सुधार"
+    "text": "वर्ज़न 1.9.0 में नया:\n• फ़ोल्डर — अपने नोट्स को फ़ोल्डर में व्यवस्थित करें। होम स्क्रीन से फ़ोल्डर बनाएँ, नाम बदलें और हटाएँ, और किसी भी नोट को फ़ोल्डर में डालें।\n• नोट के रंग — हर नोट के लिए एक रंग चुनें। सूची में एक रंगीन पट्टी दिखती है ताकि आप इसे एक नज़र में पहचान सकें।\n• कई बग फिक्स और स्थिरता में सुधार, जिसमें सुरक्षित स्वाइप-टू-डिलीट, स्टार्टअप पर बेहतर एरर हैंडलिंग और आसान सेविंग शामिल है।"
   },
   {
     "language": "id-ID",
-    "text": "Yang baru di 1.8.0:\n• Peningkatan stabilitas aplikasi dan pengalaman pengguna dengan perbaikan bug dan peningkatan performa"
+    "text": "Yang baru di 1.9.0:\n• Folder — Atur catatan Anda ke dalam folder. Buat, ganti nama, dan hapus folder dari layar utama, dan tetapkan catatan apa pun ke folder.\n• Warna Catatan — Pilih warna untuk setiap catatan. Bilah berwarna muncul di daftar sehingga Anda dapat mengenalinya sekilas.\n• Beberapa perbaikan bug dan peningkatan stabilitas termasuk geser untuk menghapus yang lebih aman, penanganan kesalahan yang lebih baik saat memulai, dan penyimpanan yang lebih lancar."
   },
   {
     "language": "vi-VN",
-    "text": "Có gì mới trong 1.8.0:\n• Cải thiện độ ổn định của ứng dụng và trải nghiệm người dùng với các bản sửa lỗi và cải tiến hiệu suất"
+    "text": "Có gì mới trong 1.9.0:\n• Thư mục — Sắp xếp ghi chú vào thư mục. Tạo, đổi tên và xóa thư mục từ màn hình chính, gán bất kỳ ghi chú nào vào thư mục.\n• Màu ghi chú — Chọn màu cho từng ghi chú. Một thanh màu xuất hiện trong danh sách giúp bạn nhận ra ngay lập tức.\n• Nhiều sửa lỗi và cải thiện độ ổn định bao gồm vuốt để xóa an toàn hơn, xử lý lỗi tốt hơn khi khởi động và lưu mượt mà hơn."
   },
   {
     "language": "pt-PT",
-    "text": "Novidades na versão 1.8.0:\n• Melhorada a estabilidade da aplicação e a experiência do utilizador com correções de bugs e melhorias de desempenho"
+    "text": "Novidades na versão 1.9.0:\n• Pastas — Organize as suas notas em pastas. Crie, renomeie e elimine pastas a partir do ecrã principal e atribua qualquer nota a uma pasta.\n• Cores das notas — Escolha uma cor para cada nota. Uma barra colorida aparece na lista para as identificar rapidamente.\n• Várias correções de erros e melhorias de estabilidade, incluindo deslizar para eliminar mais seguro, melhor tratamento de erros no arranque e gravação mais suave."
   },
   {
     "language": "es-419",
-    "text": "Novedades en la versión 1.8.0:\n• Mejorada la estabilidad de la aplicación y la experiencia del usuario con correcciones de errores y mejoras de rendimiento"
+    "text": "Novedades en la versión 1.9.0:\n• Carpetas — Organiza tus notas en carpetas. Crea, renombra y elimina carpetas desde la pantalla principal y asigna cualquier nota a una carpeta.\n• Colores de notas — Elige un color para cada nota. Una barra de color aparece en la lista para que las identifiques de un vistazo.\n• Varias correcciones de errores y mejoras de estabilidad, incluyendo un deslizar para eliminar más seguro, mejor manejo de errores al iniciar y guardado más fluido."
   }
 ]
