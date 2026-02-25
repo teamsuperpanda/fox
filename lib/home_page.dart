@@ -43,17 +43,6 @@ class _HomePageState extends State<HomePage>
       CurvedAnimation(parent: _fabController, curve: Curves.easeInOut),
     );
     
-    // In tests the binding is AutomatedTestWidgetsFlutterBinding which schedules
-    // continuous frames; avoid starting a repeating ticker there so tests can
-    // settle. Start looping only in normal app runs.
-    /*
-    final bindingName = WidgetsBinding.instance.runtimeType.toString();
-    if (!bindingName.contains('AutomatedTestWidgetsFlutterBinding')) {
-      _fabController.repeat(reverse: true);
-    }
-    */
-    // Performance improvement: Removed continuous animation loop to save battery
-    // _fabController.forward(); // Moved to _onChanged to respect initial settings
     _searchController.addListener(() {
       controller.setSearchTerm(_searchController.text);
     });
@@ -65,7 +54,7 @@ class _HomePageState extends State<HomePage>
   void dispose() {
     controller.removeListener(_onChanged);
     _animationController.dispose();
-  _fabController.dispose();
+    _fabController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -119,12 +108,201 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _addNote() async {
-    final changed = await Navigator.of(context).push<bool>(MaterialPageRoute(
+    final result = await Navigator.of(context).push<NoteDetailResult>(MaterialPageRoute(
       builder: (_) => NoteDetailPage(
         controller: controller,
       ),
     ));
-    if (changed == true) setState(() {});
+    if (result != null && result.changed) {
+      if (result.deleted && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Note deleted'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () => controller.undoRemove(),
+            ),
+          ),
+        );
+      }
+      setState(() {});
+    }
+  }
+
+  void _showFoldersDialog() async {
+    final folderNameCtrl = TextEditingController();
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('Folders'),
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: folderNameCtrl,
+                        decoration: InputDecoration(
+                          hintText: 'New folder name...',
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () async {
+                              final name = folderNameCtrl.text.trim();
+                              if (name.isNotEmpty) {
+                                await controller.addFolder(name);
+                                folderNameCtrl.clear();
+                                setDialogState(() {});
+                              }
+                            },
+                          ),
+                        ),
+                        onSubmitted: (text) async {
+                          final name = text.trim();
+                          if (name.isNotEmpty) {
+                            await controller.addFolder(name);
+                            folderNameCtrl.clear();
+                            setDialogState(() {});
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      // "All Notes" option
+                      ListTile(
+                        leading: Icon(
+                          Icons.folder_open,
+                          color: controller.selectedFolderId == null
+                              ? Theme.of(context).colorScheme.primary
+                              : null,
+                        ),
+                        title: const Text('All Notes'),
+                        selected: controller.selectedFolderId == null,
+                        contentPadding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
+                        onTap: () {
+                          controller.setSelectedFolder(null);
+                          setDialogState(() {});
+                        },
+                      ),
+                      // "Unfiled" option
+                      ListTile(
+                        leading: Icon(
+                          Icons.notes,
+                          color: controller.selectedFolderId == NotesController.unfiledFolderId
+                              ? Theme.of(context).colorScheme.primary
+                              : null,
+                        ),
+                        title: const Text('Unfiled'),
+                        selected: controller.selectedFolderId == NotesController.unfiledFolderId,
+                        contentPadding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
+                        onTap: () {
+                          controller.setSelectedFolder(NotesController.unfiledFolderId);
+                          setDialogState(() {});
+                        },
+                      ),
+                      ...controller.folders.map((folder) {
+                        return ListTile(
+                          leading: Icon(
+                            Icons.folder,
+                            color: controller.selectedFolderId == folder.id
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
+                          title: Text(folder.name),
+                          selected: controller.selectedFolderId == folder.id,
+                          contentPadding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.compact,
+                          onTap: () {
+                            controller.setSelectedFolder(folder.id);
+                            setDialogState(() {});
+                          },
+                          trailing: PopupMenuButton<String>(
+                            itemBuilder: (_) => [
+                              const PopupMenuItem(value: 'rename', child: Text('Rename')),
+                              const PopupMenuItem(value: 'delete', child: Text('Delete')),
+                            ],
+                            onSelected: (action) async {
+                              if (action == 'rename') {
+                                final renameCtrl = TextEditingController(text: folder.name);
+                                final newName = await showDialog<String>(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text('Rename Folder'),
+                                    content: TextField(
+                                      controller: renameCtrl,
+                                      autofocus: true,
+                                      decoration: const InputDecoration(hintText: 'Folder name'),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(ctx).pop(),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.of(ctx).pop(renameCtrl.text),
+                                        child: const Text('Rename'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (newName != null && newName.trim().isNotEmpty) {
+                                  await controller.renameFolder(folder.id, newName);
+                                  setDialogState(() {});
+                                }
+                              } else if (action == 'delete') {
+                                final confirmed = await showDialog<bool>(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text('Delete Folder?'),
+                                    content: const Text(
+                                      'Notes in this folder will not be deleted, they will become unfiled.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(ctx).pop(false),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.of(ctx).pop(true),
+                                        child: Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.error,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (confirmed == true) {
+                                  await controller.deleteFolder(folder.id);
+                                  setDialogState(() {});
+                                }
+                              }
+                            },
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   void _showViewOptions() async {
@@ -270,6 +448,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     final notes = controller.notes;
+    final hasAnyNotes = controller.hasNotes;
 
     return Scaffold(
       appBar: AppBar(
@@ -307,13 +486,18 @@ class _HomePageState extends State<HomePage>
             else
               IconButton(
                 icon: const Icon(Icons.search),
-                onPressed: notes.isEmpty
+                onPressed: !hasAnyNotes
                     ? null
                     : () => setState(() => _isSearching = true),
               ),
             IconButton(
+              icon: const Icon(Icons.folder_outlined),
+              onPressed: _showFoldersDialog,
+              tooltip: 'Folders',
+            ),
+            IconButton(
               icon: const Icon(Icons.tune),
-              onPressed: notes.isEmpty ? null : _showViewOptions,
+              onPressed: !hasAnyNotes ? null : _showViewOptions,
               tooltip: 'View options',
             ),
             Padding(
@@ -338,14 +522,48 @@ class _HomePageState extends State<HomePage>
       ),
       body: controller.loading
           ? const Center(child: CircularProgressIndicator())
-          : notes.isEmpty
-              ? const EmptyState()
-              : NoteList(
-                  controller: controller,
-                  notes: notes,
-                  showTags: controller.showTags,
-                  showContent: controller.showContent,
+          : Column(
+              children: [
+                // Folder filter chip bar
+                if (controller.selectedFolderId != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.folder, size: 16, color: Theme.of(context).colorScheme.primary),
+                        const SizedBox(width: 6),
+                        Text(
+                          controller.selectedFolderId == NotesController.unfiledFolderId
+                              ? 'Unfiled'
+                              : controller.getFolderName(controller.selectedFolderId) ?? 'Unknown',
+                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        GestureDetector(
+                          onTap: () => controller.setSelectedFolder(null),
+                          child: Icon(
+                            Icons.close,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                Expanded(
+                  child: notes.isEmpty
+                      ? const EmptyState()
+                      : NoteList(
+                          controller: controller,
+                          notes: notes,
+                          showTags: controller.showTags,
+                          showContent: controller.showContent,
+                        ),
                 ),
+              ],
+            ),
     );
   }
 }

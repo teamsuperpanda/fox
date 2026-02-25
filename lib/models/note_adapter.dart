@@ -21,12 +21,14 @@ class NoteAdapter extends TypeAdapter<Note> {
       pinned: fields[3] as bool? ?? false,
       updatedAt: DateTime.fromMillisecondsSinceEpoch(fields[4] as int),
       tags: (fields[5] as List?)?.cast<String>() ?? const [],
+      folderId: fields[6] as String?,
+      color: fields[7] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Note obj) {
-    writer.writeByte(6); // Number of fields
+    writer.writeByte(8); // Number of fields
     writer.writeByte(0);
     writer.write(obj.id);
     writer.writeByte(1);
@@ -39,6 +41,10 @@ class NoteAdapter extends TypeAdapter<Note> {
     writer.write(obj.updatedAt.millisecondsSinceEpoch);
     writer.writeByte(5);
     writer.write(obj.tags);
+    writer.writeByte(6);
+    writer.write(obj.folderId);
+    writer.writeByte(7);
+    writer.write(obj.color);
   }
 
   @override

@@ -26,4 +26,22 @@ class Settings extends HiveObject {
       _ => ThemeMode.system,
     };
   }
+
+  Settings copyWith({
+    String? themeMode,
+    String? locale,
+    bool? showTags,
+    bool? showContent,
+    bool? alternatingColors,
+    bool? fabAnimation,
+  }) {
+    return Settings(
+      themeMode: themeMode ?? this.themeMode,
+      locale: locale ?? this.locale,
+      showTags: showTags ?? this.showTags,
+      showContent: showContent ?? this.showContent,
+      alternatingColors: alternatingColors ?? this.alternatingColors,
+      fabAnimation: fabAnimation ?? this.fabAnimation,
+    );
+  }
 }

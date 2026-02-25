@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'repository.dart';
 import '../models/note.dart';
+import '../models/folder.dart';
 
 enum SortBy {
   titleAsc,
@@ -16,6 +17,7 @@ class NotesController extends ChangeNotifier {
   NotesController(this._repo);
 
   static const Uuid _uuid = Uuid();
+  static const String unfiledFolderId = '__unfiled__';
 
   bool _loading = false;
   bool get loading => _loading;
@@ -39,17 +41,28 @@ class NotesController extends ChangeNotifier {
   List<Note> _notes = const [];
   List<Note> get notes => _notes;
 
+  /// Whether any notes exist at all, regardless of the active search filter.
+  bool get hasNotes => _allNotes.isNotEmpty;
+
   Note? _lastRemovedNote;
   Note? get lastRemovedNote => _lastRemovedNote;
 
   String _searchTerm = '';
   String get searchTerm => _searchTerm;
 
+  // Folder support
+  List<Folder> _folders = const [];
+  List<Folder> get folders => _folders;
+
+  String? _selectedFolderId;
+  String? get selectedFolderId => _selectedFolderId;
+
   Future<void> load() async {
     _loading = true;
     notifyListeners();
     await _repo.init();
     _allNotes = await _repo.getAll();
+    _folders = await _repo.getAllFolders();
     _updateView();
     _loading = false;
     notifyListeners();
@@ -59,13 +72,13 @@ class NotesController extends ChangeNotifier {
     _notes = _sorted(_allNotes);
   }
 
-  Future<void> setSearchTerm(String term) async {
+  void setSearchTerm(String term) {
     _searchTerm = term;
     _updateView();
     notifyListeners();
   }
 
-  Future<void> setSortBy(SortBy value) async {
+  void setSortBy(SortBy value) {
     _sortBy = value;
     _updateView();
     notifyListeners();
@@ -91,12 +104,68 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Folder filter
+  void setSelectedFolder(String? folderId) {
+    _selectedFolderId = folderId;
+    _updateView();
+    notifyListeners();
+  }
+
+  // Folder CRUD
+  Future<void> addFolder(String name) async {
+    final folder = Folder(
+      id: _uuid.v4(),
+      name: name.trim(),
+      createdAt: DateTime.now(),
+    );
+    await _repo.upsertFolder(folder);
+    _folders = [..._folders, folder];
+    notifyListeners();
+  }
+
+  Future<void> renameFolder(String id, String newName) async {
+    final folder = _folders.firstWhere((f) => f.id == id);
+    final updated = folder.copyWith(name: newName.trim());
+    await _repo.upsertFolder(updated);
+    _folders = _folders.map((f) => f.id == id ? updated : f).toList();
+    notifyListeners();
+  }
+
+  Future<void> deleteFolder(String id) async {
+    await _repo.deleteFolder(id);
+    _folders = _folders.where((f) => f.id != id).toList();
+    // Clear folder assignment from notes in this folder in a single pass
+    final now = DateTime.now();
+    _allNotes = await Future.wait(_allNotes.map((note) async {
+      if (note.folderId != id) return note;
+      final updated = note.copyWith(clearFolder: true, updatedAt: now);
+      await _repo.upsert(updated);
+      return updated;
+    }));
+    if (_selectedFolderId == id) {
+      _selectedFolderId = null;
+    }
+    _updateView();
+    notifyListeners();
+  }
+
+  String? getFolderName(String? folderId) {
+    if (folderId == null) return null;
+    try {
+      return _folders.firstWhere((f) => f.id == folderId).name;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> addOrUpdate({
     String? id,
     required String title,
     required Document content,
     bool pinned = false,
     List<String> tags = const [],
+    String? folderId,
+    String? color,
   }) async {
     // Validate input
     final trimmedTitle = title.trim();
@@ -113,8 +182,11 @@ class NotesController extends ChangeNotifier {
       pinned: pinned,
       updatedAt: DateTime.now(),
       tags: tags,
+      folderId: folderId,
+      color: color,
     );
     await _repo.upsert(note);
+    _lastRemovedNote = null;
     _allNotes = [
       ...(_allNotes.where((n) => n.id != note.id)),
       note,
@@ -127,6 +199,7 @@ class NotesController extends ChangeNotifier {
     final note = _allNotes.firstWhere((n) => n.id == id);
     final updated = note.copyWith(pinned: pinned, updatedAt: DateTime.now());
     await _repo.upsert(updated);
+    _lastRemovedNote = null;
     _allNotes = [
       ...(_allNotes.where((n) => n.id != id)),
       updated,
@@ -163,6 +236,15 @@ class NotesController extends ChangeNotifier {
 
   List<Note> _sorted(List<Note> list) {
     final copy = [...list];
+
+    // Folder filter
+    if (_selectedFolderId != null) {
+      if (_selectedFolderId == unfiledFolderId) {
+        copy.retainWhere((note) => note.folderId == null);
+      } else {
+        copy.retainWhere((note) => note.folderId == _selectedFolderId);
+      }
+    }
 
     if (_searchTerm.isNotEmpty) {
       final term = _searchTerm.toLowerCase();

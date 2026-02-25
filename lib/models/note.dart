@@ -8,6 +8,8 @@ class Note {
   final bool pinned;
   final DateTime updatedAt;
   final List<String> tags;
+  final String? folderId;
+  final String? color; // Hex string e.g. '#FF5252'
 
   Note({
     required this.id,
@@ -16,6 +18,8 @@ class Note {
     required this.pinned,
     required this.updatedAt,
     this.tags = const [],
+    this.folderId,
+    this.color,
   });
 
   // Create content JSON from a Document
@@ -45,6 +49,10 @@ class Note {
     bool? pinned,
     DateTime? updatedAt,
     List<String>? tags,
+    String? folderId,
+    String? color,
+    bool clearFolder = false,
+    bool clearColor = false,
   }) {
     return Note(
       id: id ?? this.id,
@@ -53,6 +61,8 @@ class Note {
       pinned: pinned ?? this.pinned,
       updatedAt: updatedAt ?? this.updatedAt,
       tags: tags ?? this.tags,
+      folderId: clearFolder ? null : (folderId ?? this.folderId),
+      color: clearColor ? null : (color ?? this.color),
     );
   }
 
@@ -64,6 +74,8 @@ class Note {
       pinned: (map['pinned'] as int? ?? 0) == 1,
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
       tags: (map['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const [],
+      folderId: map['folderId'] as String?,
+      color: map['color'] as String?,
     );
   }
 
@@ -75,6 +87,8 @@ class Note {
       'pinned': pinned ? 1 : 0,
       'updatedAt': updatedAt.millisecondsSinceEpoch,
       'tags': tags,
+      'folderId': folderId,
+      'color': color,
     };
   }
 }

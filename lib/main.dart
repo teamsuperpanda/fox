@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -17,22 +19,42 @@ void main() async {
   
   // Preserve the splash screen
   FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
-  
-  // Initialize Hive storage
-  await StorageService.init();
 
-  // Use Hive repository for all platforms
-  final NoteRepository repo = await HiveNoteRepository.create();
-  final notesController = NotesController(repo)..load();
+  try {
+    // Initialize Hive storage
+    await StorageService.init();
 
-  // Create theme provider and load persisted preference before building the app.
-  final themeProvider = ThemeProvider();
-  await themeProvider.load();
+    // Use Hive repository for all platforms
+    final NoteRepository repo = await HiveNoteRepository.create();
+    final notesController = NotesController(repo);
+    await notesController.load();
 
-  runApp(ChangeNotifierProvider.value(
-    value: themeProvider,
-    child: MyApp(controller: notesController),
-  ));
+    // Create theme provider and load persisted preference before building the app.
+    final themeProvider = ThemeProvider();
+    await themeProvider.load();
+
+    runApp(ChangeNotifierProvider.value(
+      value: themeProvider,
+      child: MyApp(controller: notesController),
+    ));
+  } catch (e) {
+    // Show a fallback error screen instead of a white screen on startup failure
+    FlutterNativeSplash.remove();
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Text(
+              'Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: $e',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+      ),
+    ));
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -47,10 +69,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _removeSplashScreen();
+    unawaited(_removeSplashScreen());
   }
 
-  void _removeSplashScreen() async {
+  Future<void> _removeSplashScreen() async {
     // Wait for 1 second before removing the splash screen
     await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
