@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/settings.dart';
+import 'box_names.dart';
 
 class SettingsService {
-  static const _boxName = 'settings_db';
   static const _key = 'app_settings';
 
-  Box<Settings> get _box => Hive.box<Settings>(_boxName);
+  Box<Settings> get _box => Hive.box<Settings>(BoxNames.settings);
 
   Settings getSettings() {
     return _box.get(_key) ?? Settings(themeMode: 'system');
@@ -45,5 +45,37 @@ class SettingsService {
 
   Future<void> setFabAnimation(bool value) async {
     await _box.put(_key, getSettings().copyWith(fabAnimation: value));
+  }
+
+  String getSortBy() => getSettings().sortBy;
+
+  Future<void> setSortBy(String value) async {
+    await _box.put(_key, getSettings().copyWith(sortBy: value));
+  }
+
+  /// Returns the persisted accent colour hex (e.g. '#8B9A6B'), or `null` for
+  /// the default green.
+  String? getAccentColor() => getSettings().accentColor;
+
+  /// Persists an accent colour override.  Pass `null` to revert to default.
+  Future<void> setAccentColor(String? value) async {
+    if (value == null) {
+      await _box.put(_key, getSettings().copyWith(clearAccentColor: true));
+    } else {
+      await _box.put(_key, getSettings().copyWith(accentColor: value));
+    }
+  }
+
+  /// Returns the persisted locale tag (e.g. 'en', 'pt_PT'), or `null` for
+  /// system default.
+  String? getLocale() => getSettings().locale;
+
+  /// Persists a locale override.  Pass `null` to revert to system default.
+  Future<void> setLocale(String? value) async {
+    if (value == null) {
+      await _box.put(_key, getSettings().copyWith(clearLocale: true));
+    } else {
+      await _box.put(_key, getSettings().copyWith(locale: value));
+    }
   }
 }

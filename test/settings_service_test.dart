@@ -110,5 +110,226 @@ void main() {
       final unknownSettings = Settings(themeMode: 'unknown');
       expect(unknownSettings.theme, equals(ThemeMode.system));
     });
+
+    // --- Locale persistence ---
+
+    test('getLocale returns null by default', () {
+      expect(settingsService.getLocale(), isNull);
+    });
+
+    test('setLocale stores and retrieves a locale tag', () async {
+      await settingsService.setLocale('fr');
+      expect(settingsService.getLocale(), 'fr');
+    });
+
+    test('setLocale with country code stores full tag', () async {
+      await settingsService.setLocale('pt_PT');
+      expect(settingsService.getLocale(), 'pt_PT');
+    });
+
+    test('setLocale null clears persisted locale', () async {
+      await settingsService.setLocale('de');
+      expect(settingsService.getLocale(), 'de');
+
+      await settingsService.setLocale(null);
+      expect(settingsService.getLocale(), isNull);
+    });
+
+    test('setLocale preserves theme mode', () async {
+      await settingsService.setThemeMode(ThemeMode.dark);
+      await settingsService.setLocale('ja');
+
+      expect(settingsService.getThemeMode(), ThemeMode.dark);
+      expect(settingsService.getLocale(), 'ja');
+    });
+
+    // --- Show content ---
+
+    test('getShowContent returns true by default', () {
+      expect(settingsService.getShowContent(), isTrue);
+    });
+
+    test('setShowContent persists false', () async {
+      await settingsService.setShowContent(false);
+      expect(settingsService.getShowContent(), isFalse);
+    });
+
+    // --- Alternating colors ---
+
+    test('getAlternatingColors returns false by default', () {
+      expect(settingsService.getAlternatingColors(), isFalse);
+    });
+
+    test('setAlternatingColors persists true', () async {
+      await settingsService.setAlternatingColors(true);
+      expect(settingsService.getAlternatingColors(), isTrue);
+    });
+
+    // --- FAB animation ---
+
+    test('getFabAnimation returns true by default', () {
+      expect(settingsService.getFabAnimation(), isTrue);
+    });
+
+    test('setFabAnimation persists false', () async {
+      await settingsService.setFabAnimation(false);
+      expect(settingsService.getFabAnimation(), isFalse);
+    });
+
+    // --- Sort by ---
+
+    test('getSortBy returns dateDesc by default', () {
+      expect(settingsService.getSortBy(), 'dateDesc');
+    });
+
+    test('setSortBy persists value', () async {
+      await settingsService.setSortBy('titleAsc');
+      expect(settingsService.getSortBy(), 'titleAsc');
+    });
+
+    // --- Show tags ---
+
+    test('getShowTags returns true by default', () {
+      expect(settingsService.getShowTags(), isTrue);
+    });
+
+    test('setShowTags persists false', () async {
+      await settingsService.setShowTags(false);
+      expect(settingsService.getShowTags(), isFalse);
+    });
+
+    // --- Settings.copyWith ---
+
+    test('Settings.copyWith preserves all fields when no args', () {
+      final s = Settings(
+        themeMode: 'dark',
+        locale: 'ko',
+        showTags: false,
+        showContent: false,
+        alternatingColors: true,
+        fabAnimation: false,
+        sortBy: 'titleDesc',
+      );
+      final copy = s.copyWith();
+      expect(copy.themeMode, s.themeMode);
+      expect(copy.locale, s.locale);
+      expect(copy.showTags, s.showTags);
+      expect(copy.showContent, s.showContent);
+      expect(copy.alternatingColors, s.alternatingColors);
+      expect(copy.fabAnimation, s.fabAnimation);
+      expect(copy.sortBy, s.sortBy);
+    });
+
+    test('Settings.copyWith clearLocale sets locale to null', () {
+      final s = Settings(themeMode: 'system', locale: 'en');
+      final cleared = s.copyWith(clearLocale: true);
+      expect(cleared.locale, isNull);
+      expect(cleared.themeMode, 'system');
+    });
+
+    // --- Locale ---
+
+    test('getLocale returns null by default', () {
+      expect(settingsService.getLocale(), isNull);
+    });
+
+    test('setLocale stores a locale tag', () async {
+      await settingsService.setLocale('fr');
+      expect(settingsService.getLocale(), equals('fr'));
+    });
+
+    test('setLocale with country code', () async {
+      await settingsService.setLocale('pt_PT');
+      expect(settingsService.getLocale(), equals('pt_PT'));
+    });
+
+    test('setLocale null clears stored locale', () async {
+      await settingsService.setLocale('de');
+      expect(settingsService.getLocale(), equals('de'));
+
+      await settingsService.setLocale(null);
+      expect(settingsService.getLocale(), isNull);
+    });
+
+    test('setLocale preserves other settings', () async {
+      await settingsService.setThemeMode(ThemeMode.dark);
+      await settingsService.setShowTags(false);
+      await settingsService.setLocale('ja');
+
+      final settings = settingsService.getSettings();
+      expect(settings.themeMode, equals('dark'));
+      expect(settings.showTags, isFalse);
+      expect(settings.locale, equals('ja'));
+    });
+
+    // --- Show Content ---
+
+    test('getShowContent returns true by default', () {
+      expect(settingsService.getShowContent(), isTrue);
+    });
+
+    test('setShowContent stores false', () async {
+      await settingsService.setShowContent(false);
+      expect(settingsService.getShowContent(), isFalse);
+    });
+
+    // --- Alternating Colors ---
+
+    test('getAlternatingColors returns false by default', () {
+      expect(settingsService.getAlternatingColors(), isFalse);
+    });
+
+    test('setAlternatingColors stores true', () async {
+      await settingsService.setAlternatingColors(true);
+      expect(settingsService.getAlternatingColors(), isTrue);
+    });
+
+    // --- Fab Animation ---
+
+    test('getFabAnimation returns true by default', () {
+      expect(settingsService.getFabAnimation(), isTrue);
+    });
+
+    test('setFabAnimation stores false', () async {
+      await settingsService.setFabAnimation(false);
+      expect(settingsService.getFabAnimation(), isFalse);
+    });
+
+    // --- Sort By ---
+
+    test('getSortBy returns dateDesc by default', () {
+      expect(settingsService.getSortBy(), equals('dateDesc'));
+    });
+
+    test('setSortBy stores new value', () async {
+      await settingsService.setSortBy('titleAsc');
+      expect(settingsService.getSortBy(), equals('titleAsc'));
+    });
+
+    // --- Settings copyWith ---
+
+    test('Settings copyWith clearLocale sets locale to null', () {
+      final s = Settings(themeMode: 'system', locale: 'en');
+      final cleared = s.copyWith(clearLocale: true);
+      expect(cleared.locale, isNull);
+      expect(cleared.themeMode, 'system');
+    });
+
+    test('Settings copyWith without clearLocale preserves locale', () {
+      final s = Settings(themeMode: 'system', locale: 'en');
+      final copy = s.copyWith(themeMode: 'dark');
+      expect(copy.locale, 'en');
+      expect(copy.themeMode, 'dark');
+    });
+
+    test('Settings defaults are correct', () {
+      final s = Settings(themeMode: 'system');
+      expect(s.showTags, isTrue);
+      expect(s.showContent, isTrue);
+      expect(s.alternatingColors, isFalse);
+      expect(s.fabAnimation, isTrue);
+      expect(s.sortBy, 'dateDesc');
+      expect(s.locale, isNull);
+    });
   });
 }

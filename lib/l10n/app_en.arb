@@ -1,0 +1,75 @@
+{
+  "@@locale": "en",
+  "appTitle": "Fox",
+  "search": "Search...",
+  "noNotesYet": "No notes yet...",
+  "noNotesMatchSearch": "No notes match your search.",
+  "folders": "Folders",
+  "viewOptions": "View options",
+  "toggleTheme": "Toggle theme",
+  "clearFolderFilter": "Clear folder filter",
+  "unfiled": "Unfiled",
+  "unknown": "Unknown",
+  "allNotes": "All Notes",
+  "newFolderName": "New folder name...",
+  "renameFolder": "Rename Folder",
+  "folderName": "Folder name",
+  "deleteFolder": "Delete Folder?",
+  "deleteFolderMessage": "Notes in this folder will not be deleted, they will become unfiled.",
+  "rename": "Rename",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "close": "Close",
+  "deleteNote": "Delete Note?",
+  "deleteNoteMessage": "Are you sure you want to delete this note?",
+  "noteDeleted": "Note deleted",
+  "undo": "Undo",
+  "noteTitle": "Note Title...",
+  "back": "Back",
+  "folder": "Folder",
+  "tags": "Tags",
+  "noteColour": "Note Colour",
+  "hideFormattingToolbar": "Hide formatting toolbar",
+  "showFormattingToolbar": "Show formatting toolbar",
+  "unpin": "Unpin",
+  "pin": "Pin",
+  "startTyping": "Start typing...",
+  "manageTags": "Manage Tags",
+  "newTag": "New tag...",
+  "moveToFolder": "Move to Folder",
+  "noFolder": "No Folder",
+  "noteCannotBeEmpty": "Note cannot be empty",
+  "savingTitleOnly": "Saving note with title only",
+  "errorSavingNote": "Error saving note: {error}",
+  "@errorSavingNote": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "errorDeletingNote": "Error deleting note: {error}",
+  "@errorDeletingNote": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "sortBy": "Sort By",
+  "dateNewestFirst": "Date (Newest First)",
+  "dateOldestFirst": "Date (Oldest First)",
+  "titleAZ": "Title (A-Z)",
+  "titleZA": "Title (Z-A)",
+  "showTags": "Show Tags",
+  "showNotePreviews": "Show Note Previews",
+  "alternatingRowColors": "Alternating Row Colors",
+  "animateAddButton": "Animate Add Button",
+  "untitled": "(Untitled)",
+  "today": "Today",
+  "language": "Language",
+  "accentColor": "Accent Colour",
+  "systemDefault": "System Default",
+  "startupError": "Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: {error}",
+  "@startupError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
+}

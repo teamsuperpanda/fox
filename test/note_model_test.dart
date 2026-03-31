@@ -180,5 +180,84 @@ void main() {
       // Should be valid JSON that can be decoded
       expect(() => jsonDecode(content), returnsNormally);
     });
+
+    // --- copyWith sentinels ---
+
+    test('copyWith clearFolder sets folderId to null', () {
+      final n = note.copyWith(folderId: 'f1');
+      expect(n.folderId, 'f1');
+
+      final cleared = n.copyWith(clearFolder: true);
+      expect(cleared.folderId, isNull);
+    });
+
+    test('copyWith clearColor sets color to null', () {
+      final n = note.copyWith(color: '#FF0000');
+      expect(n.color, '#FF0000');
+
+      final cleared = n.copyWith(clearColor: true);
+      expect(cleared.color, isNull);
+    });
+
+    test('copyWith preserves folderId and color when not cleared', () {
+      final n = note.copyWith(folderId: 'f2', color: '#00FF00');
+      final copy = n.copyWith(title: 'New');
+      expect(copy.folderId, 'f2');
+      expect(copy.color, '#00FF00');
+    });
+
+    // --- fromMap/toMap with all fields ---
+
+    test('toMap and fromMap round-trip with all optional fields', () {
+      final full = Note(
+        id: 'full-id',
+        title: 'Full',
+        content: '{"ops":[{"insert":"hi\\n"}]}',
+        pinned: true,
+        updatedAt: testDateTime,
+        tags: ['x', 'y'],
+        folderId: 'folder-42',
+        color: '#AB47BC',
+      );
+      final map = full.toMap();
+      expect(map['folderId'], 'folder-42');
+      expect(map['color'], '#AB47BC');
+      expect(map['tags'], ['x', 'y']);
+
+      final restored = Note.fromMap(map);
+      expect(restored.folderId, 'folder-42');
+      expect(restored.color, '#AB47BC');
+      expect(restored.tags, ['x', 'y']);
+      expect(restored.pinned, isTrue);
+    });
+
+    test('fromMap handles null folderId and color', () {
+      final map = {
+        'id': 'id',
+        'title': 'T',
+        'content': '',
+        'pinned': 0,
+        'updatedAt': testDateTime.millisecondsSinceEpoch,
+      };
+      final n = Note.fromMap(map);
+      expect(n.folderId, isNull);
+      expect(n.color, isNull);
+    });
+
+    // --- document with ops wrapped in Map ---
+
+    test('document getter handles content with ops key', () {
+      final n = note.copyWith(
+        content: '{"ops":[{"insert":"wrapped\\n"}]}',
+      );
+      final doc = n.document;
+      expect(doc.toPlainText(), contains('wrapped'));
+    });
+
+    test('document getter handles empty ops list', () {
+      final n = note.copyWith(content: '{"ops":[]}');
+      final doc = n.document;
+      expect(doc.isEmpty(), isTrue);
+    });
   });
 }

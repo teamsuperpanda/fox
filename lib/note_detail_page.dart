@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'l10n/app_localizations.dart';
 import 'models/note.dart';
+import 'models/note_colors.dart';
 import 'services/notes_controller.dart';
+import 'widgets/dialogs.dart';
 
 /// Result returned when popping the detail page so the caller can act on it.
 class NoteDetailResult {
@@ -9,19 +12,6 @@ class NoteDetailResult {
   final bool deleted;
   const NoteDetailResult({this.changed = false, this.deleted = false});
 }
-
-/// Predefined note color palette.
-const List<String?> noteColorOptions = [
-  null,       // No color (default)
-  '#FF5252',  // Red
-  '#FF7043',  // Deep Orange
-  '#FFCA28',  // Amber
-  '#66BB6A',  // Green
-  '#42A5F5',  // Blue
-  '#AB47BC',  // Purple
-  '#8D6E63',  // Brown
-  '#78909C',  // Blue Grey
-];
 
 class NoteDetailPage extends StatefulWidget {
   final Note? existing;
@@ -83,10 +73,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     await showDialog(
       context: context,
       builder: (context) {
+        final l10n = AppLocalizations.of(context);
         return StatefulBuilder(
           builder: (dialogContext, setDialogState) {
             return AlertDialog(
-              title: const Text('Manage Tags'),
+              title: Text(l10n.manageTags),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -94,7 +85,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     TextField(
                       controller: tagCtrl,
                       decoration: InputDecoration(
-                        hintText: 'New tag...',
+                        hintText: l10n.newTag,
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () {
@@ -137,7 +128,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(dialogContext).pop(),
-                  child: const Text('Close'),
+                  child: Text(l10n.close),
                 ),
               ],
             );
@@ -151,16 +142,15 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     await showDialog(
       context: context,
       builder: (context) {
+        final l10n = AppLocalizations.of(context);
         return AlertDialog(
-          title: const Text('Note Colour'),
+          title: Text(l10n.noteColour),
           content: Wrap(
             spacing: 10,
             runSpacing: 10,
             children: noteColorOptions.map((hex) {
               final isSelected = _color == hex;
-              final displayColor = hex != null
-                  ? Color(int.parse('FF${hex.substring(1)}', radix: 16))
-                  : null;
+              final displayColor = parseNoteColor(hex);
               return GestureDetector(
                 onTap: () {
                   setState(() => _color = hex);
@@ -197,8 +187,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     await showDialog(
       context: context,
       builder: (context) {
+        final l10n = AppLocalizations.of(context);
         return AlertDialog(
-          title: const Text('Move to Folder'),
+          title: Text(l10n.moveToFolder),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -210,7 +201,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
-                  title: const Text('No Folder'),
+                  title: Text(l10n.noFolder),
                   selected: _folderId == null,
                   contentPadding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
@@ -252,6 +243,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.maybeOf(context);
     final errorColor = Theme.of(context).colorScheme.error;
+    final l10n = AppLocalizations.of(context);
     
     // Get trimmed values
     final title = _titleCtrl.text.trim();
@@ -269,7 +261,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       _saving = false;
       messenger?.showSnackBar(
         SnackBar(
-          content: const Text('Note cannot be empty'),
+          content: Text(l10n.noteCannotBeEmpty),
           backgroundColor: errorColor,
           duration: const Duration(seconds: 2),
         ),
@@ -281,7 +273,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     if (title.isNotEmpty && plainText.isEmpty) {
       messenger?.showSnackBar(
         SnackBar(
-          content: const Text('Saving note with title only'),
+          content: Text(l10n.savingTitleOnly),
           duration: const Duration(seconds: 1),
         ),
       );
@@ -297,12 +289,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         folderId: _folderId,
         color: _color,
       );
+      if (!mounted) return;
       navigator.pop(const NoteDetailResult(changed: true));
     } catch (e) {
       _saving = false;
       messenger?.showSnackBar(
         SnackBar(
-          content: Text('Error saving note: $e'),
+          content: Text(l10n.errorSavingNote(e.toString())),
           backgroundColor: errorColor,
         ),
       );
@@ -311,6 +304,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
@@ -323,8 +317,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         appBar: AppBar(
           title: TextField(
             controller: _titleCtrl,
-            decoration: const InputDecoration(
-              hintText: 'Note Title...',
+            decoration: InputDecoration(
+              hintText: l10n.noteTitle,
               border: InputBorder.none,
             ),
             style: Theme.of(context).appBarTheme.titleTextStyle,
@@ -333,33 +327,33 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: _saveAndPop, // auto-save on back arrow
-            tooltip: 'Back',
+            tooltip: l10n.back,
           ),
           actions: [
             IconButton(
-              tooltip: 'Folder',
+              tooltip: l10n.folder,
               icon: Icon(_folderId != null ? Icons.folder : Icons.folder_outlined),
               onPressed: _showFolderPicker,
             ),
             IconButton(
-              tooltip: 'Tags',
+              tooltip: l10n.tags,
               icon: const Icon(Icons.label_outline),
               onPressed: _showTagsDialog,
             ),
             IconButton(
-              tooltip: 'Note colour',
+              tooltip: l10n.noteColour,
               icon: _color != null
-                  ? Icon(Icons.circle, color: Color(int.parse('FF${_color!.substring(1)}', radix: 16)))
+                  ? Icon(Icons.circle, color: parseNoteColor(_color))
                   : const Icon(Icons.palette_outlined),
               onPressed: _showColorPicker,
             ),
             IconButton(
-              tooltip: _showToolbar ? 'Hide formatting toolbar' : 'Show formatting toolbar',
+              tooltip: _showToolbar ? l10n.hideFormattingToolbar : l10n.showFormattingToolbar,
               icon: Icon(_showToolbar ? Icons.text_format : Icons.text_format_outlined),
               onPressed: () => setState(() => _showToolbar = !_showToolbar),
             ),
             IconButton(
-              tooltip: _pinned ? 'Unpin' : 'Pin',
+              tooltip: _pinned ? l10n.unpin : l10n.pin,
               icon: Icon(_pinned ? Icons.push_pin : Icons.push_pin_outlined),
               onPressed: () => setState(() => _pinned = !_pinned),
             ),
@@ -380,45 +374,22 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   onPressed: () async {
                     final navigator = Navigator.of(context);
                     final messenger = ScaffoldMessenger.maybeOf(context);
-                    final theme = Theme.of(context);
-                    final errorColor = theme.colorScheme.error;
+                    final errorColor = Theme.of(context).colorScheme.error;
+                    final l10nLocal = AppLocalizations.of(context);
 
-                    final confirmed = await showDialog<bool>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Delete Note?'),
-                          content: const Text(
-                              'Are you sure you want to delete this note?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(false),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(true),
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(
-                                    color: theme.colorScheme.error),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    if (confirmed == true) {
-                      try {
-                        await widget.controller.remove(widget.existing!.id);
-                        navigator.pop(const NoteDetailResult(changed: true, deleted: true));
-                      } catch (e) {
-                        messenger?.showSnackBar(
-                          SnackBar(
-                            content: Text('Error deleting note: $e'),
-                            backgroundColor: errorColor,
-                          ),
-                        );
-                      }
+                    final confirmed = await showDeleteConfirmDialog(context);
+                    if (confirmed != true || !mounted) return;
+                    try {
+                      await widget.controller.remove(widget.existing!.id);
+                      if (!mounted) return;
+                      navigator.pop(const NoteDetailResult(changed: true, deleted: true));
+                    } catch (e) {
+                      messenger?.showSnackBar(
+                        SnackBar(
+                          content: Text(l10nLocal.errorDeletingNote(e.toString())),
+                          backgroundColor: errorColor,
+                        ),
+                      );
                     }
                   },
                   child: Icon(
@@ -490,7 +461,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 child: QuillEditor.basic(
                   controller: _contentCtrl,
                   config: QuillEditorConfig(
-                    placeholder: 'Start typing...',
+                    placeholder: l10n.startTyping,
                     padding: EdgeInsets.zero,
                     autoFocus: widget.existing?.title.isNotEmpty ?? false,
                   ),

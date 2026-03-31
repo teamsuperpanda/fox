@@ -21,12 +21,14 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       alternatingColors: fields[3] as bool? ?? false,
       fabAnimation: fields[4] as bool? ?? true,
       showContent: fields[5] as bool? ?? true,
+      sortBy: fields[6] as String? ?? 'dateDesc',
+      accentColor: fields[7] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
-    writer.writeByte(6); // Number of fields
+    writer.writeByte(8); // Number of fields
     writer.writeByte(0);
     writer.write(obj.themeMode);
     writer.writeByte(1);
@@ -39,6 +41,10 @@ class SettingsAdapter extends TypeAdapter<Settings> {
     writer.write(obj.fabAnimation);
     writer.writeByte(5);
     writer.write(obj.showContent);
+    writer.writeByte(6);
+    writer.write(obj.sortBy);
+    writer.writeByte(7);
+    writer.write(obj.accentColor);
   }
 
   @override

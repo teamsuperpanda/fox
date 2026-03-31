@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'package:hive/hive.dart';
 
+import 'box_names.dart';
 import 'repository.dart';
 import '../models/note.dart';
 import '../models/folder.dart';
 
 class HiveNoteRepository implements NoteRepository {
-  static const _boxName = 'notes_db';
-  static const _foldersBoxName = 'folders_db';
-  
-  Box<Note> get _box => Hive.box<Note>(_boxName);
-  Box<Folder> get _foldersBox => Hive.box<Folder>(_foldersBoxName);
+  Box<Note> get _box => Hive.box<Note>(BoxNames.notes);
+  Box<Folder> get _foldersBox => Hive.box<Folder>(BoxNames.folders);
 
   HiveNoteRepository._();
 
@@ -21,7 +19,7 @@ class HiveNoteRepository implements NoteRepository {
   @override
   Future<void> init() async {
     // Box should already be opened by StorageService
-    if (!Hive.isBoxOpen(_boxName)) {
+    if (!Hive.isBoxOpen(BoxNames.notes)) {
       throw StateError('Notes box not initialized. Ensure StorageService.init() was called.');
     }
   }

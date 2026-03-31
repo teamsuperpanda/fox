@@ -128,7 +128,7 @@ void main() {
       expect(controller.find('missing'), isNull);
     });
 
-    test('find uses filtered view when search term is active', () async {
+    test('find returns note even when search term filters it from view', () async {
       await controller.load();
       await controller.addOrUpdate(title: 'Alpha', content: Document());
       await controller.addOrUpdate(title: 'Beta', content: Document());
@@ -136,7 +136,9 @@ void main() {
       final alphaId = controller.notes.firstWhere((n) => n.title == 'Alpha').id;
 
       controller.setSearchTerm('Beta');
-      expect(controller.find(alphaId), isNull);
+      // find() searches _allNotes, so Alpha is still found even though
+      // it's filtered out of the visible notes list.
+      expect(controller.find(alphaId)?.title, 'Alpha');
 
       controller.setSearchTerm('');
       expect(controller.find(alphaId)?.title, 'Alpha');
@@ -224,6 +226,194 @@ void main() {
       await controller.addOrUpdate(title: 'Title Only', content: Document());
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Title Only');
+    });
+
+    // --- Undo remove ---
+
+    test('undoRemove restores the last deleted note', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Restore Me', content: Document());
+      final id = controller.notes.first.id;
+
+      await controller.remove(id);
+      expect(controller.notes, isEmpty);
+      expect(controller.lastRemovedNote, isNotNull);
+
+      await controller.undoRemove();
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.id, id);
+      expect(controller.lastRemovedNote, isNull);
+    });
+
+    test('undoRemove does nothing when no note was removed', () async {
+      await controller.load();
+      await controller.undoRemove();
+      expect(controller.notes, isEmpty);
+    });
+
+    // --- hasNotes ---
+
+    test('hasNotes is false when empty', () async {
+      await controller.load();
+      expect(controller.hasNotes, isFalse);
+    });
+
+    test('hasNotes is true even when search hides all notes', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Hidden', content: Document());
+      controller.setSearchTerm('zzzzz');
+      expect(controller.notes, isEmpty);
+      expect(controller.hasNotes, isTrue);
+    });
+
+    // --- View option setters ---
+
+    test('setShowTags notifies listeners', () async {
+      await controller.load();
+      int count = 0;
+      controller.addListener(() => count++);
+      controller.setShowTags(false);
+      expect(controller.showTags, isFalse);
+      expect(count, 1);
+    });
+
+    test('setShowContent notifies listeners', () async {
+      await controller.load();
+      int count = 0;
+      controller.addListener(() => count++);
+      controller.setShowContent(false);
+      expect(controller.showContent, isFalse);
+      expect(count, 1);
+    });
+
+    test('setAlternatingColors notifies listeners', () async {
+      await controller.load();
+      int count = 0;
+      controller.addListener(() => count++);
+      controller.setAlternatingColors(true);
+      expect(controller.alternatingColors, isTrue);
+      expect(count, 1);
+    });
+
+    test('setFabAnimation notifies listeners', () async {
+      await controller.load();
+      int count = 0;
+      controller.addListener(() => count++);
+      controller.setFabAnimation(false);
+      expect(controller.fabAnimation, isFalse);
+      expect(count, 1);
+    });
+
+    // --- Folder CRUD ---
+
+    test('addFolder creates a folder', () async {
+      await controller.load();
+      await controller.addFolder('Work');
+      expect(controller.folders.length, 1);
+      expect(controller.folders.first.name, 'Work');
+    });
+
+    test('renameFolder updates the folder name', () async {
+      await controller.load();
+      await controller.addFolder('Old Name');
+      final id = controller.folders.first.id;
+      await controller.renameFolder(id, 'New Name');
+      expect(controller.folders.first.name, 'New Name');
+    });
+
+    test('deleteFolder removes folder and clears notes folderId', () async {
+      await controller.load();
+      await controller.addFolder('ToDelete');
+      final folderId = controller.folders.first.id;
+
+      await controller.addOrUpdate(
+        title: 'In Folder',
+        content: Document(),
+        folderId: folderId,
+      );
+      expect(controller.notes.first.folderId, folderId);
+
+      await controller.deleteFolder(folderId);
+      expect(controller.folders, isEmpty);
+      expect(controller.notes.first.folderId, isNull);
+    });
+
+    test('deleteFolder clears selectedFolderId when deleting active filter', () async {
+      await controller.load();
+      await controller.addFolder('Active');
+      final folderId = controller.folders.first.id;
+      controller.setSelectedFolder(folderId);
+      expect(controller.selectedFolderId, folderId);
+
+      await controller.deleteFolder(folderId);
+      expect(controller.selectedFolderId, isNull);
+    });
+
+    // --- Folder filter ---
+
+    test('setSelectedFolder filters notes by folder', () async {
+      await controller.load();
+      await controller.addFolder('A');
+      final folderId = controller.folders.first.id;
+
+      await controller.addOrUpdate(title: 'InFolder', content: Document(), folderId: folderId);
+      await controller.addOrUpdate(title: 'NoFolder', content: Document());
+
+      controller.setSelectedFolder(folderId);
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.title, 'InFolder');
+
+      controller.setSelectedFolder(null);
+      expect(controller.notes.length, 2);
+    });
+
+    test('unfiled filter shows only notes without a folder', () async {
+      await controller.load();
+      await controller.addFolder('F');
+      final folderId = controller.folders.first.id;
+
+      await controller.addOrUpdate(title: 'Filed', content: Document(), folderId: folderId);
+      await controller.addOrUpdate(title: 'Unfiled', content: Document());
+
+      controller.setSelectedFolder(NotesController.unfiledFolderId);
+      expect(controller.notes.length, 1);
+      expect(controller.notes.first.title, 'Unfiled');
+    });
+
+    // --- getFolderName ---
+
+    test('getFolderName returns name for valid id', () async {
+      await controller.load();
+      await controller.addFolder('Named');
+      final id = controller.folders.first.id;
+      expect(controller.getFolderName(id), 'Named');
+    });
+
+    test('getFolderName returns null for unknown id', () async {
+      await controller.load();
+      expect(controller.getFolderName('non-existent'), isNull);
+    });
+
+    test('getFolderName returns null for null id', () async {
+      await controller.load();
+      expect(controller.getFolderName(null), isNull);
+    });
+
+    // --- addOrUpdate with optional fields ---
+
+    test('addOrUpdate stores tags, folderId, and color', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Full',
+        content: Document(),
+        tags: ['a', 'b'],
+        folderId: 'folder-1',
+        color: '#FF0000',
+      );
+      final note = controller.notes.first;
+      expect(note.tags, ['a', 'b']);
+      expect(note.folderId, 'folder-1');
+      expect(note.color, '#FF0000');
     });
   });
 }
