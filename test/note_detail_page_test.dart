@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:fox/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/services/notes_controller.dart';
@@ -198,7 +199,11 @@ void main() {
 
     testWidgets('creates note with title', (tester) async {
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: controller),
       ));
 
@@ -214,7 +219,11 @@ void main() {
 
     testWidgets('discards empty note on back', (tester) async {
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: controller),
       ));
 
@@ -236,7 +245,11 @@ void main() {
       mockRepo.notes.add(existingNote);
 
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: existingNote, controller: controller),
       ));
 
@@ -260,7 +273,11 @@ void main() {
       );
 
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: note, controller: controller, showToolbar: false),
       ));
 
@@ -277,7 +294,11 @@ void main() {
       );
 
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: note, controller: controller, showToolbar: false),
       ));
 
@@ -286,7 +307,11 @@ void main() {
 
     testWidgets('tags dialog allows adding and removing tags', (tester) async {
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: controller, showToolbar: false),
       ));
 
@@ -335,7 +360,11 @@ void main() {
       final failingController = NotesController(failingRepo);
 
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: failingController),
       ));
 
@@ -354,7 +383,11 @@ void main() {
       final delayedController = NotesController(delayedRepo);
 
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: delayedController),
       ));
 
@@ -385,7 +418,11 @@ void main() {
       final existing = failingController.notes.first;
 
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: existing, controller: failingController),
       ));
 
@@ -411,7 +448,11 @@ void main() {
       final existing = delayedController.notes.first;
 
       await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: [FlutterQuillLocalizations.delegate],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          FlutterQuillLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: existing, controller: delayedController),
       ));
 

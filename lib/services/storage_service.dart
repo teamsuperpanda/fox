@@ -5,6 +5,7 @@ import '../models/note_adapter.dart';
 import '../models/note.dart';
 import '../models/folder.dart';
 import '../models/folder_adapter.dart';
+import 'box_names.dart';
 
 class StorageService {
   static bool _inited = false;
@@ -26,10 +27,10 @@ class StorageService {
     }
     
     // Open boxes
-    await Hive.openBox<Settings>('settings_db');
-    await Hive.openBox('migration_flags'); // For storing migration flags
-    await Hive.openBox<Note>('notes_db'); // For storing notes
-    await Hive.openBox<Folder>('folders_db'); // For storing folders
+    await Hive.openBox<Settings>(BoxNames.settings);
+    await Hive.openBox(BoxNames.migrationFlags);
+    await Hive.openBox<Note>(BoxNames.notes);
+    await Hive.openBox<Folder>(BoxNames.folders);
     
     _inited = true;
   }

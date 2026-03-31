@@ -6,6 +6,8 @@ import 'package:fox/services/repository.dart';
 import 'package:fox/widgets/note_list.dart';
 import 'package:fox/models/folder.dart';
 
+import 'test_helpers.dart';
+
 class MockRepository implements NoteRepository {
   final List<Note> notes = [];
 
@@ -83,7 +85,7 @@ void main() {
       mockRepo.notes.addAll([note1, note2]);
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -107,7 +109,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -130,7 +132,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -153,7 +155,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -177,7 +179,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -201,7 +203,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -239,7 +241,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -264,7 +266,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -289,7 +291,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,
@@ -322,7 +324,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        buildTestApp(
           home: Scaffold(
             body: NoteList(
               controller: controller,

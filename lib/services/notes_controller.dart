@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'repository.dart';
+import 'settings_service.dart';
 import '../models/note.dart';
 import '../models/folder.dart';
 
@@ -72,6 +73,26 @@ class NotesController extends ChangeNotifier {
     _notes = _sorted(_allNotes);
   }
 
+  /// Hydrate display-preference fields from persisted settings.
+  ///
+  /// Unlike the individual setters (e.g. [setShowTags]) this does **not**
+  /// call [notifyListeners], so it is safe to invoke during app startup
+  /// before any widgets are listening.
+  void loadSettings() {
+    try {
+      final service = SettingsService();
+      _showTags = service.getShowTags();
+      _showContent = service.getShowContent();
+      _alternatingColors = service.getAlternatingColors();
+      _fabAnimation = service.getFabAnimation();
+      final sortStr = service.getSortBy();
+      final sort = SortBy.values.where((e) => e.name == sortStr).firstOrNull;
+      if (sort != null) _sortBy = sort;
+    } catch (_) {
+      // Settings box may not be open (e.g. in tests) — keep defaults.
+    }
+  }
+
   void setSearchTerm(String term) {
     _searchTerm = term;
     _updateView();
@@ -134,14 +155,20 @@ class NotesController extends ChangeNotifier {
   Future<void> deleteFolder(String id) async {
     await _repo.deleteFolder(id);
     _folders = _folders.where((f) => f.id != id).toList();
-    // Clear folder assignment from notes in this folder in a single pass
+    // Clear folder assignment from notes in this folder sequentially
+    // to avoid parallel Hive write contention on the same box.
     final now = DateTime.now();
-    _allNotes = await Future.wait(_allNotes.map((note) async {
-      if (note.folderId != id) return note;
-      final updated = note.copyWith(clearFolder: true, updatedAt: now);
-      await _repo.upsert(updated);
-      return updated;
-    }));
+    final updated = <Note>[];
+    for (final note in _allNotes) {
+      if (note.folderId != id) {
+        updated.add(note);
+      } else {
+        final cleared = note.copyWith(clearFolder: true, updatedAt: now);
+        await _repo.upsert(cleared);
+        updated.add(cleared);
+      }
+    }
+    _allNotes = updated;
     if (_selectedFolderId == id) {
       _selectedFolderId = null;
     }
@@ -228,7 +255,7 @@ class NotesController extends ChangeNotifier {
 
   Note? find(String id) {
     try {
-      return _notes.firstWhere((n) => n.id == id);
+      return _allNotes.firstWhere((n) => n.id == id);
     } catch (_) {
       return null;
     }
