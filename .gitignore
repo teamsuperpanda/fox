@@ -26,7 +26,6 @@ build/
 .svn/
 
 # Generated
-lib/l10n/*.dart
 **/doc/api/
 app.*.symbols
 app.*.map.json
