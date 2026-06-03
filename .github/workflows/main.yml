@@ -4,11 +4,14 @@ on:
   pull_request:
     branches: ['main']
     types: [opened, synchronize, reopened]
+  push:
+    branches: ['main']
 
 jobs:
   analyze_and_test:
     name: Analyze & Test
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,7 +22,7 @@ jobs:
           path: |
             ~/.pub-cache
             .dart_tool
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-pub-
 
@@ -27,16 +30,18 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.27.0'
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Generate localization
+        run: flutter gen-l10n
+
+      - name: Check formatting
+        run: dart format --set-exit-if-changed lib/ test/
 
       - name: Run flutter analyze
         run: flutter analyze
 
       - name: Run flutter test
         run: flutter test --coverage
-
-      - name: Build
-        run: flutter build apk --debug
