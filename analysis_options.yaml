@@ -1,1 +1,56 @@
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  errors:
+    close_sinks: warning
+    inference_failure_on_function_invocation: ignore
+    inference_failure_on_collection_literal: ignore
+    inference_failure_on_instance_creation: ignore
+    inference_failure_on_function_return_type: ignore
+    strict_raw_type: ignore
+
+linter:
+  rules:
+    public_member_api_docs: false
+    lines_longer_than_80_chars: false
+    cascade_invocations: false
+    flutter_style_todos: false
+    avoid_final_parameters: false
+    one_member_abstracts: false
+    join_return_with_assignment: false
+    avoid_single_cascade_in_expression_statements: false
+    avoid_types_on_closure_parameters: false
+    avoid_catches_without_on_clauses: false
+    require_trailing_commas: false
+    prefer_const_constructors: false
+    prefer_const_literals_to_create_immutables: false
+    avoid_positional_boolean_parameters: false
+    omit_local_variable_types: false
+    eol_at_end_of_file: false
+    sort_pub_dependencies: false
+    prefer_constructors_over_static_methods: false
+
+dart_code_linter:
+  metrics:
+    cyclomatic-complexity: 20
+    source-lines-of-code: 200
+    number-of-parameters: 6
+    maximum-nesting-level: 5
+    number-of-methods: 25
+    maintainability-index: 50
+  metrics-exclude:
+    - test/**
+  rules:
+    - avoid-non-null-assertion
+    - always-remove-listener
+    - dispose-fields
+    - avoid-unnecessary-setstate
+    - no-empty-block
+    - no-equal-then-else
+    - missing-test-assertion
+    - prefer-test-matchers
+    - format-test-name
+    - avoid-uncaught-future-errors
+  anti-patterns:
+    - long-method
+    - long-parameter-list

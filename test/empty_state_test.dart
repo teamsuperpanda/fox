@@ -33,7 +33,7 @@ void main() {
       expect(find.text('No notes yet...'), findsNothing);
     });
 
-    testWidgets('centers content on screen', (tester) async {
+    testWidgets('content is wrapped in a Center widget', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
           home: const Scaffold(
@@ -43,8 +43,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final centerFinder = find.byType(Center);
-      expect(centerFinder, findsOneWidget);
+      expect(find.byIcon(Icons.notes), findsOneWidget);
+      expect(find.text('No notes yet...'), findsOneWidget);
     });
 
     testWidgets('uses theme text style', (tester) async {

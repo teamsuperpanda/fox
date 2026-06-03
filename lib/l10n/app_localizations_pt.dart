@@ -180,12 +180,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get accentColor => 'Cor de destaque';
 
   @override
+  String get analytics => 'Analíticas';
+
+  @override
   String get systemDefault => 'Padrão do sistema';
 
   @override
   String startupError(String error) {
     return 'Algo deu errado ao iniciar o Fox.\n\nTente limpar os dados do app ou reinstalá-lo.\n\nErro: $error';
   }
+
+  @override
+  String get nativeName => 'Português (Brasil)';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -364,10 +370,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get accentColor => 'Cor de destaque';
 
   @override
+  String get analytics => 'Analíticas';
+
+  @override
   String get systemDefault => 'Predefinição do sistema';
 
   @override
   String startupError(String error) {
     return 'Algo correu mal ao iniciar o Fox.\n\nTente limpar os dados da aplicação ou reinstalá-la.\n\nErro: $error';
   }
+
+  @override
+  String get nativeName => 'Português (Portugal)';
 }

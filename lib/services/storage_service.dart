@@ -1,11 +1,11 @@
+import 'package:fox/models/folder.dart';
+import 'package:fox/models/folder_adapter.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/models/note_adapter.dart';
+import 'package:fox/models/settings.dart';
+import 'package:fox/models/settings_adapter.dart';
+import 'package:fox/services/box_names.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../models/settings.dart';
-import '../models/settings_adapter.dart';
-import '../models/note_adapter.dart';
-import '../models/note.dart';
-import '../models/folder.dart';
-import '../models/folder_adapter.dart';
-import 'box_names.dart';
 
 class StorageService {
   static bool _inited = false;
@@ -28,7 +28,6 @@ class StorageService {
     
     // Open boxes
     await Hive.openBox<Settings>(BoxNames.settings);
-    await Hive.openBox(BoxNames.migrationFlags);
     await Hive.openBox<Note>(BoxNames.notes);
     await Hive.openBox<Folder>(BoxNames.folders);
     

@@ -178,10 +178,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get accentColor => '강조 색상';
 
   @override
+  String get analytics => '분석';
+
+  @override
   String get systemDefault => '시스템 기본값';
 
   @override
   String startupError(String error) {
     return 'Fox 시작 중 문제가 발생했습니다.\n\n앱 데이터를 지우거나 다시 설치해 보세요.\n\n오류: $error';
   }
+
+  @override
+  String get nativeName => '한국어';
 }

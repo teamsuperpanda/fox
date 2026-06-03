@@ -13,7 +13,7 @@ A friendly, local-first notes app. Fast, minimal, and private by default. Your n
 - **Rich Text**: Create and edit notes with formatting.
 - **Organization**: Tag, pin, and search your notes quickly.
 - **Customization**: Dark/light themes and custom sort orders.
-- **Privacy First**: Zero cloud overhead. No accounts or tracking.
+- **Privacy First**: Zero cloud overhead. No accounts. Anonymous analytics, opt-out anytime.
 - **Modern UI**: Clean design with alternating list colors.
 
 ---
@@ -58,7 +58,7 @@ flutter test --coverage
 
 ## License
 
-- **Code**: [MIT License](LICENSE).
+- **Code**: [PolyForm Noncommercial License 1.0.0](LICENSE).
 - **Assets**: Copyright © 2025 Team Super Panda. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md).
 
 For more, visit [www.teamsuperpanda.com](https://www.teamsuperpanda.com).

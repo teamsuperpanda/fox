@@ -176,7 +176,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
-  String get accentColor => 'Accent Colour';
+  String get accentColor => 'Theme Color';
+
+  @override
+  String get analytics => 'Analytics';
 
   @override
   String get systemDefault => 'System Default';
@@ -185,4 +188,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String startupError(String error) {
     return 'Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: $error';
   }
+
+  @override
+  String get nativeName => 'English';
 }

@@ -179,10 +179,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get accentColor => 'Колір акценту';
 
   @override
+  String get analytics => 'Аналітика';
+
+  @override
   String get systemDefault => 'Системна за замовчуванням';
 
   @override
   String startupError(String error) {
     return 'Помилка запуску Fox.\n\nСпробуйте очистити дані додатку або перевстановити.\n\nПомилка: $error';
   }
+
+  @override
+  String get nativeName => 'Українська';
 }

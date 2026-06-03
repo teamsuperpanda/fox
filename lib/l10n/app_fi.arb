@@ -55,6 +55,8 @@
   "today": "Tänään",
   "language": "Kieli",
   "accentColor": "Korostusväri",
+  "analytics": "Analytiikka",
   "systemDefault": "Järjestelmän oletus",
-  "startupError": "Fox-sovelluksen käynnistämisessä tapahtui virhe.\n\nYritä tyhjentää sovellustiedot tai asenna uudelleen.\n\nVirhe: {error}"
+  "startupError": "Fox-sovelluksen käynnistämisessä tapahtui virhe.\n\nYritä tyhjentää sovellustiedot tai asenna uudelleen.\n\nVirhe: {error}",
+  "nativeName": "Suomi"
 }

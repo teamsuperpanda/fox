@@ -55,6 +55,8 @@
   "today": "Astăzi",
   "language": "Limbă",
   "accentColor": "Culoare de accent",
+  "analytics": "Analitice",
   "systemDefault": "Implicit sistem",
-  "startupError": "A apărut o eroare la pornirea Fox.\n\nÎncercați să ștergeți datele aplicației sau să o reinstalați.\n\nEroare: {error}"
+  "startupError": "A apărut o eroare la pornirea Fox.\n\nÎncercați să ștergeți datele aplicației sau să o reinstalați.\n\nEroare: {error}",
+  "nativeName": "Română"
 }

@@ -181,10 +181,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get accentColor => 'Warna Aksen';
 
   @override
+  String get analytics => 'Analitik';
+
+  @override
   String get systemDefault => 'Default sistem';
 
   @override
   String startupError(String error) {
     return 'Terjadi kesalahan saat memulai Fox.\n\nCoba hapus data aplikasi atau instal ulang.\n\nKesalahan: $error';
   }
+
+  @override
+  String get nativeName => 'Bahasa Indonesia';
 }

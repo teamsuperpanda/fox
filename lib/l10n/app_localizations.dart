@@ -480,8 +480,14 @@ abstract class AppLocalizations {
   /// No description provided for @accentColor.
   ///
   /// In en, this message translates to:
-  /// **'Accent Colour'**
+  /// **'Theme Color'**
   String get accentColor;
+
+  /// No description provided for @analytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analytics;
 
   /// No description provided for @systemDefault.
   ///
@@ -494,6 +500,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: {error}'**
   String startupError(String error);
+
+  /// No description provided for @nativeName.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get nativeName;
 }
 
 class _AppLocalizationsDelegate

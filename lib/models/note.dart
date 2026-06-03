@@ -1,15 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class Note {
-  final String id;
-  final String title;
-  final String content; // JSON string representing Quill Delta
-  final bool pinned;
-  final DateTime updatedAt;
-  final List<String> tags;
-  final String? folderId;
-  final String? color; // Hex string e.g. '#FF5252'
 
   Note({
     required this.id,
@@ -20,11 +13,32 @@ class Note {
     this.tags = const [],
     this.folderId,
     this.color,
-  });
+  }) : _plainText = _parsePlainText(content);
+  final String id;
+  final String title;
+  final String content; // JSON string representing Quill Delta
+  final bool pinned;
+  final DateTime updatedAt;
+  final List<String> tags;
+  final String? folderId;
+  final String? color; // Hex string e.g. '#FF5252'
+  final String _plainText;
 
   // Create content JSON from a Document
   static String documentToContent(Document document) => jsonEncode(document.toDelta().toJson());
-  
+
+  static String _parsePlainText(String content) {
+    if (content.isEmpty) return '';
+    try {
+      final decoded = jsonDecode(content);
+      final ops = decoded is Map ? decoded['ops'] ?? [] : decoded;
+      if (ops is! List || ops.isEmpty) return '';
+      return Document.fromJson(ops).toPlainText();
+    } catch (e) {
+      return '';
+    }
+  }
+
   // Parse document with error handling - returns empty Document if JSON is corrupted
   Document get document {
     if (content.isEmpty) return Document();
@@ -39,8 +53,8 @@ class Note {
   }
 
   // Get plain text from the Document for search/display
-  // Cached using late final to avoid parsing JSON repeatedly during search/render
-  late final String plainText = document.toPlainText();
+  // Pre-computed during construction to avoid parsing JSON repeatedly during search/render
+  String get plainText => _plainText;
 
   Note copyWith({
     String? id,
@@ -66,19 +80,21 @@ class Note {
     );
   }
 
+  @visibleForTesting
   static Note fromMap(Map<String, Object?> map) {
     return Note(
-      id: map['id'] as String,
+      id: (map['id'] as String?) ?? '',
       title: (map['title'] as String?) ?? '',
       content: (map['content'] as String?) ?? '',
       pinned: (map['pinned'] as int? ?? 0) == 1,
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch((map['updatedAt'] as int?) ?? 0),
       tags: (map['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const [],
       folderId: map['folderId'] as String?,
       color: map['color'] as String?,
     );
   }
 
+  @visibleForTesting
   Map<String, Object?> toMap() {
     return {
       'id': id,

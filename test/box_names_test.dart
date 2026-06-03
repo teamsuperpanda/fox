@@ -16,16 +16,11 @@ void main() {
       expect(BoxNames.settings, 'settings_db');
     });
 
-    test('migrationFlags constant equals migration_flags', () {
-      expect(BoxNames.migrationFlags, 'migration_flags');
-    });
-
     test('all box names are unique', () {
       final names = [
         BoxNames.notes,
         BoxNames.folders,
         BoxNames.settings,
-        BoxNames.migrationFlags,
       ];
       expect(names.toSet().length, names.length);
     });

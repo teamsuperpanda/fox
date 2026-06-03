@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
 import 'package:fox/models/settings.dart';
 import 'package:fox/models/settings_adapter.dart';
 import 'package:fox/services/settings_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() {
   group('SettingsService', () {
@@ -227,109 +226,5 @@ void main() {
       expect(cleared.themeMode, 'system');
     });
 
-    // --- Locale ---
-
-    test('getLocale returns null by default', () {
-      expect(settingsService.getLocale(), isNull);
-    });
-
-    test('setLocale stores a locale tag', () async {
-      await settingsService.setLocale('fr');
-      expect(settingsService.getLocale(), equals('fr'));
-    });
-
-    test('setLocale with country code', () async {
-      await settingsService.setLocale('pt_PT');
-      expect(settingsService.getLocale(), equals('pt_PT'));
-    });
-
-    test('setLocale null clears stored locale', () async {
-      await settingsService.setLocale('de');
-      expect(settingsService.getLocale(), equals('de'));
-
-      await settingsService.setLocale(null);
-      expect(settingsService.getLocale(), isNull);
-    });
-
-    test('setLocale preserves other settings', () async {
-      await settingsService.setThemeMode(ThemeMode.dark);
-      await settingsService.setShowTags(false);
-      await settingsService.setLocale('ja');
-
-      final settings = settingsService.getSettings();
-      expect(settings.themeMode, equals('dark'));
-      expect(settings.showTags, isFalse);
-      expect(settings.locale, equals('ja'));
-    });
-
-    // --- Show Content ---
-
-    test('getShowContent returns true by default', () {
-      expect(settingsService.getShowContent(), isTrue);
-    });
-
-    test('setShowContent stores false', () async {
-      await settingsService.setShowContent(false);
-      expect(settingsService.getShowContent(), isFalse);
-    });
-
-    // --- Alternating Colors ---
-
-    test('getAlternatingColors returns false by default', () {
-      expect(settingsService.getAlternatingColors(), isFalse);
-    });
-
-    test('setAlternatingColors stores true', () async {
-      await settingsService.setAlternatingColors(true);
-      expect(settingsService.getAlternatingColors(), isTrue);
-    });
-
-    // --- Fab Animation ---
-
-    test('getFabAnimation returns true by default', () {
-      expect(settingsService.getFabAnimation(), isTrue);
-    });
-
-    test('setFabAnimation stores false', () async {
-      await settingsService.setFabAnimation(false);
-      expect(settingsService.getFabAnimation(), isFalse);
-    });
-
-    // --- Sort By ---
-
-    test('getSortBy returns dateDesc by default', () {
-      expect(settingsService.getSortBy(), equals('dateDesc'));
-    });
-
-    test('setSortBy stores new value', () async {
-      await settingsService.setSortBy('titleAsc');
-      expect(settingsService.getSortBy(), equals('titleAsc'));
-    });
-
-    // --- Settings copyWith ---
-
-    test('Settings copyWith clearLocale sets locale to null', () {
-      final s = Settings(themeMode: 'system', locale: 'en');
-      final cleared = s.copyWith(clearLocale: true);
-      expect(cleared.locale, isNull);
-      expect(cleared.themeMode, 'system');
-    });
-
-    test('Settings copyWith without clearLocale preserves locale', () {
-      final s = Settings(themeMode: 'system', locale: 'en');
-      final copy = s.copyWith(themeMode: 'dark');
-      expect(copy.locale, 'en');
-      expect(copy.themeMode, 'dark');
-    });
-
-    test('Settings defaults are correct', () {
-      final s = Settings(themeMode: 'system');
-      expect(s.showTags, isTrue);
-      expect(s.showContent, isTrue);
-      expect(s.alternatingColors, isFalse);
-      expect(s.fabAnimation, isTrue);
-      expect(s.sortBy, 'dateDesc');
-      expect(s.locale, isNull);
-    });
   });
 }

@@ -179,10 +179,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get accentColor => 'สีเน้น';
 
   @override
+  String get analytics => 'การวิเคราะห์';
+
+  @override
   String get systemDefault => 'ค่าเริ่มต้นระบบ';
 
   @override
   String startupError(String error) {
     return 'เกิดข้อผิดพลาดในการเริ่มต้น Fox\n\nกรุณาลองล้างข้อมูลแอปหรือติดตั้งใหม่\n\nข้อผิดพลาด: $error';
   }
+
+  @override
+  String get nativeName => 'ภาษาไทย';
 }

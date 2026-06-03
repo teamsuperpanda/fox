@@ -8,7 +8,7 @@ void main() {
     late DateTime created;
 
     setUp(() {
-      created = DateTime(2025, 6, 1, 12, 0);
+      created = DateTime(2025, 6, 1, 12);
       folder = Folder(id: 'f-1', name: 'Work', createdAt: created);
     });
 
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('copyWith returns new Folder with updated createdAt', () {
-      final newDate = DateTime(2026, 1, 1);
+      final newDate = DateTime(2026);
       final updated = folder.copyWith(createdAt: newDate);
       expect(updated.createdAt, newDate);
     });

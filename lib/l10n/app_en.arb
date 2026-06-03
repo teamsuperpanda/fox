@@ -43,13 +43,17 @@
   "errorSavingNote": "Error saving note: {error}",
   "@errorSavingNote": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "errorDeletingNote": "Error deleting note: {error}",
   "@errorDeletingNote": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
   },
   "sortBy": "Sort By",
@@ -64,12 +68,16 @@
   "untitled": "(Untitled)",
   "today": "Today",
   "language": "Language",
-  "accentColor": "Accent Colour",
+  "accentColor": "Theme Color",
+  "analytics": "Analytics",
   "systemDefault": "System Default",
   "startupError": "Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: {error}",
   "@startupError": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "nativeName": "English"
 }

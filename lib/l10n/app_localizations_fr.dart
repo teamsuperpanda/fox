@@ -182,10 +182,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accentColor => 'Couleur d\'accentuation';
 
   @override
+  String get analytics => 'Statistiques';
+
+  @override
   String get systemDefault => 'Par défaut du système';
 
   @override
   String startupError(String error) {
     return 'Une erreur est survenue au lancement de Fox.\n\nEssayez de vider les données de l\'application ou de la réinstaller.\n\nErreur : $error';
   }
+
+  @override
+  String get nativeName => 'Français';
 }

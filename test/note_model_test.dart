@@ -13,7 +13,7 @@ void main() {
       note = Note(
         id: 'test-id-123',
         title: 'Test Note',
-        content: '{"ops":[{"insert":"Hello World\\n"}]}',
+        content: r'{"ops":[{"insert":"Hello World\n"}]}',
         pinned: false,
         updatedAt: testDateTime,
       );
@@ -22,7 +22,7 @@ void main() {
     test('creates a note with all fields', () {
       expect(note.id, equals('test-id-123'));
       expect(note.title, equals('Test Note'));
-      expect(note.content, equals('{"ops":[{"insert":"Hello World\\n"}]}'));
+      expect(note.content, equals(r'{"ops":[{"insert":"Hello World\n"}]}'));
       expect(note.pinned, equals(false));
       expect(note.updatedAt, equals(testDateTime));
       expect(note.tags, isEmpty);
@@ -66,7 +66,7 @@ void main() {
 
       expect(map['id'], equals('test-id-123'));
       expect(map['title'], equals('Test Note'));
-      expect(map['content'], equals('{"ops":[{"insert":"Hello World\\n"}]}'));
+      expect(map['content'], equals(r'{"ops":[{"insert":"Hello World\n"}]}'));
       expect(map['pinned'], equals(0)); // false -> 0
       expect(map['updatedAt'], equals(testDateTime.millisecondsSinceEpoch));
       expect(map['tags'], equals([]));
@@ -83,7 +83,7 @@ void main() {
       final map = {
         'id': 'map-id',
         'title': 'From Map',
-        'content': '{"ops":[{"insert":"Content\\n"}]}',
+        'content': r'{"ops":[{"insert":"Content\n"}]}',
         'pinned': 1, // 1 -> true
         'updatedAt': testDateTime.millisecondsSinceEpoch,
         'tags': ['a', 'b'],
@@ -93,7 +93,7 @@ void main() {
 
       expect(created.id, equals('map-id'));
       expect(created.title, equals('From Map'));
-      expect(created.content, equals('{"ops":[{"insert":"Content\\n"}]}'));
+      expect(created.content, equals(r'{"ops":[{"insert":"Content\n"}]}'));
       expect(created.pinned, equals(true));
       expect(created.updatedAt, equals(testDateTime));
       expect(created.tags, equals(['a', 'b']));
@@ -212,7 +212,7 @@ void main() {
       final full = Note(
         id: 'full-id',
         title: 'Full',
-        content: '{"ops":[{"insert":"hi\\n"}]}',
+        content: r'{"ops":[{"insert":"hi\n"}]}',
         pinned: true,
         updatedAt: testDateTime,
         tags: ['x', 'y'],
@@ -248,7 +248,7 @@ void main() {
 
     test('document getter handles content with ops key', () {
       final n = note.copyWith(
-        content: '{"ops":[{"insert":"wrapped\\n"}]}',
+        content: r'{"ops":[{"insert":"wrapped\n"}]}',
       );
       final doc = n.document;
       expect(doc.toPlainText(), contains('wrapped'));

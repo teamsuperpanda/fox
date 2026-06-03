@@ -178,12 +178,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accentColor => '强调色';
 
   @override
+  String get analytics => '分析';
+
+  @override
   String get systemDefault => '系统默认';
 
   @override
   String startupError(String error) {
     return 'Fox 启动时出现问题。\n\n请尝试清除应用数据或重新安装。\n\n错误：$error';
   }
+
+  @override
+  String get nativeName => '中文（简体）';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -360,10 +366,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get accentColor => '強調色';
 
   @override
+  String get analytics => '分析';
+
+  @override
   String get systemDefault => '系統預設';
 
   @override
   String startupError(String error) {
     return 'Fox 啟動時出現問題。\n\n請嘗試清除應用程式資料或重新安裝。\n\n錯誤：$error';
   }
+
+  @override
+  String get nativeName => '中文（繁體）';
 }
