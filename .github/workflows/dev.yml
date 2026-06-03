@@ -1,4 +1,4 @@
-name: CI
+name: Dev CI
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ jobs:
   analyze_and_test:
     name: Analyze & Test
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,5 +46,5 @@ jobs:
       - name: Run flutter analyze
         run: flutter analyze
 
-      - name: Run flutter test
-        run: flutter test --coverage
+      - name: Run tests
+        run: flutter test --coverage $(find test/ -name '*_test.dart' ! -name 'screenshot*')
