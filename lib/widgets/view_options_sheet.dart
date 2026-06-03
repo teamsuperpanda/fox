@@ -323,11 +323,14 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            l10n.viewOptions,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+          Flexible(
+            child: Text(
+              l10n.viewOptions,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.close),
