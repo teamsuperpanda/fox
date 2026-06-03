@@ -9,9 +9,10 @@ import 'package:fox/services/notes_controller.dart';
 import 'package:intl/intl.dart';
 
 class NoteList extends StatelessWidget {
-
   const NoteList({
-    required this.controller, required this.notes, super.key,
+    required this.controller,
+    required this.notes,
+    super.key,
     this.showTags = true,
     this.showContent = true,
   });
@@ -116,129 +117,154 @@ class NoteList extends StatelessWidget {
           child: Semantics(
             label: 'Note: ${note.title.isEmpty ? "Untitled" : note.title}',
             child: InkWell(
-            onTap: () async {
-              final result = await Navigator.of(context).push<NoteDetailResult>(
-                MaterialPageRoute(
-                  builder: (_) => NoteDetailPage(
-                    existing: note,
-                    controller: controller,
-                  ),
-                ),
-              );
-              if (result != null && result.deleted && context.mounted) {
-                final l10n = AppLocalizations.of(context);
-                ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.noteDeleted),
-                    action: SnackBarAction(
-                      label: l10n.undo,
-                      onPressed: controller.undoRemove,
+              onTap: () async {
+                final result =
+                    await Navigator.of(context).push<NoteDetailResult>(
+                  MaterialPageRoute(
+                    builder: (_) => NoteDetailPage(
+                      existing: note,
+                      controller: controller,
                     ),
                   ),
                 );
-              }
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: controller.alternatingColors && index.isEven
-                    ? Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
-                    : null,
-                border: noteColor != null
-                    ? Border(left: BorderSide(color: noteColor, width: 4))
-                    : null,
-              ),
-              padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  note.title.isEmpty ? l10n.untitled : note.title,
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0.15,
-                                  ),
+                if (result != null && result.deleted && context.mounted) {
+                  final l10n = AppLocalizations.of(context);
+                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.noteDeleted),
+                      action: SnackBarAction(
+                        label: l10n.undo,
+                        onPressed: controller.undoRemove,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: controller.alternatingColors && index.isEven
+                      ? Theme.of(context)
+                          .colorScheme
+                          .surfaceContainerHighest
+                          .withValues(alpha: 0.3)
+                      : null,
+                  border: noteColor != null
+                      ? Border(left: BorderSide(color: noteColor, width: 4))
+                      : null,
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            note.title.isEmpty ? l10n.untitled : note.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.15,
                                 ),
-                              ),
-                              if (note.pinned) ...[
-                                const SizedBox(width: 8),
-                                Icon(
-                                  Icons.push_pin,
-                                  size: 16,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ],
-                            ],
                           ),
-                          if (showContent && trimmedText.isNotEmpty) ...[
-                            const SizedBox(height: 6),
-                            Text(
-                              trimmedText,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                height: 1.4,
-                              ),
-                            ),
-                          ],
-                          if (showTags && note.tags.isNotEmpty) ...[
-                            const SizedBox(height: 10),
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 6,
-                              children: note.tags.map((tag) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.secondaryContainer.withValues(alpha: 0.5),
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    tag,
-                                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Text(
-                                _formatDate(note.updatedAt, l10n),
-                                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                              ),
-                              if (note.folderId != null) ...[
-                                const SizedBox(width: 8),
-                                Icon(
-                                  Icons.folder_outlined,
-                                  size: 12,
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                                const SizedBox(width: 2),
-                                Text(
-                                  controller.getFolderName(note.folderId) ?? l10n.unknown,
-                                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: Theme.of(context).colorScheme.outline,
-                                  ),
-                                ),
-                              ],
-                            ],
+                        ),
+                        if (note.pinned) ...[
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.push_pin,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ],
+                      ],
+                    ),
+                    if (showContent && trimmedText.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        trimmedText,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              height: 1.4,
+                            ),
                       ),
+                    ],
+                    if (showTags && note.tags.isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: note.tags.map((tag) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer
+                                  .withValues(alpha: 0.5),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              tag,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                          _formatDate(note.updatedAt, l10n),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                        ),
+                        if (note.folderId != null) ...[
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.folder_outlined,
+                            size: 12,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            controller.getFolderName(note.folderId) ??
+                                l10n.unknown,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
         );
       },
     );

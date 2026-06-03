@@ -56,7 +56,8 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
         : allLocales.where((locale) {
             final tag = localeToTag(locale);
             final name = (_displayNames[tag] ?? tag).toLowerCase();
-            return name.contains(_filter) || tag.toLowerCase().contains(_filter);
+            return name.contains(_filter) ||
+                tag.toLowerCase().contains(_filter);
           }).toList();
 
     final showSystemDefault = _filter.isEmpty ||
@@ -85,8 +86,8 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
               _buildTile(
                 label: widget.systemDefaultLabel,
                 isSelected: widget.currentTag == null,
-                onTap: () =>
-                    Navigator.of(context).pop(LanguagePickerDialog.sentinelSystemDefault),
+                onTap: () => Navigator.of(context)
+                    .pop(LanguagePickerDialog.sentinelSystemDefault),
               ),
             ...filtered.map((locale) {
               final tag = localeToTag(locale);

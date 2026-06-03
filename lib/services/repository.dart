@@ -15,4 +15,5 @@ abstract class FolderRepository {
   Future<void> deleteFolder(String id);
 }
 
-abstract class NoteAndFolderRepository implements NoteRepository, FolderRepository {}
+abstract class NoteAndFolderRepository
+    implements NoteRepository, FolderRepository {}

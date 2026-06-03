@@ -13,16 +13,17 @@ import 'package:provider/provider.dart';
 /// Use this in widget tests instead of bare `MaterialApp(home: ...)`.
 Widget buildTestApp({required Widget home, ThemeData? theme}) {
   return Provider.value(
-    value: UmamiService(websiteId: 'test', endpoint: 'https://test.com/api/send'),
+    value:
+        UmamiService(websiteId: 'test', endpoint: 'https://test.com/api/send'),
     child: MaterialApp(
-    localizationsDelegates: const [
-      ...AppLocalizations.localizationsDelegates,
-      FlutterQuillLocalizations.delegate,
-    ],
-    supportedLocales: AppLocalizations.supportedLocales,
-    theme: theme,
-    home: home,
-  ),
+      localizationsDelegates: const [
+        ...AppLocalizations.localizationsDelegates,
+        FlutterQuillLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: theme,
+      home: home,
+    ),
   );
 }
 

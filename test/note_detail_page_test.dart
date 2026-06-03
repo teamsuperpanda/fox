@@ -53,7 +53,7 @@ void main() {
         pinned: false,
         updatedAt: DateTime.now(),
       );
-      
+
       final updated = original.copyWith(pinned: true);
       expect(updated.pinned, isTrue);
       expect(updated.id, equals('test'));
@@ -151,14 +151,16 @@ void main() {
     });
 
     testWidgets('creates note with title', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(controller: controller),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: NoteDetailPage(controller: controller),
+        ),
+      );
 
       await tester.tap(find.byIcon(Icons.arrow_back));
       await tester.pumpAndSettle();
@@ -177,14 +179,16 @@ void main() {
       );
       mockRepo.notes.add(existingNote);
 
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(existing: existingNote, controller: controller),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: NoteDetailPage(existing: existingNote, controller: controller),
+        ),
+      );
 
       final titleField = find.byType(TextField).first;
       await tester.enterText(titleField, '');
@@ -205,14 +209,17 @@ void main() {
         updatedAt: DateTime.now(),
       );
 
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(existing: note, controller: controller, showToolbar: false),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: NoteDetailPage(
+              existing: note, controller: controller, showToolbar: false),
+        ),
+      );
 
       expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
     });
@@ -226,27 +233,32 @@ void main() {
         updatedAt: DateTime.now(),
       );
 
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(existing: note, controller: controller, showToolbar: false),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: NoteDetailPage(
+              existing: note, controller: controller, showToolbar: false),
+        ),
+      );
 
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
     });
 
     testWidgets('tags dialog allows adding and removing tags', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(controller: controller, showToolbar: false),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: NoteDetailPage(controller: controller, showToolbar: false),
+        ),
+      );
 
       // Open tags dialog
       await tester.tap(find.byIcon(Icons.label_outline));
@@ -255,14 +267,16 @@ void main() {
       expect(find.text('Manage Tags'), findsOneWidget);
 
       // Add a tag
-      await tester.enterText(find.widgetWithText(TextField, 'New tag...'), 'test-tag');
+      await tester.enterText(
+          find.widgetWithText(TextField, 'New tag...'), 'test-tag');
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
       expect(find.text('test-tag'), findsOneWidget);
 
       // Add another tag via add icon
-      await tester.enterText(find.widgetWithText(TextField, 'New tag...'), 'another-tag');
+      await tester.enterText(
+          find.widgetWithText(TextField, 'New tag...'), 'another-tag');
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
@@ -288,18 +302,21 @@ void main() {
       expect(mockRepo.notes.first.tags, contains('another-tag'));
     });
 
-    testWidgets('save failure keeps user on page and shows error', (tester) async {
+    testWidgets('save failure keeps user on page and shows error',
+        (tester) async {
       final failingRepo = FailingSaveRepository();
       final failingController = NotesController(failingRepo);
 
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(controller: failingController),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: NoteDetailPage(controller: failingController),
+        ),
+      );
 
       await tester.enterText(find.byType(TextField).first, 'Will Fail');
       await tester.pump();
@@ -315,14 +332,16 @@ void main() {
       final delayedRepo = DelayedRepository();
       final delayedController = NotesController(delayedRepo);
 
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(controller: delayedController),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: NoteDetailPage(controller: delayedController),
+        ),
+      );
 
       await tester.enterText(find.byType(TextField).first, 'Delayed Save');
       await tester.pump();
@@ -350,14 +369,17 @@ void main() {
       );
       final existing = failingController.notes.first;
 
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(existing: existing, controller: failingController),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home:
+              NoteDetailPage(existing: existing, controller: failingController),
+        ),
+      );
 
       await tester.tap(find.byIcon(Icons.delete));
       await tester.pumpAndSettle();
@@ -368,7 +390,8 @@ void main() {
       expect(find.byType(NoteDetailPage), findsOneWidget);
     });
 
-    testWidgets('delete pops only after awaited delete success', (tester) async {
+    testWidgets('delete pops only after awaited delete success',
+        (tester) async {
       final delayedRepo = DelayedRepository();
       final delayedController = NotesController(delayedRepo);
 
@@ -380,14 +403,17 @@ void main() {
       );
       final existing = delayedController.notes.first;
 
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(existing: existing, controller: delayedController),
-      ),);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            FlutterQuillLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home:
+              NoteDetailPage(existing: existing, controller: delayedController),
+        ),
+      );
 
       await tester.tap(find.byIcon(Icons.delete));
       await tester.pumpAndSettle();

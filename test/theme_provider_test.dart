@@ -28,7 +28,8 @@ void main() {
       expect(provider.getThemeIcon(), equals(Icons.brightness_auto));
     });
 
-    test('toggleTheme cycles through modes: system -> light -> dark -> system', () async {
+    test('toggleTheme cycles through modes: system -> light -> dark -> system',
+        () async {
       // Start at system
       expect(provider.themeMode, equals(ThemeMode.system));
 
@@ -59,7 +60,7 @@ void main() {
       // Toggle to light mode first
       await provider.toggleTheme(); // system -> light
       expect(provider.themeMode, equals(ThemeMode.light));
-      
+
       await provider.load();
       // Should fallback to system due to test environment
       expect(provider.themeMode, equals(ThemeMode.system));

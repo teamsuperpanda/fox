@@ -153,7 +153,11 @@ class NotesController extends ChangeNotifier {
       }
     }
     if (batch.isNotEmpty) await _repo.upsertAll(batch);
-    _unfilteredNotes = _unfilteredNotes.map((n) => n.folderId == id ? n.copyWith(clearFolder: true, updatedAt: now) : n).toList();
+    _unfilteredNotes = _unfilteredNotes
+        .map((n) => n.folderId == id
+            ? n.copyWith(clearFolder: true, updatedAt: now)
+            : n)
+        .toList();
     _updateView();
     notifyListeners();
   }
@@ -161,7 +165,9 @@ class NotesController extends ChangeNotifier {
   String? getFolderName(String? folderId) => _folder.getFolderName(folderId);
 
   Future<void> addOrUpdate({
-    required String title, required Document content, String? id,
+    required String title,
+    required Document content,
+    String? id,
     bool pinned = false,
     List<String> tags = const [],
     String? folderId,
@@ -170,11 +176,12 @@ class NotesController extends ChangeNotifier {
     // Validate input
     final trimmedTitle = title.trim();
     final plainText = content.toPlainText().trim();
-    
+
     if (trimmedTitle.isEmpty && plainText.isEmpty) {
-      throw ArgumentError('Note cannot be empty - title and content are both blank');
+      throw ArgumentError(
+          'Note cannot be empty - title and content are both blank');
     }
-    
+
     final note = Note(
       id: id ?? _uuid.v4(),
       title: trimmedTitle,
@@ -244,10 +251,12 @@ class NotesController extends ChangeNotifier {
 
     if (_searchTerm.isNotEmpty) {
       final term = _searchTerm.toLowerCase();
-      copy.retainWhere((note) =>
-          note.title.toLowerCase().contains(term) ||
-          note.plainText.toLowerCase().contains(term) ||
-          note.tags.any((tag) => tag.toLowerCase().contains(term)),);
+      copy.retainWhere(
+        (note) =>
+            note.title.toLowerCase().contains(term) ||
+            note.plainText.toLowerCase().contains(term) ||
+            note.tags.any((tag) => tag.toLowerCase().contains(term)),
+      );
     }
 
     copy.sort((a, b) {

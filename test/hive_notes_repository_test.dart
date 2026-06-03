@@ -20,7 +20,7 @@ void main() {
       // Open the notes box
       await Hive.openBox<Note>('notes_db');
       repository = HiveNoteRepository.create();
-      
+
       // Clear any existing data
       await repository.clear();
     });
@@ -100,7 +100,7 @@ void main() {
 
     test('returns all notes', () async {
       final now = DateTime.now();
-      
+
       final notes = [
         Note(
           id: 'note-1',
@@ -140,7 +140,7 @@ void main() {
 
       // Repository no longer responsible for sorting. verify all present.
       expect(retrieved.length, equals(4));
-      
+
       final ids = retrieved.map((n) => n.id).toSet();
       expect(ids.contains('note-1'), isTrue);
       expect(ids.contains('note-2'), isTrue);

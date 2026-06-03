@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class Note {
-
   Note({
     required this.id,
     required this.title,
@@ -25,7 +24,8 @@ class Note {
   final String _plainText;
 
   // Create content JSON from a Document
-  static String documentToContent(Document document) => jsonEncode(document.toDelta().toJson());
+  static String documentToContent(Document document) =>
+      jsonEncode(document.toDelta().toJson());
 
   static String _parsePlainText(String content) {
     if (content.isEmpty) return '';
@@ -87,8 +87,11 @@ class Note {
       title: (map['title'] as String?) ?? '',
       content: (map['content'] as String?) ?? '',
       pinned: (map['pinned'] as int? ?? 0) == 1,
-      updatedAt: DateTime.fromMillisecondsSinceEpoch((map['updatedAt'] as int?) ?? 0),
-      tags: (map['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const [],
+      updatedAt:
+          DateTime.fromMillisecondsSinceEpoch((map['updatedAt'] as int?) ?? 0),
+      tags:
+          (map['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
+              const [],
       folderId: map['folderId'] as String?,
       color: map['color'] as String?,
     );

@@ -5,7 +5,6 @@ import 'package:fox/services/repository.dart';
 import 'package:hive/hive.dart';
 
 class HiveNoteRepository implements NoteAndFolderRepository {
-
   HiveNoteRepository._();
   Box<Note> get _box => Hive.box<Note>(BoxNames.notes);
   Box<Folder> get _foldersBox => Hive.box<Folder>(BoxNames.folders);
@@ -18,7 +17,8 @@ class HiveNoteRepository implements NoteAndFolderRepository {
   Future<void> init() async {
     // Box should already be opened by StorageService
     if (!Hive.isBoxOpen(BoxNames.notes)) {
-      throw StateError('Notes box not initialized. Ensure StorageService.init() was called.');
+      throw StateError(
+          'Notes box not initialized. Ensure StorageService.init() was called.');
     }
   }
 

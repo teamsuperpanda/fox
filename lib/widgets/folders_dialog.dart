@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 /// A dialog that lets the user manage folders: create, rename, delete, and
 /// select a folder filter.
 class FoldersDialog extends StatefulWidget {
-
   const FoldersDialog({required this.controller, super.key});
   final NotesController controller;
 
@@ -32,7 +31,11 @@ class _FoldersDialogState extends State<FoldersDialog> {
     if (name.isNotEmpty) {
       await controller.addFolder(name);
       if (!mounted) return;
-      try { context.read<UmamiService>().track('folder_create', data: {'name_length': name.length}); } catch (e) {
+      try {
+        context
+            .read<UmamiService>()
+            .track('folder_create', data: {'name_length': name.length});
+      } catch (e) {
         debugPrint('Failed to track folder_create: $e');
       }
       _folderNameCtrl.clear();
@@ -66,7 +69,8 @@ class _FoldersDialogState extends State<FoldersDialog> {
     );
     if (!mounted) return;
     if (newName != null && newName.trim().isNotEmpty) {
-      final isDuplicate = controller.folders.any((f) => f.name == newName.trim() && f.id != id);
+      final isDuplicate =
+          controller.folders.any((f) => f.name == newName.trim() && f.id != id);
       if (isDuplicate) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -138,72 +142,78 @@ class _FoldersDialogState extends State<FoldersDialog> {
               Semantics(
                 label: l10n.allNotes,
                 child: ListTile(
-                leading: Icon(
-                  Icons.folder_open,
-                  color: controller.selectedFolderId == null
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
+                  leading: Icon(
+                    Icons.folder_open,
+                    color: controller.selectedFolderId == null
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                  ),
+                  title: Text(l10n.allNotes),
+                  selected: controller.selectedFolderId == null,
+                  contentPadding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                  onTap: () {
+                    controller.setSelectedFolder(null);
+                    setState(() {});
+                  },
                 ),
-                title: Text(l10n.allNotes),
-                selected: controller.selectedFolderId == null,
-                contentPadding: EdgeInsets.zero,
-                visualDensity: VisualDensity.compact,
-                onTap: () {
-                  controller.setSelectedFolder(null);
-                  setState(() {});
-                },
-              ),),
+              ),
               // "Unfiled" option
               Semantics(
                 label: l10n.unfiled,
                 child: ListTile(
-                leading: Icon(
-                  Icons.notes,
-                  color: controller.selectedFolderId == AppConstants.unfiledFolderId
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
+                  leading: Icon(
+                    Icons.notes,
+                    color: controller.selectedFolderId ==
+                            AppConstants.unfiledFolderId
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                  ),
+                  title: Text(l10n.unfiled),
+                  selected: controller.selectedFolderId ==
+                      AppConstants.unfiledFolderId,
+                  contentPadding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                  onTap: () {
+                    controller.setSelectedFolder(AppConstants.unfiledFolderId);
+                    setState(() {});
+                  },
                 ),
-                title: Text(l10n.unfiled),
-                selected: controller.selectedFolderId == AppConstants.unfiledFolderId,
-                contentPadding: EdgeInsets.zero,
-                visualDensity: VisualDensity.compact,
-                onTap: () {
-                  controller.setSelectedFolder(AppConstants.unfiledFolderId);
-                  setState(() {});
-                },
-              ),),
+              ),
               ...controller.folders.map((folder) {
                 return Semantics(
                   label: 'Folder: ${folder.name}',
                   child: ListTile(
-                  leading: Icon(
-                    Icons.folder,
-                    color: controller.selectedFolderId == folder.id
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
-                  ),
-                  title: Text(folder.name),
-                  selected: controller.selectedFolderId == folder.id,
-                  contentPadding: EdgeInsets.zero,
-                  visualDensity: VisualDensity.compact,
-                  onTap: () {
-                    controller.setSelectedFolder(folder.id);
-                    setState(() {});
-                  },
-                  trailing: PopupMenuButton<String>(
-                    itemBuilder: (_) => [
-                      PopupMenuItem(value: 'rename', child: Text(l10n.rename)),
-                      PopupMenuItem(value: 'delete', child: Text(l10n.delete)),
-                    ],
-                    onSelected: (action) async {
-                      if (action == 'rename') {
-                        await _renameFolder(folder.id, folder.name);
-                      } else if (action == 'delete') {
-                        await _deleteFolder(folder.id);
-                      }
+                    leading: Icon(
+                      Icons.folder,
+                      color: controller.selectedFolderId == folder.id
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
+                    ),
+                    title: Text(folder.name),
+                    selected: controller.selectedFolderId == folder.id,
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    onTap: () {
+                      controller.setSelectedFolder(folder.id);
+                      setState(() {});
                     },
+                    trailing: PopupMenuButton<String>(
+                      itemBuilder: (_) => [
+                        PopupMenuItem(
+                            value: 'rename', child: Text(l10n.rename)),
+                        PopupMenuItem(
+                            value: 'delete', child: Text(l10n.delete)),
+                      ],
+                      onSelected: (action) async {
+                        if (action == 'rename') {
+                          await _renameFolder(folder.id, folder.name);
+                        } else if (action == 'delete') {
+                          await _deleteFolder(folder.id);
+                        }
+                      },
+                    ),
                   ),
-                ),
                 );
               }),
             ],

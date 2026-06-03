@@ -7,7 +7,8 @@ class SettingsService {
   static const _key = 'app_settings';
 
   Box<Settings>? _cachedBox;
-  Box<Settings> get _box => _cachedBox ??= Hive.box<Settings>(BoxNames.settings);
+  Box<Settings> get _box =>
+      _cachedBox ??= Hive.box<Settings>(BoxNames.settings);
 
   Settings _get() => _box.get(_key) ?? Settings(themeMode: 'system');
 

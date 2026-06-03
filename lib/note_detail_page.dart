@@ -16,9 +16,9 @@ class NoteDetailResult {
 }
 
 class NoteDetailPage extends StatefulWidget {
-
   const NoteDetailPage({
-    required this.controller, super.key,
+    required this.controller,
+    super.key,
     this.existing,
     this.showToolbar = true,
   });
@@ -46,7 +46,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final isNew = widget.existing == null;
-        context.read<UmamiService>().trackPageView(isNew ? '/note/new' : '/note/edit');
+        context
+            .read<UmamiService>()
+            .trackPageView(isNew ? '/note/new' : '/note/edit');
       } catch (e) {
         debugPrint('Failed to track page view: $e');
       }
@@ -169,7 +171,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: displayColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color: displayColor ??
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: isSelected
@@ -179,9 +182,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     ),
                   ),
                   child: hex.isEmpty
-                      ? Icon(Icons.block, size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant)
+                      ? Icon(Icons.block,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant)
                       : isSelected
-                          ? const Icon(Icons.check, size: 20, color: Colors.white)
+                          ? const Icon(Icons.check,
+                              size: 20, color: Colors.white)
                           : null,
                 ),
               );
@@ -231,13 +237,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     selected: _folderId == folder.id,
                     contentPadding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
-                  onTap: () {
-                    setState(() => _folderId = folder.id);
-                    try { context.read<UmamiService>().track('note_move', data: {'folder': folder.name}); } catch (e) {
-                      debugPrint('Failed to track note_move: $e');
-                    }
-                    Navigator.of(context).pop();
-                  },
+                    onTap: () {
+                      setState(() => _folderId = folder.id);
+                      try {
+                        context
+                            .read<UmamiService>()
+                            .track('note_move', data: {'folder': folder.name});
+                      } catch (e) {
+                        debugPrint('Failed to track note_move: $e');
+                      }
+                      Navigator.of(context).pop();
+                    },
                   );
                 }),
               ],
@@ -256,12 +266,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     final messenger = ScaffoldMessenger.maybeOf(context);
     final errorColor = Theme.of(context).colorScheme.error;
     final l10n = AppLocalizations.of(context);
-    
+
     // Get trimmed values
     final title = _titleCtrl.text.trim();
     final content = _contentCtrl.document;
     final plainText = content.toPlainText().trim();
-    
+
     // If new note is empty, discard it silently
     if (title.isEmpty && plainText.isEmpty && widget.existing == null) {
       messenger?.showSnackBar(
@@ -270,7 +280,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       navigator.pop(const NoteDetailResult());
       return;
     }
-    
+
     // Validation: reject empty notes (for existing notes)
     if (title.isEmpty && plainText.isEmpty) {
       _saving = false;
@@ -283,7 +293,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       );
       return;
     }
-    
+
     // Validation: warn about title-only notes (optional)
     if (title.isNotEmpty && plainText.isEmpty) {
       messenger?.showSnackBar(
@@ -360,7 +370,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           actions: [
             IconButton(
               tooltip: l10n.folder,
-              icon: Icon(_folderId != null ? Icons.folder : Icons.folder_outlined),
+              icon: Icon(
+                  _folderId != null ? Icons.folder : Icons.folder_outlined),
               onPressed: _showFolderPicker,
             ),
             IconButton(
@@ -376,8 +387,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               onPressed: _showColorPicker,
             ),
             IconButton(
-              tooltip: _showToolbar ? l10n.hideFormattingToolbar : l10n.showFormattingToolbar,
-              icon: Icon(_showToolbar ? Icons.text_format : Icons.text_format_outlined),
+              tooltip: _showToolbar
+                  ? l10n.hideFormattingToolbar
+                  : l10n.showFormattingToolbar,
+              icon: Icon(_showToolbar
+                  ? Icons.text_format
+                  : Icons.text_format_outlined),
               onPressed: () => setState(() => _showToolbar = !_showToolbar),
             ),
             IconButton(
@@ -410,14 +425,18 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     try {
                       await widget.controller.remove(widget.existing!.id);
                       if (!context.mounted) return;
-                      try { context.read<UmamiService>().track('note_delete'); } catch (e) {
+                      try {
+                        context.read<UmamiService>().track('note_delete');
+                      } catch (e) {
                         debugPrint('Failed to track note_delete: $e');
                       }
-                      navigator.pop(const NoteDetailResult(changed: true, deleted: true));
+                      navigator.pop(
+                          const NoteDetailResult(changed: true, deleted: true));
                     } catch (e) {
                       messenger?.showSnackBar(
                         SnackBar(
-                          content: Text(l10nLocal.errorDeletingNote(e.toString())),
+                          content:
+                              Text(l10nLocal.errorDeletingNote(e.toString())),
                           backgroundColor: errorColor,
                         ),
                       );
@@ -469,7 +488,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         iconTheme: QuillIconTheme(
                           iconButtonSelectedData: IconButtonData(
                             style: IconButton.styleFrom(
-                              backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withValues(alpha: 0.1),
                             ),
                           ),
                         ),

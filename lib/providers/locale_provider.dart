@@ -26,7 +26,8 @@ class LocaleProvider extends ChangeNotifier {
   /// Set a new locale override, or `null` to revert to system default.
   Future<void> setLocale(Locale? newLocale) async {
     try {
-      await _settingsService.setLocale(newLocale != null ? localeToTag(newLocale) : null);
+      await _settingsService
+          .setLocale(newLocale != null ? localeToTag(newLocale) : null);
       _locale = newLocale;
     } catch (e) {
       debugPrint('LocaleProvider: failed to persist locale: $e');
@@ -43,6 +44,4 @@ class LocaleProvider extends ChangeNotifier {
     }
     return Locale(parts[0]);
   }
-
-
 }

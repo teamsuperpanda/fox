@@ -38,7 +38,8 @@ void main() {
       testWidgets('scaffold background is not transparent', (tester) async {
         await tester.pumpWidget(_buildApp(AppTheme.light(testAccent)));
         final ctx = tester.element(find.byType(SizedBox));
-        expect(Theme.of(ctx).scaffoldBackgroundColor, isNot(Colors.transparent));
+        expect(
+            Theme.of(ctx).scaffoldBackgroundColor, isNot(Colors.transparent));
       });
 
       testWidgets('colorScheme is derived from accent', (tester) async {
@@ -50,7 +51,8 @@ void main() {
       testWidgets('appBar theme uses warm foreground', (tester) async {
         await tester.pumpWidget(_buildApp(AppTheme.light(testAccent)));
         final ctx = tester.element(find.byType(SizedBox));
-        expect(Theme.of(ctx).appBarTheme.foregroundColor, const Color(0xFF333333));
+        expect(
+            Theme.of(ctx).appBarTheme.foregroundColor, const Color(0xFF333333));
       });
     });
 
@@ -79,13 +81,15 @@ void main() {
       testWidgets('scaffold background is not transparent', (tester) async {
         await tester.pumpWidget(_buildApp(AppTheme.dark(testAccent)));
         final ctx = tester.element(find.byType(SizedBox));
-        expect(Theme.of(ctx).scaffoldBackgroundColor, isNot(Colors.transparent));
+        expect(
+            Theme.of(ctx).scaffoldBackgroundColor, isNot(Colors.transparent));
       });
 
       testWidgets('appBar foreground is light', (tester) async {
         await tester.pumpWidget(_buildApp(AppTheme.dark(testAccent)));
         final ctx = tester.element(find.byType(SizedBox));
-        expect(Theme.of(ctx).appBarTheme.foregroundColor, const Color(0xFFF8F5F1));
+        expect(
+            Theme.of(ctx).appBarTheme.foregroundColor, const Color(0xFFF8F5F1));
       });
     });
 
@@ -100,7 +104,8 @@ void main() {
         const terracotta = Color(0xFFD4845A);
         await tester.pumpWidget(_buildApp(AppTheme.dark(terracotta)));
         final ctx = tester.element(find.byType(SizedBox));
-        expect(Theme.of(ctx).floatingActionButtonTheme.backgroundColor, terracotta);
+        expect(Theme.of(ctx).floatingActionButtonTheme.backgroundColor,
+            terracotta);
       });
     });
   });

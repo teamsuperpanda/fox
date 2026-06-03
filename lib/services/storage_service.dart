@@ -14,7 +14,7 @@ class StorageService {
   static Future<void> init() async {
     if (_inited) return;
     await Hive.initFlutter();
-    
+
     // Register adapters
     if (!Hive.isAdapterRegistered(2)) {
       Hive.registerAdapter(SettingsAdapter());
@@ -25,12 +25,12 @@ class StorageService {
     if (!Hive.isAdapterRegistered(4)) {
       Hive.registerAdapter(FolderAdapter());
     }
-    
+
     // Open boxes
     await Hive.openBox<Settings>(BoxNames.settings);
     await Hive.openBox<Note>(BoxNames.notes);
     await Hive.openBox<Folder>(BoxNames.folders);
-    
+
     _inited = true;
   }
 }

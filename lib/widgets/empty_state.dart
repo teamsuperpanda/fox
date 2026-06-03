@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 
 class EmptyState extends StatelessWidget {
-
   const EmptyState({super.key, this.isSearching = false});
+
   /// When `true`, the widget shows a "no results" message instead of the
   /// default "no notes yet" message.
   final bool isSearching;
@@ -20,7 +20,10 @@ class EmptyState extends StatelessWidget {
             Icon(
               isSearching ? Icons.search_off : Icons.notes,
               size: 64,
-              color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurfaceVariant
+                  .withValues(alpha: 0.4),
             ),
             const SizedBox(height: 16),
             Semantics(
@@ -29,8 +32,8 @@ class EmptyState extends StatelessWidget {
                 isSearching ? l10n.noNotesMatchSearch : l10n.noNotesYet,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ),
           ],

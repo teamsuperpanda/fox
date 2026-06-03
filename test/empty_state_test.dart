@@ -6,7 +6,8 @@ import 'test_helpers.dart';
 
 void main() {
   group('EmptyState Widget', () {
-    testWidgets('displays "No notes yet..." message by default', (tester) async {
+    testWidgets('displays "No notes yet..." message by default',
+        (tester) async {
       await tester.pumpWidget(
         buildTestApp(
           home: const Scaffold(
@@ -19,7 +20,8 @@ void main() {
       expect(find.text('No notes yet...'), findsOneWidget);
     });
 
-    testWidgets('displays search message when isSearching is true', (tester) async {
+    testWidgets('displays search message when isSearching is true',
+        (tester) async {
       await tester.pumpWidget(
         buildTestApp(
           home: const Scaffold(

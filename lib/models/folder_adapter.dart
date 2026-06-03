@@ -35,7 +35,6 @@ class FolderAdapter extends TypeAdapter<Folder> {
   @override
   int get hashCode => typeId.hashCode;
 
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

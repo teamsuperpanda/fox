@@ -45,7 +45,8 @@ void main() {
     test('load reads persisted simple locale', () async {
       // Pre-populate settings with a locale
       final box = Hive.box<Settings>('settings_db');
-      await box.put('app_settings', Settings(themeMode: 'system', locale: 'fr'));
+      await box.put(
+          'app_settings', Settings(themeMode: 'system', locale: 'fr'));
 
       await provider.load();
       expect(provider.locale, equals(const Locale('fr')));
@@ -53,7 +54,8 @@ void main() {
 
     test('load reads persisted locale with country code', () async {
       final box = Hive.box<Settings>('settings_db');
-      await box.put('app_settings', Settings(themeMode: 'system', locale: 'pt_PT'));
+      await box.put(
+          'app_settings', Settings(themeMode: 'system', locale: 'pt_PT'));
 
       await provider.load();
       expect(provider.locale, equals(const Locale('pt', 'PT')));

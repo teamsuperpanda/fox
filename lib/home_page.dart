@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       _searchDebounce?.cancel();
       if (term.isNotEmpty) {
         _searchDebounce = Timer(const Duration(milliseconds: 500), () {
-          context.read<UmamiService>().track('search_perform', data: {'term': term});
+          context
+              .read<UmamiService>()
+              .track('search_perform', data: {'term': term});
         });
       }
     });
@@ -112,12 +114,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Future<void> _addNote() async {
-    final result =
-        await Navigator.of(context).push<NoteDetailResult>(MaterialPageRoute(
-      builder: (_) => NoteDetailPage(
-        controller: controller,
+    final result = await Navigator.of(context).push<NoteDetailResult>(
+      MaterialPageRoute(
+        builder: (_) => NoteDetailPage(
+          controller: controller,
+        ),
       ),
-    ),);
+    );
     if (!mounted) return;
     if (result != null && result.changed) {
       if (result.deleted) {
@@ -151,7 +154,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       return;
     }
 
-    context.read<UmamiService>().track('view_option_change', data: {'action': 'open'});
+    context
+        .read<UmamiService>()
+        .track('view_option_change', data: {'action': 'open'});
 
     await showModalBottomSheet(
       context: context,
@@ -182,13 +187,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ? Semantics(
                 label: 'Search notes',
                 child: TextField(
-                controller: _searchController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: l10n.search,
-                  border: InputBorder.none,
+                  controller: _searchController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: l10n.search,
+                    border: InputBorder.none,
+                  ),
                 ),
-              ),
               )
             : Text(l10n.appTitle),
         centerTitle: true,
@@ -197,7 +202,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           child: Padding(
             padding: const EdgeInsets.only(left: 16),
             child: RotationTransition(
-              turns: Tween<double>(begin: 0, end: 1).animate(_animationController),
+              turns:
+                  Tween<double>(begin: 0, end: 1).animate(_animationController),
               child: Image.asset('assets/images/icon/icon.png'),
             ),
           ),
@@ -216,41 +222,43 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Semantics(
               label: 'Search',
               child: IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: !hasAnyNotes
-                  ? null
-                  : () {
-                      context.read<UmamiService>().track('search_activation');
-                      setState(() => _isSearching = true);
-                    },
-            ),
+                icon: const Icon(Icons.search),
+                onPressed: !hasAnyNotes
+                    ? null
+                    : () {
+                        context.read<UmamiService>().track('search_activation');
+                        setState(() => _isSearching = true);
+                      },
+              ),
             ),
           Semantics(
             label: l10n.folders,
             child: IconButton(
-            icon: const Icon(Icons.folder_outlined),
-            onPressed: _showFoldersDialog,
-            tooltip: l10n.folders,
-          ),),
+              icon: const Icon(Icons.folder_outlined),
+              onPressed: _showFoldersDialog,
+              tooltip: l10n.folders,
+            ),
+          ),
           Semantics(
             label: l10n.viewOptions,
             child: IconButton(
-            icon: const Icon(Icons.tune),
-            onPressed: _showViewOptions,
-            tooltip: l10n.viewOptions,
-          ),),
+              icon: const Icon(Icons.tune),
+              onPressed: _showViewOptions,
+              tooltip: l10n.viewOptions,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Semantics(
               label: l10n.toggleTheme,
               child: IconButton(
-              icon: Icon(context.watch<ThemeProvider>().getThemeIcon()),
-              onPressed: () {
-                context.read<UmamiService>().track('theme_change');
-                unawaited(context.read<ThemeProvider>().toggleTheme());
-              },
-              tooltip: l10n.toggleTheme,
-            ),
+                icon: Icon(context.watch<ThemeProvider>().getThemeIcon()),
+                onPressed: () {
+                  context.read<UmamiService>().track('theme_change');
+                  unawaited(context.read<ThemeProvider>().toggleTheme());
+                },
+                tooltip: l10n.toggleTheme,
+              ),
             ),
           ),
         ],
@@ -258,16 +266,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: Semantics(
         label: 'Add note',
         child: AnimatedBuilder(
-        animation: _fabAnimation,
-        builder: (context, child) => Transform.rotate(
-          angle: _fabAnimation.value,
-          child: child,
+          animation: _fabAnimation,
+          builder: (context, child) => Transform.rotate(
+            angle: _fabAnimation.value,
+            child: child,
+          ),
+          child: FloatingActionButton(
+            onPressed: _addNote,
+            child: const Icon(Icons.add),
+          ),
         ),
-        child: FloatingActionButton(
-          onPressed: _addNote,
-          child: const Icon(Icons.add),
-        ),
-      ),),
+      ),
       body: controller.loading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -277,43 +286,48 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   Semantics(
                     label: 'Folder filter',
                     child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 4,),
-                    child: Row(
-                      children: [
-                        Icon(Icons.folder,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.primary,),
-                        const SizedBox(width: 6),
-                        Text(
-                          controller.selectedFolderId ==
-                                  AppConstants.unfiledFolderId
-                              ? l10n.unfiled
-                              : controller.getFolderName(
-                                      controller.selectedFolderId,) ??
-                                  l10n.unknown,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
-                        const SizedBox(width: 4),
-                        IconButton(
-                          onPressed: () => controller.setSelectedFolder(null),
-                          icon: Icon(
-                            Icons.close,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.folder,
                             size: 16,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          tooltip: l10n.clearFolderFilter,
-                        ),
-                      ],
+                          const SizedBox(width: 6),
+                          Text(
+                            controller.selectedFolderId ==
+                                    AppConstants.unfiledFolderId
+                                ? l10n.unfiled
+                                : controller.getFolderName(
+                                      controller.selectedFolderId,
+                                    ) ??
+                                    l10n.unknown,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                          const SizedBox(width: 4),
+                          IconButton(
+                            onPressed: () => controller.setSelectedFolder(null),
+                            icon: Icon(
+                              Icons.close,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            tooltip: l10n.clearFolderFilter,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                   ),
                 Expanded(
                   child: notes.isEmpty

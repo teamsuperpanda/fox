@@ -20,7 +20,8 @@ class NoteAdapter extends TypeAdapter<Note> {
       content: fields[2] as String? ?? '',
       pinned: fields[3] as bool? ?? false,
       updatedAt: DateTime.fromMillisecondsSinceEpoch(fields[4] as int),
-      tags: (fields[5] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const [],
+      tags: (fields[5] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
+          const [],
       folderId: fields[6] as String?,
       color: fields[7] as String?,
     );
@@ -50,8 +51,10 @@ class NoteAdapter extends TypeAdapter<Note> {
   @override
   int get hashCode => typeId.hashCode;
 
-
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is NoteAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      identical(this, other) ||
+      other is NoteAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

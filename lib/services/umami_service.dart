@@ -46,9 +46,9 @@ class UmamiService extends NavigatorObserver {
           .timeout(const Duration(seconds: 10))
           .then((_) => null)
           .catchError((Object e) {
-            debugPrint('UmamiService: send failed: $e');
-            return null;
-          }));
+        debugPrint('UmamiService: send failed: $e');
+        return null;
+      }));
     } catch (e) {
       debugPrint('UmamiService: send failed (outer): $e');
     }

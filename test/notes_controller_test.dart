@@ -25,7 +25,11 @@ void main() {
 
     test('add note -> appears in list', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{'insert':'content\n'}]));
+      await controller.addOrUpdate(
+          title: 'A',
+          content: Document.fromJson([
+            {'insert': 'content\n'}
+          ]));
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'A');
       expect(controller.notes.first.pinned, isFalse);
@@ -33,10 +37,20 @@ void main() {
 
     test('update note keeps id and changes fields', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{'insert':'different content\n'}]));
+      await controller.addOrUpdate(
+          title: 'A',
+          content: Document.fromJson([
+            {'insert': 'different content\n'}
+          ]));
       final first = controller.notes.first;
       await controller.addOrUpdate(
-          id: first.id, title: 'B', content: Document.fromJson([{'insert':'c2\n'}]), pinned: true,);
+        id: first.id,
+        title: 'B',
+        content: Document.fromJson([
+          {'insert': 'c2\n'}
+        ]),
+        pinned: true,
+      );
       final updated = controller.notes.firstWhere((n) => n.id == first.id);
       expect(updated.title, 'B');
       expect(updated.plainText, 'c2\n');
@@ -78,7 +92,8 @@ void main() {
       expect(controller.find('missing'), isNull);
     });
 
-    test('find returns note even when search term filters it from view', () async {
+    test('find returns note even when search term filters it from view',
+        () async {
       await controller.load();
       await controller.addOrUpdate(title: 'Alpha', content: Document());
       await controller.addOrUpdate(title: 'Beta', content: Document());
@@ -96,13 +111,26 @@ void main() {
 
     test('search filters notes by title and content', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'Apple', content: Document.fromJson([{'insert':'fruit\n'}]));
-      await controller.addOrUpdate(title: 'Banana', content: Document.fromJson([{'insert':'yellow\n'}]));
-      await controller.addOrUpdate(title: 'Car', content: Document.fromJson([{'insert':'vehicle\n'}]));
+      await controller.addOrUpdate(
+          title: 'Apple',
+          content: Document.fromJson([
+            {'insert': 'fruit\n'}
+          ]));
+      await controller.addOrUpdate(
+          title: 'Banana',
+          content: Document.fromJson([
+            {'insert': 'yellow\n'}
+          ]));
+      await controller.addOrUpdate(
+          title: 'Car',
+          content: Document.fromJson([
+            {'insert': 'vehicle\n'}
+          ]));
 
       controller.setSearchTerm('a');
       expect(controller.notes.length, 3); // Apple, Banana, Car all contain 'a'
-      expect(controller.notes.map((n) => n.title), ['Car', 'Banana', 'Apple']); // sorted by date desc
+      expect(controller.notes.map((n) => n.title),
+          ['Car', 'Banana', 'Apple']); // sorted by date desc
 
       controller.setSearchTerm('fruit');
       expect(controller.notes.length, 1);
@@ -114,8 +142,10 @@ void main() {
 
     test('search filters notes by tags', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'Note 1', content: Document(), tags: ['work', 'important']);
-      await controller.addOrUpdate(title: 'Note 2', content: Document(), tags: ['personal']);
+      await controller.addOrUpdate(
+          title: 'Note 1', content: Document(), tags: ['work', 'important']);
+      await controller.addOrUpdate(
+          title: 'Note 2', content: Document(), tags: ['personal']);
       await controller.addOrUpdate(title: 'Note 3', content: Document());
 
       controller.setSearchTerm('work');
@@ -157,18 +187,19 @@ void main() {
 
     test('loading state is managed correctly', () async {
       expect(controller.loading, isFalse);
-      
+
       // Start loading
       final loadFuture = controller.load();
       expect(controller.loading, isTrue);
-      
+
       await loadFuture;
       expect(controller.loading, isFalse);
     });
 
     test('addOrUpdate rejects note with empty title and content', () async {
       await controller.load();
-      expect(() => controller.addOrUpdate(title: '', content: Document()), throwsA(isA<ArgumentError>()));
+      expect(() => controller.addOrUpdate(title: '', content: Document()),
+          throwsA(isA<ArgumentError>()));
     });
 
     test('addOrUpdate allows note with title only', () async {
@@ -288,7 +319,8 @@ void main() {
       expect(controller.notes.first.folderId, isNull);
     });
 
-    test('deleteFolder clears selectedFolderId when deleting active filter', () async {
+    test('deleteFolder clears selectedFolderId when deleting active filter',
+        () async {
       await controller.load();
       await controller.addFolder('Active');
       final folderId = controller.folders.first.id;
@@ -306,7 +338,8 @@ void main() {
       await controller.addFolder('A');
       final folderId = controller.folders.first.id;
 
-      await controller.addOrUpdate(title: 'InFolder', content: Document(), folderId: folderId);
+      await controller.addOrUpdate(
+          title: 'InFolder', content: Document(), folderId: folderId);
       await controller.addOrUpdate(title: 'NoFolder', content: Document());
 
       controller.setSelectedFolder(folderId);
@@ -322,7 +355,8 @@ void main() {
       await controller.addFolder('F');
       final folderId = controller.folders.first.id;
 
-      await controller.addOrUpdate(title: 'Filed', content: Document(), folderId: folderId);
+      await controller.addOrUpdate(
+          title: 'Filed', content: Document(), folderId: folderId);
       await controller.addOrUpdate(title: 'Unfiled', content: Document());
 
       controller.setSelectedFolder(AppConstants.unfiledFolderId);

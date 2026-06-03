@@ -20,10 +20,10 @@ Future<bool?> showDeleteConfirmDialog(BuildContext context) {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-          child: Text(
-            l10n.delete,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
+            child: Text(
+              l10n.delete,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ),
         ],
       );

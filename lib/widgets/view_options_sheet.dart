@@ -53,8 +53,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
         return Consumer<ThemeProvider>(
           builder: (consumerContext, themeProvider, child) {
             final brightness = MediaQuery.platformBrightnessOf(consumerContext);
-            final isDark =
-                themeProvider.themeMode == ThemeMode.dark ||
+            final isDark = themeProvider.themeMode == ThemeMode.dark ||
                 (themeProvider.themeMode == ThemeMode.system &&
                     brightness == Brightness.dark);
             final activeTheme = isDark
@@ -87,7 +86,8 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                             const SizedBox(height: 16),
                             Expanded(
                               child: SingleChildScrollView(
-                                padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                                padding:
+                                    const EdgeInsets.fromLTRB(24, 0, 24, 24),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -101,9 +101,11 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                         onChanged: (val) async {
                                           widget.controller.setSortBy(val);
                                           try {
-                                            await widget.settingsService.setSortBy(val.name);
+                                            await widget.settingsService
+                                                .setSortBy(val.name);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist sortBy: $e');
                                           }
                                           setDialogState(() {});
                                         },
@@ -117,9 +119,11 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                         onChanged: (val) async {
                                           widget.controller.setSortBy(val);
                                           try {
-                                            await widget.settingsService.setSortBy(val.name);
+                                            await widget.settingsService
+                                                .setSortBy(val.name);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist sortBy: $e');
                                           }
                                           setDialogState(() {});
                                         },
@@ -133,9 +137,11 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                         onChanged: (val) async {
                                           widget.controller.setSortBy(val);
                                           try {
-                                            await widget.settingsService.setSortBy(val.name);
+                                            await widget.settingsService
+                                                .setSortBy(val.name);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist sortBy: $e');
                                           }
                                           setDialogState(() {});
                                         },
@@ -149,16 +155,19 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                         onChanged: (val) async {
                                           widget.controller.setSortBy(val);
                                           try {
-                                            await widget.settingsService.setSortBy(val.name);
+                                            await widget.settingsService
+                                                .setSortBy(val.name);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist sortBy: $e');
                                           }
                                           setDialogState(() {});
                                         },
                                       ),
                                     ]),
                                     const SizedBox(height: 24),
-                                    _buildSectionHeader(context, l10n.viewOptions),
+                                    _buildSectionHeader(
+                                        context, l10n.viewOptions),
                                     _buildCardGroup(context, [
                                       _buildSwitchTile(
                                         context: context,
@@ -167,9 +176,11 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                         onChanged: (val) async {
                                           widget.controller.setShowTags(val);
                                           try {
-                                            await widget.settingsService.setShowTags(val);
+                                            await widget.settingsService
+                                                .setShowTags(val);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist showTags: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist showTags: $e');
                                           }
                                           setDialogState(() {});
                                         },
@@ -182,9 +193,11 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                         onChanged: (val) async {
                                           widget.controller.setShowContent(val);
                                           try {
-                                            await widget.settingsService.setShowContent(val);
+                                            await widget.settingsService
+                                                .setShowContent(val);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist showContent: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist showContent: $e');
                                           }
                                           setDialogState(() {});
                                         },
@@ -193,13 +206,17 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                       _buildSwitchTile(
                                         context: context,
                                         title: l10n.alternatingRowColors,
-                                        value: widget.controller.alternatingColors,
+                                        value:
+                                            widget.controller.alternatingColors,
                                         onChanged: (val) async {
-                                          widget.controller.setAlternatingColors(val);
+                                          widget.controller
+                                              .setAlternatingColors(val);
                                           try {
-                                            await widget.settingsService.setAlternatingColors(val);
+                                            await widget.settingsService
+                                                .setAlternatingColors(val);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist alternatingColors: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist alternatingColors: $e');
                                           }
                                           setDialogState(() {});
                                         },
@@ -210,39 +227,53 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                         title: l10n.animateAddButton,
                                         value: widget.controller.fabAnimation,
                                         onChanged: (val) async {
-                                          widget.controller.setFabAnimation(val);
+                                          widget.controller
+                                              .setFabAnimation(val);
                                           try {
-                                            await widget.settingsService.setFabAnimation(val);
+                                            await widget.settingsService
+                                                .setFabAnimation(val);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist fabAnimation: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist fabAnimation: $e');
                                           }
                                           setDialogState(() {});
                                         },
                                       ),
                                     ]),
                                     const SizedBox(height: 24),
-                                    _buildSectionHeader(context, l10n.accentColor),
-                                    _buildAccentColorPicker(context, setDialogState),
+                                    _buildSectionHeader(
+                                        context, l10n.accentColor),
+                                    _buildAccentColorPicker(
+                                        context, setDialogState),
                                     const SizedBox(height: 24),
                                     _buildSectionHeader(context, l10n.language),
                                     _buildLanguageSelector(
-                                      context, l10n, localeProvider, setDialogState,
+                                      context,
+                                      l10n,
+                                      localeProvider,
+                                      setDialogState,
                                     ),
                                     const SizedBox(height: 24),
-                                    _buildSectionHeader(context, l10n.analytics),
+                                    _buildSectionHeader(
+                                        context, l10n.analytics),
                                     _buildCardGroup(context, [
                                       _buildSwitchTile(
                                         context: context,
                                         title: l10n.analytics,
-                                        value: widget.settingsService.getAnalyticsEnabled(),
+                                        value: widget.settingsService
+                                            .getAnalyticsEnabled(),
                                         onChanged: (val) async {
                                           widget.umamiService.enabled = val;
                                           try {
-                                            await widget.settingsService.setAnalyticsEnabled(val);
+                                            await widget.settingsService
+                                                .setAnalyticsEnabled(val);
                                           } catch (e) {
-                                            debugPrint('ViewOptionsSheet: failed to persist analyticsEnabled: $e');
+                                            debugPrint(
+                                                'ViewOptionsSheet: failed to persist analyticsEnabled: $e');
                                           }
-                                          widget.umamiService.track('analytics_change', data: {'analytics': val});
+                                          widget.umamiService.track(
+                                              'analytics_change',
+                                              data: {'analytics': val});
                                           setDialogState(() {});
                                         },
                                       ),
@@ -291,14 +322,15 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           Text(
             l10n.viewOptions,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
             style: IconButton.styleFrom(
-              backgroundColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+              backgroundColor:
+                  colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             ),
           ),
         ],
@@ -312,9 +344,9 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-        ),
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
       ),
     );
   }
@@ -327,7 +359,10 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+          color: Theme.of(context)
+              .colorScheme
+              .outlineVariant
+              .withValues(alpha: 0.5),
         ),
       ),
       color: Theme.of(context)
@@ -345,7 +380,8 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
         thickness: 1,
         indent: 16,
         endIndent: 16,
-        color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+        color:
+            Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
       ),
     );
   }
@@ -425,7 +461,10 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
             .withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+          color: Theme.of(context)
+              .colorScheme
+              .outlineVariant
+              .withValues(alpha: 0.5),
         ),
       ),
       child: Wrap(
@@ -471,7 +510,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                         Icons.check,
                         size: 20,
                         color: ThemeData.estimateBrightnessForColor(color) ==
-                            Brightness.dark
+                                Brightness.dark
                             ? Colors.white
                             : Colors.black,
                       )
@@ -491,7 +530,8 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
     StateSetter setDialogState,
   ) {
     final currentLocale = localeProvider.locale;
-    final currentTag = currentLocale != null ? localeToTag(currentLocale) : null;
+    final currentTag =
+        currentLocale != null ? localeToTag(currentLocale) : null;
     final displayText = currentTag != null
         ? (_localeNames[currentTag] ?? currentTag)
         : l10n.systemDefault;
@@ -507,7 +547,10 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
               .withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+            color: Theme.of(context)
+                .colorScheme
+                .outlineVariant
+                .withValues(alpha: 0.5),
           ),
         ),
         child: InkWell(
@@ -523,11 +566,13 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
             );
             if (selected == LanguagePickerDialog.sentinelSystemDefault) {
               await localeProvider.setLocale(null);
-              widget.umamiService.track('locale_change', data: {'locale': 'system'});
+              widget.umamiService
+                  .track('locale_change', data: {'locale': 'system'});
               setDialogState(() {});
             } else if (selected != null) {
               await localeProvider.setLocale(selected);
-              widget.umamiService.track('locale_change', data: {'locale': selected.toLanguageTag()});
+              widget.umamiService.track('locale_change',
+                  data: {'locale': selected.toLanguageTag()});
               setDialogState(() {});
             }
           },

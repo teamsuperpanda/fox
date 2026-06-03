@@ -16,7 +16,9 @@ Widget _buildHome({required NotesController controller}) {
     providers: [
       ChangeNotifierProvider.value(value: ThemeProvider()),
       ChangeNotifierProvider.value(value: LocaleProvider()),
-      Provider.value(value: UmamiService(websiteId: 'test', endpoint: 'https://test.com/api/send')),
+      Provider.value(
+          value: UmamiService(
+              websiteId: 'test', endpoint: 'https://test.com/api/send')),
     ],
     child: HomePage(controller: controller),
   );
@@ -33,7 +35,8 @@ void main() {
     });
 
     testWidgets('shows empty state when no notes exist', (tester) async {
-      await tester.pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester
+          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
       await tester.pump();
       expect(find.text('No notes yet...'), findsOneWidget);
     });
@@ -42,13 +45,15 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Test Note', content: Document());
 
-      await tester.pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester
+          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
       await tester.pump();
       expect(find.text('Test Note'), findsOneWidget);
     });
 
     testWidgets('FAB opens note detail page', (tester) async {
-      await tester.pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester
+          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
       await tester.pump();
 
       await tester.tap(find.byType(FloatingActionButton));
@@ -58,11 +63,13 @@ void main() {
       expect(find.byType(NoteDetailPage), findsOneWidget);
     });
 
-    testWidgets('Search icon toggles search bar when notes exist', (tester) async {
+    testWidgets('Search icon toggles search bar when notes exist',
+        (tester) async {
       await controller.load();
       await controller.addOrUpdate(title: 'Test', content: Document());
 
-      await tester.pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester
+          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.search));
@@ -72,7 +79,8 @@ void main() {
     });
 
     testWidgets('Folder icon opens folders dialog', (tester) async {
-      await tester.pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester
+          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.folder_outlined));
@@ -83,7 +91,8 @@ void main() {
     });
 
     testWidgets('Tune icon is present on home page', (tester) async {
-      await tester.pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester
+          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
       await tester.pump();
 
       expect(find.byIcon(Icons.tune), findsOneWidget);

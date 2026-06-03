@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class Folder {
-
   Folder({
     required this.id,
     required this.name,

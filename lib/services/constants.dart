@@ -12,5 +12,6 @@ class AppConstants {
   AppConstants._();
   static const String unfiledFolderId = '__unfiled__';
   static const String umamiWebsiteId = '3a8384ff-e02c-485e-a863-3aecf5490841';
-  static const String umamiEndpoint = 'https://umami.teamsuperpanda.com/api/send';
+  static const String umamiEndpoint =
+      'https://umami.teamsuperpanda.com/api/send';
 }

@@ -206,7 +206,8 @@ void main() {
       expect(find.text('Third'), findsOneWidget);
     });
 
-    testWidgets('shows pin icon with correct color for pinned notes', (tester) async {
+    testWidgets('shows pin icon with correct color for pinned notes',
+        (tester) async {
       final pinnedNote = Note(
         id: '1',
         title: 'Pinned',
@@ -230,7 +231,8 @@ void main() {
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
     });
 
-    testWidgets('old date shows formatted like yesterday or other day', (tester) async {
+    testWidgets('old date shows formatted like yesterday or other day',
+        (tester) async {
       final yesterday = DateTime.now().subtract(const Duration(days: 1));
       final note = Note(
         id: '1',
@@ -257,7 +259,8 @@ void main() {
       expect(find.byType(Text), findsWidgets);
     });
 
-    testWidgets('mixed pinned and unpinned notes show correct icons', (tester) async {
+    testWidgets('mixed pinned and unpinned notes show correct icons',
+        (tester) async {
       final pinnedNote = Note(
         id: '1',
         title: 'Pinned',

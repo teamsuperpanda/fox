@@ -50,10 +50,10 @@ void main() {
     test('can store and retrieve Settings object', () async {
       final box = Hive.box<Settings>('settings_db');
       final settings = Settings(themeMode: 'dark', locale: 'en_US');
-      
+
       // Store settings
       await box.put('test_settings', settings);
-      
+
       // Retrieve settings
       final retrieved = box.get('test_settings');
       expect(retrieved, isNotNull);
@@ -63,14 +63,14 @@ void main() {
 
     test('adapter correctly serializes and deserializes Settings', () async {
       final box = Hive.box<Settings>('settings_db');
-      
+
       // Test with all fields
       final fullSettings = Settings(themeMode: 'light', locale: 'fr_FR');
       await box.put('full', fullSettings);
       final retrievedFull = box.get('full');
       expect(retrievedFull!.themeMode, equals('light'));
       expect(retrievedFull.locale, equals('fr_FR'));
-      
+
       // Test with null locale
       final partialSettings = Settings(themeMode: 'system');
       await box.put('partial', partialSettings);

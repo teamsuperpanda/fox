@@ -16,8 +16,7 @@ class MemoryRepo implements NoteAndFolderRepository {
   @override
   Future<void> init() async {}
   @override
-  Future<void> delete(String id) async =>
-      _data.removeWhere((e) => e.id == id);
+  Future<void> delete(String id) async => _data.removeWhere((e) => e.id == id);
   @override
   Future<List<Note>> getAll() async => List.unmodifiable(_data);
   @override
@@ -25,6 +24,7 @@ class MemoryRepo implements NoteAndFolderRepository {
     _data.removeWhere((e) => e.id == note.id);
     _data.add(note);
   }
+
   @override
   Future<void> upsertAll(List<Note> notes) async {
     for (final note in notes) {
@@ -32,6 +32,7 @@ class MemoryRepo implements NoteAndFolderRepository {
       _data.add(note);
     }
   }
+
   @override
   Future<List<Folder>> getAllFolders() async => List.unmodifiable(_folders);
   @override
@@ -39,6 +40,7 @@ class MemoryRepo implements NoteAndFolderRepository {
     _folders.removeWhere((f) => f.id == folder.id);
     _folders.add(folder);
   }
+
   @override
   Future<void> deleteFolder(String id) async =>
       _folders.removeWhere((f) => f.id == id);
@@ -54,19 +56,21 @@ void main() {
     });
 
     testWidgets('shows All Notes and Unfiled options', (tester) async {
-      await tester.pumpWidget(buildTestApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => FoldersDialog(controller: controller),
+      await tester.pumpWidget(
+        buildTestApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
               ),
-              child: const Text('Open'),
             ),
           ),
         ),
-      ),);
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Open'));
@@ -79,19 +83,21 @@ void main() {
     });
 
     testWidgets('can add a folder', (tester) async {
-      await tester.pumpWidget(buildTestApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => FoldersDialog(controller: controller),
+      await tester.pumpWidget(
+        buildTestApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
               ),
-              child: const Text('Open'),
             ),
           ),
         ),
-      ),);
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Open'));
       await tester.pumpAndSettle();
@@ -110,19 +116,21 @@ void main() {
     });
 
     testWidgets('Close button dismisses dialog', (tester) async {
-      await tester.pumpWidget(buildTestApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => FoldersDialog(controller: controller),
+      await tester.pumpWidget(
+        buildTestApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
               ),
-              child: const Text('Open'),
             ),
           ),
         ),
-      ),);
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Open'));
       await tester.pumpAndSettle();
@@ -141,19 +149,21 @@ void main() {
       controller.setSelectedFolder(controller.folders.first.id);
       expect(controller.selectedFolderId, isNotNull);
 
-      await tester.pumpWidget(buildTestApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => FoldersDialog(controller: controller),
+      await tester.pumpWidget(
+        buildTestApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
               ),
-              child: const Text('Open'),
             ),
           ),
         ),
-      ),);
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Open'));
       await tester.pumpAndSettle();
@@ -165,19 +175,21 @@ void main() {
     });
 
     testWidgets('tapping Unfiled sets unfiled filter', (tester) async {
-      await tester.pumpWidget(buildTestApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => FoldersDialog(controller: controller),
+      await tester.pumpWidget(
+        buildTestApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
               ),
-              child: const Text('Open'),
             ),
           ),
         ),
-      ),);
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Open'));
       await tester.pumpAndSettle();

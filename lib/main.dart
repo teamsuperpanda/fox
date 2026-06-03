@@ -25,18 +25,21 @@ void main() async {
     await StorageService.init();
     repository = HiveNoteRepository.create();
   } catch (e) {
-    runApp(MaterialApp(home: Scaffold(body: Center(child: Text('Startup failed: $e')))));
+    runApp(MaterialApp(
+        home: Scaffold(body: Center(child: Text('Startup failed: $e')))));
     return;
   }
 
   final settingsServiceForNotes = SettingsService();
-  final notesController = NotesController(repository, settingsService: settingsServiceForNotes);
+  final notesController =
+      NotesController(repository, settingsService: settingsServiceForNotes);
   await notesController.load();
 
   final themeProvider = ThemeProvider(settingsService: settingsServiceForNotes);
   await themeProvider.load();
 
-  final localeProvider = LocaleProvider(settingsService: settingsServiceForNotes);
+  final localeProvider =
+      LocaleProvider(settingsService: settingsServiceForNotes);
   await localeProvider.load();
 
   final umamiService = UmamiService(
@@ -58,7 +61,8 @@ void main() async {
         ChangeNotifierProvider.value(value: notesController),
         Provider.value(value: umamiService),
       ],
-      child: MyApp(umamiService: umamiService, notesController: notesController),
+      child:
+          MyApp(umamiService: umamiService, notesController: notesController),
     ),
   );
 
@@ -66,12 +70,14 @@ void main() async {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     FlutterNativeSplash.remove();
     umamiService.track('app_launch');
-    umamiService.track('note_count', data: {'count': notesController.notes.length});
+    umamiService
+        .track('note_count', data: {'count': notesController.notes.length});
   });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({required this.umamiService, required this.notesController, super.key});
+  const MyApp(
+      {required this.umamiService, required this.notesController, super.key});
   final UmamiService umamiService;
   final NotesController notesController;
 

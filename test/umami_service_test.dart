@@ -11,7 +11,8 @@ class MockClient implements http.Client {
   Map<String, dynamic>? lastPayload;
 
   @override
-  Future<http.Response> post(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+  Future<http.Response> post(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     called = true;
     if (body != null) {
       lastPayload = jsonDecode(body as String) as Map<String, dynamic>;
@@ -38,12 +39,14 @@ class MockClient implements http.Client {
   }
 
   @override
-  Future<http.Response> patch(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+  Future<http.Response> patch(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<http.Response> put(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+  Future<http.Response> put(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     throw UnimplementedError();
   }
 
@@ -58,7 +61,8 @@ class MockClient implements http.Client {
   }
 
   @override
-  Future<http.Response> delete(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+  Future<http.Response> delete(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     throw UnimplementedError();
   }
 }
