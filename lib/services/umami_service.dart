@@ -14,7 +14,7 @@ class UmamiService extends NavigatorObserver {
   final String websiteId;
   final String endpoint;
   final http.Client _client;
-  bool enabled = true;
+  bool enabled = false;
 
   void track(String event, {Map<String, dynamic>? data}) {
     if (!enabled) return;
