@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../services/settings_service.dart';
+import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/settings_service.dart';
 
 /// Predefined accent colour options.  The first entry is the app default.
+/// Note: distinct from [noteColorOptions] in note_colors.dart which defines
+/// per-note highlight colours for the editor.
 const List<Color> accentColorOptions = [
   Color(0xFF8B9A6B), // Sage green (default)
   Color(0xFF5B8DBE), // Steel blue
@@ -16,24 +21,32 @@ const List<Color> accentColorOptions = [
 ];
 
 class ThemeProvider extends ChangeNotifier {
+  ThemeProvider({SettingsService? settingsService})
+      : _settingsService = settingsService ?? SettingsService();
+
+  final SettingsService _settingsService;
   ThemeMode _themeMode = ThemeMode.system;
   Color _accentColor = accentColorOptions.first;
+  SettingsService get _service => _settingsService;
 
   ThemeMode get themeMode => _themeMode;
   Color get accentColor => _accentColor;
-  
+
   /// Load persisted theme mode from shared preferences.
   Future<void> load() async {
     try {
-      final service = SettingsService();
+      final service = _service;
       _themeMode = service.getThemeMode();
       final hex = service.getAccentColor();
       if (hex != null && hex.length == 7) {
         try {
           _accentColor = Color(int.parse('FF${hex.substring(1)}', radix: 16));
-        } catch (_) {}
+        } catch (e) {
+          debugPrint('ThemeProvider: failed to parse accent color: $e');
+        }
       }
-    } catch (_) {
+    } catch (e) {
+      debugPrint('ThemeProvider: failed to load theme: $e');
       _themeMode = ThemeMode.system;
     }
   }
@@ -41,12 +54,13 @@ class ThemeProvider extends ChangeNotifier {
   /// Persist the current theme mode.
   Future<void> _save() async {
     try {
-      final service = SettingsService();
-      await service.setThemeMode(_themeMode);
-    } catch (_) {}
+      await _service.setThemeMode(_themeMode);
+    } catch (e) {
+      debugPrint('ThemeProvider: failed to save theme: $e');
+    }
   }
 
-  void toggleTheme() {
+  Future<void> toggleTheme() async {
     if (_themeMode == ThemeMode.light) {
       _themeMode = ThemeMode.dark;
     } else if (_themeMode == ThemeMode.dark) {
@@ -54,8 +68,7 @@ class ThemeProvider extends ChangeNotifier {
     } else {
       _themeMode = ThemeMode.light;
     }
-    // persist change (fire-and-forget)
-    _save();
+    await _save();
     notifyListeners();
   }
 
@@ -66,8 +79,12 @@ class ThemeProvider extends ChangeNotifier {
       final hex =
           '#${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}';
       // Fire-and-forget but swallow async Hive errors (e.g. in tests).
-      SettingsService().setAccentColor(hex).catchError((_) {});
-    } catch (_) {}
+      unawaited(_service.setAccentColor(hex).catchError((Object e) {
+        debugPrint('ThemeProvider: failed to persist accent color: $e');
+      }));
+    } catch (e) {
+      debugPrint('ThemeProvider: failed to set accent color: $e');
+    }
     notifyListeners();
   }
 

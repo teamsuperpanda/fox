@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-/// Predefined note colour palette.
+/// Predefined note colour palette (per-note highlight colours for the editor).
+/// Note: distinct from accentColorOptions in theme_provider.dart which
+/// defines the app-wide accent colour.
 ///
-/// `null` represents the default (no colour) option.
-const List<String?> noteColorOptions = [
-  null,       // No colour (default)
+/// Empty string represents the default (no colour) option.
+const List<String> noteColorOptions = [
+  '',       // No colour (default)
   '#FF5252',  // Red
   '#FF7043',  // Deep Orange
   '#FFCA28',  // Amber

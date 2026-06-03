@@ -1,33 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-
-import 'home_page.dart';
-import 'l10n/app_localizations.dart';
-import 'providers/locale_provider.dart';
-import 'providers/theme_provider.dart';
-import 'services/notes_controller.dart';
-import 'services/repository_hive.dart';
-import 'services/storage_service.dart';
-import 'theme/app_theme.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:fox/home_page.dart';
+import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/providers/locale_provider.dart';
+import 'package:fox/providers/theme_provider.dart';
+import 'package:fox/services/constants.dart';
+import 'package:fox/services/notes_controller.dart';
+import 'package:fox/services/repository_hive.dart';
+import 'package:fox/services/settings_service.dart';
+import 'package:fox/services/storage_service.dart';
+import 'package:fox/services/umami_service.dart';
+import 'package:fox/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  await StorageService.init();
+  late final HiveNoteRepository repository;
+  try {
+    await StorageService.init();
+    repository = HiveNoteRepository.create();
+  } catch (e) {
+    runApp(MaterialApp(home: Scaffold(body: Center(child: Text('Startup failed: $e')))));
+    return;
+  }
 
-  final repository = await HiveNoteRepository.create();
-  final notesController = NotesController(repository);
+  final settingsServiceForNotes = SettingsService();
+  final notesController = NotesController(repository, settingsService: settingsServiceForNotes);
   await notesController.load();
-  notesController.loadSettings();
 
-  final themeProvider = ThemeProvider();
+  final themeProvider = ThemeProvider(settingsService: settingsServiceForNotes);
   await themeProvider.load();
 
-  final localeProvider = LocaleProvider();
+  final localeProvider = LocaleProvider(settingsService: settingsServiceForNotes);
   await localeProvider.load();
+
+  final umamiService = UmamiService(
+    websiteId: AppConstants.umamiWebsiteId,
+    endpoint: AppConstants.umamiEndpoint,
+  );
+
+  try {
+    umamiService.enabled = settingsServiceForNotes.getAnalyticsEnabled();
+  } catch (e) {
+    debugPrint('Failed to load analytics setting: $e');
+  }
 
   runApp(
     MultiProvider(
@@ -35,19 +56,24 @@ void main() async {
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
         ChangeNotifierProvider.value(value: notesController),
+        Provider.value(value: umamiService),
       ],
-      child: const MyApp(),
+      child: MyApp(umamiService: umamiService, notesController: notesController),
     ),
   );
 
   // Remove splash after the first frame is rendered to avoid a white flash.
   WidgetsBinding.instance.addPostFrameCallback((_) {
     FlutterNativeSplash.remove();
+    umamiService.track('app_launch');
+    umamiService.track('note_count', data: {'count': notesController.notes.length});
   });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({required this.umamiService, required this.notesController, super.key});
+  final UmamiService umamiService;
+  final NotesController notesController;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +83,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fox Notes',
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
+      navigatorObservers: [umamiService],
+      localizationsDelegates: const [
         ...AppLocalizations.localizationsDelegates,
         FlutterQuillLocalizations.delegate,
       ],
@@ -66,10 +93,7 @@ class MyApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       theme: AppTheme.light(themeProvider.accentColor),
       darkTheme: AppTheme.dark(themeProvider.accentColor),
-      home: Consumer<NotesController>(
-        builder: (context, controller, child) =>
-            HomePage(controller: controller),
-      ),
+      home: HomePage(controller: notesController),
     );
   }
 }

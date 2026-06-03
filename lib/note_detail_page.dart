@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'l10n/app_localizations.dart';
-import 'models/note.dart';
-import 'models/note_colors.dart';
-import 'services/notes_controller.dart';
-import 'widgets/dialogs.dart';
+import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/notes_controller.dart';
+import 'package:fox/services/umami_service.dart';
+import 'package:fox/widgets/dialogs.dart';
+import 'package:provider/provider.dart';
 
 /// Result returned when popping the detail page so the caller can act on it.
 class NoteDetailResult {
+  const NoteDetailResult({this.changed = false, this.deleted = false});
   final bool changed;
   final bool deleted;
-  const NoteDetailResult({this.changed = false, this.deleted = false});
 }
 
 class NoteDetailPage extends StatefulWidget {
+
+  const NoteDetailPage({
+    required this.controller, super.key,
+    this.existing,
+    this.showToolbar = true,
+  });
   final Note? existing;
   final NotesController controller;
   final bool showToolbar;
-
-  const NoteDetailPage({
-    super.key,
-    this.existing,
-    required this.controller,
-    this.showToolbar = true,
-  });
 
   @override
   State<NoteDetailPage> createState() => _NoteDetailPageState();
@@ -42,6 +43,14 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        final isNew = widget.existing == null;
+        context.read<UmamiService>().trackPageView(isNew ? '/note/new' : '/note/edit');
+      } catch (e) {
+        debugPrint('Failed to track page view: $e');
+      }
+    });
     _titleCtrl = TextEditingController(text: widget.existing?.title ?? '');
     _contentCtrl = QuillController(
       document: widget.existing?.document ?? Document(),
@@ -68,7 +77,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     return normalized;
   }
 
-  void _showTagsDialog() async {
+  Future<void> _showTagsDialog() async {
     final tagCtrl = TextEditingController();
     await showDialog(
       context: context,
@@ -138,7 +147,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
   }
 
-  void _showColorPicker() async {
+  Future<void> _showColorPicker() async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -153,7 +162,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               final displayColor = parseNoteColor(hex);
               return GestureDetector(
                 onTap: () {
-                  setState(() => _color = hex);
+                  setState(() => _color = hex.isEmpty ? null : hex);
                   Navigator.of(context).pop();
                 },
                 child: Container(
@@ -169,7 +178,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                       width: 3,
                     ),
                   ),
-                  child: hex == null
+                  child: hex.isEmpty
                       ? Icon(Icons.block, size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant)
                       : isSelected
                           ? const Icon(Icons.check, size: 20, color: Colors.white)
@@ -183,7 +192,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
   }
 
-  void _showFolderPicker() async {
+  Future<void> _showFolderPicker() async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -222,10 +231,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     selected: _folderId == folder.id,
                     contentPadding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
-                    onTap: () {
-                      setState(() => _folderId = folder.id);
-                      Navigator.of(context).pop();
-                    },
+                  onTap: () {
+                    setState(() => _folderId = folder.id);
+                    try { context.read<UmamiService>().track('note_move', data: {'folder': folder.name}); } catch (e) {
+                      debugPrint('Failed to track note_move: $e');
+                    }
+                    Navigator.of(context).pop();
+                  },
                   );
                 }),
               ],
@@ -252,6 +264,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     
     // If new note is empty, discard it silently
     if (title.isEmpty && plainText.isEmpty && widget.existing == null) {
+      messenger?.showSnackBar(
+        SnackBar(content: Text('Empty note discarded')),
+      );
       navigator.pop(const NoteDetailResult());
       return;
     }
@@ -280,6 +295,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
 
     try {
+      final isNew = widget.existing == null;
       await widget.controller.addOrUpdate(
         id: widget.existing?.id,
         title: title,
@@ -290,6 +306,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         color: _color,
       );
       if (!mounted) return;
+      try {
+        context.read<UmamiService>().track(isNew ? 'note_create' : 'note_edit');
+      } catch (e) {
+        debugPrint('Failed to track note save: $e');
+      }
       navigator.pop(const NoteDetailResult(changed: true));
     } catch (e) {
       _saving = false;
@@ -307,11 +328,18 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     final l10n = AppLocalizations.of(context);
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) {
-          return;
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final navigator = Navigator.of(context);
+        var timedOut = false;
+        try {
+          await _saveAndPop().timeout(const Duration(seconds: 5));
+        } catch (_) {
+          timedOut = true;
         }
-        _saveAndPop();
+        if (timedOut && mounted) {
+          navigator.pop();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -361,7 +389,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             mainAxisAlignment: widget.existing != null
                 ? MainAxisAlignment.spaceBetween
@@ -378,10 +406,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     final l10nLocal = AppLocalizations.of(context);
 
                     final confirmed = await showDeleteConfirmDialog(context);
-                    if (confirmed != true || !mounted) return;
+                    if (confirmed != true || !context.mounted) return;
                     try {
                       await widget.controller.remove(widget.existing!.id);
-                      if (!mounted) return;
+                      if (!context.mounted) return;
+                      try { context.read<UmamiService>().track('note_delete'); } catch (e) {
+                        debugPrint('Failed to track note_delete: $e');
+                      }
                       navigator.pop(const NoteDetailResult(changed: true, deleted: true));
                     } catch (e) {
                       messenger?.showSnackBar(
@@ -420,29 +451,19 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     showDividers: false,
                     showFontFamily: false,
                     showFontSize: false,
-                    showBoldButton: true,
-                    showItalicButton: true,
-                    showUnderLineButton: true,
                     showStrikeThrough: false,
                     showInlineCode: false,
                     showColorButton: false,
                     showBackgroundColorButton: false,
-                    showClearFormat: true,
-                    showAlignmentButtons: false,
                     showLeftAlignment: false,
                     showCenterAlignment: false,
                     showRightAlignment: false,
                     showJustifyAlignment: false,
                     showHeaderStyle: false,
-                    showListNumbers: true,
-                    showListBullets: true,
                     showListCheck: false,
                     showCodeBlock: false,
-                    showQuote: true,
                     showIndent: false,
                     showLink: false,
-                    showUndo: true,
-                    showRedo: true,
                     buttonOptions: QuillSimpleToolbarButtonOptions(
                       base: QuillToolbarBaseButtonOptions(
                         iconTheme: QuillIconTheme(
@@ -462,7 +483,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   controller: _contentCtrl,
                   config: QuillEditorConfig(
                     placeholder: l10n.startTyping,
-                    padding: EdgeInsets.zero,
                     autoFocus: widget.existing?.title.isNotEmpty ?? false,
                   ),
                 ),
