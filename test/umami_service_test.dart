@@ -88,6 +88,7 @@ void main() {
         endpoint: 'https://example.com/api/send',
         client: client,
       );
+      service.enabled = true;
       service.track('test_event');
       await Future.delayed(const Duration(milliseconds: 100));
       expect(client.called, isTrue);
@@ -100,6 +101,7 @@ void main() {
         endpoint: 'https://example.com/api/send',
         client: client,
       );
+      service.enabled = true;
       service.track('test_event');
       await Future.delayed(const Duration(milliseconds: 100));
       expect(client.lastPayload, isNotNull);

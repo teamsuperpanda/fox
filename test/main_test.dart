@@ -43,7 +43,7 @@ void main() {
               builder: (context) {
                 final svc = context.read<UmamiService>();
                 expect(svc, same(service));
-                expect(svc.enabled, isTrue);
+                expect(svc.enabled, isFalse);
                 return const SizedBox();
               },
             ),
