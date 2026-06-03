@@ -1,39 +1,50 @@
-# Fox
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/images/github/banner.png">
+  <img src="assets/images/github/banner.png" alt="Fox">
+</picture>
 
-<img src="assets/images/icon/icon.png" width="80" alt="Fox Icon">
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="License"></a>
+  <img src="https://img.shields.io/badge/Flutter-3.6+-blue?logo=flutter" alt="Flutter">
+  <img src="https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey" alt="Platform">
+  <img src="https://img.shields.io/github/last-commit/teamsuperpanda/fox" alt="Last commit">
+</p>
 
-A friendly, local-first notes app. Fast, minimal, and private by default. Your notes stay on your device and are always available offline.
+Fox is a notes app that stays out of your way. Rich text, dark mode, offline-first. No account, no subscription, no cloud dependency.
 
-> Built by [Team Super Panda](https://www.teamsuperpanda.com)
-
----
-
-## Features
-
-- **Rich Text**: Create and edit notes with formatting.
-- **Organization**: Tag, pin, and search your notes quickly.
-- **Customization**: Dark/light themes and custom sort orders.
-- **Privacy First**: Zero cloud overhead. No accounts. Anonymous analytics, opt-out anytime.
-- **Modern UI**: Clean design with alternating list colors.
+Built by [Team Super Panda](https://www.teamsuperpanda.com).
 
 ---
 
-## Tech Stack
+## What it does
 
-- **Framework**: [Flutter](https://flutter.dev) (^3.6.0)
-- **State Management**: [Provider](https://pub.dev/packages/provider)
-- **Persistence**: [Hive](https://pub.dev/packages/hive)
-- **Editor**: [Flutter Quill](https://pub.dev/packages/flutter_quill)
-- **Typography**: [Google Fonts](https://pub.dev/packages/google_fonts)
+Fox is what happens when you strip a notes app down to what actually matters: writing, organising, and finding things fast.
+
+- **Rich text**: bold, italic, lists, checklists, colours. No markdown syntax to remember.
+- **Pin, tag, search**: find any note in seconds, even with hundreds of them.
+- **Dark mode**: light and dark themes that actually look good.
+- **Offline-first**: it's a local app that happens to have an editor. Your notes live on your device, always available, no signal required.
+- **No accounts**: download it and start typing. There is no signup screen.
 
 ---
 
-## Getting Started
+## Tech
 
-### Prerequisites
-- Flutter SDK & Dart: `^3.6.0`
+Fox is a Flutter app with a deliberately simple stack:
 
-### Install & Run
+| Layer | Choice |
+|---|---|
+| UI | Flutter with Provider |
+| Storage | Hive (local, no server) |
+| Editor | Flutter Quill |
+| Fonts | Roboto (bundled, no network calls) |
+
+No backend. No sync. No data leaves your device unless you choose to share a note.
+
+---
+
+## Run it
+
 ```bash
 git clone https://github.com/teamsuperpanda/fox.git
 cd fox
@@ -42,23 +53,14 @@ flutter run
 ```
 
 ### Tests
+
 ```bash
 flutter test --coverage
 ```
 
 ---
 
-## Architecture Overview
-
-- **Data**: `Hive` stores notes in `notes_db` and settings in `settings_db`.
-- **Logic**: `NotesController` manages CRUD and state; `SettingsService` for preferences.
-- **UI**: Reactive updates via `Provider`. `NoteDetailPage` uses `flutter_quill`.
-
----
-
 ## License
 
-- **Code**: [PolyForm Noncommercial License 1.0.0](LICENSE).
-- **Assets**: Copyright © 2026 Team Super Panda. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md).
-
-For more, visit [www.teamsuperpanda.com](https://www.teamsuperpanda.com).
+The code is [PolyForm Noncommercial 1.0.0](LICENSE). Free for personal use, not for resale.  
+Assets are copyright 2026 Team Super Panda (see [ASSETS-LICENSE.md](ASSETS-LICENSE.md)).
