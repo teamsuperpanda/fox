@@ -2,59 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/services/notes_controller.dart';
-import 'package:fox/services/repository.dart';
 import 'package:fox/widgets/note_list.dart';
-import 'package:fox/models/folder.dart';
 
 import 'test_helpers.dart';
-
-class MockRepository implements NoteRepository {
-  final List<Note> notes = [];
-
-  @override
-  Future<void> init() async {}
-
-  @override
-  Future<void> upsert(Note note) async {
-    final index = notes.indexWhere((n) => n.id == note.id);
-    if (index >= 0) {
-      notes[index] = note;
-    } else {
-      notes.add(note);
-    }
-  }
-
-  @override
-  Future<void> delete(String id) async {
-    notes.removeWhere((n) => n.id == id);
-  }
-
-  @override
-  Future<List<Note>> getAll() async => notes;
-
-  @override
-  Future<Note?> getById(String id) async {
-    try {
-      return notes.firstWhere((n) => n.id == id);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  @override
-  Future<void> clear() async {
-    notes.clear();
-  }
-
-  @override
-  Future<List<Folder>> getAllFolders() async => [];
-
-  @override
-  Future<void> upsertFolder(Folder folder) async {}
-
-  @override
-  Future<void> deleteFolder(String id) async {}
-}
 
 void main() {
   group('NoteList Widget', () {

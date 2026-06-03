@@ -179,10 +179,16 @@ class AppLocalizationsHe extends AppLocalizations {
   String get accentColor => 'צבע הדגשה';
 
   @override
+  String get analytics => 'ניתוחים';
+
+  @override
   String get systemDefault => 'ברירת מחדל של המערכת';
 
   @override
   String startupError(String error) {
     return 'אירעה שגיאה בהפעלת Fox.\n\nנסה לנקות את נתוני האפליקציה או להתקין מחדש.\n\nשגיאה: $error';
   }
+
+  @override
+  String get nativeName => 'עברית';
 }

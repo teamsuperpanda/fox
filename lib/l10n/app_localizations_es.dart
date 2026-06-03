@@ -180,12 +180,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accentColor => 'Color de acento';
 
   @override
+  String get analytics => 'Analíticas';
+
+  @override
   String get systemDefault => 'Predeterminado del sistema';
 
   @override
   String startupError(String error) {
     return 'Algo salió mal al iniciar Fox.\n\nIntenta borrar los datos de la app o reinstalarla.\n\nError: $error';
   }
+
+  @override
+  String get nativeName => 'Español';
 }
 
 /// The translations for Spanish Castilian, as used in Latin America and the Caribbean (`es_419`).
@@ -365,10 +371,16 @@ class AppLocalizationsEs419 extends AppLocalizationsEs {
   String get accentColor => 'Color de acento';
 
   @override
+  String get analytics => 'Analíticas';
+
+  @override
   String get systemDefault => 'Predeterminado del sistema';
 
   @override
   String startupError(String error) {
     return 'Algo salió mal al iniciar Fox.\n\nIntenta borrar los datos de la app o reinstalarla.\n\nError: $error';
   }
+
+  @override
+  String get nativeName => 'Español (Latinoamérica)';
 }

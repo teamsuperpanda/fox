@@ -179,10 +179,16 @@ class AppLocalizationsMs extends AppLocalizations {
   String get accentColor => 'Warna Aksen';
 
   @override
+  String get analytics => 'Analitis';
+
+  @override
   String get systemDefault => 'Lalai sistem';
 
   @override
   String startupError(String error) {
     return 'Ralat berlaku semasa memulakan Fox.\n\nSila cuba kosongkan data apl atau pasang semula.\n\nRalat: $error';
   }
+
+  @override
+  String get nativeName => 'Bahasa Melayu';
 }

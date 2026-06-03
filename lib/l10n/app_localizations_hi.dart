@@ -179,10 +179,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get accentColor => 'एक्सेंट रंग';
 
   @override
+  String get analytics => 'विश्लेषण';
+
+  @override
   String get systemDefault => 'सिस्टम डिफ़ॉल्ट';
 
   @override
   String startupError(String error) {
     return 'Fox शुरू करते समय कुछ गलत हो गया।\n\nऐप डेटा साफ़ करने या पुनः इंस्टॉल करने का प्रयास करें।\n\nत्रुटि: $error';
   }
+
+  @override
+  String get nativeName => 'हिन्दी';
 }

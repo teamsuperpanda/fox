@@ -179,10 +179,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get accentColor => 'Kolor akcentu';
 
   @override
+  String get analytics => 'Analityka';
+
+  @override
   String get systemDefault => 'Domyślny systemowy';
 
   @override
   String startupError(String error) {
     return 'Coś poszło nie tak podczas uruchamiania Fox.\n\nSpróbuj wyczyścić dane aplikacji lub zainstalować ją ponownie.\n\nBłąd: $error';
   }
+
+  @override
+  String get nativeName => 'Polski';
 }

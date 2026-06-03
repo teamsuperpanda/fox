@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:fox/models/note.dart';
 import 'package:fox/models/folder.dart';
+import 'package:fox/models/note.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository.dart';
 import 'package:fox/widgets/dialogs.dart';
 
 import 'test_helpers.dart';
 
-class MemoryRepo implements NoteRepository {
+class MemoryRepo implements NoteAndFolderRepository {
   final List<Note> _data = [];
+  final List<Folder> _folders = [];
   @override
   Future<void> init() async {}
-  @override
-  Future<void> clear() async => _data.clear();
   @override
   Future<void> delete(String id) async =>
       _data.removeWhere((e) => e.id == id);
   @override
   Future<List<Note>> getAll() async => List.unmodifiable(_data);
   @override
-  Future<Note?> getById(String id) async =>
-      _data.cast<Note?>().firstWhere((e) => e?.id == id, orElse: () => null);
-  @override
   Future<void> upsert(Note note) async {
     _data.removeWhere((e) => e.id == note.id);
     _data.add(note);
   }
   @override
-  Future<List<Folder>> getAllFolders() async => [];
+  Future<void> upsertAll(List<Note> notes) async {
+    for (final note in notes) {
+      _data.removeWhere((e) => e.id == note.id);
+      _data.add(note);
+    }
+  }
+  @override
+  Future<List<Folder>> getAllFolders() async => List.unmodifiable(_folders);
   @override
   Future<void> upsertFolder(Folder folder) async {}
   @override
@@ -50,7 +52,7 @@ void main() {
             child: const Text('Open'),
           ),
         ),
-      ));
+      ),);
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Open'));
@@ -78,7 +80,7 @@ void main() {
             child: const Text('Open'),
           ),
         ),
-      ));
+      ),);
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Open'));
@@ -105,7 +107,7 @@ void main() {
             ),
           ),
         ),
-      ));
+      ),);
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Show Snackbar'));

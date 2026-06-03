@@ -9,14 +9,14 @@ void main() {
       expect(noteColorOptions.length, 9);
     });
 
-    test('first option is null (default / no colour)', () {
-      expect(noteColorOptions.first, isNull);
+    test('first option is empty string (default / no colour)', () {
+      expect(noteColorOptions.first, isEmpty);
     });
 
     test('remaining options are 7-character hex strings', () {
       for (final hex in noteColorOptions.skip(1)) {
         expect(hex, isNotNull);
-        expect(hex!.length, 7);
+        expect(hex.length, 7);
         expect(hex.startsWith('#'), isTrue);
       }
     });

@@ -179,10 +179,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get accentColor => 'Culoare de accent';
 
   @override
+  String get analytics => 'Analitice';
+
+  @override
   String get systemDefault => 'Implicit sistem';
 
   @override
   String startupError(String error) {
     return 'A apărut o eroare la pornirea Fox.\n\nÎncercați să ștergeți datele aplicației sau să o reinstalați.\n\nEroare: $error';
   }
+
+  @override
+  String get nativeName => 'Română';
 }

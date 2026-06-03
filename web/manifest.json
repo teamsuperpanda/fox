@@ -1,11 +1,11 @@
 {
-    "name": "fox",
-    "short_name": "fox",
+    "name": "Fox",
+    "short_name": "Fox",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#1A1A1A",
+    "theme_color": "#228B22",
+    "description": "A friendly, local-first notes app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

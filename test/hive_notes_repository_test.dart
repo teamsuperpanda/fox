@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:fox/models/note.dart';
 import 'package:fox/models/note_adapter.dart';
 import 'package:fox/services/repository_hive.dart';
-import 'package:fox/models/note.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() {
   group('HiveNoteRepository', () {
@@ -20,7 +19,7 @@ void main() {
     setUp(() async {
       // Open the notes box
       await Hive.openBox<Note>('notes_db');
-      repository = await HiveNoteRepository.create();
+      repository = HiveNoteRepository.create();
       
       // Clear any existing data
       await repository.clear();
@@ -108,14 +107,14 @@ void main() {
           title: 'Unpinned Old',
           content: 'Content 1',
           pinned: false,
-          updatedAt: now.subtract(Duration(hours: 2)),
+          updatedAt: now.subtract(const Duration(hours: 2)),
         ),
         Note(
           id: 'note-2',
           title: 'Pinned New',
           content: 'Content 2',
           pinned: true,
-          updatedAt: now.subtract(Duration(hours: 1)),
+          updatedAt: now.subtract(const Duration(hours: 1)),
         ),
         Note(
           id: 'note-3',
@@ -129,7 +128,7 @@ void main() {
           title: 'Pinned Old',
           content: 'Content 4',
           pinned: true,
-          updatedAt: now.subtract(Duration(hours: 3)),
+          updatedAt: now.subtract(const Duration(hours: 3)),
         ),
       ];
 

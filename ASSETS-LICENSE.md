@@ -40,4 +40,4 @@ For questions about asset licensing or to request exceptions, please contact tea
 
 ---
 
-**The application source code** is licensed under the [MIT License](LICENSE) and may be used, modified, and distributed according to those terms. This restriction applies **only** to the visual and multimedia assets, not to the code.
+**The application source code** is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE) and may be used, modified, and distributed according to those terms. This restriction applies **only** to the visual and multimedia assets, not to the code.

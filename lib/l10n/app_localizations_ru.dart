@@ -179,10 +179,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get accentColor => 'Цвет акцента';
 
   @override
+  String get analytics => 'Аналитика';
+
+  @override
   String get systemDefault => 'Системный по умолчанию';
 
   @override
   String startupError(String error) {
     return 'Произошла ошибка при запуске Fox.\n\nПопробуйте очистить данные приложения или переустановить его.\n\nОшибка: $error';
   }
+
+  @override
+  String get nativeName => 'Русский';
 }

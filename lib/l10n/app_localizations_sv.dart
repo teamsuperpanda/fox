@@ -180,10 +180,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get accentColor => 'Accentfärg';
 
   @override
+  String get analytics => 'Analys';
+
+  @override
   String get systemDefault => 'Systemstandard';
 
   @override
   String startupError(String error) {
     return 'Något gick fel vid start av Fox.\n\nFörsök rensa appdata eller installera om.\n\nFel: $error';
   }
+
+  @override
+  String get nativeName => 'Svenska';
 }

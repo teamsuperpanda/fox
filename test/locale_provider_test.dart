@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
 import 'package:fox/models/settings.dart';
 import 'package:fox/models/settings_adapter.dart';
 import 'package:fox/providers/locale_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() {
   group('LocaleProvider', () {
@@ -61,7 +60,7 @@ void main() {
     });
 
     test('setLocale persists and notifies', () async {
-      int notifyCount = 0;
+      var notifyCount = 0;
       provider.addListener(() => notifyCount++);
 
       await provider.setLocale(const Locale('de'));

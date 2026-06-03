@@ -179,10 +179,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get accentColor => 'Colore di evidenziazione';
 
   @override
+  String get analytics => 'Analisi';
+
+  @override
   String get systemDefault => 'Predefinito di sistema';
 
   @override
   String startupError(String error) {
     return 'Qualcosa è andato storto all\'avvio di Fox.\n\nProva a cancellare i dati dell\'app o reinstallarla.\n\nErrore: $error';
   }
+
+  @override
+  String get nativeName => 'Italiano';
 }

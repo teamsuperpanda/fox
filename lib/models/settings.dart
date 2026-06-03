@@ -1,16 +1,6 @@
-import 'package:hive/hive.dart';
 import 'package:flutter/material.dart';
 
-class Settings extends HiveObject {
-  final String themeMode; // 'system'|'light'|'dark'
-
-  final String? locale;
-  final bool showTags;
-  final bool showContent;
-  final bool alternatingColors;
-  final bool fabAnimation;
-  final String sortBy; // 'dateDesc'|'dateAsc'|'titleAsc'|'titleDesc'
-  final String? accentColor; // Hex string e.g. '#8B9A6B'
+class Settings {
 
   Settings({
     required this.themeMode,
@@ -21,7 +11,19 @@ class Settings extends HiveObject {
     this.fabAnimation = true,
     this.sortBy = 'dateDesc',
     this.accentColor,
+    this.analyticsEnabled = true,
   });
+  final String themeMode; // 'system'|'light'|'dark'
+
+  final String? locale;
+  final bool showTags;
+  final bool showContent;
+  final bool alternatingColors;
+  final bool fabAnimation;
+  final String sortBy; // 'dateDesc'|'dateAsc'|'titleAsc'|'titleDesc'
+  // Hex string e.g. '#8B9A6B'
+  final String? accentColor;
+  final bool analyticsEnabled;
 
   ThemeMode get theme {
     return switch (themeMode) {
@@ -44,6 +46,7 @@ class Settings extends HiveObject {
     String? sortBy,
     String? accentColor,
     bool clearAccentColor = false,
+    bool? analyticsEnabled,
   }) {
     return Settings(
       themeMode: themeMode ?? this.themeMode,
@@ -54,6 +57,7 @@ class Settings extends HiveObject {
       fabAnimation: fabAnimation ?? this.fabAnimation,
       sortBy: sortBy ?? this.sortBy,
       accentColor: clearAccentColor ? null : (accentColor ?? this.accentColor),
+      analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
     );
   }
 }

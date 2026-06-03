@@ -178,10 +178,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get accentColor => 'アクセントカラー';
 
   @override
+  String get analytics => '分析';
+
+  @override
   String get systemDefault => 'システムのデフォルト';
 
   @override
   String startupError(String error) {
     return 'Foxの起動中にエラーが発生しました。\n\nアプリデータを消去するか再インストールしてください。\n\nエラー: $error';
   }
+
+  @override
+  String get nativeName => '日本語';
 }

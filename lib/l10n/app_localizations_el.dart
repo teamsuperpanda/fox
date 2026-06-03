@@ -181,10 +181,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String get accentColor => 'Χρώμα Τονισμού';
 
   @override
+  String get analytics => 'Αναλυτικά';
+
+  @override
   String get systemDefault => 'Προεπιλογή συστήματος';
 
   @override
   String startupError(String error) {
     return 'Παρουσιάστηκε σφάλμα κατά την εκκίνηση του Fox.\n\nΔοκιμάστε να εκκαθαρίσετε τα δεδομένα εφαρμογής ή να επανεγκαταστήσετε.\n\nΣφάλμα: $error';
   }
+
+  @override
+  String get nativeName => 'Ελληνικά';
 }

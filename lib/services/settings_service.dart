@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:fox/models/settings.dart';
+import 'package:fox/services/box_names.dart';
 import 'package:hive/hive.dart';
-import '../models/settings.dart';
-import 'box_names.dart';
 
 class SettingsService {
   static const _key = 'app_settings';
 
-  Box<Settings> get _box => Hive.box<Settings>(BoxNames.settings);
+  Box<Settings>? _cachedBox;
+  Box<Settings> get _box => _cachedBox ??= Hive.box<Settings>(BoxNames.settings);
 
-  Settings getSettings() {
-    return _box.get(_key) ?? Settings(themeMode: 'system');
+  Settings _get() => _box.get(_key) ?? Settings(themeMode: 'system');
+
+  Settings getSettings() => _get();
+
+  Future<void> _update(Settings Function(Settings) update) async {
+    await _box.put(_key, update(_get()));
   }
 
-  ThemeMode getThemeMode() => getSettings().theme;
+  ThemeMode getThemeMode() => _get().theme;
 
   Future<void> setThemeMode(ThemeMode mode) async {
     final modeStr = switch (mode) {
@@ -20,62 +25,68 @@ class SettingsService {
       ThemeMode.dark => 'dark',
       _ => 'system',
     };
-    await _box.put(_key, getSettings().copyWith(themeMode: modeStr));
+    await _update((s) => s.copyWith(themeMode: modeStr));
   }
 
-  bool getShowTags() => getSettings().showTags;
+  bool getShowTags() => _get().showTags;
 
   Future<void> setShowTags(bool show) async {
-    await _box.put(_key, getSettings().copyWith(showTags: show));
+    await _update((s) => s.copyWith(showTags: show));
   }
 
-  bool getShowContent() => getSettings().showContent;
+  bool getShowContent() => _get().showContent;
 
   Future<void> setShowContent(bool show) async {
-    await _box.put(_key, getSettings().copyWith(showContent: show));
+    await _update((s) => s.copyWith(showContent: show));
   }
 
-  bool getAlternatingColors() => getSettings().alternatingColors;
+  bool getAlternatingColors() => _get().alternatingColors;
 
   Future<void> setAlternatingColors(bool value) async {
-    await _box.put(_key, getSettings().copyWith(alternatingColors: value));
+    await _update((s) => s.copyWith(alternatingColors: value));
   }
 
-  bool getFabAnimation() => getSettings().fabAnimation;
+  bool getFabAnimation() => _get().fabAnimation;
 
   Future<void> setFabAnimation(bool value) async {
-    await _box.put(_key, getSettings().copyWith(fabAnimation: value));
+    await _update((s) => s.copyWith(fabAnimation: value));
   }
 
-  String getSortBy() => getSettings().sortBy;
+  String getSortBy() => _get().sortBy;
 
   Future<void> setSortBy(String value) async {
-    await _box.put(_key, getSettings().copyWith(sortBy: value));
+    await _update((s) => s.copyWith(sortBy: value));
   }
 
   /// Returns the persisted accent colour hex (e.g. '#8B9A6B'), or `null` for
   /// the default green.
-  String? getAccentColor() => getSettings().accentColor;
+  String? getAccentColor() => _get().accentColor;
 
   /// Persists an accent colour override.  Pass `null` to revert to default.
   Future<void> setAccentColor(String? value) async {
     if (value == null) {
-      await _box.put(_key, getSettings().copyWith(clearAccentColor: true));
+      await _update((s) => s.copyWith(clearAccentColor: true));
     } else {
-      await _box.put(_key, getSettings().copyWith(accentColor: value));
+      await _update((s) => s.copyWith(accentColor: value));
     }
   }
 
   /// Returns the persisted locale tag (e.g. 'en', 'pt_PT'), or `null` for
   /// system default.
-  String? getLocale() => getSettings().locale;
+  String? getLocale() => _get().locale;
+
+  bool getAnalyticsEnabled() => _get().analyticsEnabled;
+
+  Future<void> setAnalyticsEnabled(bool value) async {
+    await _update((s) => s.copyWith(analyticsEnabled: value));
+  }
 
   /// Persists a locale override.  Pass `null` to revert to system default.
   Future<void> setLocale(String? value) async {
     if (value == null) {
-      await _box.put(_key, getSettings().copyWith(clearLocale: true));
+      await _update((s) => s.copyWith(clearLocale: true));
     } else {
-      await _box.put(_key, getSettings().copyWith(locale: value));
+      await _update((s) => s.copyWith(locale: value));
     }
   }
 }

@@ -1,47 +1,36 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/models/note_colors.dart';
+import 'package:fox/note_detail_page.dart';
+import 'package:fox/services/notes_controller.dart';
 import 'package:intl/intl.dart';
 
-import '../l10n/app_localizations.dart';
-import '../note_detail_page.dart';
-import '../models/note.dart';
-import '../models/note_colors.dart';
-import '../services/notes_controller.dart';
-import 'dialogs.dart';
-
 class NoteList extends StatelessWidget {
+
+  const NoteList({
+    required this.controller, required this.notes, super.key,
+    this.showTags = true,
+    this.showContent = true,
+  });
   final NotesController controller;
   final List<Note> notes;
   final bool showTags;
   final bool showContent;
 
-  const NoteList({
-    super.key,
-    required this.controller,
-    required this.notes,
-    this.showTags = true,
-    this.showContent = true,
-  });
-
-  Future<void> _editNote(BuildContext context, Note note) async {
-    final result = await Navigator.of(context).push<NoteDetailResult>(MaterialPageRoute(
-      builder: (_) => NoteDetailPage(
-        existing: note,
-        controller: controller,
-      ),
-    ));
-    if (result != null && result.deleted && context.mounted) {
-      showUndoDeleteSnackBar(context, controller);
-    }
-  }
+  static final _timeFormat = DateFormat.jm();
+  static final DateFormat _dateTimeFormat = DateFormat.yMMMd().add_jm();
 
   static String _formatDate(DateTime dt, AppLocalizations l10n) {
     final now = DateTime.now();
     final sameDay =
         dt.year == now.year && dt.month == now.month && dt.day == now.day;
     if (sameDay) {
-      return '${l10n.today} • ${DateFormat.jm().format(dt)}';
+      return '${l10n.today} • ${_timeFormat.format(dt)}';
     }
-    return DateFormat.yMMMd().add_jm().format(dt);
+    return _dateTimeFormat.format(dt);
   }
 
   @override
@@ -53,33 +42,38 @@ class NoteList extends StatelessWidget {
       itemBuilder: (context, index) {
         final note = notes[index];
         final noteColor = parseNoteColor(note.color);
+        final trimmedText = note.plainText.trim();
         return Dismissible(
           key: ValueKey(note.id),
-          // Allow swipe both ways: left-to-right (pin) and right-to-left (delete)
-          direction: DismissDirection.horizontal,
           // Deletion is handled inside confirmDismiss so Dismissible never removes
           // the widget itself — the list updates via notifyListeners instead.
           confirmDismiss: (direction) async {
             if (direction == DismissDirection.endToStart) {
-              // Delete confirmation
-              final confirmed = await showDeleteConfirmDialog(context);
-              if (confirmed == true) {
-                await controller.remove(note.id);
-                if (context.mounted) {
-                  showUndoDeleteSnackBar(context, controller);
-                }
+              // Delete confirmation — handled via parent widget controller
+              await controller.remove(note.id);
+              if (context.mounted) {
+                final l10n = AppLocalizations.of(context);
+                ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.noteDeleted),
+                    action: SnackBarAction(
+                      label: l10n.undo,
+                      onPressed: controller.undoRemove,
+                    ),
+                  ),
+                );
               }
               return false; // Never let Dismissible remove the widget
             } else if (direction == DismissDirection.startToEnd) {
               // Pin action - toggle pin
-              controller.setPinned(note.id, !note.pinned);
+              unawaited(controller.setPinned(note.id, !note.pinned));
               return false;
             }
             return false;
           },
           // Background for Pin Action (Left to Right)
           background: Container(
-            color: Colors.amber[800],
+            color: Theme.of(context).colorScheme.tertiary,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -101,7 +95,7 @@ class NoteList extends StatelessWidget {
           ),
           // Background for Delete Action (Right to Left)
           secondaryBackground: Container(
-            color: Colors.red.shade400,
+            color: Theme.of(context).colorScheme.error,
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -119,18 +113,41 @@ class NoteList extends StatelessWidget {
               ],
             ),
           ),
-          child: InkWell(
-            onTap: () => _editNote(context, note),
+          child: Semantics(
+            label: 'Note: ${note.title.isEmpty ? "Untitled" : note.title}',
+            child: InkWell(
+            onTap: () async {
+              final result = await Navigator.of(context).push<NoteDetailResult>(
+                MaterialPageRoute(
+                  builder: (_) => NoteDetailPage(
+                    existing: note,
+                    controller: controller,
+                  ),
+                ),
+              );
+              if (result != null && result.deleted && context.mounted) {
+                final l10n = AppLocalizations.of(context);
+                ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.noteDeleted),
+                    action: SnackBarAction(
+                      label: l10n.undo,
+                      onPressed: controller.undoRemove,
+                    ),
+                  ),
+                );
+              }
+            },
             child: Container(
               decoration: BoxDecoration(
-                color: controller.alternatingColors && index.isOdd
+                color: controller.alternatingColors && index.isEven
                     ? Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
                     : null,
                 border: noteColor != null
                     ? Border(left: BorderSide(color: noteColor, width: 4))
                     : null,
               ),
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -156,10 +173,10 @@ class NoteList extends StatelessWidget {
                               ],
                             ],
                           ),
-                          if (showContent && note.plainText.trim().isNotEmpty) ...[
+                          if (showContent && trimmedText.isNotEmpty) ...[
                             const SizedBox(height: 6),
                             Text(
-                              note.plainText.trim(),
+                              trimmedText,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -221,6 +238,7 @@ class NoteList extends StatelessWidget {
                       ),
             ),
           ),
+        ),
         );
       },
     );

@@ -180,10 +180,16 @@ class AppLocalizationsDa extends AppLocalizations {
   String get accentColor => 'Accentfarve';
 
   @override
+  String get analytics => 'Analyser';
+
+  @override
   String get systemDefault => 'Systemstandard';
 
   @override
   String startupError(String error) {
     return 'Der opstod en fejl ved start af Fox.\n\nPrøv at rydde appdata eller geninstaller.\n\nFejl: $error';
   }
+
+  @override
+  String get nativeName => 'Dansk';
 }

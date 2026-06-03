@@ -55,6 +55,8 @@
   "today": "Dzisiaj",
   "language": "Język",
   "accentColor": "Kolor akcentu",
+  "analytics": "Analityka",
   "systemDefault": "Domyślny systemowy",
-  "startupError": "Coś poszło nie tak podczas uruchamiania Fox.\n\nSpróbuj wyczyścić dane aplikacji lub zainstalować ją ponownie.\n\nBłąd: {error}"
+  "startupError": "Coś poszło nie tak podczas uruchamiania Fox.\n\nSpróbuj wyczyścić dane aplikacji lub zainstalować ją ponownie.\n\nBłąd: {error}",
+  "nativeName": "Polski"
 }

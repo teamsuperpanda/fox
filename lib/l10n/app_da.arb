@@ -55,6 +55,8 @@
   "today": "I dag",
   "language": "Sprog",
   "accentColor": "Accentfarve",
+  "analytics": "Analyser",
   "systemDefault": "Systemstandard",
-  "startupError": "Der opstod en fejl ved start af Fox.\n\nPrøv at rydde appdata eller geninstaller.\n\nFejl: {error}"
+  "startupError": "Der opstod en fejl ved start af Fox.\n\nPrøv at rydde appdata eller geninstaller.\n\nFejl: {error}",
+  "nativeName": "Dansk"
 }

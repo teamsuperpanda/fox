@@ -180,10 +180,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get accentColor => 'Barva akcentu';
 
   @override
+  String get analytics => 'Analýzy';
+
+  @override
   String get systemDefault => 'Výchozí systémový';
 
   @override
   String startupError(String error) {
     return 'Při spuštění Fox došlo k chybě.\n\nZkuste vymazat data aplikace nebo ji znovu nainstalovat.\n\nChyba: $error';
   }
+
+  @override
+  String get nativeName => 'Čeština';
 }

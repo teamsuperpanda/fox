@@ -14,50 +14,50 @@ void main() {
       expect(provider.themeMode, equals(ThemeMode.system));
     });
 
-    test('getThemeIcon returns correct icons for each mode', () {
+    test('getThemeIcon returns correct icons for each mode', () async {
       // Light mode
-      provider.toggleTheme(); // system -> light
+      await provider.toggleTheme(); // system -> light
       expect(provider.getThemeIcon(), equals(Icons.wb_sunny_outlined));
 
       // Dark mode
-      provider.toggleTheme(); // light -> dark
+      await provider.toggleTheme(); // light -> dark
       expect(provider.getThemeIcon(), equals(Icons.nightlight_round));
 
       // System mode
-      provider.toggleTheme(); // dark -> system
+      await provider.toggleTheme(); // dark -> system
       expect(provider.getThemeIcon(), equals(Icons.brightness_auto));
     });
 
-    test('toggleTheme cycles through modes: system -> light -> dark -> system', () {
+    test('toggleTheme cycles through modes: system -> light -> dark -> system', () async {
       // Start at system
       expect(provider.themeMode, equals(ThemeMode.system));
 
       // Toggle to light
-      provider.toggleTheme();
+      await provider.toggleTheme();
       expect(provider.themeMode, equals(ThemeMode.light));
 
       // Toggle to dark
-      provider.toggleTheme();
+      await provider.toggleTheme();
       expect(provider.themeMode, equals(ThemeMode.dark));
 
       // Toggle back to system
-      provider.toggleTheme();
+      await provider.toggleTheme();
       expect(provider.themeMode, equals(ThemeMode.system));
     });
 
-    test('toggleTheme notifies listeners', () {
-      bool notified = false;
+    test('toggleTheme notifies listeners', () async {
+      var notified = false;
       provider.addListener(() {
         notified = true;
       });
 
-      provider.toggleTheme();
+      await provider.toggleTheme();
       expect(notified, isTrue);
     });
 
     test('load sets theme to system if SettingsService fails', () async {
       // Toggle to light mode first
-      provider.toggleTheme(); // system -> light
+      await provider.toggleTheme(); // system -> light
       expect(provider.themeMode, equals(ThemeMode.light));
       
       await provider.load();
@@ -65,7 +65,7 @@ void main() {
       expect(provider.themeMode, equals(ThemeMode.system));
     });
 
-    test('multiple toggles work correctly', () {
+    test('multiple toggles work correctly', () async {
       final sequence = [
         ThemeMode.system,
         ThemeMode.light,
@@ -74,18 +74,18 @@ void main() {
         ThemeMode.light,
       ];
 
-      for (int i = 0; i < sequence.length - 1; i++) {
+      for (var i = 0; i < sequence.length - 1; i++) {
         expect(provider.themeMode, equals(sequence[i]));
-        provider.toggleTheme();
+        await provider.toggleTheme();
       }
       expect(provider.themeMode, equals(sequence.last));
     });
 
-    test('themeMode getter returns current theme mode', () {
-      provider.toggleTheme(); // system -> light
+    test('themeMode getter returns current theme mode', () async {
+      await provider.toggleTheme(); // system -> light
       expect(provider.themeMode, equals(ThemeMode.light));
 
-      provider.toggleTheme(); // light -> dark
+      await provider.toggleTheme(); // light -> dark
       expect(provider.themeMode, equals(ThemeMode.dark));
     });
   });

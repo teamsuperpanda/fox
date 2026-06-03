@@ -181,10 +181,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get accentColor => 'Accentkleur';
 
   @override
+  String get analytics => 'Analyses';
+
+  @override
   String get systemDefault => 'Systeemstandaard';
 
   @override
   String startupError(String error) {
     return 'Er is iets misgegaan bij het starten van Fox.\n\nProbeer de app-gegevens te wissen of opnieuw te installeren.\n\nFout: $error';
   }
+
+  @override
+  String get nativeName => 'Nederlands';
 }

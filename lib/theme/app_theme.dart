@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   static ThemeData light(Color accent) {
     // Blend a subtle accent wash into the warm base background.
-    final base = const Color(0xFFF8F5F1);
+    const base = Color(0xFFF8F5F1);
     final bg = Color.lerp(base, accent, 0.06)!;
 
     return ThemeData(
@@ -31,7 +31,6 @@ class AppTheme {
       ),
       colorScheme: ColorScheme.fromSeed(
         seedColor: accent,
-        brightness: Brightness.light,
       ).copyWith(
         secondary: const Color(0xFFC7B8A5),
         error: const Color(0xFFD9534F),
@@ -41,7 +40,7 @@ class AppTheme {
 
   static ThemeData dark(Color accent) {
     // Blend a very subtle accent wash into the dark base background.
-    final base = const Color(0xFF202124);
+    const base = Color(0xFF202124);
     final bg = Color.lerp(base, accent, 0.04)!;
 
     return ThemeData(
@@ -71,7 +70,7 @@ class AppTheme {
         seedColor: accent,
         brightness: Brightness.dark,
       ).copyWith(
-        secondary: const Color(0xFFC7B8A5),
+        secondary: const Color(0xFFE8D5C2),
         error: const Color(0xFFD9534F),
       ),
     );

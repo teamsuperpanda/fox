@@ -181,10 +181,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get accentColor => 'Korostusväri';
 
   @override
+  String get analytics => 'Analytiikka';
+
+  @override
   String get systemDefault => 'Järjestelmän oletus';
 
   @override
   String startupError(String error) {
     return 'Fox-sovelluksen käynnistämisessä tapahtui virhe.\n\nYritä tyhjentää sovellustiedot tai asenna uudelleen.\n\nVirhe: $error';
   }
+
+  @override
+  String get nativeName => 'Suomi';
 }
