@@ -1,0 +1,66 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/images/github/banner.png">
+  <img src="assets/images/github/banner.png" alt="Fox">
+</picture>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="License"></a>
+  <img src="https://img.shields.io/badge/Flutter-3.6+-blue?logo=flutter" alt="Flutter">
+  <img src="https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey" alt="Platform">
+  <img src="https://img.shields.io/github/last-commit/teamsuperpanda/fox" alt="Last commit">
+</p>
+
+Fox is a notes app that stays out of your way. Rich text, dark mode, offline-first. No account, no subscription, no cloud dependency.
+
+Built by [Team Super Panda](https://www.teamsuperpanda.com).
+
+---
+
+## What it does
+
+Fox is what happens when you strip a notes app down to what actually matters: writing, organising, and finding things fast.
+
+- **Rich text**: bold, italic, lists, checklists, colours. No markdown syntax to remember.
+- **Pin, tag, search**: find any note in seconds, even with hundreds of them.
+- **Dark mode**: light and dark themes that actually look good.
+- **Offline-first**: it's a local app that happens to have an editor. Your notes live on your device, always available, no signal required.
+- **No accounts**: download it and start typing. There is no signup screen.
+
+---
+
+## Tech
+
+Fox is a Flutter app with a deliberately simple stack:
+
+| Layer | Choice |
+|---|---|
+| UI | Flutter with Provider |
+| Storage | Hive (local, no server) |
+| Editor | Flutter Quill |
+| Fonts | Roboto (bundled, no network calls) |
+
+No backend. No sync. No data leaves your device unless you choose to share a note.
+
+---
+
+## Run it
+
+```bash
+git clone https://github.com/teamsuperpanda/fox.git
+cd fox
+flutter pub get
+flutter run
+```
+
+### Tests
+
+```bash
+flutter test --coverage
+```
+
+---
+
+## License
+
+The code is [PolyForm Noncommercial 1.0.0](LICENSE). Free for personal use, not for resale.  
+Assets are copyright 2026 Team Super Panda (see [ASSETS-LICENSE.md](ASSETS-LICENSE.md)).

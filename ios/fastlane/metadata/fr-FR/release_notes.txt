@@ -1,0 +1,4 @@
+Nouveautés de la version 2.0.1 :
+• Thèmes de couleur d'accentuation — Personnalisez votre application avec 10 belles couleurs d'accentuation. Votre choix est sauvegardé et appliqué en modes clair et sombre.
+• 31 langues — Fox prend désormais en charge 31 langues, dont le thaï, l'ukrainien, le roumain, le tchèque, le danois, le finnois, le malais, le bengali, le grec et l'hébreu.
+• Corrections de bugs et améliorations de stabilité dans toute l'application.
