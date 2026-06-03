@@ -11,7 +11,7 @@ class Settings {
     this.fabAnimation = true,
     this.sortBy = 'dateDesc',
     this.accentColor,
-    this.analyticsEnabled = true,
+    this.analyticsEnabled = false,
   });
   final String themeMode; // 'system'|'light'|'dark'
 
