@@ -1,0 +1,4 @@
+Yang baru di 2.0.1:
+• Tema Warna Aksen — Personalisasi aplikasi Anda dengan 10 warna aksen yang indah. Pilihan Anda disimpan dan diterapkan di mode terang dan gelap.
+• 31 Bahasa — Fox kini mendukung 31 bahasa termasuk Thai, Ukraina, Romania, Ceko, Denmark, Finlandia, Melayu, Bengali, Yunani, dan Ibrani.
+• Perbaikan bug dan peningkatan stabilitas di seluruh aplikasi.

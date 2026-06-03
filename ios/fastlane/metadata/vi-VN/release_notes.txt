@@ -1,0 +1,4 @@
+Có gì mới trong 2.0.1:
+• Chủ đề màu nhấn — Cá nhân hóa ứng dụng với 10 màu nhấn đẹp mắt. Lựa chọn của bạn được lưu và áp dụng cho cả chế độ sáng và tối.
+• 31 ngôn ngữ — Fox hiện hỗ trợ 31 ngôn ngữ bao gồm tiếng Thái, Ukraine, Romania, Séc, Đan Mạch, Phần Lan, Mã Lai, Bengal, Hy Lạp và Do Thái.
+• Sửa lỗi và cải thiện độ ổn định trong toàn bộ ứng dụng.

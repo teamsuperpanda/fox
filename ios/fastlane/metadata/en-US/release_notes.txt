@@ -1,0 +1,5 @@
+What's new in 2.0.1:
+• Improved stability — fixed crashes when deleting folders and navigating back during saves.
+• Faster performance — optimised search, sorting, and list rendering.
+• Accessibility improvements — pinch-to-zoom now enabled on web for visually impaired users.
+• General bug fixes and quality-of-life improvements.

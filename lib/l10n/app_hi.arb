@@ -58,5 +58,17 @@
   "analytics": "विश्लेषण",
   "systemDefault": "सिस्टम डिफ़ॉल्ट",
   "startupError": "Fox शुरू करते समय कुछ गलत हो गया।\n\nऐप डेटा साफ़ करने या पुनः इंस्टॉल करने का प्रयास करें।\n\nत्रुटि: {error}",
-  "nativeName": "हिन्दी"
+  "nativeName": "हिन्दी",
+  "screenshotLightTagline": "आपके नोट्स, आपके तरीके से",
+  "screenshotLightMarketing1": "रिच टेक्स्ट से विचारों को व्यवस्थित करें",
+  "screenshotLightMarketing2": "तेज़, निजी, ऑफ़लाइन-फ़र्स्ट",
+  "screenshotDarkTagline": "लाइट या डार्क में खूबसूरत",
+  "screenshotDarkMarketing1": "पूर्ण डार्क मोड समर्थन",
+  "screenshotDarkMarketing2": "आँखों पर आसान, हमेशा",
+  "screenshotNewNoteTagline": "विचारों को तुरंत कैप्चर करें",
+  "screenshotNewNoteMarketing1": "रिच टेक्स्ट • चेकलिस्ट • रंग",
+  "screenshotNewNoteMarketing2": "वह सब कुछ जो आपको चाहिए",
+  "screenshotSettingsTagline": "ऐप को अपने तरीके से कस्टमाइज़ करें",
+  "screenshotSettingsMarketing1": "एक्सेंट रंग • सॉर्ट विकल्प • भाषा",
+  "screenshotSettingsMarketing2": "इसे वास्तव में अपना बनाएँ"
 }

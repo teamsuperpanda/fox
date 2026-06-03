@@ -58,5 +58,17 @@
   "analytics": "分析",
   "systemDefault": "系统默认",
   "startupError": "Fox 启动时出现问题。\n\n请尝试清除应用数据或重新安装。\n\n错误：{error}",
-  "nativeName": "中文（简体）"
+  "nativeName": "中文（简体）",
+  "screenshotLightTagline": "你的笔记，你的方式",
+  "screenshotLightMarketing1": "用富文本整理思绪",
+  "screenshotLightMarketing2": "快速、私密、离线优先",
+  "screenshotDarkTagline": "浅色或深色都美丽",
+  "screenshotDarkMarketing1": "完全支持深色模式",
+  "screenshotDarkMarketing2": "随时保护眼睛",
+  "screenshotNewNoteTagline": "即时捕捉灵感",
+  "screenshotNewNoteMarketing1": "富文本 • 清单 • 颜色",
+  "screenshotNewNoteMarketing2": "你需要的一切",
+  "screenshotSettingsTagline": "随心定制应用",
+  "screenshotSettingsMarketing1": "强调色 • 排序选项 • 语言",
+  "screenshotSettingsMarketing2": "让它真正属于你"
 }

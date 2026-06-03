@@ -193,4 +193,44 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get nativeName => 'Nederlands';
+
+  @override
+  String get screenshotLightTagline => 'Jouw notities, op jouw manier';
+
+  @override
+  String get screenshotLightMarketing1 =>
+      'Organiseer gedachten met rijke tekst';
+
+  @override
+  String get screenshotLightMarketing2 => 'Snel, privé, offline-first';
+
+  @override
+  String get screenshotDarkTagline => 'Prachtig in licht of donker';
+
+  @override
+  String get screenshotDarkMarketing1 =>
+      'Volledige donkere modus ondersteuning';
+
+  @override
+  String get screenshotDarkMarketing2 => 'Altijd vriendelijk voor de ogen';
+
+  @override
+  String get screenshotNewNoteTagline => 'Leg ideeën direct vast';
+
+  @override
+  String get screenshotNewNoteMarketing1 =>
+      'Rijke tekst • Checklists • Kleuren';
+
+  @override
+  String get screenshotNewNoteMarketing2 => 'Alles wat je nodig hebt';
+
+  @override
+  String get screenshotSettingsTagline => 'Pas de app aan naar jouw wensen';
+
+  @override
+  String get screenshotSettingsMarketing1 =>
+      'Accentkleuren • Sorteeropties • Taal';
+
+  @override
+  String get screenshotSettingsMarketing2 => 'Maak het echt van jou';
 }

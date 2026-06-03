@@ -58,5 +58,17 @@
   "analytics": "Analitis",
   "systemDefault": "Lalai sistem",
   "startupError": "Ralat berlaku semasa memulakan Fox.\n\nSila cuba kosongkan data apl atau pasang semula.\n\nRalat: {error}",
-  "nativeName": "Bahasa Melayu"
+  "nativeName": "Bahasa Melayu",
+  "screenshotLightTagline": "Your notes, your way",
+  "screenshotLightMarketing1": "Organise thoughts with rich text",
+  "screenshotLightMarketing2": "Fast, private, offline-first",
+  "screenshotDarkTagline": "Beautiful in light or dark",
+  "screenshotDarkMarketing1": "Full dark mode support",
+  "screenshotDarkMarketing2": "Easy on the eyes, always",
+  "screenshotNewNoteTagline": "Capture ideas instantly",
+  "screenshotNewNoteMarketing1": "Rich text  •  Checklists  •  Colours",
+  "screenshotNewNoteMarketing2": "Everything you need",
+  "screenshotSettingsTagline": "Customise the app your way",
+  "screenshotSettingsMarketing1": "Accent colors  •  Sort options  •  Language",
+  "screenshotSettingsMarketing2": "Make it truly yours"
 }

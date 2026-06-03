@@ -58,5 +58,17 @@
   "analytics": "Analys",
   "systemDefault": "Systemstandard",
   "startupError": "Något gick fel vid start av Fox.\n\nFörsök rensa appdata eller installera om.\n\nFel: {error}",
-  "nativeName": "Svenska"
+  "nativeName": "Svenska",
+  "screenshotLightTagline": "Dina anteckningar, ditt sätt",
+  "screenshotLightMarketing1": "Organisera tankar med rik text",
+  "screenshotLightMarketing2": "Snabb, privat, offline-first",
+  "screenshotDarkTagline": "Vacker i ljust eller mörkt",
+  "screenshotDarkMarketing1": "Fullt stöd för mörkt läge",
+  "screenshotDarkMarketing2": "Skonsam för ögonen, alltid",
+  "screenshotNewNoteTagline": "Fånga idéer direkt",
+  "screenshotNewNoteMarketing1": "Rik text • Checklistor • Färger",
+  "screenshotNewNoteMarketing2": "Allt du behöver",
+  "screenshotSettingsTagline": "Anpassa appen ditt sätt",
+  "screenshotSettingsMarketing1": "Accentfärger • Sorteringsalternativ • Språk",
+  "screenshotSettingsMarketing2": "Gör den verkligen till din"
 }

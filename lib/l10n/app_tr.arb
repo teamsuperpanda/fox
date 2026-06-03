@@ -58,5 +58,17 @@
   "analytics": "Analitik",
   "systemDefault": "Sistem varsayılanı",
   "startupError": "Fox başlatılırken bir sorun oluştu.\n\nUygulama verilerini temizlemeyi veya yeniden yüklemeyi deneyin.\n\nHata: {error}",
-  "nativeName": "Türkçe"
+  "nativeName": "Türkçe",
+  "screenshotLightTagline": "Notların, senin tarzın",
+  "screenshotLightMarketing1": "Zengin metinle düşüncelerini düzenle",
+  "screenshotLightMarketing2": "Hızlı, özel, çevrimdışı öncelikli",
+  "screenshotDarkTagline": "Aydınlıkta da karanlıkta da güzel",
+  "screenshotDarkMarketing1": "Tam karanlık mod desteği",
+  "screenshotDarkMarketing2": "Göz dostu, her zaman",
+  "screenshotNewNoteTagline": "Fikirleri anında yakala",
+  "screenshotNewNoteMarketing1": "Zengin metin • Kontrol listeleri • Renkler",
+  "screenshotNewNoteMarketing2": "İhtiyacın olan her şey",
+  "screenshotSettingsTagline": "Uygulamayı kendi tarzında özelleştir",
+  "screenshotSettingsMarketing1": "Vurgu renkleri • Sıralama seçenekleri • Dil",
+  "screenshotSettingsMarketing2": "Onu gerçekten senin yap"
 }

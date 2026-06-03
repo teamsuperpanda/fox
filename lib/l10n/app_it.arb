@@ -58,5 +58,17 @@
   "analytics": "Analisi",
   "systemDefault": "Predefinito di sistema",
   "startupError": "Qualcosa è andato storto all'avvio di Fox.\n\nProva a cancellare i dati dell'app o reinstallarla.\n\nErrore: {error}",
-  "nativeName": "Italiano"
+  "nativeName": "Italiano",
+  "screenshotLightTagline": "Le tue note, a modo tuo",
+  "screenshotLightMarketing1": "Organizza i pensieri con testo ricco",
+  "screenshotLightMarketing2": "Veloce, privato, offline-first",
+  "screenshotDarkTagline": "Bellissimo sia in chiaro che in scuro",
+  "screenshotDarkMarketing1": "Supporto completo per la modalità scura",
+  "screenshotDarkMarketing2": "Leggero per gli occhi, sempre",
+  "screenshotNewNoteTagline": "Cattura le idee all'istante",
+  "screenshotNewNoteMarketing1": "Testo ricco • Checklist • Colori",
+  "screenshotNewNoteMarketing2": "Tutto ciò di cui hai bisogno",
+  "screenshotSettingsTagline": "Personalizza l'app a modo tuo",
+  "screenshotSettingsMarketing1": "Colori accent • Opzioni di ordinamento • Lingua",
+  "screenshotSettingsMarketing2": "Rendila veramente tua"
 }

@@ -58,5 +58,17 @@
   "analytics": "تحليلات",
   "systemDefault": "الافتراضي للنظام",
   "startupError": "حدث خطأ أثناء بدء تشغيل Fox.\n\nحاول مسح بيانات التطبيق أو إعادة تثبيته.\n\nخطأ: {error}",
-  "nativeName": "العربية"
+  "nativeName": "العربية",
+  "screenshotLightTagline": "ملاحظاتك، بطريقتك",
+  "screenshotLightMarketing1": "نظم أفكارك بالنص المنسق",
+  "screenshotLightMarketing2": "سريع، خاص، يعمل بدون إنترنت",
+  "screenshotDarkTagline": "جميل في الوضع الفاتح أو الداكن",
+  "screenshotDarkMarketing1": "دعم كامل للوضع الداكن",
+  "screenshotDarkMarketing2": "مريح للعينين، دائماً",
+  "screenshotNewNoteTagline": "التقط الأفكار فوراً",
+  "screenshotNewNoteMarketing1": "نص منسق • قوائم مراجعة • ألوان",
+  "screenshotNewNoteMarketing2": "كل ما تحتاجه",
+  "screenshotSettingsTagline": "خصص التطبيق بطريقتك",
+  "screenshotSettingsMarketing1": "ألوان مميزة • خيارات الفرز • اللغة",
+  "screenshotSettingsMarketing2": "اجعله ملكك حقاً"
 }

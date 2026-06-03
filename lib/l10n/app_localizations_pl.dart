@@ -191,4 +191,44 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get nativeName => 'Polski';
+
+  @override
+  String get screenshotLightTagline => 'Twoje notatki, na twoich zasadach';
+
+  @override
+  String get screenshotLightMarketing1 =>
+      'Organizuj myśli za pomocą bogatego tekstu';
+
+  @override
+  String get screenshotLightMarketing2 => 'Szybko, prywatnie, offline-first';
+
+  @override
+  String get screenshotDarkTagline => 'Piękny w trybie jasnym i ciemnym';
+
+  @override
+  String get screenshotDarkMarketing1 => 'Pełne wsparcie trybu ciemnego';
+
+  @override
+  String get screenshotDarkMarketing2 => 'Łagodny dla oczu, zawsze';
+
+  @override
+  String get screenshotNewNoteTagline => 'Łap pomysły natychmiast';
+
+  @override
+  String get screenshotNewNoteMarketing1 =>
+      'Bogaty tekst • Listy kontrolne • Kolory';
+
+  @override
+  String get screenshotNewNoteMarketing2 => 'Wszystko, czego potrzebujesz';
+
+  @override
+  String get screenshotSettingsTagline =>
+      'Dostosuj aplikację do swoich potrzeb';
+
+  @override
+  String get screenshotSettingsMarketing1 =>
+      'Kolory akcentu • Opcje sortowania • Język';
+
+  @override
+  String get screenshotSettingsMarketing2 => 'Uczyń ją naprawdę swoją';
 }

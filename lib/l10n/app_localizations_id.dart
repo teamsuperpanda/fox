@@ -193,4 +193,42 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get nativeName => 'Bahasa Indonesia';
+
+  @override
+  String get screenshotLightTagline => 'Catatanmu, dengan caramu';
+
+  @override
+  String get screenshotLightMarketing1 => 'Atur pikiran dengan teks kaya';
+
+  @override
+  String get screenshotLightMarketing2 => 'Cepat, pribadi, offline-first';
+
+  @override
+  String get screenshotDarkTagline => 'Indah dalam terang maupun gelap';
+
+  @override
+  String get screenshotDarkMarketing1 => 'Dukungan mode gelap penuh';
+
+  @override
+  String get screenshotDarkMarketing2 => 'Nyaman di mata, selalu';
+
+  @override
+  String get screenshotNewNoteTagline => 'Tangkap ide secara instan';
+
+  @override
+  String get screenshotNewNoteMarketing1 =>
+      'Teks kaya • Daftar periksa • Warna';
+
+  @override
+  String get screenshotNewNoteMarketing2 => 'Semua yang kamu butuhkan';
+
+  @override
+  String get screenshotSettingsTagline =>
+      'Sesuaikan aplikasi sesuai keinginanmu';
+
+  @override
+  String get screenshotSettingsMarketing1 => 'Warna aksen • Opsi urut • Bahasa';
+
+  @override
+  String get screenshotSettingsMarketing2 => 'Jadikan benar-benar milikmu';
 }

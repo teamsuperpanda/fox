@@ -59,7 +59,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       selection: const TextSelection.collapsed(offset: 0),
     );
     _pinned = widget.existing?.pinned ?? false;
-    _showToolbar = widget.showToolbar;
+    _showToolbar = false;
     _tags = List.from(widget.existing?.tags ?? []);
     _folderId = widget.existing?.folderId;
     _color = widget.existing?.color;
@@ -336,6 +336,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
@@ -353,18 +354,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: TextField(
-            controller: _titleCtrl,
-            decoration: InputDecoration(
-              hintText: l10n.noteTitle,
-              border: InputBorder.none,
-            ),
-            style: Theme.of(context).appBarTheme.titleTextStyle,
-            autofocus: widget.existing?.title.isEmpty ?? true,
-          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: _saveAndPop, // auto-save on back arrow
+            onPressed: _saveAndPop,
             tooltip: l10n.back,
           ),
           actions: [
@@ -455,62 +447,82 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             ],
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Column(
-            children: [
-              // Conditionally show toolbar
-              if (_showToolbar)
-                QuillSimpleToolbar(
-                  controller: _contentCtrl,
-                  config: QuillSimpleToolbarConfig(
-                    color: Theme.of(context).appBarTheme.backgroundColor,
-                    multiRowsDisplay: false,
-                    toolbarIconAlignment: WrapAlignment.start,
-                    showDividers: false,
-                    showFontFamily: false,
-                    showFontSize: false,
-                    showStrikeThrough: false,
-                    showInlineCode: false,
-                    showColorButton: false,
-                    showBackgroundColorButton: false,
-                    showLeftAlignment: false,
-                    showCenterAlignment: false,
-                    showRightAlignment: false,
-                    showJustifyAlignment: false,
-                    showHeaderStyle: false,
-                    showListCheck: false,
-                    showCodeBlock: false,
-                    showIndent: false,
-                    showLink: false,
-                    buttonOptions: QuillSimpleToolbarButtonOptions(
-                      base: QuillToolbarBaseButtonOptions(
-                        iconTheme: QuillIconTheme(
-                          iconButtonSelectedData: IconButtonData(
-                            style: IconButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withValues(alpha: 0.1),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+              child: TextField(
+                controller: _titleCtrl,
+                decoration: InputDecoration(
+                  hintText: l10n.noteTitle,
+                  border: InputBorder.none,
+                  isDense: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                style: Theme.of(context).textTheme.headlineSmall,
+                autofocus: widget.existing?.title.isEmpty ?? true,
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Column(
+                  children: [
+                    if (_showToolbar)
+                      QuillSimpleToolbar(
+                        controller: _contentCtrl,
+                        config: QuillSimpleToolbarConfig(
+                          color: Theme.of(context).appBarTheme.backgroundColor,
+                          multiRowsDisplay: false,
+                          toolbarIconAlignment: WrapAlignment.start,
+                          showDividers: false,
+                          showFontFamily: false,
+                          showFontSize: false,
+                          showStrikeThrough: false,
+                          showInlineCode: false,
+                          showColorButton: false,
+                          showBackgroundColorButton: false,
+                          showLeftAlignment: false,
+                          showCenterAlignment: false,
+                          showRightAlignment: false,
+                          showJustifyAlignment: false,
+                          showHeaderStyle: false,
+                          showListCheck: false,
+                          showCodeBlock: false,
+                          showIndent: false,
+                          showLink: false,
+                          buttonOptions: QuillSimpleToolbarButtonOptions(
+                            base: QuillToolbarBaseButtonOptions(
+                              iconTheme: QuillIconTheme(
+                                iconButtonSelectedData: IconButtonData(
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withValues(alpha: 0.1),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
+                    if (_showToolbar) const SizedBox(height: 8),
+                    Expanded(
+                      child: QuillEditor.basic(
+                        controller: _contentCtrl,
+                        config: QuillEditorConfig(
+                          placeholder: l10n.startTyping,
+                          autoFocus: widget.existing?.title.isNotEmpty ?? false,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              if (_showToolbar) const SizedBox(height: 8),
-              Expanded(
-                child: QuillEditor.basic(
-                  controller: _contentCtrl,
-                  config: QuillEditorConfig(
-                    placeholder: l10n.startTyping,
-                    autoFocus: widget.existing?.title.isNotEmpty ?? false,
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

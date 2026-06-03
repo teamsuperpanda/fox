@@ -58,5 +58,17 @@
   "analytics": "分析",
   "systemDefault": "システムのデフォルト",
   "startupError": "Foxの起動中にエラーが発生しました。\n\nアプリデータを消去するか再インストールしてください。\n\nエラー: {error}",
-  "nativeName": "日本語"
+  "nativeName": "日本語",
+  "screenshotLightTagline": "あなたのメモ、あなたのスタイルで",
+  "screenshotLightMarketing1": "リッチテキストで思考を整理",
+  "screenshotLightMarketing2": "高速、プライベート、オフライン優先",
+  "screenshotDarkTagline": "ライトでもダークでも美しく",
+  "screenshotDarkMarketing1": "完全なダークモード対応",
+  "screenshotDarkMarketing2": "目に優しく、いつでも",
+  "screenshotNewNoteTagline": "アイデアを即座にキャプチャ",
+  "screenshotNewNoteMarketing1": "リッチテキスト • チェックリスト • 色",
+  "screenshotNewNoteMarketing2": "あなたに必要なすべて",
+  "screenshotSettingsTagline": "自分流にアプリをカスタマイズ",
+  "screenshotSettingsMarketing1": "アクセントカラー • 並び替え • 言語",
+  "screenshotSettingsMarketing2": "本当に自分だけのものに"
 }

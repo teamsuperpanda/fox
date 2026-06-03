@@ -191,4 +191,43 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nativeName => 'Italiano';
+
+  @override
+  String get screenshotLightTagline => 'Le tue note, a modo tuo';
+
+  @override
+  String get screenshotLightMarketing1 =>
+      'Organizza i pensieri con testo ricco';
+
+  @override
+  String get screenshotLightMarketing2 => 'Veloce, privato, offline-first';
+
+  @override
+  String get screenshotDarkTagline => 'Bellissimo sia in chiaro che in scuro';
+
+  @override
+  String get screenshotDarkMarketing1 =>
+      'Supporto completo per la modalità scura';
+
+  @override
+  String get screenshotDarkMarketing2 => 'Leggero per gli occhi, sempre';
+
+  @override
+  String get screenshotNewNoteTagline => 'Cattura le idee all\'istante';
+
+  @override
+  String get screenshotNewNoteMarketing1 => 'Testo ricco • Checklist • Colori';
+
+  @override
+  String get screenshotNewNoteMarketing2 => 'Tutto ciò di cui hai bisogno';
+
+  @override
+  String get screenshotSettingsTagline => 'Personalizza l\'app a modo tuo';
+
+  @override
+  String get screenshotSettingsMarketing1 =>
+      'Colori accent • Opzioni di ordinamento • Lingua';
+
+  @override
+  String get screenshotSettingsMarketing2 => 'Rendila veramente tua';
 }
