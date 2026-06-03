@@ -41,6 +41,9 @@ windows/flutter/ephemeral/
 **/android/.gradle
 **/android/local.properties
 
+# Coverage
+coverage/
+
 # Hive test artifacts
 test/hive_*/
 test/**/*.hive

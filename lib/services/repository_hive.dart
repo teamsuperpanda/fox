@@ -1,18 +1,16 @@
-import 'dart:async';
+import 'package:fox/models/folder.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/services/box_names.dart';
+import 'package:fox/services/repository.dart';
 import 'package:hive/hive.dart';
 
-import 'box_names.dart';
-import 'repository.dart';
-import '../models/note.dart';
-import '../models/folder.dart';
+class HiveNoteRepository implements NoteAndFolderRepository {
 
-class HiveNoteRepository implements NoteRepository {
+  HiveNoteRepository._();
   Box<Note> get _box => Hive.box<Note>(BoxNames.notes);
   Box<Folder> get _foldersBox => Hive.box<Folder>(BoxNames.folders);
 
-  HiveNoteRepository._();
-
-  static Future<HiveNoteRepository> create() async {
+  static HiveNoteRepository create() {
     return HiveNoteRepository._();
   }
 
@@ -30,13 +28,17 @@ class HiveNoteRepository implements NoteRepository {
   }
 
   @override
-  Future<Note?> getById(String id) async {
-    return _box.get(id);
+  Future<void> upsert(Note note) async {
+    await _box.put(note.id, note);
   }
 
   @override
-  Future<void> upsert(Note note) async {
-    await _box.put(note.id, note);
+  Future<void> upsertAll(List<Note> notes) async {
+    final map = <String, Note>{};
+    for (final note in notes) {
+      map[note.id] = note;
+    }
+    await _box.putAll(map);
   }
 
   @override
@@ -44,7 +46,11 @@ class HiveNoteRepository implements NoteRepository {
     await _box.delete(id);
   }
 
-  @override
+  // Not on the interface but useful for direct testing
+  Future<Note?> getById(String id) async {
+    return _box.get(id);
+  }
+
   Future<void> clear() async {
     await _box.clear();
   }

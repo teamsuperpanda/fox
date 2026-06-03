@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import '../services/settings_service.dart';
+import 'package:fox/services/constants.dart';
+import 'package:fox/services/settings_service.dart';
 
 /// Manages the app locale: system default (`null`) or a user-chosen override.
 class LocaleProvider extends ChangeNotifier {
+  LocaleProvider({SettingsService? settingsService})
+      : _settingsService = settingsService ?? SettingsService();
+
+  final SettingsService _settingsService;
   Locale? _locale; // null → follow system
 
   Locale? get locale => _locale;
@@ -10,21 +15,22 @@ class LocaleProvider extends ChangeNotifier {
   /// Load persisted locale from settings.
   Future<void> load() async {
     try {
-      final service = SettingsService();
-      final tag = service.getLocale();
+      final tag = _settingsService.getLocale();
       _locale = _parseLocale(tag);
-    } catch (_) {
+    } catch (e) {
+      debugPrint('LocaleProvider: failed to load locale: $e');
       _locale = null;
     }
   }
 
   /// Set a new locale override, or `null` to revert to system default.
   Future<void> setLocale(Locale? newLocale) async {
-    _locale = newLocale;
     try {
-      final service = SettingsService();
-      await service.setLocale(newLocale != null ? _localeToTag(newLocale) : null);
-    } catch (_) {}
+      await _settingsService.setLocale(newLocale != null ? localeToTag(newLocale) : null);
+      _locale = newLocale;
+    } catch (e) {
+      debugPrint('LocaleProvider: failed to persist locale: $e');
+    }
     notifyListeners();
   }
 
@@ -38,11 +44,5 @@ class LocaleProvider extends ChangeNotifier {
     return Locale(parts[0]);
   }
 
-  /// Converts a [Locale] into a storable string tag.
-  static String _localeToTag(Locale locale) {
-    if (locale.countryCode != null && locale.countryCode!.isNotEmpty) {
-      return '${locale.languageCode}_${locale.countryCode}';
-    }
-    return locale.languageCode;
-  }
+
 }

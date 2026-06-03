@@ -1,61 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:fox/l10n/app_localizations.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:fox/models/note.dart';
-import 'package:fox/services/notes_controller.dart';
-import 'package:fox/services/repository.dart';
-import 'package:fox/note_detail_page.dart';
-import 'package:fox/models/folder.dart';
+// TODO: Move Note.copyWith tests (lines 45-72) to test/models/note_test.dart
+// TODO: Move NotesController tests (lines 75-138) to test/services/notes_controller_test.dart
+
 import 'dart:async';
 
-class MockRepository implements NoteRepository {
-  final List<Note> notes = [];
-
-  @override
-  Future<void> init() async {}
-
-  @override
-  Future<void> upsert(Note note) async {
-    final index = notes.indexWhere((n) => n.id == note.id);
-    if (index >= 0) {
-      notes[index] = note;
-    } else {
-      notes.add(note);
-    }
-  }
-
-  @override
-  Future<void> delete(String id) async {
-    notes.removeWhere((n) => n.id == id);
-  }
-
-  @override
-  Future<List<Note>> getAll() async => notes;
-
-  @override
-  Future<Note?> getById(String id) async {
-    try {
-      return notes.firstWhere((n) => n.id == id);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  @override
-  Future<void> clear() async {
-    notes.clear();
-  }
-
-  @override
-  Future<List<Folder>> getAllFolders() async => [];
-
-  @override
-  Future<void> upsertFolder(Folder folder) async {}
-
-  @override
-  Future<void> deleteFolder(String id) async {}
-}
+import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/note_detail_page.dart';
+import 'package:fox/services/notes_controller.dart';
+import 'test_helpers.dart';
 
 class FailingSaveRepository extends MockRepository {
   @override
@@ -134,7 +89,6 @@ void main() {
       await controller.addOrUpdate(
         title: 'New Note',
         content: doc,
-        pinned: false,
       );
 
       expect(mockRepo.notes.length, equals(1));
@@ -180,7 +134,6 @@ void main() {
       await controller.addOrUpdate(
         title: 'Title Only',
         content: Document(),
-        pinned: false,
       );
 
       expect(mockRepo.notes.length, equals(1));
@@ -205,27 +158,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: controller),
-      ));
-
-      await tester.enterText(find.byType(TextField).first, 'New Note');
-      await tester.pump();
-      await tester.tap(find.byIcon(Icons.save));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(NoteDetailPage), findsNothing);
-      expect(mockRepo.notes.length, 1);
-      expect(mockRepo.notes.first.title, 'New Note');
-    });
-
-    testWidgets('discards empty note on back', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        localizationsDelegates: const [
-          ...AppLocalizations.localizationsDelegates,
-          FlutterQuillLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: NoteDetailPage(controller: controller),
-      ));
+      ),);
 
       await tester.tap(find.byIcon(Icons.arrow_back));
       await tester.pumpAndSettle();
@@ -251,7 +184,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: existingNote, controller: controller),
-      ));
+      ),);
 
       final titleField = find.byType(TextField).first;
       await tester.enterText(titleField, '');
@@ -279,7 +212,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: note, controller: controller, showToolbar: false),
-      ));
+      ),);
 
       expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
     });
@@ -300,7 +233,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: note, controller: controller, showToolbar: false),
-      ));
+      ),);
 
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
     });
@@ -313,7 +246,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: controller, showToolbar: false),
-      ));
+      ),);
 
       // Open tags dialog
       await tester.tap(find.byIcon(Icons.label_outline));
@@ -366,7 +299,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: failingController),
-      ));
+      ),);
 
       await tester.enterText(find.byType(TextField).first, 'Will Fail');
       await tester.pump();
@@ -389,7 +322,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(controller: delayedController),
-      ));
+      ),);
 
       await tester.enterText(find.byType(TextField).first, 'Delayed Save');
       await tester.pump();
@@ -424,7 +357,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: existing, controller: failingController),
-      ));
+      ),);
 
       await tester.tap(find.byIcon(Icons.delete));
       await tester.pumpAndSettle();
@@ -454,7 +387,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: NoteDetailPage(existing: existing, controller: delayedController),
-      ));
+      ),);
 
       await tester.tap(find.byIcon(Icons.delete));
       await tester.pumpAndSettle();

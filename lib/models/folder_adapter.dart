@@ -1,6 +1,6 @@
 // Handwritten Hive TypeAdapter for Folder to avoid build_runner.
+import 'package:fox/models/folder.dart';
 import 'package:hive/hive.dart';
-import 'folder.dart';
 
 class FolderAdapter extends TypeAdapter<Folder> {
   @override
@@ -34,6 +34,7 @@ class FolderAdapter extends TypeAdapter<Folder> {
 
   @override
   int get hashCode => typeId.hashCode;
+
 
   @override
   bool operator ==(Object other) =>

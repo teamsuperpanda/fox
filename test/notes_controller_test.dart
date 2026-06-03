@@ -1,60 +1,10 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-
-import 'package:fox/services/repository.dart';
-import 'package:fox/services/notes_controller.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
-import 'package:fox/models/folder.dart';
+import 'package:fox/services/constants.dart';
+import 'package:fox/services/notes_controller.dart';
 
-class MemoryRepo implements NoteRepository {
-  final List<Note> _data = [];
-  bool _inited = false;
-
-  @override
-  Future<void> init() async {
-    _inited = true;
-  }
-
-  @override
-  Future<void> clear() async {
-    _data.clear();
-  }
-
-  @override
-  Future<void> delete(String id) async {
-    _data.removeWhere((e) => e.id == id);
-  }
-
-  @override
-  Future<List<Note>> getAll() async {
-    if (!_inited) throw StateError('init not called');
-    return List.unmodifiable(_data);
-  }
-
-  @override
-  Future<Note?> getById(String id) async {
-    try {
-      return _data.firstWhere((e) => e.id == id);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  @override
-  Future<void> upsert(Note note) async {
-    _data.removeWhere((e) => e.id == note.id);
-    _data.add(note);
-  }
-
-  @override
-  Future<List<Folder>> getAllFolders() async => [];
-
-  @override
-  Future<void> upsertFolder(Folder folder) async {}
-
-  @override
-  Future<void> deleteFolder(String id) async {}
-}
+import 'test_helpers.dart';
 
 void main() {
   group('NotesController', () {
@@ -75,7 +25,7 @@ void main() {
 
     test('add note -> appears in list', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{"insert":"content\n"}]));
+      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{'insert':'content\n'}]));
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'A');
       expect(controller.notes.first.pinned, isFalse);
@@ -83,10 +33,10 @@ void main() {
 
     test('update note keeps id and changes fields', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{"insert":"different content\n"}]));
+      await controller.addOrUpdate(title: 'A', content: Document.fromJson([{'insert':'different content\n'}]));
       final first = controller.notes.first;
       await controller.addOrUpdate(
-          id: first.id, title: 'B', content: Document.fromJson([{"insert":"c2\n"}]), pinned: true);
+          id: first.id, title: 'B', content: Document.fromJson([{'insert':'c2\n'}]), pinned: true,);
       final updated = controller.notes.firstWhere((n) => n.id == first.id);
       expect(updated.title, 'B');
       expect(updated.plainText, 'c2\n');
@@ -146,9 +96,9 @@ void main() {
 
     test('search filters notes by title and content', () async {
       await controller.load();
-      await controller.addOrUpdate(title: 'Apple', content: Document.fromJson([{"insert":"fruit\n"}]));
-      await controller.addOrUpdate(title: 'Banana', content: Document.fromJson([{"insert":"yellow\n"}]));
-      await controller.addOrUpdate(title: 'Car', content: Document.fromJson([{"insert":"vehicle\n"}]));
+      await controller.addOrUpdate(title: 'Apple', content: Document.fromJson([{'insert':'fruit\n'}]));
+      await controller.addOrUpdate(title: 'Banana', content: Document.fromJson([{'insert':'yellow\n'}]));
+      await controller.addOrUpdate(title: 'Car', content: Document.fromJson([{'insert':'vehicle\n'}]));
 
       controller.setSearchTerm('a');
       expect(controller.notes.length, 3); // Apple, Banana, Car all contain 'a'
@@ -270,7 +220,7 @@ void main() {
 
     test('setShowTags notifies listeners', () async {
       await controller.load();
-      int count = 0;
+      var count = 0;
       controller.addListener(() => count++);
       controller.setShowTags(false);
       expect(controller.showTags, isFalse);
@@ -279,7 +229,7 @@ void main() {
 
     test('setShowContent notifies listeners', () async {
       await controller.load();
-      int count = 0;
+      var count = 0;
       controller.addListener(() => count++);
       controller.setShowContent(false);
       expect(controller.showContent, isFalse);
@@ -288,7 +238,7 @@ void main() {
 
     test('setAlternatingColors notifies listeners', () async {
       await controller.load();
-      int count = 0;
+      var count = 0;
       controller.addListener(() => count++);
       controller.setAlternatingColors(true);
       expect(controller.alternatingColors, isTrue);
@@ -297,7 +247,7 @@ void main() {
 
     test('setFabAnimation notifies listeners', () async {
       await controller.load();
-      int count = 0;
+      var count = 0;
       controller.addListener(() => count++);
       controller.setFabAnimation(false);
       expect(controller.fabAnimation, isFalse);
@@ -375,7 +325,7 @@ void main() {
       await controller.addOrUpdate(title: 'Filed', content: Document(), folderId: folderId);
       await controller.addOrUpdate(title: 'Unfiled', content: Document());
 
-      controller.setSelectedFolder(NotesController.unfiledFolderId);
+      controller.setSelectedFolder(AppConstants.unfiledFolderId);
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Unfiled');
     });
@@ -414,6 +364,64 @@ void main() {
       expect(note.tags, ['a', 'b']);
       expect(note.folderId, 'folder-1');
       expect(note.color, '#FF0000');
+    });
+
+    // --- Additional edge cases ---
+
+    test('sorting empty list does not crash', () async {
+      await controller.load();
+      controller.setSortBy(SortBy.titleAsc);
+      expect(controller.notes, isEmpty);
+      controller.setSortBy(SortBy.dateAsc);
+      expect(controller.notes, isEmpty);
+    });
+
+    test('search with empty term returns all notes', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'A', content: Document());
+      await controller.addOrUpdate(title: 'B', content: Document());
+      controller.setSearchTerm('');
+      expect(controller.notes.length, 2);
+    });
+
+    test('folder filter with no matching notes shows empty', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Note', content: Document());
+      controller.setSelectedFolder('nonexistent');
+      expect(controller.notes, isEmpty);
+    });
+
+    test('plainText is pre-computed during note creation', () async {
+      final note = Note(
+        id: 'plain-test',
+        title: 'Test',
+        content: r'{"ops":[{"insert":"Hello World\n"}]}',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+      expect(note.plainText, 'Hello World\n');
+    });
+
+    test('plainText is empty for empty content', () async {
+      final note = Note(
+        id: 'plain-test-2',
+        title: 'Empty',
+        content: '',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+      expect(note.plainText, '');
+    });
+
+    test('plainText handles malformed JSON gracefully', () async {
+      final note = Note(
+        id: 'plain-test-3',
+        title: 'Bad JSON',
+        content: '{invalid}',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+      expect(note.plainText, '');
     });
   });
 }

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import '../l10n/app_localizations.dart';
-import '../services/notes_controller.dart';
+import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/services/constants.dart';
+import 'package:fox/services/notes_controller.dart';
+import 'package:fox/services/umami_service.dart';
+import 'package:provider/provider.dart';
 
 /// A dialog that lets the user manage folders: create, rename, delete, and
 /// select a folder filter.
 class FoldersDialog extends StatefulWidget {
-  final NotesController controller;
 
-  const FoldersDialog({super.key, required this.controller});
+  const FoldersDialog({required this.controller, super.key});
+  final NotesController controller;
 
   @override
   State<FoldersDialog> createState() => _FoldersDialogState();
@@ -28,6 +31,10 @@ class _FoldersDialogState extends State<FoldersDialog> {
     final name = _folderNameCtrl.text.trim();
     if (name.isNotEmpty) {
       await controller.addFolder(name);
+      if (!mounted) return;
+      try { context.read<UmamiService>().track('folder_create', data: {'name_length': name.length}); } catch (e) {
+        debugPrint('Failed to track folder_create: $e');
+      }
       _folderNameCtrl.clear();
       setState(() {});
     }
@@ -59,6 +66,14 @@ class _FoldersDialogState extends State<FoldersDialog> {
     );
     if (!mounted) return;
     if (newName != null && newName.trim().isNotEmpty) {
+      final isDuplicate = controller.folders.any((f) => f.name == newName.trim() && f.id != id);
+      if (isDuplicate) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('A folder with this name already exists')),
+        );
+        return;
+      }
       await controller.renameFolder(id, newName);
       if (!mounted) return;
       setState(() {});
@@ -88,7 +103,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
       ),
     );
     if (!mounted) return;
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       await controller.deleteFolder(id);
       if (!mounted) return;
       setState(() {});
@@ -120,7 +135,9 @@ class _FoldersDialogState extends State<FoldersDialog> {
               ),
               const SizedBox(height: 16),
               // "All Notes" option
-              ListTile(
+              Semantics(
+                label: l10n.allNotes,
+                child: ListTile(
                 leading: Icon(
                   Icons.folder_open,
                   color: controller.selectedFolderId == null
@@ -135,26 +152,30 @@ class _FoldersDialogState extends State<FoldersDialog> {
                   controller.setSelectedFolder(null);
                   setState(() {});
                 },
-              ),
+              ),),
               // "Unfiled" option
-              ListTile(
+              Semantics(
+                label: l10n.unfiled,
+                child: ListTile(
                 leading: Icon(
                   Icons.notes,
-                  color: controller.selectedFolderId == NotesController.unfiledFolderId
+                  color: controller.selectedFolderId == AppConstants.unfiledFolderId
                       ? Theme.of(context).colorScheme.primary
                       : null,
                 ),
                 title: Text(l10n.unfiled),
-                selected: controller.selectedFolderId == NotesController.unfiledFolderId,
+                selected: controller.selectedFolderId == AppConstants.unfiledFolderId,
                 contentPadding: EdgeInsets.zero,
                 visualDensity: VisualDensity.compact,
                 onTap: () {
-                  controller.setSelectedFolder(NotesController.unfiledFolderId);
+                  controller.setSelectedFolder(AppConstants.unfiledFolderId);
                   setState(() {});
                 },
-              ),
+              ),),
               ...controller.folders.map((folder) {
-                return ListTile(
+                return Semantics(
+                  label: 'Folder: ${folder.name}',
+                  child: ListTile(
                   leading: Icon(
                     Icons.folder,
                     color: controller.selectedFolderId == folder.id
@@ -182,6 +203,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
                       }
                     },
                   ),
+                ),
                 );
               }),
             ],

@@ -1,10 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'repository.dart';
-import 'settings_service.dart';
-import '../models/note.dart';
-import '../models/folder.dart';
+import 'package:fox/models/folder.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/services/constants.dart';
+import 'package:fox/services/folder_controller.dart';
+import 'package:fox/services/repository.dart';
+import 'package:fox/services/settings_service.dart';
+import 'package:uuid/uuid.dart';
 
 enum SortBy {
   titleAsc,
@@ -14,11 +17,16 @@ enum SortBy {
 }
 
 class NotesController extends ChangeNotifier {
-  final NoteRepository _repo;
-  NotesController(this._repo);
+  NotesController(this._repo, {SettingsService? settingsService})
+      : _folder = FolderController(_repo),
+        _settingsService = settingsService ?? SettingsService();
+  final NoteAndFolderRepository _repo;
+
+  final FolderController _folder;
+
+  final SettingsService _settingsService;
 
   static const Uuid _uuid = Uuid();
-  static const String unfiledFolderId = '__unfiled__';
 
   bool _loading = false;
   bool get loading => _loading;
@@ -38,12 +46,12 @@ class NotesController extends ChangeNotifier {
   bool _fabAnimation = true;
   bool get fabAnimation => _fabAnimation;
 
-  List<Note> _allNotes = const [];
-  List<Note> _notes = const [];
-  List<Note> get notes => _notes;
+  List<Note> _unfilteredNotes = const [];
+  List<Note> _visibleNotes = const [];
+  List<Note> get notes => _visibleNotes;
 
   /// Whether any notes exist at all, regardless of the active search filter.
-  bool get hasNotes => _allNotes.isNotEmpty;
+  bool get hasNotes => _unfilteredNotes.isNotEmpty;
 
   Note? _lastRemovedNote;
   Note? get lastRemovedNote => _lastRemovedNote;
@@ -51,36 +59,25 @@ class NotesController extends ChangeNotifier {
   String _searchTerm = '';
   String get searchTerm => _searchTerm;
 
-  // Folder support
-  List<Folder> _folders = const [];
-  List<Folder> get folders => _folders;
-
-  String? _selectedFolderId;
-  String? get selectedFolderId => _selectedFolderId;
+  // Folder support — delegated to [_folder]
+  List<Folder> get folders => _folder.folders;
+  String? get selectedFolderId => _folder.selectedFolderId;
 
   Future<void> load() async {
     _loading = true;
     notifyListeners();
     await _repo.init();
-    _allNotes = await _repo.getAll();
-    _folders = await _repo.getAllFolders();
+    _unfilteredNotes = await _repo.getAll();
+    await _folder.load();
+    _loadSettings();
     _updateView();
     _loading = false;
     notifyListeners();
   }
 
-  void _updateView() {
-    _notes = _sorted(_allNotes);
-  }
-
-  /// Hydrate display-preference fields from persisted settings.
-  ///
-  /// Unlike the individual setters (e.g. [setShowTags]) this does **not**
-  /// call [notifyListeners], so it is safe to invoke during app startup
-  /// before any widgets are listening.
-  void loadSettings() {
+  void _loadSettings() {
     try {
-      final service = SettingsService();
+      final service = _settingsService;
       _showTags = service.getShowTags();
       _showContent = service.getShowContent();
       _alternatingColors = service.getAlternatingColors();
@@ -88,9 +85,13 @@ class NotesController extends ChangeNotifier {
       final sortStr = service.getSortBy();
       final sort = SortBy.values.where((e) => e.name == sortStr).firstOrNull;
       if (sort != null) _sortBy = sort;
-    } catch (_) {
-      // Settings box may not be open (e.g. in tests) — keep defaults.
+    } catch (e) {
+      debugPrint('NotesController: failed to load settings: $e');
     }
+  }
+
+  void _updateView() {
+    _visibleNotes = _filterAndSort(_unfilteredNotes);
   }
 
   void setSearchTerm(String term) {
@@ -125,70 +126,42 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Folder filter
   void setSelectedFolder(String? folderId) {
-    _selectedFolderId = folderId;
+    _folder.setSelectedFolder(folderId);
     _updateView();
     notifyListeners();
   }
 
   // Folder CRUD
   Future<void> addFolder(String name) async {
-    final folder = Folder(
-      id: _uuid.v4(),
-      name: name.trim(),
-      createdAt: DateTime.now(),
-    );
-    await _repo.upsertFolder(folder);
-    _folders = [..._folders, folder];
+    await _folder.addFolder(name);
     notifyListeners();
   }
 
   Future<void> renameFolder(String id, String newName) async {
-    final folder = _folders.firstWhere((f) => f.id == id);
-    final updated = folder.copyWith(name: newName.trim());
-    await _repo.upsertFolder(updated);
-    _folders = _folders.map((f) => f.id == id ? updated : f).toList();
+    await _folder.renameFolder(id, newName);
     notifyListeners();
   }
 
   Future<void> deleteFolder(String id) async {
-    await _repo.deleteFolder(id);
-    _folders = _folders.where((f) => f.id != id).toList();
-    // Clear folder assignment from notes in this folder sequentially
-    // to avoid parallel Hive write contention on the same box.
+    await _folder.deleteFolder(id);
     final now = DateTime.now();
-    final updated = <Note>[];
-    for (final note in _allNotes) {
-      if (note.folderId != id) {
-        updated.add(note);
-      } else {
-        final cleared = note.copyWith(clearFolder: true, updatedAt: now);
-        await _repo.upsert(cleared);
-        updated.add(cleared);
+    final batch = <Note>[];
+    for (final note in _unfilteredNotes) {
+      if (note.folderId == id) {
+        batch.add(note.copyWith(clearFolder: true, updatedAt: now));
       }
     }
-    _allNotes = updated;
-    if (_selectedFolderId == id) {
-      _selectedFolderId = null;
-    }
+    if (batch.isNotEmpty) await _repo.upsertAll(batch);
+    _unfilteredNotes = _unfilteredNotes.map((n) => n.folderId == id ? n.copyWith(clearFolder: true, updatedAt: now) : n).toList();
     _updateView();
     notifyListeners();
   }
 
-  String? getFolderName(String? folderId) {
-    if (folderId == null) return null;
-    try {
-      return _folders.firstWhere((f) => f.id == folderId).name;
-    } catch (_) {
-      return null;
-    }
-  }
+  String? getFolderName(String? folderId) => _folder.getFolderName(folderId);
 
   Future<void> addOrUpdate({
-    String? id,
-    required String title,
-    required Document content,
+    required String title, required Document content, String? id,
     bool pinned = false,
     List<String> tags = const [],
     String? folderId,
@@ -214,8 +187,8 @@ class NotesController extends ChangeNotifier {
     );
     await _repo.upsert(note);
     _lastRemovedNote = null;
-    _allNotes = [
-      ...(_allNotes.where((n) => n.id != note.id)),
+    _unfilteredNotes = [
+      ...(_unfilteredNotes.where((n) => n.id != note.id)),
       note,
     ];
     _updateView();
@@ -223,12 +196,13 @@ class NotesController extends ChangeNotifier {
   }
 
   Future<void> setPinned(String id, bool pinned) async {
-    final note = _allNotes.firstWhere((n) => n.id == id);
+    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    if (note == null) return;
     final updated = note.copyWith(pinned: pinned, updatedAt: DateTime.now());
     await _repo.upsert(updated);
     _lastRemovedNote = null;
-    _allNotes = [
-      ...(_allNotes.where((n) => n.id != id)),
+    _unfilteredNotes = [
+      ...(_unfilteredNotes.where((n) => n.id != id)),
       updated,
     ];
     _updateView();
@@ -236,9 +210,10 @@ class NotesController extends ChangeNotifier {
   }
 
   Future<void> remove(String id) async {
-    _lastRemovedNote = _allNotes.firstWhere((n) => n.id == id);
+    _lastRemovedNote = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    if (_lastRemovedNote == null) return;
     await _repo.delete(id);
-    _allNotes = _allNotes.where((n) => n.id != id).toList();
+    _unfilteredNotes = _unfilteredNotes.where((n) => n.id != id).toList();
     _updateView();
     notifyListeners();
   }
@@ -246,30 +221,24 @@ class NotesController extends ChangeNotifier {
   Future<void> undoRemove() async {
     if (_lastRemovedNote != null) {
       await _repo.upsert(_lastRemovedNote!);
-      _allNotes = [..._allNotes, _lastRemovedNote!];
+      _unfilteredNotes = [..._unfilteredNotes, _lastRemovedNote!];
       _lastRemovedNote = null;
       _updateView();
       notifyListeners();
     }
   }
 
-  Note? find(String id) {
-    try {
-      return _allNotes.firstWhere((n) => n.id == id);
-    } catch (_) {
-      return null;
-    }
-  }
+  Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
 
-  List<Note> _sorted(List<Note> list) {
+  List<Note> _filterAndSort(List<Note> list) {
     final copy = [...list];
 
     // Folder filter
-    if (_selectedFolderId != null) {
-      if (_selectedFolderId == unfiledFolderId) {
+    if (_folder.selectedFolderId != null) {
+      if (_folder.selectedFolderId == AppConstants.unfiledFolderId) {
         copy.retainWhere((note) => note.folderId == null);
       } else {
-        copy.retainWhere((note) => note.folderId == _selectedFolderId);
+        copy.retainWhere((note) => note.folderId == _folder.selectedFolderId);
       }
     }
 
@@ -278,7 +247,7 @@ class NotesController extends ChangeNotifier {
       copy.retainWhere((note) =>
           note.title.toLowerCase().contains(term) ||
           note.plainText.toLowerCase().contains(term) ||
-          note.tags.any((tag) => tag.toLowerCase().contains(term)));
+          note.tags.any((tag) => tag.toLowerCase().contains(term)),);
     }
 
     copy.sort((a, b) {
