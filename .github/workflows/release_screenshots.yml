@@ -3,11 +3,12 @@ name: Release Screenshots
 on:
   push:
     branches: ['main']
+  workflow_dispatch:
 
 jobs:
   release:
     name: Release
-    if: startsWith(github.event.head_commit.message, 'Release')
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'Release')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
