@@ -47,3 +47,6 @@ coverage/
 # Hive test artifacts
 test/hive_*/
 test/**/*.hive
+
+# Golden test failure artifacts
+test/failures/
