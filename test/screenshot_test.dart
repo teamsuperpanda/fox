@@ -24,53 +24,15 @@ class _Device {
   final double widthDp;
   final double heightDp;
 
-  String folder(String localeTag) => 'golden/$name/raw/$localeTag';
+  String folder(String localeTag) => 'golden/$name/$localeTag';
 }
 
 const _devices = [
   _Device('iphone_5.5', 414, 736),
   _Device('iphone_6.9', 440, 956),
-  _Device('iphone_6.5', 414, 896),
+  _Device('iphone_6.5', 428, 926),
   _Device('android', 360, 640),
 ];
-
-const _targetLocales = [
-  Locale('ar'),
-  Locale('de'),
-  Locale('en'),
-  Locale('es'),
-  Locale('es', '419'),
-  Locale('fr'),
-  Locale('hi'),
-  Locale('id'),
-  Locale('it'),
-  Locale('ja'),
-  Locale('ko'),
-  Locale('nl'),
-  Locale('pl'),
-  Locale('pt'),
-  Locale('pt', 'PT'),
-  Locale('ru'),
-  Locale('sv'),
-  Locale('tr'),
-  Locale('vi'),
-  Locale('zh'),
-  Locale('zh', 'TW'),
-];
-
-ThemeData _applyFont(ThemeData theme) {
-  return theme.copyWith(
-    textTheme: theme.textTheme.apply(fontFamily: 'Roboto'),
-    appBarTheme: theme.appBarTheme.copyWith(
-      titleTextStyle: theme.appBarTheme.titleTextStyle?.copyWith(
-        fontFamily: 'Roboto',
-      ),
-    ),
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      elevation: 0,
-    ),
-  );
-}
 
 Widget buildApp({
   required ThemeMode themeMode,
@@ -97,11 +59,15 @@ Widget buildApp({
       supportedLocales: AppLocalizations.supportedLocales,
       locale: localeProvider?.locale,
       themeMode: themeMode,
-      theme: _applyFont(
-        AppTheme.light(accentColorOptions.first, useGoogleFonts: false),
+      theme: AppTheme.light(accentColorOptions.first, useGoogleFonts: false).copyWith(
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          elevation: 0,
+        ),
       ),
-      darkTheme: _applyFont(
-        AppTheme.dark(accentColorOptions.first, useGoogleFonts: false),
+      darkTheme: AppTheme.dark(accentColorOptions.first, useGoogleFonts: false).copyWith(
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          elevation: 0,
+        ),
       ),
       home: HomePage(controller: controller, useGoogleFonts: false),
     ),
@@ -190,90 +156,83 @@ void main() {
     );
   }
 
-  for (final locale in _targetLocales) {
-    final localeTag = localeToTag(locale);
+  group('store', () {
+    const device = _Device('iphone_6.5', 428, 926);
+    late LocaleProvider localeProvider;
 
-    group(localeTag, () {
-      late LocaleProvider localeProvider;
-
-      setUp(() async {
-        localeProvider = LocaleProvider();
-        await localeProvider.setLocale(locale);
-      });
-
-      for (final device in _devices) {
-        group(device.name, () {
-          for (final tm in [ThemeMode.light, ThemeMode.dark]) {
-            final suffix = tm == ThemeMode.light ? 'light' : 'dark';
-
-            group('main', () {
-              setUp(() async => seedNotes());
-
-              testWidgets(suffix, (tester) async {
-                addTearDown(() => tester.binding.setSurfaceSize(null));
-                await tester.binding
-                    .setSurfaceSize(Size(device.widthDp, device.heightDp));
-                await tester.pumpWidget(buildApp(
-                    themeMode: tm,
-                    controller: controller,
-                    localeProvider: localeProvider));
-                await precacheIcon(tester);
-                await expectLater(
-                  find.byType(MaterialApp),
-                  matchesGoldenFile(
-                      '${device.folder(localeTag)}/main_$suffix.png'),
-                );
-              });
-            });
-          }
-
-          group('new_note', () {
-            testWidgets('light', (tester) async {
-              addTearDown(() => tester.binding.setSurfaceSize(null));
-              await tester.binding
-                  .setSurfaceSize(Size(device.widthDp, device.heightDp));
-              await tester.pumpWidget(buildApp(
-                  themeMode: ThemeMode.light,
-                  controller: controller,
-                  localeProvider: localeProvider));
-              await tester.tap(find.byType(FloatingActionButton));
-              await tester.pump();
-              await tester.pump(const Duration(milliseconds: 500));
-              await expectLater(
-                find.byType(MaterialApp),
-                matchesGoldenFile(
-                    '${device.folder(localeTag)}/new_note_light.png'),
-              );
-            });
-          });
-
-          group('settings', () {
-            setUp(() async => seedNotes());
-
-            testWidgets('light', (tester) async {
-              addTearDown(() => tester.binding.setSurfaceSize(null));
-              await tester.binding
-                  .setSurfaceSize(Size(device.widthDp, device.heightDp));
-              await tester.pumpWidget(buildApp(
-                  themeMode: ThemeMode.light,
-                  controller: controller,
-                  localeProvider: localeProvider));
-              await tester.runAsync(() => precacheImage(
-                    const AssetImage('assets/images/icon/icon.png'),
-                    tester.element(find.byType(MaterialApp)),
-                  ));
-              await tester.tap(find.byIcon(Icons.tune));
-              await tester.pump();
-              await tester.pump(const Duration(milliseconds: 500));
-              await expectLater(
-                find.byType(MaterialApp),
-                matchesGoldenFile(
-                    '${device.folder(localeTag)}/settings_light.png'),
-              );
-            });
-          });
-        });
-      }
+    setUp(() async {
+      localeProvider = LocaleProvider();
+      await localeProvider.setLocale(const Locale('en'));
     });
-  }
+
+    testWidgets('light', (tester) async {
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await seedNotes();
+      await tester.binding
+          .setSurfaceSize(Size(device.widthDp, device.heightDp));
+      await tester.pumpWidget(buildApp(
+          themeMode: ThemeMode.light,
+          controller: controller,
+          localeProvider: localeProvider));
+      await precacheIcon(tester);
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('golden/store/light.png'),
+      );
+    });
+
+    testWidgets('dark', (tester) async {
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.binding
+          .setSurfaceSize(Size(device.widthDp, device.heightDp));
+      await tester.pumpWidget(buildApp(
+          themeMode: ThemeMode.dark,
+          controller: controller,
+          localeProvider: localeProvider));
+      await precacheIcon(tester);
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('golden/store/dark.png'),
+      );
+    });
+
+    testWidgets('new_note', (tester) async {
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.binding
+          .setSurfaceSize(Size(device.widthDp, device.heightDp));
+      await tester.pumpWidget(buildApp(
+          themeMode: ThemeMode.light,
+          controller: controller,
+          localeProvider: localeProvider));
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('golden/store/new_note.png'),
+      );
+    });
+
+    testWidgets('settings', (tester) async {
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await seedNotes();
+      await tester.binding
+          .setSurfaceSize(Size(device.widthDp, device.heightDp));
+      await tester.pumpWidget(buildApp(
+          themeMode: ThemeMode.light,
+          controller: controller,
+          localeProvider: localeProvider));
+      await tester.runAsync(() => precacheImage(
+            const AssetImage('assets/images/icon/icon.png'),
+            tester.element(find.byType(MaterialApp)),
+          ));
+      await tester.tap(find.byIcon(Icons.tune));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('golden/store/settings.png'),
+      );
+    });
+  });
 }

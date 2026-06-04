@@ -27,13 +27,13 @@ class _Device {
 
   String rawFolder(String localeTag) => 'golden/$name/raw/$localeTag';
   String decoratedFolder(String localeTag) =>
-      'golden/$name/decorated/$localeTag';
+      'golden/$name/$localeTag';
 }
 
 const _devices = [
   _Device('iphone_5.5', 414, 736),
   _Device('iphone_6.9', 440, 956),
-  _Device('iphone_6.5', 414, 896),
+  _Device('iphone_6.5', 428, 926),
   _Device('android', 360, 640),
 ];
 
@@ -98,13 +98,11 @@ const _scenarios = [
     label: 'Light',
     themeMode: ThemeMode.light,
     light: true,
-    canvasColor: Color(0xFFF5F3F0),
   ),
   _Scenario(
     label: 'Dark',
     themeMode: ThemeMode.dark,
     light: false,
-    canvasColor: Color(0xFF202124),
     rotationDegrees: 2,
     seedNotes: false,
   ),
@@ -112,7 +110,6 @@ const _scenarios = [
     label: 'New Note',
     themeMode: ThemeMode.light,
     light: true,
-    canvasColor: Color(0xFFECEFE6),
     rotationDegrees: -2,
     openNewNote: true,
   ),
@@ -120,24 +117,9 @@ const _scenarios = [
     label: 'Settings',
     themeMode: ThemeMode.light,
     light: true,
-    canvasColor: Color(0xFFF0EFE8),
     openSettings: true,
   ),
 ];
-
-ThemeData _applyFont(ThemeData theme) {
-  return theme.copyWith(
-    textTheme: theme.textTheme.apply(fontFamily: 'Roboto'),
-    appBarTheme: theme.appBarTheme.copyWith(
-      titleTextStyle: theme.appBarTheme.titleTextStyle?.copyWith(
-        fontFamily: 'Roboto',
-      ),
-    ),
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      elevation: 0,
-    ),
-  );
-}
 
 Widget buildApp({
   required ThemeMode themeMode,
@@ -164,11 +146,15 @@ Widget buildApp({
       supportedLocales: AppLocalizations.supportedLocales,
       locale: localeProvider?.locale,
       themeMode: themeMode,
-      theme: _applyFont(
-        AppTheme.light(accentColorOptions.first, useGoogleFonts: false),
+      theme: AppTheme.light(accentColorOptions.first, useGoogleFonts: false).copyWith(
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          elevation: 0,
+        ),
       ),
-      darkTheme: _applyFont(
-        AppTheme.dark(accentColorOptions.first, useGoogleFonts: false),
+      darkTheme: AppTheme.dark(accentColorOptions.first, useGoogleFonts: false).copyWith(
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          elevation: 0,
+        ),
       ),
       home: HomePage(controller: controller, useGoogleFonts: false),
     ),
@@ -258,27 +244,7 @@ void main() {
   }
 
   const targetLocales = [
-    Locale('ar'),
-    Locale('de'),
     Locale('en'),
-    Locale('es'),
-    Locale('es', '419'),
-    Locale('fr'),
-    Locale('hi'),
-    Locale('id'),
-    Locale('it'),
-    Locale('ja'),
-    Locale('ko'),
-    Locale('nl'),
-    Locale('pl'),
-    Locale('pt'),
-    Locale('pt', 'PT'),
-    Locale('ru'),
-    Locale('sv'),
-    Locale('tr'),
-    Locale('vi'),
-    Locale('zh'),
-    Locale('zh', 'TW'),
   ];
 
   for (final locale in targetLocales) {
@@ -312,7 +278,6 @@ void main() {
                 marketingLine1: line1,
                 marketingLine2: line2,
                 canvasColor: s.canvasColor,
-                rotationDegrees: s.rotationDegrees,
                 child: buildApp(
                     themeMode: s.themeMode,
                     controller: controller,
@@ -320,7 +285,7 @@ void main() {
               );
 
               await tester.binding.setSurfaceSize(
-                Size(decorator.canvasWidth, decorator.canvasHeight),
+                Size(device.widthDp, device.heightDp),
               );
               await tester.pumpWidget(decorator);
               await precacheIcon(tester);
@@ -329,12 +294,14 @@ void main() {
                 await tester.tap(find.byType(FloatingActionButton));
                 await tester.pump();
                 await tester.pump(const Duration(milliseconds: 500));
+                await tester.pump();
               }
 
               if (s.openSettings) {
                 await tester.tap(find.byIcon(Icons.tune));
                 await tester.pump();
                 await tester.pump(const Duration(milliseconds: 500));
+                await tester.pump();
               }
 
               await expectLater(

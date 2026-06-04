@@ -35,8 +35,16 @@ jobs:
       - name: Generate localization
         run: flutter gen-l10n
 
+      - name: Install Noto fonts for screenshot generation
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            fonts-noto-cjk \
+            fonts-noto-arabic \
+            fonts-noto-devanagari
+
       - name: Generate goldens
-        run: flutter test --update-goldens test/screenshot_test.dart test/screenshot_decorated_test.dart
+        run: flutter test --update-goldens test/screenshot_decorated_test.dart
 
       - name: Copy goldens to Fastlane folders
         run: |
@@ -54,7 +62,7 @@ jobs:
           for tag in "${!MAP[@]}"; do
             fl="${MAP[$tag]}"
 
-            src="test/golden/android/decorated/$tag"
+            src="test/golden/android/$tag"
             dst="android/fastlane/metadata/android/$fl/images/phoneScreenshots"
             if [ -d "$src" ]; then
               mkdir -p "$dst" && cp "$src"/*.png "$dst/"
@@ -68,8 +76,8 @@ jobs:
                 iphone_6.9) pfx="iPhone69";;
                 iphone_5.5) pfx="iPhone55";;
               esac
-              if [ -d "test/golden/$dev/decorated/$tag" ]; then
-                for f in test/golden/$dev/decorated/$tag/*.png; do
+              if [ -d "test/golden/$dev/$tag" ]; then
+                for f in test/golden/$dev/$tag/*.png; do
                   cp "$f" "$dst/$pfx-${f##*/}"
                 done
               fi

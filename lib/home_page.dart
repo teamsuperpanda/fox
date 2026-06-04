@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               )
-            : MediaQuery.of(context).size.width <= 430
+            : MediaQuery.of(context).size.width <= 320
                 ? null
                 : Text(l10n.appTitle),
         centerTitle: true,

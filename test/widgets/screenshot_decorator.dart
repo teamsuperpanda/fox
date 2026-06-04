@@ -1,15 +1,13 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
-const _headerHeight = 140.0;
-const _footerHeight = 120.0;
-const _frameBezelWidth = 4.0;
-const _frameCornerRadius = 40.0;
-const _screenCornerRadius = 28.0;
-const _frameHPadding = 28.0;
-const _frameTopPadding = 24.0;
-const _frameBottomPadding = 24.0;
+const _headerHeight = 90.0;
+const _footerHeight = 80.0;
+const _frameBezelWidth = 3.0;
+const _frameCornerRadius = 28.0;
+const _screenCornerRadius = 18.0;
+const _frameHPadding = 16.0;
+const _frameTopPadding = 8.0;
+const _frameBottomPadding = 8.0;
 
 class ScreenshotDecorator extends StatelessWidget {
   const ScreenshotDecorator({
@@ -21,7 +19,6 @@ class ScreenshotDecorator extends StatelessWidget {
     this.marketingLine1,
     this.marketingLine2,
     this.canvasColor,
-    this.rotationDegrees = 0,
     super.key,
   });
 
@@ -33,67 +30,58 @@ class ScreenshotDecorator extends StatelessWidget {
   final String? marketingLine1;
   final String? marketingLine2;
   final Color? canvasColor;
-  final double rotationDegrees;
 
-  double get _frameWidth =>
-      deviceWidth + _frameHPadding * 2 + _frameBezelWidth * 2;
-  double get _frameHeight =>
-      _frameTopPadding +
-      _frameBezelWidth +
-      deviceHeight +
-      _frameBezelWidth +
+  double get _screenWidth =>
+      deviceWidth - _frameHPadding * 2 - _frameBezelWidth * 2;
+
+  double get _screenHeight =>
+      deviceHeight -
+      _headerHeight -
+      _footerHeight -
+      _frameTopPadding -
+      _frameBezelWidth * 2 -
       _frameBottomPadding;
 
-  double get _rotatedFrameWidth {
-    if (rotationDegrees == 0) return _frameWidth;
-    final rad = rotationDegrees * math.pi / 180;
-    return (_frameWidth * math.cos(rad)).abs() +
-        (_frameHeight * math.sin(rad)).abs();
-  }
+  double get _frameWidth => _screenWidth + _frameBezelWidth * 2;
 
-  double get _rotatedFrameHeight {
-    if (rotationDegrees == 0) return _frameHeight;
-    final rad = rotationDegrees * math.pi / 180;
-    return (_frameWidth * math.sin(rad)).abs() +
-        (_frameHeight * math.cos(rad)).abs();
-  }
-
-  double get canvasWidth => math.max(_frameWidth, _rotatedFrameWidth);
-
-  double get canvasHeight =>
-      _headerHeight + _rotatedFrameHeight + _footerHeight;
+  double get _frameHeight => _screenHeight + _frameBezelWidth * 2;
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = canvasColor ??
+    final bgColor =
+        canvasColor ??
         (light ? const Color(0xFFF5F3F0) : const Color(0xFF202124));
 
     return Directionality(
       textDirection: TextDirection.ltr,
-      child: SizedBox(
-        width: canvasWidth,
-        height: canvasHeight,
+      child: Container(
+        width: deviceWidth,
+        height: deviceHeight,
+        color: bgColor,
         child: Stack(
           children: [
-            Positioned.fill(
-              child: Container(color: bgColor),
-            ),
             Positioned(
               top: 0,
               left: 0,
               right: 0,
               height: _headerHeight,
-              child: _Header(light: light, tagline: tagline),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: _Header(light: light, tagline: tagline),
+              ),
             ),
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               height: _footerHeight,
-              child: _Footer(
-                light: light,
-                line1: marketingLine1,
-                line2: marketingLine2,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: _Footer(
+                  light: light,
+                  line1: marketingLine1,
+                  line2: marketingLine2,
+                ),
               ),
             ),
             Positioned(
@@ -102,7 +90,7 @@ class ScreenshotDecorator extends StatelessWidget {
               right: 0,
               bottom: _footerHeight,
               child: Center(
-                child: _buildRotatedFrame(bgColor),
+                child: _buildFrame(bgColor),
               ),
             ),
           ],
@@ -111,51 +99,39 @@ class ScreenshotDecorator extends StatelessWidget {
     );
   }
 
-  Widget _buildRotatedFrame(Color bgColor) {
-    final frameContent = SizedBox(
+  Widget _buildFrame(Color bgColor) {
+    return SizedBox(
       width: _frameWidth,
       height: _frameHeight,
       child: Stack(
         children: [
           Positioned.fill(
-            child: Container(color: bgColor),
-          ),
-          Positioned(
-            top: _frameTopPadding,
-            left: _frameHPadding,
             child: Container(
-              width: deviceWidth + _frameBezelWidth * 2,
-              height: deviceHeight + _frameBezelWidth * 2,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(_frameCornerRadius),
                 border: Border.all(
-                  color: light ? Colors.grey.shade300 : Colors.grey.shade700,
+                  color:
+                      light ? Colors.grey.shade300 : Colors.grey.shade700,
                   width: _frameBezelWidth,
                 ),
+                color: bgColor,
               ),
             ),
           ),
           Positioned(
-            top: _frameTopPadding + _frameBezelWidth,
-            left: _frameHPadding + _frameBezelWidth,
+            top: _frameBezelWidth,
+            left: _frameBezelWidth,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(_screenCornerRadius),
               child: SizedBox(
-                width: deviceWidth,
-                height: deviceHeight,
+                width: _screenWidth,
+                height: _screenHeight,
                 child: child,
               ),
             ),
           ),
         ],
       ),
-    );
-
-    if (rotationDegrees == 0) return frameContent;
-
-    return Transform.rotate(
-      angle: rotationDegrees * math.pi / 180,
-      child: frameContent,
     );
   }
 }
@@ -168,34 +144,40 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Fox',
-            style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
-              color: light ? const Color(0xFF333333) : Colors.white,
-              letterSpacing: -0.5,
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Fox',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const [
+              'NotoNaskhArabic',
+              'NotoSansDevanagari',
+              'NotoSansCJK',
+            ],
+            color: light ? const Color(0xFF333333) : Colors.white,
+            letterSpacing: -0.5,
           ),
-          const SizedBox(height: 4),
-          Text(
-            tagline ?? 'Your notes, your way',
-            style: TextStyle(
-              fontSize: 18,
-              fontFamily: 'Roboto',
-              color: light ? Colors.grey.shade600 : Colors.grey.shade400,
-            ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          tagline ?? 'Your notes, your way',
+          style: TextStyle(
+            fontSize: 14,
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const [
+              'NotoNaskhArabic',
+              'NotoSansDevanagari',
+              'NotoSansCJK',
+            ],
+            color: light ? Colors.grey.shade600 : Colors.grey.shade400,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -215,34 +197,42 @@ class _Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     final textColor = light ? Colors.grey.shade700 : Colors.grey.shade300;
     final mutedColor = light ? Colors.grey.shade500 : Colors.grey.shade500;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            line1 ?? 'Offline-first  •  Rich text editing  •  Tags & folders',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'Roboto',
-              color: textColor,
-              fontWeight: FontWeight.w500,
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          line1 ??
+              'Offline-first  •  Rich text editing  •  Tags & folders',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 13,
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const [
+              'NotoNaskhArabic',
+              'NotoSansDevanagari',
+              'NotoSansCJK',
+            ],
+            color: textColor,
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 6),
-          Text(
-            line2 ?? 'Dark mode  •  Multiple languages  •  Custom themes',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'Roboto',
-              color: mutedColor,
-            ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          line2 ??
+              'Dark mode  •  Multiple languages  •  Custom themes',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12,
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const [
+              'NotoNaskhArabic',
+              'NotoSansDevanagari',
+              'NotoSansCJK',
+            ],
+            color: mutedColor,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
