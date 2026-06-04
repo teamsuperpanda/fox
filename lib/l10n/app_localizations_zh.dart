@@ -190,42 +190,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nativeName => '中文（简体）';
-
-  @override
-  String get screenshotLightTagline => '你的笔记，你的方式';
-
-  @override
-  String get screenshotLightMarketing1 => '用富文本整理思绪';
-
-  @override
-  String get screenshotLightMarketing2 => '快速、私密、离线优先';
-
-  @override
-  String get screenshotDarkTagline => '浅色或深色都美丽';
-
-  @override
-  String get screenshotDarkMarketing1 => '完全支持深色模式';
-
-  @override
-  String get screenshotDarkMarketing2 => '随时保护眼睛';
-
-  @override
-  String get screenshotNewNoteTagline => '即时捕捉灵感';
-
-  @override
-  String get screenshotNewNoteMarketing1 => '富文本 • 清单 • 颜色';
-
-  @override
-  String get screenshotNewNoteMarketing2 => '你需要的一切';
-
-  @override
-  String get screenshotSettingsTagline => '随心定制应用';
-
-  @override
-  String get screenshotSettingsMarketing1 => '强调色 • 排序选项 • 语言';
-
-  @override
-  String get screenshotSettingsMarketing2 => '让它真正属于你';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -414,40 +378,4 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get nativeName => '中文（繁體）';
-
-  @override
-  String get screenshotLightTagline => '你的筆記，你的方式';
-
-  @override
-  String get screenshotLightMarketing1 => '用富文本整理思緒';
-
-  @override
-  String get screenshotLightMarketing2 => '快速、私密、離線優先';
-
-  @override
-  String get screenshotDarkTagline => '淺色或深色都美麗';
-
-  @override
-  String get screenshotDarkMarketing1 => '完全支援深色模式';
-
-  @override
-  String get screenshotDarkMarketing2 => '隨時保護眼睛';
-
-  @override
-  String get screenshotNewNoteTagline => '即時捕捉靈感';
-
-  @override
-  String get screenshotNewNoteMarketing1 => '富文本 • 清單 • 顏色';
-
-  @override
-  String get screenshotNewNoteMarketing2 => '你需要的一切';
-
-  @override
-  String get screenshotSettingsTagline => '隨心定製應用';
-
-  @override
-  String get screenshotSettingsMarketing1 => '強調色 • 排序選項 • 語言';
-
-  @override
-  String get screenshotSettingsMarketing2 => '讓它真正屬於你';
 }

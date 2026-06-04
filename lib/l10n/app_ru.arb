@@ -58,17 +58,5 @@
   "analytics": "Аналитика",
   "systemDefault": "Системный по умолчанию",
   "startupError": "Произошла ошибка при запуске Fox.\n\nПопробуйте очистить данные приложения или переустановить его.\n\nОшибка: {error}",
-  "nativeName": "Русский",
-  "screenshotLightTagline": "Ваши заметки, по-вашему",
-  "screenshotLightMarketing1": "Организуйте мысли с помощью форматированного текста",
-  "screenshotLightMarketing2": "Быстро, конфиденциально, офлайн",
-  "screenshotDarkTagline": "Прекрасно в светлой или тёмной теме",
-  "screenshotDarkMarketing1": "Полная поддержка тёмной темы",
-  "screenshotDarkMarketing2": "Бережёт зрение, всегда",
-  "screenshotNewNoteTagline": "Записывайте идеи мгновенно",
-  "screenshotNewNoteMarketing1": "Форматированный текст • Списки • Цвета",
-  "screenshotNewNoteMarketing2": "Всё, что вам нужно",
-  "screenshotSettingsTagline": "Настройте приложение под себя",
-  "screenshotSettingsMarketing1": "Акцентные цвета • Сортировка • Язык",
-  "screenshotSettingsMarketing2": "Сделайте его действительно своим"
+  "nativeName": "Русский"
 }

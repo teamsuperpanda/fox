@@ -58,17 +58,5 @@
   "analytics": "Analitik",
   "systemDefault": "Default sistem",
   "startupError": "Terjadi kesalahan saat memulai Fox.\n\nCoba hapus data aplikasi atau instal ulang.\n\nKesalahan: {error}",
-  "nativeName": "Bahasa Indonesia",
-  "screenshotLightTagline": "Catatanmu, dengan caramu",
-  "screenshotLightMarketing1": "Atur pikiran dengan teks kaya",
-  "screenshotLightMarketing2": "Cepat, pribadi, offline-first",
-  "screenshotDarkTagline": "Indah dalam terang maupun gelap",
-  "screenshotDarkMarketing1": "Dukungan mode gelap penuh",
-  "screenshotDarkMarketing2": "Nyaman di mata, selalu",
-  "screenshotNewNoteTagline": "Tangkap ide secara instan",
-  "screenshotNewNoteMarketing1": "Teks kaya • Daftar periksa • Warna",
-  "screenshotNewNoteMarketing2": "Semua yang kamu butuhkan",
-  "screenshotSettingsTagline": "Sesuaikan aplikasi sesuai keinginanmu",
-  "screenshotSettingsMarketing1": "Warna aksen • Opsi urut • Bahasa",
-  "screenshotSettingsMarketing2": "Jadikan benar-benar milikmu"
+  "nativeName": "Bahasa Indonesia"
 }

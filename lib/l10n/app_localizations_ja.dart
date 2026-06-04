@@ -190,40 +190,4 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nativeName => '日本語';
-
-  @override
-  String get screenshotLightTagline => 'あなたのメモ、あなたのスタイルで';
-
-  @override
-  String get screenshotLightMarketing1 => 'リッチテキストで思考を整理';
-
-  @override
-  String get screenshotLightMarketing2 => '高速、プライベート、オフライン優先';
-
-  @override
-  String get screenshotDarkTagline => 'ライトでもダークでも美しく';
-
-  @override
-  String get screenshotDarkMarketing1 => '完全なダークモード対応';
-
-  @override
-  String get screenshotDarkMarketing2 => '目に優しく、いつでも';
-
-  @override
-  String get screenshotNewNoteTagline => 'アイデアを即座にキャプチャ';
-
-  @override
-  String get screenshotNewNoteMarketing1 => 'リッチテキスト • チェックリスト • 色';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'あなたに必要なすべて';
-
-  @override
-  String get screenshotSettingsTagline => '自分流にアプリをカスタマイズ';
-
-  @override
-  String get screenshotSettingsMarketing1 => 'アクセントカラー • 並び替え • 言語';
-
-  @override
-  String get screenshotSettingsMarketing2 => '本当に自分だけのものに';
 }

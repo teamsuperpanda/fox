@@ -58,17 +58,5 @@
   "analytics": "Statistiques",
   "systemDefault": "Par défaut du système",
   "startupError": "Une erreur est survenue au lancement de Fox.\n\nEssayez de vider les données de l'application ou de la réinstaller.\n\nErreur : {error}",
-  "nativeName": "Français",
-  "screenshotLightTagline": "Vos notes, à votre façon",
-  "screenshotLightMarketing1": "Organisez vos idées en texte enrichi",
-  "screenshotLightMarketing2": "Rapide, privé, hors-ligne",
-  "screenshotDarkTagline": "Magnifique en clair ou en sombre",
-  "screenshotDarkMarketing1": "Prise en charge complète du mode sombre",
-  "screenshotDarkMarketing2": "Douce pour les yeux, en permanence",
-  "screenshotNewNoteTagline": "Capturez les idées instantanément",
-  "screenshotNewNoteMarketing1": "Texte enrichi • Listes de contrôle • Couleurs",
-  "screenshotNewNoteMarketing2": "Tout ce dont vous avez besoin",
-  "screenshotSettingsTagline": "Personnalisez l'app à votre image",
-  "screenshotSettingsMarketing1": "Couleurs d'accentuation • Options de tri • Langue",
-  "screenshotSettingsMarketing2": "Faites-la vraiment vôtre"
+  "nativeName": "Français"
 }

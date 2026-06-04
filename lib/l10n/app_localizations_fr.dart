@@ -194,44 +194,4 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get nativeName => 'Français';
-
-  @override
-  String get screenshotLightTagline => 'Vos notes, à votre façon';
-
-  @override
-  String get screenshotLightMarketing1 =>
-      'Organisez vos idées en texte enrichi';
-
-  @override
-  String get screenshotLightMarketing2 => 'Rapide, privé, hors-ligne';
-
-  @override
-  String get screenshotDarkTagline => 'Magnifique en clair ou en sombre';
-
-  @override
-  String get screenshotDarkMarketing1 =>
-      'Prise en charge complète du mode sombre';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Douce pour les yeux, en permanence';
-
-  @override
-  String get screenshotNewNoteTagline => 'Capturez les idées instantanément';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Texte enrichi • Listes de contrôle • Couleurs';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Tout ce dont vous avez besoin';
-
-  @override
-  String get screenshotSettingsTagline => 'Personnalisez l\'app à votre image';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Couleurs d\'accentuation • Options de tri • Langue';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Faites-la vraiment vôtre';
 }

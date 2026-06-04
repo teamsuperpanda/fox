@@ -47,4 +47,4 @@ jobs:
         run: flutter analyze
 
       - name: Run tests
-        run: flutter test --coverage $(find test/ -name '*_test.dart' ! -name 'screenshot*')
+        run: flutter test --coverage

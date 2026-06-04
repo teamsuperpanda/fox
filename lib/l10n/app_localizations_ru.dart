@@ -191,43 +191,4 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get nativeName => 'Русский';
-
-  @override
-  String get screenshotLightTagline => 'Ваши заметки, по-вашему';
-
-  @override
-  String get screenshotLightMarketing1 =>
-      'Организуйте мысли с помощью форматированного текста';
-
-  @override
-  String get screenshotLightMarketing2 => 'Быстро, конфиденциально, офлайн';
-
-  @override
-  String get screenshotDarkTagline => 'Прекрасно в светлой или тёмной теме';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Полная поддержка тёмной темы';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Бережёт зрение, всегда';
-
-  @override
-  String get screenshotNewNoteTagline => 'Записывайте идеи мгновенно';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Форматированный текст • Списки • Цвета';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Всё, что вам нужно';
-
-  @override
-  String get screenshotSettingsTagline => 'Настройте приложение под себя';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Акцентные цвета • Сортировка • Язык';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Сделайте его действительно своим';
 }

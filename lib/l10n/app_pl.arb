@@ -58,17 +58,5 @@
   "analytics": "Analityka",
   "systemDefault": "Domyślny systemowy",
   "startupError": "Coś poszło nie tak podczas uruchamiania Fox.\n\nSpróbuj wyczyścić dane aplikacji lub zainstalować ją ponownie.\n\nBłąd: {error}",
-  "nativeName": "Polski",
-  "screenshotLightTagline": "Twoje notatki, na twoich zasadach",
-  "screenshotLightMarketing1": "Organizuj myśli za pomocą bogatego tekstu",
-  "screenshotLightMarketing2": "Szybko, prywatnie, offline-first",
-  "screenshotDarkTagline": "Piękny w trybie jasnym i ciemnym",
-  "screenshotDarkMarketing1": "Pełne wsparcie trybu ciemnego",
-  "screenshotDarkMarketing2": "Łagodny dla oczu, zawsze",
-  "screenshotNewNoteTagline": "Łap pomysły natychmiast",
-  "screenshotNewNoteMarketing1": "Bogaty tekst • Listy kontrolne • Kolory",
-  "screenshotNewNoteMarketing2": "Wszystko, czego potrzebujesz",
-  "screenshotSettingsTagline": "Dostosuj aplikację do swoich potrzeb",
-  "screenshotSettingsMarketing1": "Kolory akcentu • Opcje sortowania • Język",
-  "screenshotSettingsMarketing2": "Uczyń ją naprawdę swoją"
+  "nativeName": "Polski"
 }

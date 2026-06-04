@@ -58,17 +58,5 @@
   "analytics": "分析",
   "systemDefault": "系統預設",
   "startupError": "Fox 啟動時出現問題。\n\n請嘗試清除應用程式資料或重新安裝。\n\n錯誤：{error}",
-  "nativeName": "中文（繁體）",
-  "screenshotLightTagline": "你的筆記，你的方式",
-  "screenshotLightMarketing1": "用富文本整理思緒",
-  "screenshotLightMarketing2": "快速、私密、離線優先",
-  "screenshotDarkTagline": "淺色或深色都美麗",
-  "screenshotDarkMarketing1": "完全支援深色模式",
-  "screenshotDarkMarketing2": "隨時保護眼睛",
-  "screenshotNewNoteTagline": "即時捕捉靈感",
-  "screenshotNewNoteMarketing1": "富文本 • 清單 • 顏色",
-  "screenshotNewNoteMarketing2": "你需要的一切",
-  "screenshotSettingsTagline": "隨心定製應用",
-  "screenshotSettingsMarketing1": "強調色 • 排序選項 • 語言",
-  "screenshotSettingsMarketing2": "讓它真正屬於你"
+  "nativeName": "中文（繁體）"
 }

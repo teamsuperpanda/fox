@@ -190,40 +190,4 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nativeName => '한국어';
-
-  @override
-  String get screenshotLightTagline => '내 노트, 내 방식대로';
-
-  @override
-  String get screenshotLightMarketing1 => '리치 텍스트로 생각을 정리하세요';
-
-  @override
-  String get screenshotLightMarketing2 => '빠르고, 비공개, 오프라인 우선';
-
-  @override
-  String get screenshotDarkTagline => '라이트나 다크 모두 아름답게';
-
-  @override
-  String get screenshotDarkMarketing1 => '완벽한 다크 모드 지원';
-
-  @override
-  String get screenshotDarkMarketing2 => '눈에 편안하게, 항상';
-
-  @override
-  String get screenshotNewNoteTagline => '아이디어를 즉시 캡처';
-
-  @override
-  String get screenshotNewNoteMarketing1 => '리치 텍스트 • 체크리스트 • 색상';
-
-  @override
-  String get screenshotNewNoteMarketing2 => '필요한 모든 것';
-
-  @override
-  String get screenshotSettingsTagline => '앱을 나만의 방식으로 커스터마이즈';
-
-  @override
-  String get screenshotSettingsMarketing1 => '강조 색상 • 정렬 옵션 • 언어';
-
-  @override
-  String get screenshotSettingsMarketing2 => '진정으로 나만의 것으로';
 }

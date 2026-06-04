@@ -191,41 +191,4 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get nativeName => 'العربية';
-
-  @override
-  String get screenshotLightTagline => 'ملاحظاتك، بطريقتك';
-
-  @override
-  String get screenshotLightMarketing1 => 'نظم أفكارك بالنص المنسق';
-
-  @override
-  String get screenshotLightMarketing2 => 'سريع، خاص، يعمل بدون إنترنت';
-
-  @override
-  String get screenshotDarkTagline => 'جميل في الوضع الفاتح أو الداكن';
-
-  @override
-  String get screenshotDarkMarketing1 => 'دعم كامل للوضع الداكن';
-
-  @override
-  String get screenshotDarkMarketing2 => 'مريح للعينين، دائماً';
-
-  @override
-  String get screenshotNewNoteTagline => 'التقط الأفكار فوراً';
-
-  @override
-  String get screenshotNewNoteMarketing1 => 'نص منسق • قوائم مراجعة • ألوان';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'كل ما تحتاجه';
-
-  @override
-  String get screenshotSettingsTagline => 'خصص التطبيق بطريقتك';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'ألوان مميزة • خيارات الفرز • اللغة';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'اجعله ملكك حقاً';
 }

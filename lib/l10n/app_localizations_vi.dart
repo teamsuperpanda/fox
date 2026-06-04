@@ -192,45 +192,4 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nativeName => 'Tiếng Việt';
-
-  @override
-  String get screenshotLightTagline => 'Ghi chép của bạn, theo cách của bạn';
-
-  @override
-  String get screenshotLightMarketing1 =>
-      'Sắp xếp suy nghĩ với văn bản định dạng';
-
-  @override
-  String get screenshotLightMarketing2 =>
-      'Nhanh, riêng tư, ưu tiên ngoại tuyến';
-
-  @override
-  String get screenshotDarkTagline => 'Đẹp cả ở chế độ sáng lẫn tối';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Hỗ trợ chế độ tối đầy đủ';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Dịu nhẹ cho mắt, luôn luôn';
-
-  @override
-  String get screenshotNewNoteTagline => 'Ghi lại ý tưởng ngay lập tức';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Văn bản định dạng • Danh sách kiểm tra • Màu sắc';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Mọi thứ bạn cần';
-
-  @override
-  String get screenshotSettingsTagline =>
-      'Tuỳ chỉnh ứng dụng theo cách của bạn';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Màu nhấn • Tuỳ chọn sắp xếp • Ngôn ngữ';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Biến nó thực sự thành của bạn';
 }

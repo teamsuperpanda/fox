@@ -191,44 +191,4 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nativeName => 'Türkçe';
-
-  @override
-  String get screenshotLightTagline => 'Notların, senin tarzın';
-
-  @override
-  String get screenshotLightMarketing1 =>
-      'Zengin metinle düşüncelerini düzenle';
-
-  @override
-  String get screenshotLightMarketing2 => 'Hızlı, özel, çevrimdışı öncelikli';
-
-  @override
-  String get screenshotDarkTagline => 'Aydınlıkta da karanlıkta da güzel';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Tam karanlık mod desteği';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Göz dostu, her zaman';
-
-  @override
-  String get screenshotNewNoteTagline => 'Fikirleri anında yakala';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Zengin metin • Kontrol listeleri • Renkler';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'İhtiyacın olan her şey';
-
-  @override
-  String get screenshotSettingsTagline =>
-      'Uygulamayı kendi tarzında özelleştir';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Vurgu renkleri • Sıralama seçenekleri • Dil';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Onu gerçekten senin yap';
 }

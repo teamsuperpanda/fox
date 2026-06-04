@@ -58,17 +58,5 @@
   "analytics": "Analíticas",
   "systemDefault": "Padrão do sistema",
   "startupError": "Algo deu errado ao iniciar o Fox.\n\nTente limpar os dados do app ou reinstalá-lo.\n\nErro: {error}",
-  "nativeName": "Português (Brasil)",
-  "screenshotLightTagline": "Suas notas, do seu jeito",
-  "screenshotLightMarketing1": "Organize pensamentos com texto rico",
-  "screenshotLightMarketing2": "Rápido, privado, offline-first",
-  "screenshotDarkTagline": "Linda no claro ou no escuro",
-  "screenshotDarkMarketing1": "Suporte completo para modo escuro",
-  "screenshotDarkMarketing2": "Suave para os olhos, sempre",
-  "screenshotNewNoteTagline": "Capture ideias instantaneamente",
-  "screenshotNewNoteMarketing1": "Texto rico • Listas de verificação • Cores",
-  "screenshotNewNoteMarketing2": "Tudo que você precisa",
-  "screenshotSettingsTagline": "Personalize o app do seu jeito",
-  "screenshotSettingsMarketing1": "Cores de destaque • Opções de ordenação • Idioma",
-  "screenshotSettingsMarketing2": "Torne-o verdadeiramente seu"
+  "nativeName": "Português (Brasil)"
 }

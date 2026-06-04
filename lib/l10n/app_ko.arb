@@ -58,17 +58,5 @@
   "analytics": "분석",
   "systemDefault": "시스템 기본값",
   "startupError": "Fox 시작 중 문제가 발생했습니다.\n\n앱 데이터를 지우거나 다시 설치해 보세요.\n\n오류: {error}",
-  "nativeName": "한국어",
-  "screenshotLightTagline": "내 노트, 내 방식대로",
-  "screenshotLightMarketing1": "리치 텍스트로 생각을 정리하세요",
-  "screenshotLightMarketing2": "빠르고, 비공개, 오프라인 우선",
-  "screenshotDarkTagline": "라이트나 다크 모두 아름답게",
-  "screenshotDarkMarketing1": "완벽한 다크 모드 지원",
-  "screenshotDarkMarketing2": "눈에 편안하게, 항상",
-  "screenshotNewNoteTagline": "아이디어를 즉시 캡처",
-  "screenshotNewNoteMarketing1": "리치 텍스트 • 체크리스트 • 색상",
-  "screenshotNewNoteMarketing2": "필요한 모든 것",
-  "screenshotSettingsTagline": "앱을 나만의 방식으로 커스터마이즈",
-  "screenshotSettingsMarketing1": "강조 색상 • 정렬 옵션 • 언어",
-  "screenshotSettingsMarketing2": "진정으로 나만의 것으로"
+  "nativeName": "한국어"
 }

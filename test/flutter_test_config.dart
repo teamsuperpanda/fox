@@ -40,7 +40,7 @@ Future<void> testExecutable(Future<void> Function() testRunner) async {
     for (final dir in notoDirs) {
       for (final file in candidates) {
         final path = '$dir/$file';
-        if (await File(path).exists()) {
+        if (File(path).existsSync()) {
           final bytes = await File(path).readAsBytes();
           final loader = FontLoader(name);
           loader.addFont(Future<ByteData>.value(bytes.buffer.asByteData()));

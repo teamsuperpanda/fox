@@ -192,45 +192,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nativeName => 'Español';
-
-  @override
-  String get screenshotLightTagline => 'Tus notas, a tu manera';
-
-  @override
-  String get screenshotLightMarketing1 =>
-      'Organiza tus ideas con texto enriquecido';
-
-  @override
-  String get screenshotLightMarketing2 => 'Rápido, privado, offline-first';
-
-  @override
-  String get screenshotDarkTagline => 'Hermoso en modo claro u oscuro';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Soporte completo para modo oscuro';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Agradable a la vista, siempre';
-
-  @override
-  String get screenshotNewNoteTagline => 'Captura ideas al instante';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Texto enriquecido • Listas • Colores';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Todo lo que necesitas';
-
-  @override
-  String get screenshotSettingsTagline => 'Personaliza la app a tu gusto';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Colores de acento • Opciones de orden • Idioma';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Hazla verdaderamente tuya';
 }
 
 /// The translations for Spanish Castilian, as used in Latin America and the Caribbean (`es_419`).
@@ -422,43 +383,4 @@ class AppLocalizationsEs419 extends AppLocalizationsEs {
 
   @override
   String get nativeName => 'Español (Latinoamérica)';
-
-  @override
-  String get screenshotLightTagline => 'Tus notas, a tu manera';
-
-  @override
-  String get screenshotLightMarketing1 =>
-      'Organiza tus ideas con texto enriquecido';
-
-  @override
-  String get screenshotLightMarketing2 => 'Rápido, privado, sin conexión';
-
-  @override
-  String get screenshotDarkTagline => 'Hermoso en modo claro u oscuro';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Soporte completo para modo oscuro';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Agradable a la vista, siempre';
-
-  @override
-  String get screenshotNewNoteTagline => 'Captura ideas al instante';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Texto enriquecido • Listas de verificación • Colores';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Todo lo que necesitas';
-
-  @override
-  String get screenshotSettingsTagline => 'Personaliza la app a tu manera';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Colores de acento • Opciones de orden • Idioma';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Hazla verdaderamente tuya';
 }

@@ -192,41 +192,4 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get nativeName => 'Svenska';
-
-  @override
-  String get screenshotLightTagline => 'Dina anteckningar, ditt sätt';
-
-  @override
-  String get screenshotLightMarketing1 => 'Organisera tankar med rik text';
-
-  @override
-  String get screenshotLightMarketing2 => 'Snabb, privat, offline-first';
-
-  @override
-  String get screenshotDarkTagline => 'Vacker i ljust eller mörkt';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Fullt stöd för mörkt läge';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Skonsam för ögonen, alltid';
-
-  @override
-  String get screenshotNewNoteTagline => 'Fånga idéer direkt';
-
-  @override
-  String get screenshotNewNoteMarketing1 => 'Rik text • Checklistor • Färger';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Allt du behöver';
-
-  @override
-  String get screenshotSettingsTagline => 'Anpassa appen ditt sätt';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Accentfärger • Sorteringsalternativ • Språk';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Gör den verkligen till din';
 }

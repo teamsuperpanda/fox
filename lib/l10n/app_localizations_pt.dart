@@ -192,44 +192,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nativeName => 'Português (Brasil)';
-
-  @override
-  String get screenshotLightTagline => 'Suas notas, do seu jeito';
-
-  @override
-  String get screenshotLightMarketing1 => 'Organize pensamentos com texto rico';
-
-  @override
-  String get screenshotLightMarketing2 => 'Rápido, privado, offline-first';
-
-  @override
-  String get screenshotDarkTagline => 'Linda no claro ou no escuro';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Suporte completo para modo escuro';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Suave para os olhos, sempre';
-
-  @override
-  String get screenshotNewNoteTagline => 'Capture ideias instantaneamente';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Texto rico • Listas de verificação • Cores';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Tudo que você precisa';
-
-  @override
-  String get screenshotSettingsTagline => 'Personalize o app do seu jeito';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Cores de destaque • Opções de ordenação • Idioma';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Torne-o verdadeiramente seu';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -420,42 +382,4 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get nativeName => 'Português (Portugal)';
-
-  @override
-  String get screenshotLightTagline => 'As tuas notas, à tua maneira';
-
-  @override
-  String get screenshotLightMarketing1 => 'Organiza pensamentos com texto rico';
-
-  @override
-  String get screenshotLightMarketing2 => 'Rápido, privado, offline-first';
-
-  @override
-  String get screenshotDarkTagline => 'Linda no claro ou no escuro';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Suporte completo para modo escuro';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Suave para os olhos, sempre';
-
-  @override
-  String get screenshotNewNoteTagline => 'Captura ideias instantaneamente';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Texto rico • Listas de verificação • Cores';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Tudo de que precisas';
-
-  @override
-  String get screenshotSettingsTagline => 'Personaliza a app à tua maneira';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Cores de destaque • Opções de ordenação • Idioma';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Torna-a verdadeiramente tua';
 }

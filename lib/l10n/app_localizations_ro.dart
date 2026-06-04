@@ -191,42 +191,4 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get nativeName => 'Română';
-
-  @override
-  String get screenshotLightTagline => 'Your notes, your way';
-
-  @override
-  String get screenshotLightMarketing1 => 'Organise thoughts with rich text';
-
-  @override
-  String get screenshotLightMarketing2 => 'Fast, private, offline-first';
-
-  @override
-  String get screenshotDarkTagline => 'Beautiful in light or dark';
-
-  @override
-  String get screenshotDarkMarketing1 => 'Full dark mode support';
-
-  @override
-  String get screenshotDarkMarketing2 => 'Easy on the eyes, always';
-
-  @override
-  String get screenshotNewNoteTagline => 'Capture ideas instantly';
-
-  @override
-  String get screenshotNewNoteMarketing1 =>
-      'Rich text  •  Checklists  •  Colours';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'Everything you need';
-
-  @override
-  String get screenshotSettingsTagline => 'Customise the app your way';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'Accent colors  •  Sort options  •  Language';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'Make it truly yours';
 }

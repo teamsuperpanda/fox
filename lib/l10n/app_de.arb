@@ -58,17 +58,5 @@
   "analytics": "Analysen",
   "systemDefault": "Systemstandard",
   "startupError": "Beim Starten von Fox ist ein Fehler aufgetreten.\n\nVersuche, die App-Daten zu löschen oder die App neu zu installieren.\n\nFehler: {error}",
-  "nativeName": "Deutsch",
-  "screenshotLightTagline": "Deine Notizen, dein Stil",
-  "screenshotLightMarketing1": "Organisiere Gedanken mit Rich Text",
-  "screenshotLightMarketing2": "Schnell, privat, offline-first",
-  "screenshotDarkTagline": "Wunderschön in Hell oder Dunkel",
-  "screenshotDarkMarketing1": "Vollständige Dunkelmodus-Unterstützung",
-  "screenshotDarkMarketing2": "Schonend für die Augen, immer",
-  "screenshotNewNoteTagline": "Halte Ideen sofort fest",
-  "screenshotNewNoteMarketing1": "Rich Text • Checklisten • Farben",
-  "screenshotNewNoteMarketing2": "Alles, was du brauchst",
-  "screenshotSettingsTagline": "Passe die App an deine Bedürfnisse an",
-  "screenshotSettingsMarketing1": "Akzentfarben • Sortieroptionen • Sprache",
-  "screenshotSettingsMarketing2": "Mach sie wirklich zu deiner"
+  "nativeName": "Deutsch"
 }

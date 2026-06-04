@@ -58,17 +58,5 @@
   "analytics": "Analíticas",
   "systemDefault": "Predeterminado del sistema",
   "startupError": "Algo salió mal al iniciar Fox.\n\nIntenta borrar los datos de la app o reinstalarla.\n\nError: {error}",
-  "nativeName": "Español",
-  "screenshotLightTagline": "Tus notas, a tu manera",
-  "screenshotLightMarketing1": "Organiza tus ideas con texto enriquecido",
-  "screenshotLightMarketing2": "Rápido, privado, offline-first",
-  "screenshotDarkTagline": "Hermoso en modo claro u oscuro",
-  "screenshotDarkMarketing1": "Soporte completo para modo oscuro",
-  "screenshotDarkMarketing2": "Agradable a la vista, siempre",
-  "screenshotNewNoteTagline": "Captura ideas al instante",
-  "screenshotNewNoteMarketing1": "Texto enriquecido • Listas • Colores",
-  "screenshotNewNoteMarketing2": "Todo lo que necesitas",
-  "screenshotSettingsTagline": "Personaliza la app a tu gusto",
-  "screenshotSettingsMarketing1": "Colores de acento • Opciones de orden • Idioma",
-  "screenshotSettingsMarketing2": "Hazla verdaderamente tuya"
+  "nativeName": "Español"
 }

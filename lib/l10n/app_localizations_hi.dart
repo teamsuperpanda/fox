@@ -191,42 +191,4 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get nativeName => 'हिन्दी';
-
-  @override
-  String get screenshotLightTagline => 'आपके नोट्स, आपके तरीके से';
-
-  @override
-  String get screenshotLightMarketing1 =>
-      'रिच टेक्स्ट से विचारों को व्यवस्थित करें';
-
-  @override
-  String get screenshotLightMarketing2 => 'तेज़, निजी, ऑफ़लाइन-फ़र्स्ट';
-
-  @override
-  String get screenshotDarkTagline => 'लाइट या डार्क में खूबसूरत';
-
-  @override
-  String get screenshotDarkMarketing1 => 'पूर्ण डार्क मोड समर्थन';
-
-  @override
-  String get screenshotDarkMarketing2 => 'आँखों पर आसान, हमेशा';
-
-  @override
-  String get screenshotNewNoteTagline => 'विचारों को तुरंत कैप्चर करें';
-
-  @override
-  String get screenshotNewNoteMarketing1 => 'रिच टेक्स्ट • चेकलिस्ट • रंग';
-
-  @override
-  String get screenshotNewNoteMarketing2 => 'वह सब कुछ जो आपको चाहिए';
-
-  @override
-  String get screenshotSettingsTagline => 'ऐप को अपने तरीके से कस्टमाइज़ करें';
-
-  @override
-  String get screenshotSettingsMarketing1 =>
-      'एक्सेंट रंग • सॉर्ट विकल्प • भाषा';
-
-  @override
-  String get screenshotSettingsMarketing2 => 'इसे वास्तव में अपना बनाएँ';
 }

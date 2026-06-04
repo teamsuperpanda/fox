@@ -58,17 +58,5 @@
   "analytics": "Phân tích",
   "systemDefault": "Mặc định hệ thống",
   "startupError": "Đã xảy ra lỗi khi khởi động Fox.\n\nHãy thử xóa dữ liệu ứng dụng hoặc cài đặt lại.\n\nLỗi: {error}",
-  "nativeName": "Tiếng Việt",
-  "screenshotLightTagline": "Ghi chép của bạn, theo cách của bạn",
-  "screenshotLightMarketing1": "Sắp xếp suy nghĩ với văn bản định dạng",
-  "screenshotLightMarketing2": "Nhanh, riêng tư, ưu tiên ngoại tuyến",
-  "screenshotDarkTagline": "Đẹp cả ở chế độ sáng lẫn tối",
-  "screenshotDarkMarketing1": "Hỗ trợ chế độ tối đầy đủ",
-  "screenshotDarkMarketing2": "Dịu nhẹ cho mắt, luôn luôn",
-  "screenshotNewNoteTagline": "Ghi lại ý tưởng ngay lập tức",
-  "screenshotNewNoteMarketing1": "Văn bản định dạng • Danh sách kiểm tra • Màu sắc",
-  "screenshotNewNoteMarketing2": "Mọi thứ bạn cần",
-  "screenshotSettingsTagline": "Tuỳ chỉnh ứng dụng theo cách của bạn",
-  "screenshotSettingsMarketing1": "Màu nhấn • Tuỳ chọn sắp xếp • Ngôn ngữ",
-  "screenshotSettingsMarketing2": "Biến nó thực sự thành của bạn"
+  "nativeName": "Tiếng Việt"
 }
