@@ -195,105 +195,101 @@ void main() {
         );
       });
 
-      if (deviceName == 'iphone_6.5') {
-        testWidgets('detail', (tester) async {
-          tester.view.physicalSize = logicalSize * _dpr;
-          tester.view.devicePixelRatio = _dpr;
-          addTearDown(() {
-            tester.view.resetPhysicalSize();
-            tester.view.resetDevicePixelRatio();
-          });
-
-          await tester.pumpWidget(_buildApp(
-            themeMode: ThemeMode.light,
-            controller: controller,
-          ));
-          await tester.pump();
-          await tester.pumpAndSettle();
-
-          await tester.tap(find.text('Meeting Notes'));
-          await tester.pump();
-          await tester.pumpAndSettle();
-
-          await expectLater(
-            find.byType(MaterialApp),
-            matchesGoldenFile('$_goldenDir/iphone_6.5/raw/detail.png'),
-          );
+      testWidgets('detail', (tester) async {
+        tester.view.physicalSize = logicalSize * _dpr;
+        tester.view.devicePixelRatio = _dpr;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
         });
 
-        testWidgets('detail_new', (tester) async {
-          tester.view.physicalSize = logicalSize * _dpr;
-          tester.view.devicePixelRatio = _dpr;
-          addTearDown(() {
-            tester.view.resetPhysicalSize();
-            tester.view.resetDevicePixelRatio();
-          });
+        await tester.pumpWidget(_buildApp(
+          themeMode: ThemeMode.light,
+          controller: controller,
+        ));
+        await tester.pump();
+        await tester.pumpAndSettle();
 
-          final note = Note(
-            id: 'new',
-            title: '',
-            content: '',
-            pinned: false,
-            updatedAt: DateTime.now(),
-          );
+        await tester.tap(find.text('Meeting Notes'));
+        await tester.pump();
+        await tester.pumpAndSettle();
 
-          await tester.pumpWidget(
-            MultiProvider(
-              providers: [
-                ChangeNotifierProvider.value(value: ThemeProvider()),
-                ChangeNotifierProvider.value(value: LocaleProvider()),
-                Provider.value(
-                  value: UmamiService(
-                    websiteId: 'test',
-                    endpoint: 'https://test.com/api/send',
-                  ),
-                ),
-              ],
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                localizationsDelegates: const [
-                  ...AppLocalizations.localizationsDelegates,
-                  FlutterQuillLocalizations.delegate,
-                ],
-                supportedLocales: AppLocalizations.supportedLocales,
-                locale: const Locale('en'),
-                theme: () {
-                  final base = AppTheme.light(
-                    accentColorOptions.first,
-                    useGoogleFonts: false,
-                  );
-                  return base.copyWith(
-                    appBarTheme: base.appBarTheme.copyWith(
-                      titleTextStyle: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: const Color(0xFF333333),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    floatingActionButtonTheme:
-                        const FloatingActionButtonThemeData(elevation: 0),
-                  );
-                }(),
-                home: NoteDetailPage(
-                  controller: controller,
-                  existing: note,
-                  showToolbar: false,
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile('$_goldenDir/$deviceName/raw/detail.png'),
+        );
+      });
+
+      testWidgets('detail_new', (tester) async {
+        tester.view.physicalSize = logicalSize * _dpr;
+        tester.view.devicePixelRatio = _dpr;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+
+        final note = Note(
+          id: 'new',
+          title: '',
+          content: '',
+          pinned: false,
+          updatedAt: DateTime.now(),
+        );
+
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider.value(value: ThemeProvider()),
+              ChangeNotifierProvider.value(value: LocaleProvider()),
+              Provider.value(
+                value: UmamiService(
+                  websiteId: 'test',
+                  endpoint: 'https://test.com/api/send',
                 ),
               ),
+            ],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: const [
+                ...AppLocalizations.localizationsDelegates,
+                FlutterQuillLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: const Locale('en'),
+              theme: () {
+                final base = AppTheme.light(
+                  accentColorOptions.first,
+                  useGoogleFonts: false,
+                );
+                return base.copyWith(
+                  appBarTheme: base.appBarTheme.copyWith(
+                    titleTextStyle: TextStyle(
+                      fontFamily: 'Roboto',
+                      color: const Color(0xFF333333),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  floatingActionButtonTheme:
+                      const FloatingActionButtonThemeData(elevation: 0),
+                );
+              }(),
+              home: NoteDetailPage(
+                controller: controller,
+                existing: note,
+                showToolbar: false,
+              ),
             ),
-          );
-          await tester.pump();
-          await tester.pumpAndSettle();
+          ),
+        );
+        await tester.pump();
+        await tester.pumpAndSettle();
 
-          await expectLater(
-            find.byType(MaterialApp),
-            matchesGoldenFile('$_goldenDir/iphone_6.5/raw/detail_new.png'),
-          );
-        });
-
-
-      }
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile('$_goldenDir/$deviceName/raw/detail_new.png'),
+        );
+      });
     });
   }
 }
