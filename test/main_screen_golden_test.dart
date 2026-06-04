@@ -149,7 +149,7 @@ void main() {
 
         await expectLater(
           find.byType(MaterialApp),
-          matchesGoldenFile('$_goldenDir/$deviceName/$label.png'),
+          matchesGoldenFile('$_goldenDir/$deviceName/raw/$label.png'),
         );
       }
 
@@ -190,7 +190,7 @@ void main() {
 
         await expectLater(
           find.byType(MaterialApp),
-          matchesGoldenFile('$_goldenDir/$deviceName/settings.png'),
+          matchesGoldenFile('$_goldenDir/$deviceName/raw/settings.png'),
         );
       });
 
@@ -216,7 +216,7 @@ void main() {
 
           await expectLater(
             find.byType(MaterialApp),
-            matchesGoldenFile('$_goldenDir/iphone_6.5/detail.png'),
+            matchesGoldenFile('$_goldenDir/iphone_6.5/raw/detail.png'),
           );
         });
       }
