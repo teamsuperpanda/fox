@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class StoreFrame extends StatelessWidget {
   const StoreFrame({
-    super.key,
     required this.child,
     required this.tagline,
     required this.headline,
+    super.key,
     this.features = const [],
   });
 
@@ -22,9 +22,9 @@ class StoreFrame extends StatelessWidget {
     final taglineSize = (size.width * 0.035).clamp(12.0, 18.0);
     final headlineSize = (size.width * 0.05).clamp(16.0, 24.0);
     final featureSize = (size.width * 0.035).clamp(11.0, 17.0);
-    final topPct = 0.14;
-    final botPct = 0.14;
-    final sidePct = 0.06;
+    const topPct = 0.14;
+    const botPct = 0.14;
+    const sidePct = 0.06;
 
     final topH = size.height * topPct;
     final botH = size.height * botPct;
@@ -35,7 +35,7 @@ class StoreFrame extends StatelessWidget {
     final overlap = topH * 0.15;
     final extAvailH = availH + overlap;
 
-    final appRatio = 9.0 / 16.0;
+    const appRatio = 9.0 / 16.0;
     var scrW = availW;
     var scrH = scrW / appRatio;
     if (scrH > extAvailH) {
@@ -91,9 +91,9 @@ class StoreFrame extends StatelessWidget {
           ),
           Positioned(
             bottom: 0, left: 0, right: 0, height: botH,
-            child: Container(
-              color: const Color(0xFF2D5A27),
-              child: Column(
+          child: ColoredBox(
+            color: const Color(0xFF2D5A27),
+            child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(

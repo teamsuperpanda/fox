@@ -29,11 +29,11 @@ class _DeviceConfig {
 }
 
 final _devices = <String, _DeviceConfig>{
-  'iphone_6.9': const _DeviceConfig(Size(440, 956), 3.0),
-  'iphone_6.5': const _DeviceConfig(Size(414, 896), 3.0),
-  'android': const _DeviceConfig(Size(360, 640), 3.0),
-  'ipad_12.9': const _DeviceConfig(Size(1024, 1366), 2.0),
-  'ipad_13': const _DeviceConfig(Size(1032, 1376), 2.0),
+  'iphone_6.9': const _DeviceConfig(Size(440, 956), 3),
+  'iphone_6.5': const _DeviceConfig(Size(414, 896), 3),
+  'android': const _DeviceConfig(Size(360, 640), 3),
+  'ipad_12.9': const _DeviceConfig(Size(1024, 1366), 2),
+  'ipad_13': const _DeviceConfig(Size(1032, 1376), 2),
 };
 
 const _storeTagline = 'Your thoughts, organized.';
