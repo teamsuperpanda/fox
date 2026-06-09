@@ -10,6 +10,11 @@
   <img src="https://img.shields.io/github/last-commit/teamsuperpanda/fox" alt="Last commit">
 </p>
 
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.teamsuperpanda.fox"><img src="https://img.shields.io/badge/Google%20Play-414141?logo=google-play&logoColor=white" alt="Google Play"></a>
+  <a href="https://apps.apple.com/app/fox-list/id1625597940"><img src="https://img.shields.io/badge/App%20Store-0D96F6?logo=apple&logoColor=white" alt="App Store"></a>
+</p>
+
 Fox is a notes app that stays out of your way. Rich text, dark mode, offline-first. No account, no subscription, no cloud dependency.
 
 Built by [Team Super Panda](https://www.teamsuperpanda.com).
