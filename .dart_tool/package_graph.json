@@ -43,8 +43,9 @@
     },
     {
       "name": "dart_code_linter",
-      "version": "4.0.5",
+      "version": "4.1.2",
       "dependencies": [
+        "analysis_server_plugin",
         "analyzer",
         "analyzer_plugin",
         "ansicolor",
@@ -384,6 +385,17 @@
         "source_span",
         "watcher",
         "yaml"
+      ]
+    },
+    {
+      "name": "analysis_server_plugin",
+      "version": "0.3.14",
+      "dependencies": [
+        "analyzer",
+        "analyzer_plugin",
+        "meta",
+        "yaml",
+        "yaml_edit"
       ]
     },
     {
@@ -740,6 +752,16 @@
       "dependencies": [
         "meta",
         "source_span"
+      ]
+    },
+    {
+      "name": "yaml_edit",
+      "version": "2.2.4",
+      "dependencies": [
+        "collection",
+        "meta",
+        "source_span",
+        "yaml"
       ]
     },
     {

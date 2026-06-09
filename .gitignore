@@ -50,3 +50,6 @@ test/**/*.hive
 
 # Golden test failure artifacts
 test/failures/
+
+# Local-only release screenshots workflow
+.github/workflows/release_screenshots.yml
