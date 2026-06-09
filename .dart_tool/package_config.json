@@ -284,12 +284,6 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "google_fonts",
-      "rootUri": "file:///home/adam/.pub-cache/hosted/pub.dev/google_fonts-8.1.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.9"
-    },
-    {
       "name": "hive",
       "rootUri": "file:///home/adam/.pub-cache/hosted/pub.dev/hive-2.2.3",
       "packageUri": "lib/",

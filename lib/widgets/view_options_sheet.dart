@@ -21,7 +21,6 @@ class ViewOptionsSheet extends StatefulWidget {
     required this.localeProvider,
     required this.umamiService,
     required this.accentColorOptions,
-    this.useGoogleFonts = true,
     super.key,
   });
 
@@ -31,7 +30,6 @@ class ViewOptionsSheet extends StatefulWidget {
   final LocaleProvider localeProvider;
   final UmamiService umamiService;
   final List<Color> accentColorOptions;
-  final bool useGoogleFonts;
 
   @override
   State<ViewOptionsSheet> createState() => _ViewOptionsSheetState();
@@ -59,10 +57,8 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                 (themeProvider.themeMode == ThemeMode.system &&
                     brightness == Brightness.dark);
             final activeTheme = isDark
-                ? AppTheme.dark(themeProvider.accentColor,
-                    useGoogleFonts: widget.useGoogleFonts)
-                : AppTheme.light(themeProvider.accentColor,
-                    useGoogleFonts: widget.useGoogleFonts);
+                ? AppTheme.dark(themeProvider.accentColor)
+                : AppTheme.light(themeProvider.accentColor);
 
             return Theme(
               data: activeTheme,

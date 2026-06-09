@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="License"></a>
-  <img src="https://img.shields.io/badge/Flutter-3.6+-blue?logo=flutter" alt="Flutter">
+  <img src="https://img.shields.io/badge/Dart-3.6+-blue?logo=dart" alt="Dart">
   <img src="https://img.shields.io/github/last-commit/teamsuperpanda/fox" alt="Last commit">
 </p>
 
@@ -24,7 +24,7 @@ Built by [Team Super Panda](https://www.teamsuperpanda.com).
 
 Fox is what happens when you strip a notes app down to what actually matters: writing, organising, and finding things fast.
 
-- **Rich text**: bold, italic, lists, checklists, colours. No markdown syntax to remember.
+- **Rich text**: bold, italic, bullet lists, ordered lists, note colours. No markdown syntax to remember.
 - **Pin, tag, search**: find any note in seconds, even with hundreds of them.
 - **Dark mode**: light and dark themes that actually look good.
 - **Offline-first**: it's a local app that happens to have an editor. Your notes live on your device, always available, no signal required.
@@ -41,9 +41,9 @@ Fox is a Flutter app with a deliberately simple stack:
 | UI | Flutter with Provider |
 | Storage | Hive (local, no server) |
 | Editor | Flutter Quill |
-| Fonts | Roboto (bundled, no network calls) |
+| Fonts | Inter (bundled, no network calls) |
 
-No backend. No sync. No data leaves your device unless you choose to share a note.
+No backend. No sync. No app data leaves your device. (Optional anonymous analytics, disabled by default.)
 
 ---
 

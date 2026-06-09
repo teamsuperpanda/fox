@@ -12,7 +12,6 @@
         "flutter_localizations",
         "flutter_native_splash",
         "flutter_quill",
-        "google_fonts",
         "hive",
         "hive_flutter",
         "http",
@@ -164,16 +163,6 @@
         "collection",
         "flutter",
         "nested"
-      ]
-    },
-    {
-      "name": "google_fonts",
-      "version": "8.1.0",
-      "dependencies": [
-        "crypto",
-        "flutter",
-        "http",
-        "path_provider"
       ]
     },
     {

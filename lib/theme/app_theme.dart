@@ -1,42 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static ThemeData light(Color accent, {bool useGoogleFonts = true}) {
-    // Blend a subtle accent wash into the warm base background.
+  static ThemeData light(Color accent) {
     const base = Color(0xFFF8F5F1);
     final bg = Color.lerp(base, accent, 0.06)!;
 
     return ThemeData(
       useMaterial3: true,
+      fontFamily: 'Inter',
       scaffoldBackgroundColor: bg,
       appBarTheme: AppBarTheme(
         backgroundColor: bg,
         foregroundColor: const Color(0xFF333333),
         elevation: 0,
-        titleTextStyle: useGoogleFonts
-            ? GoogleFonts.inter(
-                textStyle: const TextStyle(
-                  color: Color(0xFF333333),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            : const TextStyle(
-                color: Color(0xFF333333),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+        titleTextStyle: const TextStyle(
+          fontFamily: 'Inter',
+          color: Color(0xFF333333),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: accent,
         foregroundColor: bg,
       ),
-      textTheme: useGoogleFonts
-          ? GoogleFonts.interTextTheme(
-              ThemeData.light().textTheme,
-            )
-          : ThemeData.light().textTheme,
+      textTheme: ThemeData.light().textTheme,
       colorScheme: ColorScheme.fromSeed(
         seedColor: accent,
       ).copyWith(
@@ -46,42 +34,31 @@ class AppTheme {
     );
   }
 
-  static ThemeData dark(Color accent, {bool useGoogleFonts = true}) {
-    // Blend a very subtle accent wash into the dark base background.
+  static ThemeData dark(Color accent) {
     const base = Color(0xFF202124);
     final bg = Color.lerp(base, accent, 0.04)!;
 
     return ThemeData(
       brightness: Brightness.dark,
       useMaterial3: true,
+      fontFamily: 'Inter',
       scaffoldBackgroundColor: bg,
       appBarTheme: AppBarTheme(
         backgroundColor: bg,
         foregroundColor: const Color(0xFFF8F5F1),
         elevation: 0,
-        titleTextStyle: useGoogleFonts
-            ? GoogleFonts.inter(
-                textStyle: const TextStyle(
-                  color: Color(0xFFF8F5F1),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            : const TextStyle(
-                color: Color(0xFFF8F5F1),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+        titleTextStyle: const TextStyle(
+          fontFamily: 'Inter',
+          color: Color(0xFFF8F5F1),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: accent,
         foregroundColor: bg,
       ),
-      textTheme: useGoogleFonts
-          ? GoogleFonts.interTextTheme(
-              ThemeData.dark().textTheme,
-            )
-          : ThemeData.dark().textTheme,
+      textTheme: ThemeData.dark().textTheme,
       colorScheme: ColorScheme.fromSeed(
         seedColor: accent,
         brightness: Brightness.dark,

@@ -17,10 +17,8 @@ import 'package:fox/widgets/view_options_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(
-      {required this.controller, this.useGoogleFonts = true, super.key});
+  const HomePage({required this.controller, super.key});
   final NotesController controller;
-  final bool useGoogleFonts;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -173,7 +171,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         localeProvider: context.read<LocaleProvider>(),
         umamiService: context.read<UmamiService>(),
         accentColorOptions: accentColorOptions,
-        useGoogleFonts: widget.useGoogleFonts,
+
       ),
     );
   }

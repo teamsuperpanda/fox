@@ -70,7 +70,7 @@ Widget _buildApp({
       themeMode: themeMode,
       theme: () {
         final base =
-            AppTheme.light(accentColorOptions.first, useGoogleFonts: false);
+            AppTheme.light(accentColorOptions.first);
         return base.copyWith(
           appBarTheme: base.appBarTheme.copyWith(
             titleTextStyle: TextStyle(
@@ -86,7 +86,7 @@ Widget _buildApp({
       }(),
       darkTheme: () {
         final base =
-            AppTheme.dark(accentColorOptions.first, useGoogleFonts: false);
+            AppTheme.dark(accentColorOptions.first);
         return base.copyWith(
           appBarTheme: base.appBarTheme.copyWith(
             titleTextStyle: TextStyle(
@@ -100,7 +100,7 @@ Widget _buildApp({
               const FloatingActionButtonThemeData(elevation: 0),
         );
       }(),
-      home: HomePage(controller: controller, useGoogleFonts: false),
+      home: HomePage(controller: controller),
     ),
   );
 }
@@ -284,7 +284,6 @@ void main() {
               theme: () {
                 final base = AppTheme.light(
                   accentColorOptions.first,
-                  useGoogleFonts: false,
                 );
                 return base.copyWith(
                   appBarTheme: base.appBarTheme.copyWith(
@@ -400,7 +399,6 @@ void main() {
               theme: () {
                 final base = AppTheme.light(
                   accentColorOptions.first,
-                  useGoogleFonts: false,
                 );
                 return base.copyWith(
                   appBarTheme: base.appBarTheme.copyWith(
