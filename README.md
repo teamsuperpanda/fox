@@ -6,7 +6,6 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="License"></a>
   <img src="https://img.shields.io/badge/Flutter-3.6+-blue?logo=flutter" alt="Flutter">
-  <img src="https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey" alt="Platform">
   <img src="https://img.shields.io/github/last-commit/teamsuperpanda/fox" alt="Last commit">
 </p>
 
