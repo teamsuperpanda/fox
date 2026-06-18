@@ -1,0 +1,4 @@
+Novidades na versão 2.0.1:
+• Temas de cor de destaque — Personalize a sua aplicação com 10 belas cores de destaque. A sua escolha é guardada e aplicada nos modos claro e escuro.
+• 31 idiomas — Fox agora suporta 31 idiomas incluindo tailandês, ucraniano, romeno, checo, dinamarquês, finlandês, malaio, bengali, grego e hebraico.
+• Correções de erros e melhorias de estabilidade em toda a aplicação.

@@ -1,0 +1,4 @@
+Novità nella versione 2.0.1:
+• Temi colore di evidenziazione — Personalizza la tua app con 10 splendidi colori di evidenziazione. La tua scelta viene salvata e applicata sia in modalità chiara che scura.
+• 31 lingue — Fox ora supporta 31 lingue tra cui tailandese, ucraino, rumeno, ceco, danese, finlandese, malese, bengalese, greco ed ebraico.
+• Correzioni di bug e miglioramenti di stabilità in tutta l'app.

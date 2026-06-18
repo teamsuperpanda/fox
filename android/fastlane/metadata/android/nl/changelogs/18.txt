@@ -1,0 +1,4 @@
+Wat is nieuw in 2.0.1:
+• Accentkleur thema's — Personaliseer je app met 10 prachtige accentkleuren. Je keuze wordt opgeslagen en toegepast in zowel lichte als donkere modus.
+• 31 talen — Fox ondersteunt nu 31 talen waaronder Thais, Oekraïens, Roemeens, Tsjechisch, Deens, Fins, Maleis, Bengaals, Grieks en Hebreeuws.
+• Bugfixes en stabiliteitsverbeteringen door de hele app.
