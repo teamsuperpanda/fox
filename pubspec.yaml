@@ -1,0 +1,81 @@
+name: fox
+description: "A simple, local-first notes application."
+
+publish_to: 'none'
+license: PolyForm-Noncommercial-1.0.0
+version: 2.0.2+18
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  collection: ^1.19.0
+  intl: ^0.20.0
+  flutter_native_splash: ^2.4.0
+
+  provider: ^6.1.5
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  uuid: ^4.5.3
+  flutter_quill: ^11.5.0
+  http: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  very_good_analysis: ^10.0.0
+  dart_code_linter: ^4.1.2
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/icon/
+    - assets/images/launchscreen/
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#1A1A1A"
+  image: assets/images/launchscreen/logo_light.png
+  image_dark: assets/images/launchscreen/logo_dark.png
+  branding: assets/images/launchscreen/branding_light.png
+  branding_dark: assets/images/launchscreen/branding_dark.png
+
+  android_12: 
+    image: assets/images/launchscreen/logo_light.png
+    image_dark: assets/images/launchscreen/logo_dark.png
+    branding: assets/images/launchscreen/branding_light.png
+    branding_dark: assets/images/launchscreen/branding_dark.png
+    color: "#FFFFFF"
+    color_dark: "#1A1A1A"
+  android: true
+  ios: true
+  # dart run flutter_native_splash:create
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon/icon.png"
+  image_path_ios: "assets/images/icon/icon_ios.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#228B22"
+  adaptive_icon_foreground: "assets/images/icon/icon.png"
+  # dart run flutter_launcher_icons:main

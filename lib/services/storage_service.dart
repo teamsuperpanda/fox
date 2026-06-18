@@ -1,0 +1,36 @@
+import 'package:fox/models/folder.dart';
+import 'package:fox/models/folder_adapter.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/models/note_adapter.dart';
+import 'package:fox/models/settings.dart';
+import 'package:fox/models/settings_adapter.dart';
+import 'package:fox/services/box_names.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+class StorageService {
+  static bool _inited = false;
+
+  /// Initialize Hive, register adapters, and open core boxes.
+  static Future<void> init() async {
+    if (_inited) return;
+    await Hive.initFlutter();
+
+    // Register adapters
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapter(SettingsAdapter());
+    }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(NoteAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter(FolderAdapter());
+    }
+
+    // Open boxes
+    await Hive.openBox<Settings>(BoxNames.settings);
+    await Hive.openBox<Note>(BoxNames.notes);
+    await Hive.openBox<Folder>(BoxNames.folders);
+
+    _inited = true;
+  }
+}

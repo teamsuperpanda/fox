@@ -1,0 +1,448 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/note_detail_page.dart';
+import 'package:fox/services/notes_controller.dart';
+import 'package:fox/services/umami_service.dart';
+import 'package:provider/provider.dart';
+import 'test_helpers.dart';
+
+class FailingSaveRepository extends MockRepository {
+  @override
+  Future<void> upsert(Note note) async {
+    throw Exception('save failed');
+  }
+}
+
+class FailingDeleteRepository extends MockRepository {
+  @override
+  Future<void> delete(String id) async {
+    throw Exception('delete failed');
+  }
+}
+
+class DelayedRepository extends MockRepository {
+  final Completer<void> upsertCompleter = Completer<void>();
+  final Completer<void> deleteCompleter = Completer<void>();
+
+  @override
+  Future<void> upsert(Note note) async {
+    await upsertCompleter.future;
+    return super.upsert(note);
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    await deleteCompleter.future;
+    return super.delete(id);
+  }
+}
+
+Widget _withUmami(Widget child) {
+  return Provider.value(
+    value: UmamiService(websiteId: 'test', endpoint: 'https://test.com/api/send'),
+    child: child,
+  );
+}
+
+void main() {
+  group('NoteDetailPage - Basic Tests', () {
+    test('Note copyWith updates pinned state', () {
+      final original = Note(
+        id: 'test',
+        title: 'Title',
+        content: '{}',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+
+      final updated = original.copyWith(pinned: true);
+      expect(updated.pinned, isTrue);
+      expect(updated.id, equals('test'));
+    });
+
+    test('Note copyWith preserves other fields', () {
+      final now = DateTime.now();
+      final original = Note(
+        id: 'test',
+        title: 'Title',
+        content: '{}',
+        pinned: false,
+        updatedAt: now,
+      );
+
+      final updated = original.copyWith(pinned: true);
+      expect(updated.title, equals('Title'));
+      expect(updated.updatedAt, equals(now));
+    });
+  });
+
+  group('NoteDetailPage - Controller Tests', () {
+    late MockRepository mockRepo;
+    late NotesController controller;
+
+    setUp(() {
+      mockRepo = MockRepository();
+      controller = NotesController(mockRepo);
+    });
+
+    test('controller adds new note', () async {
+      final doc = Document();
+      await controller.addOrUpdate(
+        title: 'New Note',
+        content: doc,
+      );
+
+      expect(mockRepo.notes.length, equals(1));
+      expect(mockRepo.notes.first.title, equals('New Note'));
+    });
+
+    test('controller updates existing note', () async {
+      final originalNote = Note(
+        id: 'test-id',
+        title: 'Original',
+        content: '{}',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+
+      mockRepo.notes.add(originalNote);
+
+      await controller.addOrUpdate(
+        id: 'test-id',
+        title: 'Updated',
+        content: Document(),
+        pinned: true,
+      );
+
+      expect(mockRepo.notes.length, equals(1));
+      expect(mockRepo.notes.first.title, equals('Updated'));
+      expect(mockRepo.notes.first.pinned, isTrue);
+    });
+
+    test('controller saves pinned state', () async {
+      await controller.addOrUpdate(
+        title: 'Pinned Note',
+        content: Document(),
+        pinned: true,
+      );
+
+      final saved = mockRepo.notes.first;
+      expect(saved.pinned, isTrue);
+      expect(saved.title, equals('Pinned Note'));
+    });
+
+    test('controller allows title-only notes', () async {
+      await controller.addOrUpdate(
+        title: 'Title Only',
+        content: Document(),
+      );
+
+      expect(mockRepo.notes.length, equals(1));
+      expect(mockRepo.notes.first.title, equals('Title Only'));
+    });
+  });
+
+  group('NoteDetailPage - Widget Tests', () {
+    late MockRepository mockRepo;
+    late NotesController controller;
+
+    setUp(() {
+      mockRepo = MockRepository();
+      controller = NotesController(mockRepo);
+    });
+
+    testWidgets('creates note with title', (tester) async {
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(controller: controller),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
+      expect(mockRepo.notes.length, 0);
+    });
+
+    testWidgets('shows error for empty title save', (tester) async {
+      final existingNote = Note(
+        id: 'existing',
+        title: 'Existing',
+        content: '{}',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+      mockRepo.notes.add(existingNote);
+
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(existing: existingNote, controller: controller),
+          ),
+        ),
+      );
+
+      final titleField = find.byType(TextField).first;
+      await tester.enterText(titleField, '');
+      await tester.pump();
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pump();
+
+      expect(find.text('Note cannot be empty'), findsOneWidget);
+      expect(mockRepo.notes.length, 1);
+    });
+
+    testWidgets('pin button shows correct state', (tester) async {
+      final note = Note(
+        id: '1',
+        title: '',
+        content: '{}',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(
+                existing: note, controller: controller, showToolbar: false),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
+    });
+
+    testWidgets('pin button shows pinned state', (tester) async {
+      final note = Note(
+        id: '1',
+        title: '',
+        content: '{}',
+        pinned: true,
+        updatedAt: DateTime.now(),
+      );
+
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(
+                existing: note, controller: controller, showToolbar: false),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.push_pin), findsOneWidget);
+    });
+
+    testWidgets('tags dialog allows adding and removing tags', (tester) async {
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(controller: controller, showToolbar: false),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.label_outline));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Manage Tags'), findsOneWidget);
+
+      await tester.enterText(
+          find.widgetWithText(TextField, 'New tag...'), 'test-tag');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      expect(find.text('test-tag'), findsOneWidget);
+
+      await tester.enterText(
+          find.widgetWithText(TextField, 'New tag...'), 'another-tag');
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(find.text('another-tag'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.cancel).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('test-tag'), findsNothing);
+      expect(find.text('another-tag'), findsOneWidget);
+
+      await tester.tap(find.text('Close'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).first, 'Tagged Note');
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(mockRepo.notes.length, 1);
+      expect(mockRepo.notes.first.tags, contains('another-tag'));
+    });
+
+    testWidgets('save failure keeps user on page and shows error',
+        (tester) async {
+      final failingRepo = FailingSaveRepository();
+      final failingController = NotesController(failingRepo);
+
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(controller: failingController),
+          ),
+        ),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Will Fail');
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pump();
+
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+      expect(failingRepo.notes, isEmpty);
+    });
+
+    testWidgets('save pops only after awaited write success', (tester) async {
+      final delayedRepo = DelayedRepository();
+      final delayedController = NotesController(delayedRepo);
+
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(controller: delayedController),
+          ),
+        ),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Delayed Save');
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pump();
+
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+
+      delayedRepo.upsertCompleter.complete();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
+    });
+
+    testWidgets('delete failure does not pop detail page', (tester) async {
+      final failingRepo = FailingDeleteRepository();
+      final failingController = NotesController(failingRepo);
+
+      await failingController.load();
+      await failingController.addOrUpdate(
+        title: 'Delete Me',
+        content: Document(),
+      );
+      final existing = failingController.notes.first;
+
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(
+                existing: existing, controller: failingController),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.delete));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete'));
+      await tester.pump();
+
+      expect(find.textContaining('Error deleting note'), findsOneWidget);
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+    });
+
+    testWidgets('delete pops only after awaited delete success',
+        (tester) async {
+      final delayedRepo = DelayedRepository();
+      final delayedController = NotesController(delayedRepo);
+
+      await delayedController.load();
+      delayedRepo.upsertCompleter.complete();
+      await delayedController.addOrUpdate(
+        title: 'Delayed Delete',
+        content: Document(),
+      );
+      final existing = delayedController.notes.first;
+
+      await tester.pumpWidget(
+        _withUmami(
+          MaterialApp(
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NoteDetailPage(
+                existing: existing, controller: delayedController),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.delete));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete'));
+      await tester.pump();
+
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+
+      delayedRepo.deleteCompleter.complete();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
+    });
+  });
+}

@@ -1,0 +1,29 @@
+default_platform(:ios)
+
+platform :ios do
+  lane :beta do
+    setup_ci if ENV["CI"]
+    match(type: "appstore")
+    build_app(
+      scheme: "Runner",
+      workspace: "Runner.xcworkspace",
+      export_method: "app-store"
+    )
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  lane :release do
+    setup_ci if ENV["CI"]
+    match(type: "appstore")
+    build_app(
+      scheme: "Runner",
+      workspace: "Runner.xcworkspace",
+      export_method: "app-store"
+    )
+    upload_to_app_store(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

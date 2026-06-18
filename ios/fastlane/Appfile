@@ -1,0 +1,5 @@
+app_identifier "com.teamsuperpanda.fox"
+
+# Apple Developer Portal credentials -- set as CI secrets
+apple_id ENV["APPLE_ID"]
+team_id ENV["TEAM_ID"]
