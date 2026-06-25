@@ -8,7 +8,6 @@ import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
-import 'package:fox/services/umami_service.dart';
 import 'package:fox/theme/app_theme.dart';
 import 'package:fox/widgets/language_picker_dialog.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +18,6 @@ class ViewOptionsSheet extends StatefulWidget {
     required this.settingsService,
     required this.themeProvider,
     required this.localeProvider,
-    required this.umamiService,
     required this.accentColorOptions,
     super.key,
   });
@@ -28,7 +26,6 @@ class ViewOptionsSheet extends StatefulWidget {
   final SettingsService settingsService;
   final ThemeProvider themeProvider;
   final LocaleProvider localeProvider;
-  final UmamiService umamiService;
   final List<Color> accentColorOptions;
 
   @override
@@ -253,31 +250,6 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                       localeProvider,
                                       setDialogState,
                                     ),
-                                    const SizedBox(height: 24),
-                                    _buildSectionHeader(
-                                        context, l10n.analytics),
-                                    _buildCardGroup(context, [
-                                      _buildSwitchTile(
-                                        context: context,
-                                        title: l10n.analytics,
-                                        value: widget.settingsService
-                                            .getAnalyticsEnabled(),
-                                        onChanged: (val) async {
-                                          widget.umamiService.enabled = val;
-                                          try {
-                                            await widget.settingsService
-                                                .setAnalyticsEnabled(val);
-                                          } catch (e) {
-                                            debugPrint(
-                                                'ViewOptionsSheet: failed to persist analyticsEnabled: $e');
-                                          }
-                                          widget.umamiService.track(
-                                              'analytics_change',
-                                              data: {'analytics': val});
-                                          setDialogState(() {});
-                                        },
-                                      ),
-                                    ]),
                                     const SizedBox(height: 16),
                                   ],
                                 ),
@@ -482,7 +454,6 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
             child: GestureDetector(
               onTap: () {
                 themeProvider.setAccentColor(color);
-                widget.umamiService.track('accent_color_change');
                 setDialogState(() {});
               },
               child: AnimatedContainer(
@@ -569,13 +540,9 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
             );
             if (selected == LanguagePickerDialog.sentinelSystemDefault) {
               await localeProvider.setLocale(null);
-              widget.umamiService
-                  .track('locale_change', data: {'locale': 'system'});
               setDialogState(() {});
             } else if (selected != null) {
               await localeProvider.setLocale(selected);
-              widget.umamiService.track('locale_change',
-                  data: {'locale': selected.toLanguageTag()});
               setDialogState(() {});
             }
           },

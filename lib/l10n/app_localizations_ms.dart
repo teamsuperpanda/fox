@@ -182,9 +182,6 @@ class AppLocalizationsMs extends AppLocalizations {
   String get accentColor => 'Warna Aksen';
 
   @override
-  String get analytics => 'Analitis';
-
-  @override
   String get systemDefault => 'Lalai sistem';
 
   @override

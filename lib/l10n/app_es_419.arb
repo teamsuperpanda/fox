@@ -55,7 +55,6 @@
   "today": "Hoy",
   "language": "Idioma",
   "accentColor": "Color de acento",
-  "analytics": "Analíticas",
   "systemDefault": "Predeterminado del sistema",
   "startupError": "Algo salió mal al iniciar Fox.\n\nIntenta borrar los datos de la app o reinstalarla.\n\nError: {error}",  "note": "Nota",
   "emptyNoteDiscarded": "Nota vacía descartada",

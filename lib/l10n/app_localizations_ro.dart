@@ -182,9 +182,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get accentColor => 'Culoare de accent';
 
   @override
-  String get analytics => 'Analitice';
-
-  @override
   String get systemDefault => 'Implicit sistem';
 
   @override

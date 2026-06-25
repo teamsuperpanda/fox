@@ -1,0 +1,2 @@
+Yang baru di 2.1.0:
+• Perbaikan bug dan peningkatan kinerja.

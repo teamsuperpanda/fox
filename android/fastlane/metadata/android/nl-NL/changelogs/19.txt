@@ -1,0 +1,2 @@
+Wat is nieuw in 2.1.0:
+• Bugfixes en prestatieverbeteringen.

@@ -55,7 +55,6 @@
   "today": "Hoje",
   "language": "Idioma",
   "accentColor": "Cor de destaque",
-  "analytics": "Analíticas",
   "systemDefault": "Padrão do sistema",
   "startupError": "Algo deu errado ao iniciar o Fox.\n\nTente limpar os dados do app ou reinstalá-lo.\n\nErro: {error}",  "note": "Nota",
   "emptyNoteDiscarded": "Nota vazia descartada",

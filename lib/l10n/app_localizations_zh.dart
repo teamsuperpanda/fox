@@ -181,9 +181,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accentColor => '强调色';
 
   @override
-  String get analytics => '分析';
-
-  @override
   String get systemDefault => '系统默认';
 
   @override
@@ -373,9 +370,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get accentColor => '強調色';
-
-  @override
-  String get analytics => '分析';
 
   @override
   String get systemDefault => '系統預設';

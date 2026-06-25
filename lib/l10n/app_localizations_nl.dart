@@ -184,9 +184,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get accentColor => 'Accentkleur';
 
   @override
-  String get analytics => 'Analyses';
-
-  @override
   String get systemDefault => 'Systeemstandaard';
 
   @override

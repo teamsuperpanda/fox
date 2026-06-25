@@ -182,9 +182,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accentColor => 'لون التمييز';
 
   @override
-  String get analytics => 'تحليلات';
-
-  @override
   String get systemDefault => 'الافتراضي للنظام';
 
   @override

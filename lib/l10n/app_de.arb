@@ -55,7 +55,6 @@
   "today": "Heute",
   "language": "Sprache",
   "accentColor": "Akzentfarbe",
-  "analytics": "Analysen",
   "systemDefault": "Systemstandard",
   "startupError": "Beim Starten von Fox ist ein Fehler aufgetreten.\n\nVersuche, die App-Daten zu löschen oder die App neu zu installieren.\n\nFehler: {error}",  "note": "Notiz",
   "emptyNoteDiscarded": "Leere Notiz verworfen",

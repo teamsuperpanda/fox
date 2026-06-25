@@ -4,9 +4,7 @@ import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
 import 'package:fox/services/notes_controller.dart';
-import 'package:fox/services/umami_service.dart';
 import 'package:fox/widgets/dialogs.dart';
-import 'package:provider/provider.dart';
 
 /// Result returned when popping the detail page so the caller can act on it.
 class NoteDetailResult {
@@ -43,12 +41,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final isNew = widget.existing == null;
-      context
-          .read<UmamiService>()
-          .trackPageView(isNew ? '/note/new' : '/note/edit');
-    });
     _titleCtrl = TextEditingController(text: widget.existing?.title ?? '');
     _contentCtrl = QuillController(
       document: widget.existing?.document ?? Document(),
@@ -235,9 +227,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     visualDensity: VisualDensity.compact,
                     onTap: () {
                       setState(() => _folderId = folder.id);
-                      context
-                          .read<UmamiService>()
-                          .track('note_move', data: {'folder': folder.name});
                       Navigator.of(context).pop();
                     },
                   );
@@ -297,7 +286,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
 
     try {
-      final isNew = widget.existing == null;
       await widget.controller.addOrUpdate(
         id: widget.existing?.id,
         title: title,
@@ -308,7 +296,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         color: _color,
       );
       if (!mounted) return;
-      context.read<UmamiService>().track(isNew ? 'note_create' : 'note_edit');
       navigator.pop(const NoteDetailResult(changed: true));
     } catch (e) {
       _saving = false;
@@ -405,7 +392,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     try {
                       await widget.controller.remove(widget.existing!.id);
                       if (!context.mounted) return;
-                      context.read<UmamiService>().track('note_delete');
                       navigator.pop(
                           const NoteDetailResult(changed: true, deleted: true));
                     } catch (e) {

@@ -182,9 +182,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get accentColor => 'অ্যাকসেন্ট রঙ';
 
   @override
-  String get analytics => 'বিশ্লেষণ';
-
-  @override
   String get systemDefault => 'সিস্টেম ডিফল্ট';
 
   @override

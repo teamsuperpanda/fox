@@ -182,9 +182,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get accentColor => 'Kolor akcentu';
 
   @override
-  String get analytics => 'Analityka';
-
-  @override
   String get systemDefault => 'Domyślny systemowy';
 
   @override

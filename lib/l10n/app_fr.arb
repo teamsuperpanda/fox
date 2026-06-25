@@ -55,7 +55,6 @@
   "today": "Aujourd'hui",
   "language": "Langue",
   "accentColor": "Couleur d'accentuation",
-  "analytics": "Statistiques",
   "systemDefault": "Par défaut du système",
   "startupError": "Une erreur est survenue au lancement de Fox.\n\nEssayez de vider les données de l'application ou de la réinstaller.\n\nErreur : {error}",  "note": "Note",
   "emptyNoteDiscarded": "Note vide abandonnée",

@@ -55,7 +55,6 @@
   "today": "Vandaag",
   "language": "Taal",
   "accentColor": "Accentkleur",
-  "analytics": "Analyses",
   "systemDefault": "Systeemstandaard",
   "startupError": "Er is iets misgegaan bij het starten van Fox.\n\nProbeer de app-gegevens te wissen of opnieuw te installeren.\n\nFout: {error}",  "note": "Notitie",
   "emptyNoteDiscarded": "Lege notitie weggegooid",

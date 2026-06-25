@@ -183,9 +183,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accentColor => 'Color de acento';
 
   @override
-  String get analytics => 'Analíticas';
-
-  @override
   String get systemDefault => 'Predeterminado del sistema';
 
   @override
@@ -378,9 +375,6 @@ class AppLocalizationsEs419 extends AppLocalizationsEs {
 
   @override
   String get accentColor => 'Color de acento';
-
-  @override
-  String get analytics => 'Analíticas';
 
   @override
   String get systemDefault => 'Predeterminado del sistema';

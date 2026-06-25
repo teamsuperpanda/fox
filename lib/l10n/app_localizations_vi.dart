@@ -183,9 +183,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get accentColor => 'Màu nhấn';
 
   @override
-  String get analytics => 'Phân tích';
-
-  @override
   String get systemDefault => 'Mặc định hệ thống';
 
   @override

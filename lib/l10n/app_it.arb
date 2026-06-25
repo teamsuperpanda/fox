@@ -55,7 +55,6 @@
   "today": "Oggi",
   "language": "Lingua",
   "accentColor": "Colore di evidenziazione",
-  "analytics": "Analisi",
   "systemDefault": "Predefinito di sistema",
   "startupError": "Qualcosa è andato storto all'avvio di Fox.\n\nProva a cancellare i dati dell'app o reinstallarla.\n\nErrore: {error}",  "note": "Nota",
   "emptyNoteDiscarded": "Nota vuota scartata",

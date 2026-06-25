@@ -183,9 +183,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get accentColor => 'Cor de destaque';
 
   @override
-  String get analytics => 'Analíticas';
-
-  @override
   String get systemDefault => 'Padrão do sistema';
 
   @override
@@ -377,9 +374,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get accentColor => 'Cor de destaque';
-
-  @override
-  String get analytics => 'Analíticas';
 
   @override
   String get systemDefault => 'Predefinição do sistema';

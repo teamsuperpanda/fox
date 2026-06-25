@@ -185,9 +185,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accentColor => 'Couleur d\'accentuation';
 
   @override
-  String get analytics => 'Statistiques';
-
-  @override
   String get systemDefault => 'Par défaut du système';
 
   @override

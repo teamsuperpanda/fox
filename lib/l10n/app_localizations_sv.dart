@@ -183,9 +183,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get accentColor => 'Accentfärg';
 
   @override
-  String get analytics => 'Analys';
-
-  @override
   String get systemDefault => 'Systemstandard';
 
   @override

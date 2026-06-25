@@ -8,7 +8,6 @@ import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
-import 'package:fox/services/umami_service.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
 import 'package:fox/widgets/folders_dialog.dart';
@@ -39,9 +38,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     controller.addListener(_onChanged);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<UmamiService>().trackPageView('/home');
-    });
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -60,11 +56,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       controller.setSearchTerm(term);
       _searchDebounce?.cancel();
       if (term.isNotEmpty) {
-        _searchDebounce = Timer(const Duration(milliseconds: 500), () {
-          context
-              .read<UmamiService>()
-              .track('search_perform', data: {'term': term.hashCode.toString()});
-        });
+        _searchDebounce = Timer(const Duration(milliseconds: 500), () {});
       }
     });
     // Kick off the FAB wiggle after the first frame so it doesn't block
@@ -141,10 +133,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Future<void> _showViewOptions() async {
-    context
-        .read<UmamiService>()
-        .track('view_option_change', data: {'action': 'open'});
-
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -156,7 +144,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         settingsService: widget.settingsService,
         themeProvider: context.read<ThemeProvider>(),
         localeProvider: context.read<LocaleProvider>(),
-        umamiService: context.read<UmamiService>(),
         accentColorOptions: accentColorOptions,
       ),
     );
@@ -215,7 +202,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 onPressed: !hasAnyNotes
                     ? null
                     : () {
-                        context.read<UmamiService>().track('search_activation');
                         setState(() => _isSearching = true);
                       },
               ),
@@ -243,7 +229,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: IconButton(
                 icon: Icon(context.watch<ThemeProvider>().getThemeIcon()),
                 onPressed: () {
-                  context.read<UmamiService>().track('theme_change');
                   unawaited(context.read<ThemeProvider>().toggleTheme());
                 },
                 tooltip: l10n.toggleTheme,

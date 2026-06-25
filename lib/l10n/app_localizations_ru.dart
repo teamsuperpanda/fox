@@ -182,9 +182,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get accentColor => 'Цвет акцента';
 
   @override
-  String get analytics => 'Аналитика';
-
-  @override
   String get systemDefault => 'Системный по умолчанию';
 
   @override

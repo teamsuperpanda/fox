@@ -55,7 +55,6 @@
   "today": "Hari ini",
   "language": "Bahasa",
   "accentColor": "Warna Aksen",
-  "analytics": "Analitik",
   "systemDefault": "Default sistem",
   "startupError": "Terjadi kesalahan saat memulai Fox.\n\nCoba hapus data aplikasi atau instal ulang.\n\nKesalahan: {error}",  "note": "Catatan",
   "emptyNoteDiscarded": "Catatan kosong dibuang",

@@ -1,0 +1,2 @@
+Neu in Version 2.1.0:
+• Verbesserungen der Leistung und Fehlerbehebungen.

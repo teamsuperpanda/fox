@@ -183,9 +183,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get accentColor => 'Barva akcentu';
 
   @override
-  String get analytics => 'Analýzy';
-
-  @override
   String get systemDefault => 'Výchozí systémový';
 
   @override

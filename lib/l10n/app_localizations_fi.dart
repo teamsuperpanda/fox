@@ -184,9 +184,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get accentColor => 'Korostusväri';
 
   @override
-  String get analytics => 'Analytiikka';
-
-  @override
   String get systemDefault => 'Järjestelmän oletus';
 
   @override

@@ -55,7 +55,6 @@
   "today": "今天",
   "language": "语言",
   "accentColor": "强调色",
-  "analytics": "分析",
   "systemDefault": "系统默认",
   "startupError": "Fox 启动时出现问题。\n\n请尝试清除应用数据或重新安装。\n\n错误：{error}",  "note": "笔记",
   "emptyNoteDiscarded": "空笔记已丢弃",

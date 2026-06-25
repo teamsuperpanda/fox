@@ -55,7 +55,6 @@
   "today": "היום",
   "language": "שפה",
   "accentColor": "צבע הדגשה",
-  "analytics": "ניתוחים",
   "systemDefault": "ברירת מחדל של המערכת",
   "startupError": "אירעה שגיאה בהפעלת Fox.\n\nנסה לנקות את נתוני האפליקציה או להתקין מחדש.\n\nשגיאה: {error}",  "note": "פתק",
   "emptyNoteDiscarded": "פתק ריק נמחק",

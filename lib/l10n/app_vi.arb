@@ -55,7 +55,6 @@
   "today": "Hôm nay",
   "language": "Ngôn ngữ",
   "accentColor": "Màu nhấn",
-  "analytics": "Phân tích",
   "systemDefault": "Mặc định hệ thống",
   "startupError": "Đã xảy ra lỗi khi khởi động Fox.\n\nHãy thử xóa dữ liệu ứng dụng hoặc cài đặt lại.\n\nLỗi: {error}",  "note": "Ghi chú",
   "emptyNoteDiscarded": "Ghi chú trống đã bị hủy",

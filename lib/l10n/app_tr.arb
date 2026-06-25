@@ -55,7 +55,6 @@
   "today": "Bugün",
   "language": "Dil",
   "accentColor": "Vurgu Rengi",
-  "analytics": "Analitik",
   "systemDefault": "Sistem varsayılanı",
   "startupError": "Fox başlatılırken bir sorun oluştu.\n\nUygulama verilerini temizlemeyi veya yeniden yüklemeyi deneyin.\n\nHata: {error}",  "note": "Not",
   "emptyNoteDiscarded": "Boş not atıldı",

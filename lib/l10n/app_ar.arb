@@ -55,7 +55,6 @@
   "today": "اليوم",
   "language": "اللغة",
   "accentColor": "لون التمييز",
-  "analytics": "تحليلات",
   "systemDefault": "الافتراضي للنظام",
   "startupError": "حدث خطأ أثناء بدء تشغيل Fox.\n\nحاول مسح بيانات التطبيق أو إعادة تثبيته.\n\nخطأ: {error}",  "note": "ملاحظة",
   "emptyNoteDiscarded": "تم تجاهل الملاحظة الفارغة",

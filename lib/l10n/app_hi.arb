@@ -55,7 +55,6 @@
   "today": "आज",
   "language": "भाषा",
   "accentColor": "एक्सेंट रंग",
-  "analytics": "विश्लेषण",
   "systemDefault": "सिस्टम डिफ़ॉल्ट",
   "startupError": "Fox शुरू करते समय कुछ गलत हो गया।\n\nऐप डेटा साफ़ करने या पुनः इंस्टॉल करने का प्रयास करें।\n\nत्रुटि: {error}",  "note": "नोट",
   "emptyNoteDiscarded": "खाली नोट हटा दिया गया",

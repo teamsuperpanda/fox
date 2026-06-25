@@ -9,7 +9,6 @@ import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
-import 'package:fox/services/umami_service.dart';
 import 'package:fox/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -48,15 +47,10 @@ Widget _buildApp({
   required NotesController controller,
   required SettingsService settingsService,
 }) {
-  final umami = UmamiService(
-    websiteId: 'test',
-    endpoint: 'https://test.com/api/send',
-  );
   return MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsService)),
       ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsService)),
-      Provider.value(value: umami),
     ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -257,17 +251,11 @@ void main() {
           updatedAt: DateTime.now(),
         );
 
-        final umami = UmamiService(
-          websiteId: 'test',
-          endpoint: 'https://test.com/api/send',
-        );
-
         await tester.pumpWidget(
           MultiProvider(
             providers: [
               ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsService)),
               ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsService)),
-              Provider.value(value: umami),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -372,17 +360,11 @@ void main() {
           updatedAt: DateTime.now(),
         );
 
-        final umami = UmamiService(
-          websiteId: 'test',
-          endpoint: 'https://test.com/api/send',
-        );
-
         await tester.pumpWidget(buildStoreFrame(
           MultiProvider(
             providers: [
               ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsService)),
               ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsService)),
-              Provider.value(value: umami),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

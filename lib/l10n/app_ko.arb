@@ -55,7 +55,6 @@
   "today": "오늘",
   "language": "언어",
   "accentColor": "강조 색상",
-  "analytics": "분석",
   "systemDefault": "시스템 기본값",
   "startupError": "Fox 시작 중 문제가 발생했습니다.\n\n앱 데이터를 지우거나 다시 설치해 보세요.\n\n오류: {error}",  "note": "노트",
   "emptyNoteDiscarded": "빈 노트가 삭제되었습니다",

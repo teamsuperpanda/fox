@@ -6,12 +6,10 @@ import 'package:fox/home_page.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
-import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/services/storage_service.dart';
-import 'package:fox/services/umami_service.dart';
 import 'package:fox/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -42,27 +40,14 @@ void main() async {
       LocaleProvider(settingsRepository: settingsService);
   await localeProvider.load();
 
-  final umamiService = UmamiService(
-    websiteId: AppConstants.umamiWebsiteId,
-    endpoint: AppConstants.umamiEndpoint,
-  );
-
-  try {
-    umamiService.enabled = settingsService.getAnalyticsEnabled();
-  } catch (e) {
-    debugPrint('Failed to load analytics setting: $e');
-  }
-
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
         ChangeNotifierProvider.value(value: notesController),
-        Provider.value(value: umamiService),
       ],
       child: MyApp(
-        umamiService: umamiService,
         notesController: notesController,
         settingsService: settingsService,
       ),
@@ -70,22 +55,18 @@ void main() async {
   );
 
   // Remove splash after the first frame is rendered to avoid a white flash.
-  WidgetsBinding.instance.addPostFrameCallback((_) {
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
     FlutterNativeSplash.remove();
-    umamiService.track('app_launch');
-    umamiService
-        .track('note_count', data: {'count': notesController.notes.length});
+
   });
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({
-    required this.umamiService,
     required this.notesController,
     required this.settingsService,
     super.key,
   });
-  final UmamiService umamiService;
   final NotesController notesController;
   final SettingsService settingsService;
 
@@ -97,7 +78,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fox Notes',
       debugShowCheckedModeBanner: false,
-      navigatorObservers: [umamiService],
+      navigatorObservers: [],
       localizationsDelegates: const [
         ...AppLocalizations.localizationsDelegates,
         FlutterQuillLocalizations.delegate,

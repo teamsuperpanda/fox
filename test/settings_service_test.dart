@@ -43,7 +43,6 @@ void main() {
       expect(settingsService.getAlternatingColors(), isFalse);
       expect(settingsService.getFabAnimation(), isTrue);
       expect(settingsService.getSortBy(), 'dateDesc');
-      expect(settingsService.getAnalyticsEnabled(), isFalse);
     });
 
     test('getThemeMode returns system by default', () {

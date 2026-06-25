@@ -182,9 +182,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accentColor => 'Theme Color';
 
   @override
-  String get analytics => 'Analytics';
-
-  @override
   String get systemDefault => 'System Default';
 
   @override

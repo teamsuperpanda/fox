@@ -7,20 +7,16 @@ import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
-import 'package:fox/services/umami_service.dart';
 import 'package:provider/provider.dart';
 
 import 'test_helpers.dart';
 
 Widget _buildHome({required NotesController controller, SettingsService? settingsService}) {
   final settingsRepo = settingsService ?? SettingsService();
-  final umami = UmamiService(
-      websiteId: 'test', endpoint: 'https://test.com/api/send');
   return MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsRepo)),
       ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsRepo)),
-      Provider.value(value: umami),
     ],
     child: HomePage(controller: controller, settingsService: settingsRepo),
   );

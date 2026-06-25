@@ -55,7 +55,6 @@
   "today": "Dnes",
   "language": "Jazyk",
   "accentColor": "Barva akcentu",
-  "analytics": "Analýzy",
   "systemDefault": "Výchozí systémový",
   "startupError": "Při spuštění Fox došlo k chybě.\n\nZkuste vymazat data aplikace nebo ji znovu nainstalovat.\n\nChyba: {error}",  "note": "Poznámka",
   "emptyNoteDiscarded": "Prázdná poznámka zahozena",

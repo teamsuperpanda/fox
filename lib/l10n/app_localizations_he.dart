@@ -182,9 +182,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get accentColor => 'צבע הדגשה';
 
   @override
-  String get analytics => 'ניתוחים';
-
-  @override
   String get systemDefault => 'ברירת מחדל של המערכת';
 
   @override

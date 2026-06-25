@@ -55,7 +55,6 @@
   "today": "Hari ini",
   "language": "Bahasa",
   "accentColor": "Warna Aksen",
-  "analytics": "Analitis",
   "systemDefault": "Lalai sistem",
   "startupError": "Ralat berlaku semasa memulakan Fox.\n\nSila cuba kosongkan data apl atau pasang semula.\n\nRalat: {error}",  "note": "Nota",
   "emptyNoteDiscarded": "Nota kosong dibuang",

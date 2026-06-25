@@ -55,7 +55,6 @@
   "today": "Astăzi",
   "language": "Limbă",
   "accentColor": "Culoare de accent",
-  "analytics": "Analitice",
   "systemDefault": "Implicit sistem",
   "startupError": "A apărut o eroare la pornirea Fox.\n\nÎncercați să ștergeți datele aplicației sau să o reinstalați.\n\nEroare: {error}",  "note": "Notă",
   "emptyNoteDiscarded": "Nota goală a fost eliminată",

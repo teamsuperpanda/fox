@@ -1,0 +1,2 @@
+Novità nella versione 2.1.0:
+• Correzioni di bug e miglioramenti delle prestazioni.

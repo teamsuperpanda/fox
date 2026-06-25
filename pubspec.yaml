@@ -3,7 +3,7 @@ description: "A simple, local-first notes application."
 
 publish_to: 'none'
 license: PolyForm-Noncommercial-1.0.0
-version: 2.0.2+18
+version: 2.1.0+19
 
 environment:
   sdk: ^3.6.0

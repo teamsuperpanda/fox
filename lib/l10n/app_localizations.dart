@@ -489,12 +489,6 @@ abstract class AppLocalizations {
   /// **'Theme Color'**
   String get accentColor;
 
-  /// No description provided for @analytics.
-  ///
-  /// In en, this message translates to:
-  /// **'Analytics'**
-  String get analytics;
-
   /// No description provided for @systemDefault.
   ///
   /// In en, this message translates to:

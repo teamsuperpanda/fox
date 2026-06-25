@@ -184,9 +184,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get accentColor => 'Warna Aksen';
 
   @override
-  String get analytics => 'Analitik';
-
-  @override
   String get systemDefault => 'Default sistem';
 
   @override

@@ -70,7 +70,6 @@
   "today": "Today",
   "language": "Language",
   "accentColor": "Theme Color",
-  "analytics": "Analytics",
   "systemDefault": "System Default",
   "startupError": "Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: {error}",
   "@startupError": {

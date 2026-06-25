@@ -184,9 +184,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get accentColor => 'Χρώμα Τονισμού';
 
   @override
-  String get analytics => 'Αναλυτικά';
-
-  @override
   String get systemDefault => 'Προεπιλογή συστήματος';
 
   @override

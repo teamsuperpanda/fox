@@ -7,8 +7,6 @@ import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/note_detail_page.dart';
 import 'package:fox/services/notes_controller.dart';
-import 'package:fox/services/umami_service.dart';
-import 'package:provider/provider.dart';
 import 'test_helpers.dart';
 
 class FailingSaveRepository extends MockRepository {
@@ -40,13 +38,6 @@ class DelayedRepository extends MockRepository {
     await deleteCompleter.future;
     return super.delete(id);
   }
-}
-
-Widget _withUmami(Widget child) {
-  return Provider.value(
-    value: UmamiService(websiteId: 'test', endpoint: 'https://test.com/api/send'),
-    child: child,
-  );
 }
 
 void main() {
@@ -158,7 +149,7 @@ void main() {
 
     testWidgets('creates note with title', (tester) async {
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -167,7 +158,6 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: NoteDetailPage(controller: controller),
           ),
-        ),
       );
 
       await tester.tap(find.byIcon(Icons.arrow_back));
@@ -188,7 +178,7 @@ void main() {
       mockRepo.notes.add(existingNote);
 
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -197,7 +187,6 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: NoteDetailPage(existing: existingNote, controller: controller),
           ),
-        ),
       );
 
       final titleField = find.byType(TextField).first;
@@ -220,7 +209,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -230,7 +219,6 @@ void main() {
             home: NoteDetailPage(
                 existing: note, controller: controller, showToolbar: false),
           ),
-        ),
       );
 
       expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
@@ -246,7 +234,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -256,7 +244,6 @@ void main() {
             home: NoteDetailPage(
                 existing: note, controller: controller, showToolbar: false),
           ),
-        ),
       );
 
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
@@ -264,7 +251,7 @@ void main() {
 
     testWidgets('tags dialog allows adding and removing tags', (tester) async {
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -273,7 +260,6 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: NoteDetailPage(controller: controller, showToolbar: false),
           ),
-        ),
       );
 
       await tester.tap(find.byIcon(Icons.label_outline));
@@ -318,7 +304,7 @@ void main() {
       final failingController = NotesController(failingRepo);
 
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -327,7 +313,6 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: NoteDetailPage(controller: failingController),
           ),
-        ),
       );
 
       await tester.enterText(find.byType(TextField).first, 'Will Fail');
@@ -345,7 +330,7 @@ void main() {
       final delayedController = NotesController(delayedRepo);
 
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -354,7 +339,6 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: NoteDetailPage(controller: delayedController),
           ),
-        ),
       );
 
       await tester.enterText(find.byType(TextField).first, 'Delayed Save');
@@ -383,7 +367,7 @@ void main() {
       final existing = failingController.notes.first;
 
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -393,7 +377,6 @@ void main() {
             home: NoteDetailPage(
                 existing: existing, controller: failingController),
           ),
-        ),
       );
 
       await tester.tap(find.byIcon(Icons.delete));
@@ -419,7 +402,7 @@ void main() {
       final existing = delayedController.notes.first;
 
       await tester.pumpWidget(
-        _withUmami(
+        
           MaterialApp(
             localizationsDelegates: const [
               ...AppLocalizations.localizationsDelegates,
@@ -429,7 +412,6 @@ void main() {
             home: NoteDetailPage(
                 existing: existing, controller: delayedController),
           ),
-        ),
       );
 
       await tester.tap(find.byIcon(Icons.delete));

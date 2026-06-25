@@ -182,9 +182,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get accentColor => 'Vurgu Rengi';
 
   @override
-  String get analytics => 'Analitik';
-
-  @override
   String get systemDefault => 'Sistem varsayılanı';
 
   @override

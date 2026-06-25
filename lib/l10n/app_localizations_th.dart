@@ -182,9 +182,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get accentColor => 'สีเน้น';
 
   @override
-  String get analytics => 'การวิเคราะห์';
-
-  @override
   String get systemDefault => 'ค่าเริ่มต้นระบบ';
 
   @override

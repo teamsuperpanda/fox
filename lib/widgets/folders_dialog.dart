@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
-import 'package:fox/services/umami_service.dart';
-import 'package:provider/provider.dart';
 
 /// A dialog that lets the user manage folders: create, rename, delete, and
 /// select a folder filter.
@@ -31,13 +29,6 @@ class _FoldersDialogState extends State<FoldersDialog> {
     if (name.isNotEmpty) {
       await controller.addFolder(name);
       if (!mounted) return;
-      try {
-        context
-            .read<UmamiService>()
-            .track('folder_create', data: {'name_length': name.length});
-      } catch (e) {
-        debugPrint('Failed to track folder_create: $e');
-      }
       _folderNameCtrl.clear();
       setState(() {});
     }

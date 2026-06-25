@@ -4,23 +4,16 @@ import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/services/repository_hive.dart';
-import 'package:fox/services/umami_service.dart';
-import 'package:provider/provider.dart';
 
 Widget buildTestApp({required Widget home, ThemeData? theme}) {
-  final umami = UmamiService(
-      websiteId: 'test', endpoint: 'https://test.com/api/send');
-  return Provider.value(
-    value: umami,
-    child: MaterialApp(
-      localizationsDelegates: const [
-        ...AppLocalizations.localizationsDelegates,
-        FlutterQuillLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: theme,
-      home: home,
-    ),
+  return MaterialApp(
+    localizationsDelegates: const [
+      ...AppLocalizations.localizationsDelegates,
+      FlutterQuillLocalizations.delegate,
+    ],
+    supportedLocales: AppLocalizations.supportedLocales,
+    theme: theme,
+    home: home,
   );
 }
 

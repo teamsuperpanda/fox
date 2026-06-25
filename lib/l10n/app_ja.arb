@@ -55,7 +55,6 @@
   "today": "今日",
   "language": "言語",
   "accentColor": "アクセントカラー",
-  "analytics": "分析",
   "systemDefault": "システムのデフォルト",
   "startupError": "Foxの起動中にエラーが発生しました。\n\nアプリデータを消去するか再インストールしてください。\n\nエラー: {error}",  "note": "ノート",
   "emptyNoteDiscarded": "空のノートは破棄されました",

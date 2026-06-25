@@ -82,12 +82,6 @@ class SettingsService {
 
   String? getLocale() => _get().locale;
 
-  bool getAnalyticsEnabled() => _get().analyticsEnabled;
-
-  Future<void> setAnalyticsEnabled(bool value) async {
-    await _update((s) => s.copyWith(analyticsEnabled: value));
-  }
-
   Future<void> setLocale(String? value) async {
     if (value == null) {
       await _update((s) => s.copyWith(clearLocale: true));

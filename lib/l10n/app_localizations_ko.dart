@@ -181,9 +181,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get accentColor => '강조 색상';
 
   @override
-  String get analytics => '분석';
-
-  @override
   String get systemDefault => '시스템 기본값';
 
   @override

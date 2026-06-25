@@ -9,6 +9,37 @@ import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:intl/intl.dart';
 
+InlineSpan _highlightText(
+  String text,
+  String query,
+  TextStyle? style,
+  Color highlightColor,
+) {
+  if (query.isEmpty) return TextSpan(text: text, style: style);
+  final lower = text.toLowerCase();
+  final q = query.toLowerCase();
+  final spans = <InlineSpan>[];
+  var start = 0;
+  while (true) {
+    final idx = lower.indexOf(q, start);
+    if (idx < 0) break;
+    if (idx > start) {
+      spans.add(TextSpan(text: text.substring(start, idx), style: style));
+    }
+    spans.add(TextSpan(
+      text: text.substring(idx, idx + q.length),
+      style: style?.copyWith(
+        backgroundColor: highlightColor,
+      ),
+    ));
+    start = idx + q.length;
+  }
+  if (start < text.length) {
+    spans.add(TextSpan(text: text.substring(start), style: style));
+  }
+  return TextSpan(children: spans);
+}
+
 class NoteList extends StatelessWidget {
   const NoteList({
     required this.controller,
@@ -45,6 +76,8 @@ class NoteList extends StatelessWidget {
         final note = notes[index];
         final noteColor = parseNoteColor(note.color);
         final trimmedText = note.plainText.trim();
+        final searchTerm = controller.searchTerm;
+        final highlightColor = Theme.of(context).colorScheme.tertiaryContainer.withValues(alpha: 0.5);
         return Dismissible(
           key: ValueKey(note.id),
           // Deletion is handled inside confirmDismiss so Dismissible never removes
@@ -163,15 +196,16 @@ class NoteList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Text(
-                            note.title.isEmpty ? l10n.untitled : note.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.15,
-                                ),
+                          child: Text.rich(
+                            _highlightText(
+                              note.title.isEmpty ? l10n.untitled : note.title,
+                              searchTerm,
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.15,
+                                  ),
+                              highlightColor,
+                            ),
                           ),
                         ),
                         if (note.pinned) ...[
@@ -186,16 +220,20 @@ class NoteList extends StatelessWidget {
                     ),
                     if (showContent && trimmedText.isNotEmpty) ...[
                       const SizedBox(height: 2),
-                      Text(
-                        trimmedText,
+                      Text.rich(
+                        _highlightText(
+                          trimmedText,
+                          searchTerm,
+                          Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                height: 1.2,
+                              ),
+                          highlightColor,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                              height: 1.2,
-                            ),
                       ),
                     ],
                     if (showTags && note.tags.isNotEmpty) ...[
