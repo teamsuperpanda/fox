@@ -27,6 +27,9 @@ build/
 
 # Generated
 **/doc/api/
+
+# Web (local dev only)
+web/
 app.*.symbols
 app.*.map.json
 
