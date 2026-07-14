@@ -1,4 +1,5 @@
-2.0.1 sürümündeki yenilikler:
-• Vurgu Renk Temaları — 10 güzel vurgu rengiyle uygulamanızı kişiselleştirin. Seçiminiz kaydedilir ve hem açık hem de koyu modlarda uygulanır.
-• 31 Dil — Fox artık Tayca, Ukraynaca, Romence, Çekçe, Danca, Fince, Malayca, Bengalce, Yunanca ve İbranice dahil 31 dili destekliyor.
-• Uygulama genelinde hata düzeltmeleri ve kararlılık iyileştirmeleri.
+2.1.1 sürümündeki yenilikler:
+• Daha hızlı arama.
+• Klasör silinirken oluşan çökme hatası düzeltildi.
+• Başlangıç güvenilirliği iyileştirildi.
+• Ek hata düzeltmeleri ve performans iyileştirmeleri.

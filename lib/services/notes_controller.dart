@@ -145,11 +145,6 @@ class NotesController extends ChangeNotifier {
   }
 
   Future<void> deleteFolder(String id) async {
-    await _repo.deleteFolder(id);
-    _folders = _folders.where((f) => f.id != id).toList();
-    if (_selectedFolderId == id) {
-      _selectedFolderId = null;
-    }
     final now = DateTime.now();
     final batch = <Note>[];
     for (final note in _unfilteredNotes) {
@@ -158,6 +153,11 @@ class NotesController extends ChangeNotifier {
       }
     }
     if (batch.isNotEmpty) await _repo.upsertAll(batch);
+    await _repo.deleteFolder(id);
+    _folders = _folders.where((f) => f.id != id).toList();
+    if (_selectedFolderId == id) {
+      _selectedFolderId = null;
+    }
     _unfilteredNotes = _unfilteredNotes
         .map((n) => n.folderId == id
             ? n.copyWith(clearFolder: true, updatedAt: now)
@@ -224,19 +224,23 @@ class NotesController extends ChangeNotifier {
   }
 
   Future<void> remove(String id) async {
-    _lastRemovedNote = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
-    if (_lastRemovedNote == null) return;
+    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    if (note == null) return;
     await _repo.delete(id);
+    _lastRemovedNote = note;
     _unfilteredNotes = _unfilteredNotes.where((n) => n.id != id).toList();
     _updateView();
     notifyListeners();
   }
 
   Future<void> undoRemove() async {
-    if (_lastRemovedNote != null) {
-      await _repo.upsert(_lastRemovedNote!);
-      _unfilteredNotes = [..._unfilteredNotes, _lastRemovedNote!];
-      _lastRemovedNote = null;
+    final note = _lastRemovedNote;
+    if (note != null) {
+      await _repo.upsert(note);
+      _unfilteredNotes = [..._unfilteredNotes, note];
+      if (identical(_lastRemovedNote, note)) {
+        _lastRemovedNote = null;
+      }
       _updateView();
       notifyListeners();
     }

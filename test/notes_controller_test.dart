@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
@@ -5,6 +7,44 @@ import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 
 import 'test_helpers.dart';
+
+class _FailingDeleteRepo extends MemoryRepo {
+  bool failDeletes = false;
+
+  @override
+  Future<void> delete(String id) {
+    if (failDeletes) throw StateError('delete failed');
+    return super.delete(id);
+  }
+}
+
+class _FailingFolderNoteUpdateRepo extends MemoryRepo {
+  bool deleteFolderCalled = false;
+
+  @override
+  Future<void> upsertAll(List<Note> notes) =>
+      Future.error(StateError('note update failed'));
+
+  @override
+  Future<void> deleteFolder(String id) async {
+    deleteFolderCalled = true;
+  }
+}
+
+class _BlockingUpsertRepo extends MemoryRepo {
+  bool blockUpserts = false;
+  final upsertStarted = Completer<void>();
+  final resumeUpsert = Completer<void>();
+
+  @override
+  Future<void> upsert(Note note) async {
+    if (blockUpserts) {
+      upsertStarted.complete();
+      await resumeUpsert.future;
+    }
+    await super.upsert(note);
+  }
+}
 
 void main() {
   group('NotesController', () {
@@ -82,6 +122,36 @@ void main() {
       final id = controller.notes.first.id;
       await controller.remove(id);
       expect(controller.notes.any((n) => n.id == id), isFalse);
+    });
+
+    test('failed remove preserves the previous undo target', () async {
+      final failingRepo = _FailingDeleteRepo();
+      final failingController = NotesController(failingRepo);
+      await failingController.load();
+      await failingController.addOrUpdate(
+        title: 'First',
+        content: Document(),
+      );
+      await failingController.addOrUpdate(
+        title: 'Second',
+        content: Document(),
+      );
+      final first = failingController.notes.firstWhere(
+        (note) => note.title == 'First',
+      );
+      final second = failingController.notes.firstWhere(
+        (note) => note.title == 'Second',
+      );
+
+      await failingController.remove(first.id);
+      failingRepo.failDeletes = true;
+
+      await expectLater(
+        failingController.remove(second.id),
+        throwsA(isA<StateError>()),
+      );
+      expect(failingController.lastRemovedNote?.id, first.id);
+      expect(failingController.find(second.id), same(second));
     });
 
     test('find returns note or null', () async {
@@ -232,6 +302,38 @@ void main() {
       expect(controller.notes, isEmpty);
     });
 
+    test('undoRemove does not clear a newer concurrent undo target', () async {
+      final blockingRepo = _BlockingUpsertRepo();
+      final blockingController = NotesController(blockingRepo);
+      await blockingController.load();
+      await blockingController.addOrUpdate(
+        title: 'First',
+        content: Document(),
+      );
+      await blockingController.addOrUpdate(
+        title: 'Second',
+        content: Document(),
+      );
+      final first = blockingController.notes.firstWhere(
+        (note) => note.title == 'First',
+      );
+      final second = blockingController.notes.firstWhere(
+        (note) => note.title == 'Second',
+      );
+      await blockingController.remove(first.id);
+      blockingRepo.blockUpserts = true;
+
+      final undoFuture = blockingController.undoRemove();
+      await blockingRepo.upsertStarted.future;
+      await blockingController.remove(second.id);
+      blockingRepo.resumeUpsert.complete();
+      await undoFuture;
+
+      expect(blockingController.find(first.id), same(first));
+      expect(blockingController.find(second.id), isNull);
+      expect(blockingController.lastRemovedNote?.id, second.id);
+    });
+
     // --- hasNotes ---
 
     test('hasNotes is false when empty', () async {
@@ -329,6 +431,34 @@ void main() {
 
       await controller.deleteFolder(folderId);
       expect(controller.selectedFolderId, isNull);
+    });
+
+    test('deleteFolder keeps folder when clearing note references fails',
+        () async {
+      final failingRepo = _FailingFolderNoteUpdateRepo();
+      final failingController = NotesController(failingRepo);
+      await failingController.load();
+      await failingController.addFolder('Still present');
+      final folderId = failingController.folders.single.id;
+      await failingController.addOrUpdate(
+        title: 'Filed note',
+        content: Document(),
+        folderId: folderId,
+      );
+      failingController.setSelectedFolder(folderId);
+
+      await expectLater(
+        failingController.deleteFolder(folderId),
+        throwsA(isA<StateError>()),
+      );
+
+      expect(failingRepo.deleteFolderCalled, isFalse);
+      expect(failingController.folders.single.id, folderId);
+      expect(failingController.selectedFolderId, folderId);
+      expect(
+        failingController.find(failingController.notes.single.id)?.folderId,
+        folderId,
+      );
     });
 
     // --- Folder filter ---

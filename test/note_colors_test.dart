@@ -57,8 +57,8 @@ void main() {
     });
 
     test('returns null for hex without # prefix', () {
-      // 6 chars but no '#' → length is 6, not 7
       expect(parseNoteColor('FF5252'), isNull);
+      expect(parseNoteColor('1FF5252'), isNull);
     });
   });
 }

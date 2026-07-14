@@ -15,33 +15,25 @@ import 'package:provider/provider.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  late final HiveNoteRepository repository;
+  late final Widget app;
   try {
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     await StorageService.init();
-    repository = HiveNoteRepository.create();
-  } catch (e) {
-    runApp(MaterialApp(
-        home: Scaffold(body: Center(child: Text('Startup failed: $e')))));
-    return;
-  }
+    final repository = HiveNoteRepository.create();
+    final settingsService = SettingsService();
+    final notesController =
+        NotesController(repository, settingsRepository: settingsService);
+    await notesController.load();
 
-  final settingsService = SettingsService();
-  final notesController =
-      NotesController(repository, settingsRepository: settingsService);
-  await notesController.load();
+    final themeProvider = ThemeProvider(settingsRepository: settingsService);
+    await themeProvider.load();
 
-  final themeProvider = ThemeProvider(settingsRepository: settingsService);
-  await themeProvider.load();
+    final localeProvider = LocaleProvider(settingsRepository: settingsService);
+    await localeProvider.load();
 
-  final localeProvider =
-      LocaleProvider(settingsRepository: settingsService);
-  await localeProvider.load();
-
-  runApp(
-    MultiProvider(
+    app = MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
@@ -51,13 +43,18 @@ void main() async {
         notesController: notesController,
         settingsService: settingsService,
       ),
-    ),
-  );
+    );
+  } catch (e) {
+    app = MaterialApp(
+      home: Scaffold(body: Center(child: Text('Startup failed: $e'))),
+    );
+  }
+
+  runApp(app);
 
   // Remove splash after the first frame is rendered to avoid a white flash.
   WidgetsBinding.instance.addPostFrameCallback((_) async {
     FlutterNativeSplash.remove();
-
   });
 }
 
@@ -78,7 +75,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fox Notes',
       debugShowCheckedModeBanner: false,
-      navigatorObservers: [],
       localizationsDelegates: const [
         ...AppLocalizations.localizationsDelegates,
         FlutterQuillLocalizations.delegate,
@@ -88,7 +84,8 @@ class MyApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       theme: AppTheme.light(themeProvider.accentColor),
       darkTheme: AppTheme.dark(themeProvider.accentColor),
-      home: HomePage(controller: notesController, settingsService: settingsService),
+      home: HomePage(
+          controller: notesController, settingsService: settingsService),
     );
   }
 }

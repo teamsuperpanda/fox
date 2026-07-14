@@ -21,7 +21,7 @@ const List<String> noteColorOptions = [
 ///
 /// Returns `null` if [hex] is null, malformed, or not exactly 7 characters.
 Color? parseNoteColor(String? hex) {
-  if (hex == null || hex.length != 7) return null;
+  if (hex == null || hex.length != 7 || !hex.startsWith('#')) return null;
   try {
     return Color(int.parse('FF${hex.substring(1)}', radix: 16));
   } catch (_) {

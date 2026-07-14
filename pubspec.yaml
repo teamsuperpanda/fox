@@ -3,7 +3,7 @@ description: "A simple, local-first notes application."
 
 publish_to: 'none'
 license: PolyForm-Noncommercial-1.0.0
-version: 2.1.0+19
+version: 2.1.1+20
 
 environment:
   sdk: ^3.6.0
@@ -22,7 +22,6 @@ dependencies:
   hive_flutter: ^1.1.0
   uuid: ^4.5.3
   flutter_quill: ^11.5.0
-  http: ^1.2.0
 
 dev_dependencies:
   flutter_test:

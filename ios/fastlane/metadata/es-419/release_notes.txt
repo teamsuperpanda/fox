@@ -1,4 +1,5 @@
-Novedades en la versión 2.0.1:
-• Temas de color de acento — Personaliza tu aplicación con 10 hermosos colores de acento. Tu elección se guarda y se aplica en los modos claro y oscuro.
-• 31 idiomas — Fox ahora está disponible en 31 idiomas, incluyendo tailandés, ucraniano, rumano, checo, danés, finlandés, malayo, bengalí, griego y hebreo.
-• Correcciones de errores y mejoras de estabilidad en toda la aplicación.
+Novedades en la versión 2.1.1:
+• Búsqueda más rápida.
+• Se corrigió un fallo al eliminar carpetas.
+• Mejora en la fiabilidad de inicio.
+• Correcciones de errores adicionales y mejoras de rendimiento.

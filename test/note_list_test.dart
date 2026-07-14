@@ -6,6 +6,11 @@ import 'package:fox/widgets/note_list.dart';
 
 import 'test_helpers.dart';
 
+class _FailingUpsertRepository extends MockRepository {
+  @override
+  Future<void> upsert(Note note) => Future.error(StateError('upsert failed'));
+}
+
 void main() {
   group('NoteList Widget', () {
     late MockRepository mockRepo;
@@ -117,6 +122,37 @@ void main() {
 
       // Just verify it renders without crashing
       expect(find.byType(NoteList), findsOneWidget);
+    });
+
+    testWidgets('pin gesture propagates persistence errors', (tester) async {
+      final failingRepo = _FailingUpsertRepository();
+      final failingController = NotesController(failingRepo);
+      final note = Note(
+        id: '1',
+        title: 'Test Note',
+        content: '{}',
+        pinned: false,
+        updatedAt: DateTime.now(),
+      );
+      failingRepo.notes.add(note);
+      await failingController.load();
+
+      await tester.pumpWidget(
+        buildTestApp(
+          home: Scaffold(
+            body: NoteList(
+              controller: failingController,
+              notes: [note],
+            ),
+          ),
+        ),
+      );
+      final dismissible = tester.widget<Dismissible>(find.byType(Dismissible));
+
+      await expectLater(
+        dismissible.confirmDismiss!(DismissDirection.startToEnd),
+        throwsA(isA<StateError>()),
+      );
     });
 
     testWidgets('note with empty title shows (Untitled)', (tester) async {

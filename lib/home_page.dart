@@ -16,7 +16,8 @@ import 'package:fox/widgets/view_options_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({required this.controller, required this.settingsService, super.key});
+  const HomePage(
+      {required this.controller, required this.settingsService, super.key});
   final NotesController controller;
   final SettingsService settingsService;
 
@@ -32,7 +33,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool _isRotated = false;
   bool _isSearching = false;
   final _searchController = TextEditingController();
-  Timer? _searchDebounce;
 
   @override
   void initState() {
@@ -52,12 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     _searchController.addListener(() {
-      final term = _searchController.text;
-      controller.setSearchTerm(term);
-      _searchDebounce?.cancel();
-      if (term.isNotEmpty) {
-        _searchDebounce = Timer(const Duration(milliseconds: 500), () {});
-      }
+      controller.setSearchTerm(_searchController.text);
     });
     // Kick off the FAB wiggle after the first frame so it doesn't block
     // pumpAndSettle in tests (a repeating animation never "settles").
@@ -73,7 +68,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     controller.removeListener(_onChanged);
     _animationController.dispose();
     _fabController.dispose();
-    _searchDebounce?.cancel();
     _searchController.dispose();
     super.dispose();
   }

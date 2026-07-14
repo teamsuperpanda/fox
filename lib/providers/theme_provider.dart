@@ -37,14 +37,8 @@ class ThemeProvider extends ChangeNotifier {
     try {
       final service = _service;
       _themeMode = service.getThemeMode();
-      final hex = service.getAccentColor();
-      if (hex != null && hex.length == 7) {
-        try {
-          _accentColor = Color(int.parse('FF${hex.substring(1)}', radix: 16));
-        } catch (e) {
-          debugPrint('ThemeProvider: failed to parse accent color: $e');
-        }
-      }
+      final accentColor = parseNoteColor(service.getAccentColor());
+      if (accentColor != null) _accentColor = accentColor;
     } catch (e) {
       debugPrint('ThemeProvider: failed to load theme: $e');
       _themeMode = ThemeMode.system;

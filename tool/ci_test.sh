@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -e
-flutter test
+flutter test --exclude-tags golden

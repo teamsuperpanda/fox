@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/providers/theme_provider.dart';
+import 'package:fox/services/settings_service.dart';
 
 void main() {
   group('ThemeProvider', () {
@@ -64,6 +65,16 @@ void main() {
       await provider.load();
       // Should read back the persisted value
       expect(provider.themeMode, equals(ThemeMode.light));
+    });
+
+    test('load ignores malformed seven-character accent color', () async {
+      final settings = SettingsService();
+      await settings.setAccentColor('1FF5252');
+      final provider = ThemeProvider(settingsRepository: settings);
+
+      await provider.load();
+
+      expect(provider.accentColor, accentColorOptions.first);
     });
 
     test('multiple toggles work correctly', () async {

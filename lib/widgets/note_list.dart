@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
@@ -77,7 +75,10 @@ class NoteList extends StatelessWidget {
         final noteColor = parseNoteColor(note.color);
         final trimmedText = note.plainText.trim();
         final searchTerm = controller.searchTerm;
-        final highlightColor = Theme.of(context).colorScheme.tertiaryContainer.withValues(alpha: 0.5);
+        final highlightColor = Theme.of(context)
+            .colorScheme
+            .tertiaryContainer
+            .withValues(alpha: 0.5);
         return Dismissible(
           key: ValueKey(note.id),
           // Deletion is handled inside confirmDismiss so Dismissible never removes
@@ -103,7 +104,7 @@ class NoteList extends StatelessWidget {
               return false; // Never let Dismissible remove the widget
             } else if (direction == DismissDirection.startToEnd) {
               // Pin action - toggle pin
-              unawaited(controller.setPinned(note.id, !note.pinned));
+              await controller.setPinned(note.id, !note.pinned);
               return false;
             }
             return false;
@@ -151,7 +152,8 @@ class NoteList extends StatelessWidget {
             ),
           ),
           child: Semantics(
-            label: '${l10n.note}: ${note.title.isEmpty ? l10n.untitled : note.title}',
+            label:
+                '${l10n.note}: ${note.title.isEmpty ? l10n.untitled : note.title}',
             child: InkWell(
               onTap: () async {
                 final result =
