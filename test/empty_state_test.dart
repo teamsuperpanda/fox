@@ -10,7 +10,7 @@ void main() {
         (tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          home: const Scaffold(
+          const Scaffold(
             body: EmptyState(),
           ),
         ),
@@ -24,7 +24,7 @@ void main() {
         (tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          home: const Scaffold(
+          const Scaffold(
             body: EmptyState(isSearching: true),
           ),
         ),
@@ -38,7 +38,7 @@ void main() {
     testWidgets('content is wrapped in a Center widget', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          home: const Scaffold(
+          const Scaffold(
             body: EmptyState(),
           ),
         ),
@@ -52,13 +52,13 @@ void main() {
     testWidgets('uses theme text style', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
+          const Scaffold(
+            body: EmptyState(),
+          ),
           theme: ThemeData(
             textTheme: const TextTheme(
               titleMedium: TextStyle(fontSize: 20),
             ),
-          ),
-          home: const Scaffold(
-            body: EmptyState(),
           ),
         ),
       );

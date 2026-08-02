@@ -53,6 +53,7 @@ class NotesController extends ChangeNotifier {
 
   String _searchTerm = '';
   String get searchTerm => _searchTerm;
+  String _lastSearchTerm = '';
 
   List<Folder> _folders = const [];
   List<Folder> get folders => _folders;
@@ -88,6 +89,8 @@ class NotesController extends ChangeNotifier {
 
   void setSearchTerm(String term) {
     _searchTerm = term;
+    if (term == _lastSearchTerm) return;
+    _lastSearchTerm = term;
     _updateView();
     notifyListeners();
   }
@@ -144,25 +147,28 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Note> _clearFolderFrom(List<Note> notes, String folderId, DateTime now) {
+    return notes
+        .map((n) => n.folderId == folderId
+            ? n.copyWith(clearFolder: true, updatedAt: now)
+            : n)
+        .toList();
+  }
+
   Future<void> deleteFolder(String id) async {
     final now = DateTime.now();
-    final batch = <Note>[];
-    for (final note in _unfilteredNotes) {
-      if (note.folderId == id) {
-        batch.add(note.copyWith(clearFolder: true, updatedAt: now));
-      }
-    }
+    final cleared = _clearFolderFrom(_unfilteredNotes, id, now);
+    final batch = [
+      for (var i = 0; i < cleared.length; i++)
+        if (_unfilteredNotes[i].folderId == id) cleared[i],
+    ];
     if (batch.isNotEmpty) await _repo.upsertAll(batch);
     await _repo.deleteFolder(id);
     _folders = _folders.where((f) => f.id != id).toList();
     if (_selectedFolderId == id) {
       _selectedFolderId = null;
     }
-    _unfilteredNotes = _unfilteredNotes
-        .map((n) => n.folderId == id
-            ? n.copyWith(clearFolder: true, updatedAt: now)
-            : n)
-        .toList();
+    _unfilteredNotes = cleared;
     _updateView();
     notifyListeners();
   }
@@ -263,9 +269,9 @@ class NotesController extends ChangeNotifier {
       final term = _searchTerm.toLowerCase();
       copy.retainWhere(
         (note) =>
-            note.title.toLowerCase().contains(term) ||
+            note.lowerTitle.contains(term) ||
             note.plainText.toLowerCase().contains(term) ||
-            note.tags.any((tag) => tag.toLowerCase().contains(term)),
+            note.lowerTags.any((t) => t.contains(term)),
       );
     }
 

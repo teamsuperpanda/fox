@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/models/note.dart';
+import 'package:fox/models/note_colors.dart';
 import 'package:fox/note_detail_page.dart';
-import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
@@ -26,13 +27,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  static const _searchBreakWidth = 320.0;
+
   NotesController get controller => widget.controller;
   late AnimationController _animationController;
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
-  bool _isRotated = false;
   bool _isSearching = false;
   final _searchController = TextEditingController();
+  Timer? _searchDebounce;
 
   @override
   void initState() {
@@ -52,7 +55,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     _searchController.addListener(() {
-      controller.setSearchTerm(_searchController.text);
+      _searchDebounce?.cancel();
+      _searchDebounce = Timer(const Duration(milliseconds: 150), () {
+        controller.setSearchTerm(_searchController.text);
+      });
     });
     // Kick off the FAB wiggle after the first frame so it doesn't block
     // pumpAndSettle in tests (a repeating animation never "settles").
@@ -65,6 +71,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _searchDebounce?.cancel();
     controller.removeListener(_onChanged);
     _animationController.dispose();
     _fabController.dispose();
@@ -73,31 +80,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _onChanged() {
-    if (mounted) {
-      if (controller.fabAnimation) {
-        if (!_fabController.isAnimating) {
-          unawaited(_fabController.repeat(reverse: true));
-        }
-      } else {
-        if (_fabController.isAnimating) {
-          _fabController.stop();
-        }
-        // Force neutral position (0 degrees). Tween is -0.05 to 0.05. Neutral is 0.0, which is t=0.5
-        _fabController.value = 0.5;
+    if (!mounted) return;
+    if (controller.fabAnimation) {
+      if (!_fabController.isAnimating) {
+        unawaited(_fabController.repeat(reverse: true));
       }
-      setState(() {});
+    } else {
+      if (_fabController.isAnimating) {
+        _fabController.stop();
+      }
+      // Force neutral position (0 degrees). Tween is -0.05 to 0.05. Neutral is 0.0, which is t=0.5
+      _fabController.value = 0.5;
     }
   }
 
   void _toggleRotation() {
-    setState(() {
-      _isRotated = !_isRotated;
-      if (_isRotated) {
-        unawaited(_animationController.forward(from: 0));
-      } else {
-        unawaited(_animationController.reverse(from: 1));
-      }
-    });
+    if (_animationController.value > 0) {
+      unawaited(_animationController.reverse(from: 1));
+    } else {
+      unawaited(_animationController.forward(from: 0));
+    }
   }
 
   Future<void> _addNote() async {
@@ -114,6 +116,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         showUndoDeleteSnackBar(context, controller);
       }
       setState(() {});
+    }
+  }
+
+  Future<void> _openNote(Note note) async {
+    final result = await Navigator.of(context).push<NoteDetailResult>(
+      MaterialPageRoute(
+        builder: (_) => NoteDetailPage(
+          existing: note,
+          controller: controller,
+        ),
+      ),
+    );
+    if (!mounted) return;
+    if (result != null && result.deleted) {
+      showUndoDeleteSnackBar(context, controller);
     }
   }
 
@@ -136,8 +153,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (_) => ViewOptionsSheet(
         controller: controller,
         settingsService: widget.settingsService,
-        themeProvider: context.read<ThemeProvider>(),
-        localeProvider: context.read<LocaleProvider>(),
         accentColorOptions: accentColorOptions,
       ),
     );
@@ -146,14 +161,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final notes = controller.notes;
-    final hasAnyNotes = controller.hasNotes;
 
     return Scaffold(
       appBar: AppBar(
         title: _isSearching
             ? Semantics(
-                label: 'Search notes',
+                label: l10n.searchNotes,
                 child: TextField(
                   controller: _searchController,
                   autofocus: true,
@@ -163,7 +176,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               )
-            : MediaQuery.of(context).size.width <= 320
+            : MediaQuery.of(context).size.width <= _searchBreakWidth
                 ? null
                 : Text(l10n.appTitle),
         centerTitle: true,
@@ -174,7 +187,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: RotationTransition(
               turns:
                   Tween<double>(begin: 0, end: 1).animate(_animationController),
-              child: Image.asset('assets/images/icon/icon.png'),
+              child: Image.asset('assets/images/icon/icon.png', cacheWidth: 64),
             ),
           ),
         ),
@@ -190,14 +203,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             )
           else
             Semantics(
-              label: 'Search',
-              child: IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: !hasAnyNotes
-                    ? null
-                    : () {
-                        setState(() => _isSearching = true);
-                      },
+              label: l10n.search,
+              child: AnimatedBuilder(
+                animation: controller,
+                builder: (context, _) => IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: !controller.hasNotes
+                      ? null
+                      : () {
+                          setState(() => _isSearching = true);
+                        },
+                ),
               ),
             ),
           Semantics(
@@ -232,7 +248,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ],
       ),
       floatingActionButton: Semantics(
-        label: 'Add note',
+        label: l10n.addNote,
         child: AnimatedBuilder(
           animation: _fabAnimation,
           builder: (context, child) => Transform.rotate(
@@ -245,73 +261,79 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ),
       ),
-      body: controller.loading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                // Folder filter chip bar
-                if (controller.selectedFolderId != null)
-                  Semantics(
-                    label: 'Folder filter',
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.folder,
+      body: AnimatedBuilder(
+        animation: controller,
+        builder: (context, _) {
+          if (controller.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final notes = controller.notes;
+          return Column(
+            children: [
+              // Folder filter chip bar
+              if (controller.selectedFolderId != null)
+                Semantics(
+                  label: l10n.folderFilter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.folder,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          controller.selectedFolderId ==
+                                  AppConstants.unfiledFolderId
+                              ? l10n.unfiled
+                              : controller.getFolderName(
+                                    controller.selectedFolderId,
+                                  ) ??
+                                  l10n.unknown,
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          onPressed: () => controller.setSelectedFolder(null),
+                          icon: Icon(
+                            Icons.close,
                             size: 16,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          const SizedBox(width: 6),
-                          Text(
-                            controller.selectedFolderId ==
-                                    AppConstants.unfiledFolderId
-                                ? l10n.unfiled
-                                : controller.getFolderName(
-                                      controller.selectedFolderId,
-                                    ) ??
-                                    l10n.unknown,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                          ),
-                          const SizedBox(width: 4),
-                          IconButton(
-                            onPressed: () => controller.setSelectedFolder(null),
-                            icon: Icon(
-                              Icons.close,
-                              size: 16,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            tooltip: l10n.clearFolderFilter,
-                          ),
-                        ],
-                      ),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          tooltip: l10n.clearFolderFilter,
+                        ),
+                      ],
                     ),
                   ),
-                Expanded(
-                  child: notes.isEmpty
-                      ? EmptyState(
-                          isSearching:
-                              _isSearching || controller.searchTerm.isNotEmpty,
-                        )
-                      : NoteList(
-                          controller: controller,
-                          notes: notes,
-                          showTags: controller.showTags,
-                          showContent: controller.showContent,
-                        ),
                 ),
-              ],
-            ),
+              Expanded(
+                child: notes.isEmpty
+                    ? EmptyState(
+                        isSearching:
+                            _isSearching || controller.searchTerm.isNotEmpty,
+                      )
+                    : NoteList(
+                        controller: controller,
+                        notes: notes,
+                        onNoteTap: _openNote,
+                      ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

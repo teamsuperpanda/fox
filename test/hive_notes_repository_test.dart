@@ -4,12 +4,13 @@ import 'package:fox/models/note_adapter.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'test_helpers.dart';
+
 void main() {
   group('HiveNoteRepository', () {
     late HiveNoteRepository repository;
 
     setUpAll(() async {
-      // Initialize Hive for testing
       Hive.init('./test/hive_notes_test');
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(NoteAdapter());
@@ -17,16 +18,13 @@ void main() {
     });
 
     setUp(() async {
-      // Open the notes box
       await Hive.openBox<Note>('notes_db');
       repository = HiveNoteRepository.create();
 
-      // Clear any existing data
       await repository.clear();
     });
 
     tearDown(() async {
-      // Close the box after each test
       if (Hive.isBoxOpen('notes_db')) {
         final box = Hive.box<Note>('notes_db');
         await box.close();
@@ -34,17 +32,13 @@ void main() {
     });
 
     tearDownAll(() async {
-      // Clean up Hive after all tests
       await Hive.deleteFromDisk();
     });
 
     test('creates and retrieves a note', () async {
-      final note = Note(
+      final note = makeNote(
         id: 'test-1',
-        title: 'Test Note',
         content: 'This is a test note',
-        pinned: false,
-        updatedAt: DateTime.now(),
       );
 
       await repository.upsert(note);
@@ -58,12 +52,10 @@ void main() {
     });
 
     test('updates an existing note', () async {
-      final note = Note(
+      final note = makeNote(
         id: 'test-1',
         title: 'Original Title',
         content: 'Original content',
-        pinned: false,
-        updatedAt: DateTime.now(),
       );
 
       await repository.upsert(note);
@@ -83,12 +75,9 @@ void main() {
     });
 
     test('deletes a note', () async {
-      final note = Note(
+      final note = makeNote(
         id: 'test-1',
-        title: 'Test Note',
         content: 'This note will be deleted',
-        pinned: false,
-        updatedAt: DateTime.now(),
       );
 
       await repository.upsert(note);
@@ -102,28 +91,26 @@ void main() {
       final now = DateTime.now();
 
       final notes = [
-        Note(
+        makeNote(
           id: 'note-1',
           title: 'Unpinned Old',
           content: 'Content 1',
-          pinned: false,
           updatedAt: now.subtract(const Duration(hours: 2)),
         ),
-        Note(
+        makeNote(
           id: 'note-2',
           title: 'Pinned New',
           content: 'Content 2',
           pinned: true,
           updatedAt: now.subtract(const Duration(hours: 1)),
         ),
-        Note(
+        makeNote(
           id: 'note-3',
           title: 'Unpinned New',
           content: 'Content 3',
-          pinned: false,
           updatedAt: now,
         ),
-        Note(
+        makeNote(
           id: 'note-4',
           title: 'Pinned Old',
           content: 'Content 4',
@@ -138,7 +125,6 @@ void main() {
 
       final retrieved = await repository.getAll();
 
-      // Repository no longer responsible for sorting. verify all present.
       expect(retrieved.length, equals(4));
 
       final ids = retrieved.map((n) => n.id).toSet();
@@ -150,19 +136,12 @@ void main() {
 
     test('clears all notes', () async {
       final notes = [
-        Note(
-          id: 'note-1',
-          title: 'Note 1',
-          content: 'Content 1',
-          pinned: false,
-          updatedAt: DateTime.now(),
-        ),
-        Note(
+        makeNote(id: 'note-1', title: 'Note 1', content: 'Content 1'),
+        makeNote(
           id: 'note-2',
           title: 'Note 2',
           content: 'Content 2',
           pinned: true,
-          updatedAt: DateTime.now(),
         ),
       ];
 

@@ -1,5 +1,5 @@
 class LocaleDisplayNames {
-  static const Map<String, String> _names = {
+  static const Map<String, String> names = {
     'ar': 'العربية',
     'bn': 'বাংলা',
     'cs': 'Čeština',
@@ -32,8 +32,4 @@ class LocaleDisplayNames {
     'zh': '中文',
     'zh_TW': '中文 (台灣)',
   };
-
-  static Future<Map<String, String>> load() async {
-    return _names;
-  }
 }

@@ -43,13 +43,7 @@ class DelayedRepository extends MockRepository {
 void main() {
   group('NoteDetailPage - Basic Tests', () {
     test('Note copyWith updates pinned state', () {
-      final original = Note(
-        id: 'test',
-        title: 'Title',
-        content: '{}',
-        pinned: false,
-        updatedAt: DateTime.now(),
-      );
+      final original = makeNote(id: 'test', title: 'Title');
 
       final updated = original.copyWith(pinned: true);
       expect(updated.pinned, isTrue);
@@ -58,13 +52,7 @@ void main() {
 
     test('Note copyWith preserves other fields', () {
       final now = DateTime.now();
-      final original = Note(
-        id: 'test',
-        title: 'Title',
-        content: '{}',
-        pinned: false,
-        updatedAt: now,
-      );
+      final original = makeNote(id: 'test', title: 'Title', updatedAt: now);
 
       final updated = original.copyWith(pinned: true);
       expect(updated.title, equals('Title'));
@@ -93,13 +81,7 @@ void main() {
     });
 
     test('controller updates existing note', () async {
-      final originalNote = Note(
-        id: 'test-id',
-        title: 'Original',
-        content: '{}',
-        pinned: false,
-        updatedAt: DateTime.now(),
-      );
+      final originalNote = makeNote(id: 'test-id', title: 'Original');
 
       mockRepo.notes.add(originalNote);
 
@@ -149,15 +131,7 @@ void main() {
 
     testWidgets('creates note with title', (tester) async {
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(controller: controller),
-          ),
+        buildTestApp(NoteDetailPage(controller: controller)),
       );
 
       await tester.tap(find.byIcon(Icons.arrow_back));
@@ -168,25 +142,15 @@ void main() {
     });
 
     testWidgets('shows error for empty title save', (tester) async {
-      final existingNote = Note(
-        id: 'existing',
-        title: 'Existing',
-        content: '{}',
-        pinned: false,
-        updatedAt: DateTime.now(),
-      );
+      final existingNote = makeNote(id: 'existing', title: 'Existing');
       mockRepo.notes.add(existingNote);
 
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(existing: existingNote, controller: controller),
-          ),
+        buildTestApp(
+            NoteDetailPage(existing: existingNote, controller: controller)),
+      );
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
       );
 
       final titleField = find.byType(TextField).first;
@@ -195,55 +159,27 @@ void main() {
       await tester.tap(find.byIcon(Icons.save));
       await tester.pump();
 
-      expect(find.text('Note cannot be empty'), findsOneWidget);
+      expect(find.textContaining(l10n.noteCannotBeEmpty), findsOneWidget);
       expect(mockRepo.notes.length, 1);
     });
 
     testWidgets('pin button shows correct state', (tester) async {
-      final note = Note(
-        id: '1',
-        title: '',
-        content: '{}',
-        pinned: false,
-        updatedAt: DateTime.now(),
-      );
+      final note = makeNote(title: '');
 
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(
-                existing: note, controller: controller, showToolbar: false),
-          ),
+        buildTestApp(NoteDetailPage(
+            existing: note, controller: controller, showToolbar: false)),
       );
 
       expect(find.byIcon(Icons.push_pin_outlined), findsOneWidget);
     });
 
     testWidgets('pin button shows pinned state', (tester) async {
-      final note = Note(
-        id: '1',
-        title: '',
-        content: '{}',
-        pinned: true,
-        updatedAt: DateTime.now(),
-      );
+      final note = makeNote(title: '', pinned: true);
 
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(
-                existing: note, controller: controller, showToolbar: false),
-          ),
+        buildTestApp(NoteDetailPage(
+            existing: note, controller: controller, showToolbar: false)),
       );
 
       expect(find.byIcon(Icons.push_pin), findsOneWidget);
@@ -251,31 +187,27 @@ void main() {
 
     testWidgets('tags dialog allows adding and removing tags', (tester) async {
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(controller: controller, showToolbar: false),
-          ),
+        buildTestApp(
+            NoteDetailPage(controller: controller, showToolbar: false)),
+      );
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
       );
 
       await tester.tap(find.byIcon(Icons.label_outline));
       await tester.pumpAndSettle();
 
-      expect(find.text('Manage Tags'), findsOneWidget);
+      expect(find.text(l10n.manageTags), findsOneWidget);
 
       await tester.enterText(
-          find.widgetWithText(TextField, 'New tag...'), 'test-tag');
+          find.widgetWithText(TextField, l10n.newTag), 'test-tag');
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
       expect(find.text('test-tag'), findsOneWidget);
 
       await tester.enterText(
-          find.widgetWithText(TextField, 'New tag...'), 'another-tag');
+          find.widgetWithText(TextField, l10n.newTag), 'another-tag');
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
@@ -287,7 +219,7 @@ void main() {
       expect(find.text('test-tag'), findsNothing);
       expect(find.text('another-tag'), findsOneWidget);
 
-      await tester.tap(find.text('Close'));
+      await tester.tap(find.text(l10n.close));
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField).first, 'Tagged Note');
@@ -304,15 +236,7 @@ void main() {
       final failingController = NotesController(failingRepo);
 
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(controller: failingController),
-          ),
+        buildTestApp(NoteDetailPage(controller: failingController)),
       );
 
       await tester.enterText(find.byType(TextField).first, 'Will Fail');
@@ -330,15 +254,7 @@ void main() {
       final delayedController = NotesController(delayedRepo);
 
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(controller: delayedController),
-          ),
+        buildTestApp(NoteDetailPage(controller: delayedController)),
       );
 
       await tester.enterText(find.byType(TextField).first, 'Delayed Save');
@@ -367,16 +283,8 @@ void main() {
       final existing = failingController.notes.first;
 
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(
-                existing: existing, controller: failingController),
-          ),
+        buildTestApp(
+            NoteDetailPage(existing: existing, controller: failingController)),
       );
 
       await tester.tap(find.byIcon(Icons.delete));
@@ -402,16 +310,8 @@ void main() {
       final existing = delayedController.notes.first;
 
       await tester.pumpWidget(
-        
-          MaterialApp(
-            localizationsDelegates: const [
-              ...AppLocalizations.localizationsDelegates,
-              FlutterQuillLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: NoteDetailPage(
-                existing: existing, controller: delayedController),
-          ),
+        buildTestApp(
+            NoteDetailPage(existing: existing, controller: delayedController)),
       );
 
       await tester.tap(find.byIcon(Icons.delete));

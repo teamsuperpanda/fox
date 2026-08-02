@@ -29,64 +29,93 @@ class SettingsService {
     }
   }
 
+  dynamic _getValue(String key, {dynamic defaultValue}) {
+    final settings = _get();
+    return switch (key) {
+      'themeMode' => settings.themeMode,
+      'showTags' => settings.showTags,
+      'showContent' => settings.showContent,
+      'alternatingColors' => settings.alternatingColors,
+      'fabAnimation' => settings.fabAnimation,
+      'sortBy' => settings.sortBy,
+      'accentColor' => settings.accentColor,
+      'locale' => settings.locale,
+      _ => defaultValue,
+    };
+  }
+
+  Future<void> _setValue(String key, dynamic value) async {
+    switch (key) {
+      case 'themeMode':
+        await _update((s) => s.copyWith(themeMode: value as String));
+      case 'showTags':
+        await _update((s) => s.copyWith(showTags: value as bool));
+      case 'showContent':
+        await _update((s) => s.copyWith(showContent: value as bool));
+      case 'alternatingColors':
+        await _update((s) => s.copyWith(alternatingColors: value as bool));
+      case 'fabAnimation':
+        await _update((s) => s.copyWith(fabAnimation: value as bool));
+      case 'sortBy':
+        await _update((s) => s.copyWith(sortBy: value as String));
+      case 'accentColor':
+        await _update((s) => value == null
+            ? s.copyWith(clearAccentColor: true)
+            : s.copyWith(accentColor: value as String));
+      case 'locale':
+        await _update((s) => value == null
+            ? s.copyWith(clearLocale: true)
+            : s.copyWith(locale: value as String));
+    }
+  }
+
   ThemeMode getThemeMode() => _get().theme;
 
   Future<void> setThemeMode(ThemeMode mode) async {
-    final modeStr = switch (mode) {
-      ThemeMode.light => 'light',
-      ThemeMode.dark => 'dark',
-      _ => 'system',
-    };
-    await _update((s) => s.copyWith(themeMode: modeStr));
+    await _setValue('themeMode', mode.name);
   }
 
-  bool getShowTags() => _get().showTags;
+  bool getShowTags() => _getValue('showTags', defaultValue: true) as bool;
 
   Future<void> setShowTags(bool show) async {
-    await _update((s) => s.copyWith(showTags: show));
+    await _setValue('showTags', show);
   }
 
-  bool getShowContent() => _get().showContent;
+  bool getShowContent() => _getValue('showContent', defaultValue: true) as bool;
 
   Future<void> setShowContent(bool show) async {
-    await _update((s) => s.copyWith(showContent: show));
+    await _setValue('showContent', show);
   }
 
-  bool getAlternatingColors() => _get().alternatingColors;
+  bool getAlternatingColors() =>
+      _getValue('alternatingColors', defaultValue: false) as bool;
 
   Future<void> setAlternatingColors(bool value) async {
-    await _update((s) => s.copyWith(alternatingColors: value));
+    await _setValue('alternatingColors', value);
   }
 
-  bool getFabAnimation() => _get().fabAnimation;
+  bool getFabAnimation() =>
+      _getValue('fabAnimation', defaultValue: true) as bool;
 
   Future<void> setFabAnimation(bool value) async {
-    await _update((s) => s.copyWith(fabAnimation: value));
+    await _setValue('fabAnimation', value);
   }
 
-  String getSortBy() => _get().sortBy;
+  String getSortBy() => _getValue('sortBy', defaultValue: 'dateDesc') as String;
 
   Future<void> setSortBy(String value) async {
-    await _update((s) => s.copyWith(sortBy: value));
+    await _setValue('sortBy', value);
   }
 
-  String? getAccentColor() => _get().accentColor;
+  String? getAccentColor() => _getValue('accentColor') as String?;
 
   Future<void> setAccentColor(String? value) async {
-    if (value == null) {
-      await _update((s) => s.copyWith(clearAccentColor: true));
-    } else {
-      await _update((s) => s.copyWith(accentColor: value));
-    }
+    await _setValue('accentColor', value);
   }
 
-  String? getLocale() => _get().locale;
+  String? getLocale() => _getValue('locale') as String?;
 
   Future<void> setLocale(String? value) async {
-    if (value == null) {
-      await _update((s) => s.copyWith(clearLocale: true));
-    } else {
-      await _update((s) => s.copyWith(locale: value));
-    }
+    await _setValue('locale', value);
   }
 }

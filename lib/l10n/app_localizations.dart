@@ -165,6 +165,24 @@ abstract class AppLocalizations {
   /// **'Search...'**
   String get search;
 
+  /// No description provided for @searchNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Search notes'**
+  String get searchNotes;
+
+  /// No description provided for @addNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add note'**
+  String get addNote;
+
+  /// No description provided for @folderFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder filter'**
+  String get folderFilter;
+
   /// No description provided for @noNotesYet.
   ///
   /// In en, this message translates to:

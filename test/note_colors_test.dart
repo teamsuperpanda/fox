@@ -22,43 +22,43 @@ void main() {
     });
   });
 
-  group('parseNoteColor', () {
+  group('parseHexColor', () {
     test('returns correct Color for valid hex', () {
-      final color = parseNoteColor('#FF5252');
+      final color = parseHexColor('#FF5252');
       expect(color, isNotNull);
       expect(color, equals(const Color(0xFFFF5252)));
     });
 
     test('returns null for null input', () {
-      expect(parseNoteColor(null), isNull);
+      expect(parseHexColor(null), isNull);
     });
 
     test('returns null for empty string', () {
-      expect(parseNoteColor(''), isNull);
+      expect(parseHexColor(''), isNull);
     });
 
     test('returns null for short hex string', () {
-      expect(parseNoteColor('#FFF'), isNull);
+      expect(parseHexColor('#FFF'), isNull);
     });
 
     test('returns null for long hex string', () {
-      expect(parseNoteColor('#FF525200'), isNull);
+      expect(parseHexColor('#FF525200'), isNull);
     });
 
     test('returns null for invalid hex characters', () {
-      expect(parseNoteColor('#GGGGGG'), isNull);
+      expect(parseHexColor('#GGGGGG'), isNull);
     });
 
     test('parses all predefined colour options', () {
       for (final hex in noteColorOptions.skip(1)) {
-        final color = parseNoteColor(hex);
+        final color = parseHexColor(hex);
         expect(color, isNotNull, reason: 'Failed to parse $hex');
       }
     });
 
     test('returns null for hex without # prefix', () {
-      expect(parseNoteColor('FF5252'), isNull);
-      expect(parseNoteColor('1FF5252'), isNull);
+      expect(parseHexColor('FF5252'), isNull);
+      expect(parseHexColor('1FF5252'), isNull);
     });
   });
 }

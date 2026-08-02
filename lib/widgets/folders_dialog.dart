@@ -58,6 +58,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
         ],
       ),
     );
+    renameCtrl.dispose();
     if (!mounted) return;
     if (newName != null && newName.trim().isNotEmpty) {
       final isDuplicate =

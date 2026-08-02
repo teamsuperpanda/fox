@@ -15,6 +15,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String get search => 'অনুসন্ধান...';
 
   @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
+
+  @override
   String get noNotesYet => 'এখনো কোনো নোট নেই...';
 
   @override

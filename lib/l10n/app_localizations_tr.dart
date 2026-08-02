@@ -15,6 +15,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get search => 'Ara...';
 
   @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
+
+  @override
   String get noNotesYet => 'Henüz not yok...';
 
   @override

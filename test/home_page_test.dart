@@ -3,22 +3,16 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/home_page.dart';
 import 'package:fox/note_detail_page.dart';
-import 'package:fox/providers/locale_provider.dart';
-import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
-import 'package:provider/provider.dart';
 
 import 'test_helpers.dart';
 
-Widget _buildHome({required NotesController controller, SettingsService? settingsService}) {
-  final settingsRepo = settingsService ?? SettingsService();
-  return MultiProvider(
-    providers: [
-      ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsRepo)),
-      ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsRepo)),
-    ],
-    child: HomePage(controller: controller, settingsService: settingsRepo),
+Widget _buildHome(
+    {required NotesController controller, SettingsService? settingsService}) {
+  return HomePage(
+    controller: controller,
+    settingsService: settingsService ?? SettingsService(),
   );
 }
 
@@ -33,8 +27,7 @@ void main() {
     });
 
     testWidgets('shows empty state when no notes exist', (tester) async {
-      await tester
-          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();
       expect(find.text('No notes yet...'), findsOneWidget);
     });
@@ -43,15 +36,13 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Test Note', content: Document());
 
-      await tester
-          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();
       expect(find.text('Test Note'), findsOneWidget);
     });
 
     testWidgets('FAB opens note detail page', (tester) async {
-      await tester
-          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();
 
       await tester.tap(find.byType(FloatingActionButton));
@@ -66,8 +57,7 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Test', content: Document());
 
-      await tester
-          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.search));
@@ -77,8 +67,7 @@ void main() {
     });
 
     testWidgets('Folder icon opens folders dialog', (tester) async {
-      await tester
-          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.folder_outlined));
@@ -89,8 +78,7 @@ void main() {
     });
 
     testWidgets('Tune icon is present on home page', (tester) async {
-      await tester
-          .pumpWidget(buildTestApp(home: _buildHome(controller: controller)));
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();
 
       expect(find.byIcon(Icons.tune), findsOneWidget);

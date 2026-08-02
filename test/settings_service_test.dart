@@ -1,38 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/settings.dart';
-import 'package:fox/models/settings_adapter.dart';
+import 'package:fox/services/box_names.dart';
 import 'package:fox/services/settings_service.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+
+import 'test_helpers.dart';
 
 void main() {
   group('SettingsService', () {
     late SettingsService settingsService;
 
-    setUpAll(() async {
-      Hive.init('./test/hive_settings_test');
-      if (!Hive.isAdapterRegistered(2)) {
-        Hive.registerAdapter(SettingsAdapter());
-      }
-    });
-
     setUp(() async {
-      await Hive.openBox<Settings>('settings_db');
+      await hiveTestSetup('./test/hive_settings_test');
       settingsService = SettingsService();
-
-      final box = Hive.box<Settings>('settings_db');
-      await box.clear();
     });
 
     tearDown(() async {
-      if (Hive.isBoxOpen('settings_db')) {
-        final box = Hive.box<Settings>('settings_db');
-        await box.close();
-      }
-    });
-
-    tearDownAll(() async {
-      await Hive.deleteFromDisk();
+      await hiveTestTeardown();
     });
 
     test('defaults are correct', () {
@@ -72,7 +57,7 @@ void main() {
     });
 
     test('setThemeMode preserves existing locale', () async {
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       final initialSettings = Settings(themeMode: 'system', locale: 'en_US');
       await box.put('app_settings', initialSettings);
 

@@ -1,50 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fox/models/folder.dart';
-import 'package:fox/models/note.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
-import 'package:fox/services/repository_hive.dart';
 import 'package:fox/widgets/folders_dialog.dart';
 
 import 'test_helpers.dart';
-
-class MemoryRepo implements NoteAndFolderRepository {
-  final List<Note> _data = [];
-  final List<Folder> _folders = [];
-
-  @override
-  Future<void> init() async {}
-  @override
-  Future<void> delete(String id) async => _data.removeWhere((e) => e.id == id);
-  @override
-  Future<List<Note>> getAll() async => List.unmodifiable(_data);
-  @override
-  Future<void> upsert(Note note) async {
-    _data.removeWhere((e) => e.id == note.id);
-    _data.add(note);
-  }
-
-  @override
-  Future<void> upsertAll(List<Note> notes) async {
-    for (final note in notes) {
-      _data.removeWhere((e) => e.id == note.id);
-      _data.add(note);
-    }
-  }
-
-  @override
-  Future<List<Folder>> getAllFolders() async => List.unmodifiable(_folders);
-  @override
-  Future<void> upsertFolder(Folder folder) async {
-    _folders.removeWhere((f) => f.id == folder.id);
-    _folders.add(folder);
-  }
-
-  @override
-  Future<void> deleteFolder(String id) async =>
-      _folders.removeWhere((f) => f.id == id);
-}
 
 void main() {
   group('FoldersDialog', () {
@@ -58,7 +18,7 @@ void main() {
     testWidgets('shows All Notes and Unfiled options', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          home: Scaffold(
+          Scaffold(
             body: Builder(
               builder: (context) => ElevatedButton(
                 onPressed: () => showDialog(
@@ -85,7 +45,7 @@ void main() {
     testWidgets('can add a folder', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          home: Scaffold(
+          Scaffold(
             body: Builder(
               builder: (context) => ElevatedButton(
                 onPressed: () => showDialog(
@@ -114,7 +74,7 @@ void main() {
     testWidgets('Close button dismisses dialog', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          home: Scaffold(
+          Scaffold(
             body: Builder(
               builder: (context) => ElevatedButton(
                 onPressed: () => showDialog(
@@ -146,7 +106,7 @@ void main() {
 
       await tester.pumpWidget(
         buildTestApp(
-          home: Scaffold(
+          Scaffold(
             body: Builder(
               builder: (context) => ElevatedButton(
                 onPressed: () => showDialog(
@@ -172,7 +132,7 @@ void main() {
     testWidgets('tapping Unfiled sets unfiled filter', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
-          home: Scaffold(
+          Scaffold(
             body: Builder(
               builder: (context) => ElevatedButton(
                 onPressed: () => showDialog(

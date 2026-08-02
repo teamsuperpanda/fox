@@ -3,22 +3,82 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/settings.dart';
+import 'package:fox/models/settings_adapter.dart';
+import 'package:fox/providers/locale_provider.dart';
+import 'package:fox/providers/theme_provider.dart';
+import 'package:fox/services/box_names.dart';
 import 'package:fox/services/repository_hive.dart';
+import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 
-Widget buildTestApp({required Widget home, ThemeData? theme}) {
-  return MaterialApp(
-    localizationsDelegates: const [
-      ...AppLocalizations.localizationsDelegates,
-      FlutterQuillLocalizations.delegate,
+Widget buildTestApp(
+  Widget child, {
+  ThemeMode themeMode = ThemeMode.system,
+  Locale? locale,
+  ThemeData? theme,
+}) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: ThemeProvider()),
+      ChangeNotifierProvider.value(value: LocaleProvider()),
     ],
-    supportedLocales: AppLocalizations.supportedLocales,
-    theme: theme,
-    home: home,
+    child: MaterialApp(
+      localizationsDelegates: const [
+        ...AppLocalizations.localizationsDelegates,
+        FlutterQuillLocalizations.delegate,
+      ],
+      supportedLocales: [
+        ...AppLocalizations.supportedLocales,
+        ...FlutterQuillLocalizations.supportedLocales,
+      ],
+      locale: locale,
+      themeMode: themeMode,
+      theme: theme,
+      home: child,
+    ),
+  );
+}
+
+Future<void> hiveTestSetup(String dir) async {
+  Hive.init(dir);
+  if (!Hive.isAdapterRegistered(2)) {
+    Hive.registerAdapter(SettingsAdapter());
+  }
+  await Hive.openBox<Settings>(BoxNames.settings);
+  await Hive.box<Settings>(BoxNames.settings).clear();
+}
+
+Future<void> hiveTestTeardown() async {
+  await Hive.close();
+  await Hive.deleteFromDisk();
+}
+
+Note makeNote({
+  String id = '1',
+  String title = 'Test Note',
+  String content = '{}',
+  bool pinned = false,
+  DateTime? updatedAt,
+  List<String> tags = const [],
+  String? folderId,
+  String? color,
+}) {
+  return Note(
+    id: id,
+    title: title,
+    content: content,
+    pinned: pinned,
+    updatedAt: updatedAt ?? DateTime.now(),
+    tags: tags,
+    folderId: folderId,
+    color: color,
   );
 }
 
 class MemoryRepo implements NoteAndFolderRepository {
   final List<Note> _data = [];
+  final List<Folder> _folders = [];
   bool _inited = false;
 
   @override
@@ -52,13 +112,35 @@ class MemoryRepo implements NoteAndFolderRepository {
   }
 
   @override
-  Future<List<Folder>> getAllFolders() async => [];
+  Future<List<Folder>> getAllFolders() async => List.unmodifiable(_folders);
 
   @override
-  Future<void> upsertFolder(Folder folder) async {}
+  Future<void> upsertFolder(Folder folder) async {
+    _folders.removeWhere((f) => f.id == folder.id);
+    _folders.add(folder);
+  }
 
   @override
-  Future<void> deleteFolder(String id) async {}
+  Future<void> deleteFolder(String id) async {
+    _folders.removeWhere((f) => f.id == id);
+  }
+
+  Future<void> addFolder(String name) async {
+    await upsertFolder(Folder(
+      id: 'folder-${_folders.length + 1}',
+      name: name,
+      createdAt: DateTime.now(),
+    ));
+  }
+
+  Future<void> renameFolder(String id, String newName) async {
+    for (final folder in _folders) {
+      if (folder.id == id) {
+        await upsertFolder(folder.copyWith(name: newName));
+        return;
+      }
+    }
+  }
 }
 
 class MockRepository implements NoteAndFolderRepository {

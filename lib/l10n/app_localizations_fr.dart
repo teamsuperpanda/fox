@@ -15,6 +15,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get search => 'Rechercher...';
 
   @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
+
+  @override
   String get noNotesYet => 'Aucune note pour l\'instant...';
 
   @override

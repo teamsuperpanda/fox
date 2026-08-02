@@ -15,6 +15,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get search => '搜索...';
 
   @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
+
+  @override
   String get noNotesYet => '还没有笔记...';
 
   @override

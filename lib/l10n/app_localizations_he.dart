@@ -15,6 +15,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get search => 'חיפוש...';
 
   @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
+
+  @override
   String get noNotesYet => 'אין פתקים עדיין...';
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:fox/data/locale_display_names.dart';
 import 'package:fox/l10n/app_localizations.dart';
@@ -26,7 +24,6 @@ class LanguagePickerDialog extends StatefulWidget {
 class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
   final _searchCtrl = TextEditingController();
   String _filter = '';
-  Map<String, String> _displayNames = const {};
 
   @override
   void initState() {
@@ -34,12 +31,6 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
     _searchCtrl.addListener(() {
       setState(() => _filter = _searchCtrl.text.toLowerCase());
     });
-    unawaited(_loadNames());
-  }
-
-  Future<void> _loadNames() async {
-    final names = await LocaleDisplayNames.load();
-    if (mounted) setState(() => _displayNames = names);
   }
 
   @override
@@ -50,15 +41,13 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    const allLocales = AppLocalizations.supportedLocales;
-    final filtered = _filter.isEmpty
-        ? allLocales
-        : allLocales.where((locale) {
-            final tag = localeToTag(locale);
-            final name = (_displayNames[tag] ?? tag).toLowerCase();
-            return name.contains(_filter) ||
-                tag.toLowerCase().contains(_filter);
-          }).toList();
+    final allLocales = AppLocalizations.supportedLocales.where((locale) {
+      final tag = localeToTag(locale);
+      final name = (LocaleDisplayNames.names[tag] ?? tag).toLowerCase();
+      return _filter.isEmpty ||
+          name.contains(_filter) ||
+          tag.toLowerCase().contains(_filter);
+    }).toList();
 
     final showSystemDefault = _filter.isEmpty ||
         widget.systemDefaultLabel.toLowerCase().contains(_filter);
@@ -79,25 +68,25 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         height: MediaQuery.of(context).size.height * 0.5,
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            if (showSystemDefault)
-              _buildTile(
+        child: ListView.builder(
+          itemCount: allLocales.length + (showSystemDefault ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (showSystemDefault && index == 0) {
+              return _buildTile(
                 label: widget.systemDefaultLabel,
                 isSelected: widget.currentTag == null,
                 onTap: () => Navigator.of(context)
                     .pop(LanguagePickerDialog.sentinelSystemDefault),
-              ),
-            ...filtered.map((locale) {
-              final tag = localeToTag(locale);
-              return _buildTile(
-                label: _displayNames[tag] ?? tag,
-                isSelected: tag == widget.currentTag,
-                onTap: () => Navigator.of(context).pop(locale),
               );
-            }),
-          ],
+            }
+            final locale = allLocales[showSystemDefault ? index - 1 : index];
+            final tag = localeToTag(locale);
+            return _buildTile(
+              label: LocaleDisplayNames.names[tag] ?? tag,
+              isSelected: tag == widget.currentTag,
+              onTap: () => Navigator.of(context).pop(locale),
+            );
+          },
         ),
       ),
     );

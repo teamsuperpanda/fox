@@ -6,7 +6,6 @@ import 'package:fox/models/note_colors.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
 
-/// Result returned when popping the detail page so the caller can act on it.
 class NoteDetailResult {
   const NoteDetailResult({this.changed = false, this.deleted = false});
   final bool changed;
@@ -29,6 +28,10 @@ class NoteDetailPage extends StatefulWidget {
 }
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
+  static const _snackBarDuration = Duration(seconds: 5);
+  static const _heroTagDelete = 'delete';
+  static const _heroTagSave = 'save';
+
   late final TextEditingController _titleCtrl;
   late QuillController _contentCtrl;
   late bool _pinned;
@@ -60,80 +63,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     super.dispose();
   }
 
-  /// Normalizes tag input — trims whitespace, lowercases, and rejects duplicates.
-  String? _normalizeTag(String raw) {
-    final normalized = raw.trim().toLowerCase();
-    if (normalized.isEmpty || _tags.contains(normalized)) return null;
-    return normalized;
-  }
-
   Future<void> _showTagsDialog() async {
-    final tagCtrl = TextEditingController();
-    await showDialog(
+    await showDialog<void>(
       context: context,
-      builder: (context) {
-        final l10n = AppLocalizations.of(context);
-        return StatefulBuilder(
-          builder: (dialogContext, setDialogState) {
-            return AlertDialog(
-              title: Text(l10n.manageTags),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: tagCtrl,
-                      decoration: InputDecoration(
-                        hintText: l10n.newTag,
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            final tag = _normalizeTag(tagCtrl.text);
-                            if (tag != null) {
-                              setState(() => _tags.add(tag));
-                              setDialogState(() {});
-                              tagCtrl.clear();
-                            }
-                          },
-                        ),
-                      ),
-                      onSubmitted: (text) {
-                        final tag = _normalizeTag(text);
-                        if (tag != null) {
-                          setState(() => _tags.add(tag));
-                          setDialogState(() {});
-                          tagCtrl.clear();
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 8,
-                      children: _tags.map((tag) {
-                        return Chip(
-                          label: Text(tag),
-                          onDeleted: () {
-                            setState(() {
-                              _tags.remove(tag);
-                            });
-                            setDialogState(() {});
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(),
-                  child: Text(l10n.close),
-                ),
-              ],
-            );
-          },
-        );
-      },
+      builder: (context) => _TagsDialog(
+        tags: _tags,
+        onChanged: (tags) => setState(() => _tags = tags),
+      ),
     );
   }
 
@@ -149,7 +85,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             runSpacing: 10,
             children: noteColorOptions.map((hex) {
               final isSelected = _color == hex;
-              final displayColor = parseNoteColor(hex);
+              final displayColor = parseHexColor(hex);
               return GestureDetector(
                 onTap: () {
                   setState(() => _color = hex.isEmpty ? null : hex);
@@ -248,12 +184,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     final errorColor = Theme.of(context).colorScheme.error;
     final l10n = AppLocalizations.of(context);
 
-    // Get trimmed values
     final title = _titleCtrl.text.trim();
     final content = _contentCtrl.document;
     final plainText = content.toPlainText().trim();
 
-    // If new note is empty, discard it silently
     if (title.isEmpty && plainText.isEmpty && widget.existing == null) {
       messenger?.showSnackBar(
         SnackBar(content: Text(l10n.emptyNoteDiscarded)),
@@ -262,25 +196,22 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       return;
     }
 
-    // Validation: reject empty notes (for existing notes)
-    if (title.isEmpty && plainText.isEmpty) {
+    if (title.isEmpty && plainText.isEmpty && widget.existing != null) {
       _saving = false;
       messenger?.showSnackBar(
         SnackBar(
           content: Text(l10n.noteCannotBeEmpty),
           backgroundColor: errorColor,
-          duration: const Duration(seconds: 2),
         ),
       );
       return;
     }
 
-    // Validation: warn about title-only notes (optional)
     if (title.isNotEmpty && plainText.isEmpty) {
       messenger?.showSnackBar(
         SnackBar(
           content: Text(l10n.savingTitleOnly),
-          duration: const Duration(seconds: 1),
+          duration: _snackBarDuration,
         ),
       );
     }
@@ -319,7 +250,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         final navigator = Navigator.of(context);
         var timedOut = false;
         try {
-          await _saveAndPop().timeout(const Duration(seconds: 5));
+          await _saveAndPop().timeout(_snackBarDuration);
         } catch (_) {
           timedOut = true;
         }
@@ -349,7 +280,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             IconButton(
               tooltip: l10n.noteColour,
               icon: _color != null
-                  ? Icon(Icons.circle, color: parseNoteColor(_color))
+                  ? Icon(Icons.circle, color: parseHexColor(_color))
                   : const Icon(Icons.palette_outlined),
               onPressed: _showColorPicker,
             ),
@@ -379,7 +310,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             children: [
               if (widget.existing != null)
                 FloatingActionButton(
-                  heroTag: 'delete',
+                  heroTag: _heroTagDelete,
                   backgroundColor: Theme.of(context).colorScheme.error,
                   onPressed: () async {
                     final navigator = Navigator.of(context);
@@ -410,7 +341,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   ),
                 ),
               FloatingActionButton(
-                heroTag: 'save',
+                heroTag: _heroTagSave,
                 onPressed: _saveAndPop,
                 child: const Icon(Icons.save),
               ),
@@ -495,6 +426,89 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TagsDialog extends StatefulWidget {
+  const _TagsDialog({required this.tags, required this.onChanged});
+  final List<String> tags;
+  final ValueChanged<List<String>> onChanged;
+
+  @override
+  State<_TagsDialog> createState() => _TagsDialogState();
+}
+
+class _TagsDialogState extends State<_TagsDialog> {
+  final _tagCtrl = TextEditingController();
+  late List<String> _tags = List.of(widget.tags);
+
+  @override
+  void dispose() {
+    _tagCtrl.dispose();
+    super.dispose();
+  }
+
+  String? _normalizeTag(String raw) {
+    final normalized = raw.trim().toLowerCase();
+    if (normalized.isEmpty || _tags.contains(normalized)) return null;
+    return normalized;
+  }
+
+  void _addTag(String? raw) {
+    final tag = _normalizeTag(raw ?? _tagCtrl.text);
+    if (tag == null) return;
+    _tags = [..._tags, tag];
+    widget.onChanged(_tags);
+    _tagCtrl.clear();
+    setState(() {});
+  }
+
+  void _removeTag(String tag) {
+    _tags = _tags.where((t) => t != tag).toList();
+    widget.onChanged(_tags);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return AlertDialog(
+      title: Text(l10n.manageTags),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _tagCtrl,
+              decoration: InputDecoration(
+                hintText: l10n.newTag,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => _addTag(null),
+                ),
+              ),
+              onSubmitted: _addTag,
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              children: _tags.map((tag) {
+                return Chip(
+                  label: Text(tag),
+                  onDeleted: () => _removeTag(tag),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.close),
+        ),
+      ],
     );
   }
 }

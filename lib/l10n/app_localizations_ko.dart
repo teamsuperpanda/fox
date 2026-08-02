@@ -15,6 +15,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get search => '검색...';
 
   @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
+
+  @override
   String get noNotesYet => '아직 노트가 없습니다...';
 
   @override

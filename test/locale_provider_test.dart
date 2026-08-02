@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/settings.dart';
-import 'package:fox/models/settings_adapter.dart';
 import 'package:fox/providers/locale_provider.dart';
+import 'package:fox/services/box_names.dart';
 import 'package:fox/services/settings_service.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+
+import 'test_helpers.dart';
 
 void main() {
   group('LocaleProvider', () {
     late LocaleProvider provider;
 
-    setUpAll(() async {
-      Hive.init('./test/hive_locale_provider_test');
-      if (!Hive.isAdapterRegistered(2)) {
-        Hive.registerAdapter(SettingsAdapter());
-      }
-    });
-
     setUp(() async {
-      await Hive.openBox<Settings>('settings_db');
-      final box = Hive.box<Settings>('settings_db');
-      await box.clear();
+      await hiveTestSetup('./test/hive_locale_provider_test');
       provider = LocaleProvider(settingsRepository: SettingsService());
     });
 
     tearDown(() async {
-      if (Hive.isBoxOpen('settings_db')) {
-        await Hive.box<Settings>('settings_db').close();
-      }
-    });
-
-    tearDownAll(() async {
-      await Hive.deleteFromDisk();
+      await hiveTestTeardown();
     });
 
     test('initial locale is null (system default)', () {
@@ -44,8 +31,7 @@ void main() {
     });
 
     test('load reads persisted simple locale', () async {
-      // Pre-populate settings with a locale
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       await box.put(
           'app_settings', Settings(themeMode: 'system', locale: 'fr'));
 
@@ -54,7 +40,7 @@ void main() {
     });
 
     test('load reads persisted locale with country code', () async {
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       await box.put(
           'app_settings', Settings(themeMode: 'system', locale: 'pt_PT'));
 
@@ -71,8 +57,7 @@ void main() {
       expect(provider.locale, equals(const Locale('de')));
       expect(notifyCount, 1);
 
-      // Verify persisted
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       final settings = box.get('app_settings');
       expect(settings?.locale, equals('de'));
     });
@@ -82,7 +67,7 @@ void main() {
 
       expect(provider.locale, equals(const Locale('zh', 'TW')));
 
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       final settings = box.get('app_settings');
       expect(settings?.locale, equals('zh_TW'));
     });
@@ -94,13 +79,13 @@ void main() {
       await provider.setLocale(null);
       expect(provider.locale, isNull);
 
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       final settings = box.get('app_settings');
       expect(settings?.locale, isNull);
     });
 
     test('load handles empty locale string as null', () async {
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       await box.put('app_settings', Settings(themeMode: 'system', locale: ''));
 
       await provider.load();
@@ -110,7 +95,6 @@ void main() {
     test('load and setLocale round-trip', () async {
       await provider.setLocale(const Locale('es', 'MX'));
 
-      // Create a new provider and load from persistence
       final provider2 = LocaleProvider(settingsRepository: SettingsService());
       await provider2.load();
       expect(provider2.locale, equals(const Locale('es', 'MX')));

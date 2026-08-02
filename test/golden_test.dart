@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/home_page.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/note_colors.dart';
 import 'package:fox/note_detail_page.dart';
 import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
@@ -17,8 +18,6 @@ import 'test_helpers.dart';
 
 const _golden = <String>['golden'];
 const _goldenDir = '../assets/images/screenshots';
-
-const _unstableGoldenTests = <String>{};
 
 class _DeviceConfig {
   const _DeviceConfig(this.size, this.dpr);
@@ -192,11 +191,11 @@ void main() {
 
       testWidgets('light', (tester) async {
         await pumpRaw(tester: tester, themeMode: ThemeMode.light, label: 'light');
-      }, skip: _unstableGoldenTests.contains('$deviceName/light'), tags: _golden);
+      }, tags: _golden);
 
       testWidgets('dark', (tester) async {
         await pumpRaw(tester: tester, themeMode: ThemeMode.dark, label: 'dark');
-      }, skip: _unstableGoldenTests.contains('$deviceName/dark'), tags: _golden);
+      }, tags: _golden);
 
       testWidgets('settings', (tester) async {
         setViewport(tester);
@@ -301,11 +300,11 @@ void main() {
 
       testWidgets('store_light', (tester) async {
         await pumpStore(tester: tester, themeMode: ThemeMode.light, label: 'light');
-      }, skip: _unstableGoldenTests.contains('$deviceName/store_light'), tags: _golden);
+      }, tags: _golden);
 
       testWidgets('store_dark', (tester) async {
         await pumpStore(tester: tester, themeMode: ThemeMode.dark, label: 'dark');
-      }, skip: _unstableGoldenTests.contains('$deviceName/store_dark'), tags: _golden);
+      }, tags: _golden);
 
       testWidgets('store_settings', (tester) async {
         setViewport(tester);

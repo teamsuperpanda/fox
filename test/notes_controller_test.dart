@@ -556,35 +556,22 @@ void main() {
     });
 
     test('plainText is pre-computed during note creation', () async {
-      final note = Note(
+      final note = makeNote(
         id: 'plain-test',
         title: 'Test',
         content: r'{"ops":[{"insert":"Hello World\n"}]}',
-        pinned: false,
-        updatedAt: DateTime.now(),
       );
       expect(note.plainText, 'Hello World\n');
     });
 
     test('plainText is empty for empty content', () async {
-      final note = Note(
-        id: 'plain-test-2',
-        title: 'Empty',
-        content: '',
-        pinned: false,
-        updatedAt: DateTime.now(),
-      );
+      final note = makeNote(id: 'plain-test-2', title: 'Empty', content: '');
       expect(note.plainText, '');
     });
 
     test('plainText handles malformed JSON gracefully', () async {
-      final note = Note(
-        id: 'plain-test-3',
-        title: 'Bad JSON',
-        content: '{invalid}',
-        pinned: false,
-        updatedAt: DateTime.now(),
-      );
+      final note =
+          makeNote(id: 'plain-test-3', title: 'Bad JSON', content: '{invalid}');
       expect(note.plainText, '');
     });
   });

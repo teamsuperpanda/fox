@@ -12,7 +12,8 @@ class Note {
     this.tags = const [],
     this.folderId,
     this.color,
-  }) : _plainText = _parsePlainText(content);
+  })  : _lowerTitle = title.toLowerCase(),
+        _lowerTags = tags.map((t) => t.toLowerCase()).toList(growable: false);
   final String id;
   final String title;
   final String content; // JSON string representing Quill Delta
@@ -21,40 +22,59 @@ class Note {
   final List<String> tags;
   final String? folderId;
   final String? color; // Hex string e.g. '#FF5252'
-  final String _plainText;
+
+  String? _plainText;
+  final String _lowerTitle;
+  final List<String> _lowerTags;
+
+  String get lowerTitle => _lowerTitle;
+  List<String> get lowerTags => _lowerTags;
 
   // Create content JSON from a Document
   static String documentToContent(Document document) =>
       jsonEncode(document.toDelta().toJson());
 
-  static String _parsePlainText(String content) {
-    if (content.isEmpty) return '';
-    try {
-      final decoded = jsonDecode(content);
-      final ops = decoded is Map ? decoded['ops'] ?? [] : decoded;
-      if (ops is! List || ops.isEmpty) return '';
-      return Document.fromJson(ops).toPlainText();
-    } catch (e) {
-      return '';
-    }
-  }
-
   // Parse document with error handling - returns empty Document if JSON is corrupted
   Document get document {
-    if (content.isEmpty) return Document();
+    final ops = _decodeOps(content);
+    if (ops.isEmpty) return Document();
     try {
-      final decoded = jsonDecode(content);
-      final ops = decoded is Map ? decoded['ops'] ?? [] : decoded;
-      if (ops is! List || ops.isEmpty) return Document();
       return Document.fromJson(ops);
     } catch (e) {
       return Document(); // Fallback to empty document
     }
   }
 
-  // Get plain text from the Document for search/display
-  // Pre-computed during construction to avoid parsing JSON repeatedly during search/render
-  String get plainText => _plainText;
+  // Get plain text from the Document for search/display.
+  // Computed lazily and cached after the first access.
+  String get plainText {
+    final cached = _plainText;
+    if (cached != null) return cached;
+    final computed = _parsePlainText(content);
+    _plainText = computed;
+    return computed;
+  }
+
+  static String _parsePlainText(String content) {
+    final ops = _decodeOps(content);
+    if (ops.isEmpty) return '';
+    try {
+      return Document.fromJson(ops).toPlainText();
+    } catch (e) {
+      return '';
+    }
+  }
+
+  static List<dynamic> _decodeOps(String content) {
+    if (content.isEmpty) return const [];
+    try {
+      final decoded = jsonDecode(content);
+      final ops = decoded is Map ? decoded['ops'] ?? [] : decoded;
+      return ops is List ? ops : const [];
+    } catch (e) {
+      return const [];
+    }
+  }
 
   Note copyWith({
     String? id,

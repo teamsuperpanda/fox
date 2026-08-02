@@ -15,6 +15,15 @@ class AppLocalizationsSv extends AppLocalizations {
   String get search => 'Sök...';
 
   @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
+
+  @override
   String get noNotesYet => 'Inga anteckningar ännu...';
 
   @override

@@ -1,55 +1,49 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static ThemeData light(Color accent) {
-    const base = Color(0xFFF8F5F1);
-    final bg = Color.lerp(base, accent, 0.06)!;
+  static const _fontFamily = 'Inter';
 
-    return ThemeData(
-      useMaterial3: true,
-      fontFamily: 'Inter',
-      scaffoldBackgroundColor: bg,
-      appBarTheme: AppBarTheme(
-        backgroundColor: bg,
-        foregroundColor: const Color(0xFF333333),
-        elevation: 0,
-        titleTextStyle: const TextStyle(
-          fontFamily: 'Inter',
-          color: Color(0xFF333333),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: accent,
-        foregroundColor: bg,
-      ),
-      textTheme: ThemeData.light().textTheme,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: accent,
-      ).copyWith(
-        secondary: const Color(0xFFC7B8A5),
-        error: const Color(0xFFD9534F),
-      ),
+  static ThemeData light(Color accent) {
+    final bg = Color.lerp(const Color(0xFFF8F5F1), accent, 0.06)!;
+    return _build(
+      brightness: Brightness.light,
+      accent: accent,
+      bg: bg,
+      fg: const Color(0xFF333333),
+      secondary: const Color(0xFFC7B8A5),
     );
   }
 
   static ThemeData dark(Color accent) {
-    const base = Color(0xFF202124);
-    final bg = Color.lerp(base, accent, 0.04)!;
-
-    return ThemeData(
+    final bg = Color.lerp(const Color(0xFF202124), accent, 0.04)!;
+    return _build(
       brightness: Brightness.dark,
+      accent: accent,
+      bg: bg,
+      fg: const Color(0xFFF8F5F1),
+      secondary: const Color(0xFFE8D5C2),
+    );
+  }
+
+  static ThemeData _build({
+    required Brightness brightness,
+    required Color accent,
+    required Color bg,
+    required Color fg,
+    required Color secondary,
+  }) {
+    return ThemeData(
+      brightness: brightness,
       useMaterial3: true,
-      fontFamily: 'Inter',
+      fontFamily: _fontFamily,
       scaffoldBackgroundColor: bg,
       appBarTheme: AppBarTheme(
         backgroundColor: bg,
-        foregroundColor: const Color(0xFFF8F5F1),
+        foregroundColor: fg,
         elevation: 0,
-        titleTextStyle: const TextStyle(
-          fontFamily: 'Inter',
-          color: Color(0xFFF8F5F1),
+        titleTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          color: fg,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
@@ -58,12 +52,12 @@ class AppTheme {
         backgroundColor: accent,
         foregroundColor: bg,
       ),
-      textTheme: ThemeData.dark().textTheme,
+      textTheme: ThemeData(brightness: brightness).textTheme,
       colorScheme: ColorScheme.fromSeed(
         seedColor: accent,
-        brightness: Brightness.dark,
+        brightness: brightness,
       ).copyWith(
-        secondary: const Color(0xFFE8D5C2),
+        secondary: secondary,
         error: const Color(0xFFD9534F),
       ),
     );

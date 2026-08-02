@@ -1,41 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/settings.dart';
-import 'package:fox/models/settings_adapter.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:fox/services/box_names.dart';
+import 'package:hive/hive.dart';
+
+import 'test_helpers.dart';
 
 void main() {
   group('StorageService', () {
-    setUpAll(() async {
-      // Initialize Hive for testing (without Flutter)
-      Hive.init('./test/hive_storage_test');
-      if (!Hive.isAdapterRegistered(2)) {
-        Hive.registerAdapter(SettingsAdapter());
-      }
-    });
-
     setUp(() async {
-      // Open boxes for testing
-      await Hive.openBox<Settings>('settings_db');
-      await Hive.openBox('migration_flags');
+      await hiveTestSetup('./test/hive_storage_test');
     });
 
     tearDown(() async {
-      // Clean up after each test
-      if (Hive.isBoxOpen('settings_db')) {
-        final box = Hive.box<Settings>('settings_db');
-        await box.clear();
-        await box.close();
-      }
-      if (Hive.isBoxOpen('migration_flags')) {
-        final box = Hive.box('migration_flags');
-        await box.clear();
-        await box.close();
-      }
-    });
-
-    tearDownAll(() async {
-      // Clean up Hive after all tests
-      await Hive.deleteFromDisk();
+      await hiveTestTeardown();
     });
 
     test('adapter is registered correctly', () {
@@ -43,18 +20,16 @@ void main() {
     });
 
     test('can open and access settings box', () async {
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       expect(box, isNotNull);
     });
 
     test('can store and retrieve Settings object', () async {
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
       final settings = Settings(themeMode: 'dark', locale: 'en_US');
 
-      // Store settings
       await box.put('test_settings', settings);
 
-      // Retrieve settings
       final retrieved = box.get('test_settings');
       expect(retrieved, isNotNull);
       expect(retrieved!.themeMode, equals('dark'));
@@ -62,16 +37,14 @@ void main() {
     });
 
     test('adapter correctly serializes and deserializes Settings', () async {
-      final box = Hive.box<Settings>('settings_db');
+      final box = Hive.box<Settings>(BoxNames.settings);
 
-      // Test with all fields
       final fullSettings = Settings(themeMode: 'light', locale: 'fr_FR');
       await box.put('full', fullSettings);
       final retrievedFull = box.get('full');
       expect(retrievedFull!.themeMode, equals('light'));
       expect(retrievedFull.locale, equals('fr_FR'));
 
-      // Test with null locale
       final partialSettings = Settings(themeMode: 'system');
       await box.put('partial', partialSettings);
       final retrievedPartial = box.get('partial');

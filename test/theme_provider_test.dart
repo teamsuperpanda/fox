@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fox/models/note_colors.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/settings_service.dart';
 
