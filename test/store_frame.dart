@@ -51,7 +51,10 @@ class StoreFrame extends StatelessWidget {
         children: [
           Container(color: const Color(0xFF8BAA7E)),
           Positioned(
-            top: 0, left: 0, right: 0, height: topH,
+            top: 0,
+            left: 0,
+            right: 0,
+            height: topH,
             child: Container(
               color: const Color(0xFF2D5A27),
               padding: EdgeInsets.only(top: topH * 0.18),
@@ -60,7 +63,10 @@ class StoreFrame extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('assets/images/icon/icon.png', width: iconSize, height: iconSize, fit: BoxFit.contain),
+                      Image.asset('assets/images/icon/icon.png',
+                          width: iconSize,
+                          height: iconSize,
+                          fit: BoxFit.contain),
                       const SizedBox(width: 12),
                       Text(
                         'Fox',
@@ -90,10 +96,13 @@ class StoreFrame extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 0, left: 0, right: 0, height: botH,
-          child: ColoredBox(
-            color: const Color(0xFF2D5A27),
-            child: Column(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: botH,
+            child: ColoredBox(
+              color: const Color(0xFF2D5A27),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -111,7 +120,8 @@ class StoreFrame extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.circle, size: 6, color: Color(0xFFD8D0C0)),
+                            Icon(Icons.circle,
+                                size: 6, color: Color(0xFFD8D0C0)),
                             SizedBox(width: 8),
                             Text(
                               f,
@@ -156,4 +166,3 @@ class StoreFrame extends StatelessWidget {
     );
   }
 }
-

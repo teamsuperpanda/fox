@@ -8,6 +8,14 @@ analyzer:
     inference_failure_on_instance_creation: ignore
     inference_failure_on_function_return_type: ignore
     strict_raw_type: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:

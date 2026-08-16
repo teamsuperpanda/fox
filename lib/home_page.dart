@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // pumpAndSettle in tests (a repeating animation never "settles").
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && controller.fabAnimation) {
-        unawaited(_fabController.repeat(reverse: true));
+        _fabController.repeat(reverse: true);
       }
     });
   }
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (!mounted) return;
     if (controller.fabAnimation) {
       if (!_fabController.isAnimating) {
-        unawaited(_fabController.repeat(reverse: true));
+        _fabController.repeat(reverse: true);
       }
     } else {
       if (_fabController.isAnimating) {
@@ -96,9 +96,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _toggleRotation() {
     if (_animationController.value > 0) {
-      unawaited(_animationController.reverse(from: 1));
+      _animationController.reverse(from: 1);
     } else {
-      unawaited(_animationController.forward(from: 0));
+      _animationController.forward(from: 0);
     }
   }
 

@@ -48,8 +48,10 @@ Widget _buildApp({
 }) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsService)),
-      ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsService)),
+      ChangeNotifierProvider.value(
+          value: ThemeProvider(settingsRepository: settingsService)),
+      ChangeNotifierProvider.value(
+          value: LocaleProvider(settingsRepository: settingsService)),
     ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -61,8 +63,7 @@ Widget _buildApp({
       locale: const Locale('en'),
       themeMode: themeMode,
       theme: () {
-        final base =
-            AppTheme.light(accentColorOptions.first);
+        final base = AppTheme.light(accentColorOptions.first);
         return base.copyWith(
           appBarTheme: base.appBarTheme.copyWith(
             titleTextStyle: TextStyle(
@@ -77,8 +78,7 @@ Widget _buildApp({
         );
       }(),
       darkTheme: () {
-        final base =
-            AppTheme.dark(accentColorOptions.first);
+        final base = AppTheme.dark(accentColorOptions.first);
         return base.copyWith(
           appBarTheme: base.appBarTheme.copyWith(
             titleTextStyle: TextStyle(
@@ -190,7 +190,8 @@ void main() {
       }
 
       testWidgets('light', (tester) async {
-        await pumpRaw(tester: tester, themeMode: ThemeMode.light, label: 'light');
+        await pumpRaw(
+            tester: tester, themeMode: ThemeMode.light, label: 'light');
       }, tags: _golden);
 
       testWidgets('dark', (tester) async {
@@ -253,8 +254,10 @@ void main() {
         await tester.pumpWidget(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsService)),
-              ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsService)),
+              ChangeNotifierProvider.value(
+                  value: ThemeProvider(settingsRepository: settingsService)),
+              ChangeNotifierProvider.value(
+                  value: LocaleProvider(settingsRepository: settingsService)),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -299,11 +302,13 @@ void main() {
       }, tags: _golden);
 
       testWidgets('store_light', (tester) async {
-        await pumpStore(tester: tester, themeMode: ThemeMode.light, label: 'light');
+        await pumpStore(
+            tester: tester, themeMode: ThemeMode.light, label: 'light');
       }, tags: _golden);
 
       testWidgets('store_dark', (tester) async {
-        await pumpStore(tester: tester, themeMode: ThemeMode.dark, label: 'dark');
+        await pumpStore(
+            tester: tester, themeMode: ThemeMode.dark, label: 'dark');
       }, tags: _golden);
 
       testWidgets('store_settings', (tester) async {
@@ -362,8 +367,10 @@ void main() {
         await tester.pumpWidget(buildStoreFrame(
           MultiProvider(
             providers: [
-              ChangeNotifierProvider.value(value: ThemeProvider(settingsRepository: settingsService)),
-              ChangeNotifierProvider.value(value: LocaleProvider(settingsRepository: settingsService)),
+              ChangeNotifierProvider.value(
+                  value: ThemeProvider(settingsRepository: settingsService)),
+              ChangeNotifierProvider.value(
+                  value: LocaleProvider(settingsRepository: settingsService)),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
