@@ -30,13 +30,13 @@ class DelayedRepository extends MockRepository {
   @override
   Future<void> upsert(Note note) async {
     await upsertCompleter.future;
-    return super.upsert(note);
+    await super.upsert(note);
   }
 
   @override
   Future<void> delete(String id) async {
     await deleteCompleter.future;
-    return super.delete(id);
+    await super.delete(id);
   }
 }
 
