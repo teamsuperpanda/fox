@@ -53,7 +53,7 @@ void main() async {
   runApp(app);
 
   // Remove splash after the first frame is rendered to avoid a white flash.
-  WidgetsBinding.instance.addPostFrameCallback((_) async {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     FlutterNativeSplash.remove();
   });
 }

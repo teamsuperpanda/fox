@@ -124,23 +124,6 @@ class MemoryRepo implements NoteAndFolderRepository {
   Future<void> deleteFolder(String id) async {
     _folders.removeWhere((f) => f.id == id);
   }
-
-  Future<void> addFolder(String name) async {
-    await upsertFolder(Folder(
-      id: 'folder-${_folders.length + 1}',
-      name: name,
-      createdAt: DateTime.now(),
-    ));
-  }
-
-  Future<void> renameFolder(String id, String newName) async {
-    for (final folder in _folders) {
-      if (folder.id == id) {
-        await upsertFolder(folder.copyWith(name: newName));
-        return;
-      }
-    }
-  }
 }
 
 class MockRepository implements NoteAndFolderRepository {
