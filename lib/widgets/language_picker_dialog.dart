@@ -41,6 +41,7 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final allLocales = AppLocalizations.supportedLocales.where((locale) {
       final tag = localeToTag(locale);
       final name = (LocaleDisplayNames.names[tag] ?? tag).toLowerCase();
@@ -54,7 +55,7 @@ class _LanguagePickerDialogState extends State<LanguagePickerDialog> {
 
     return AlertDialog(
       title: Semantics(
-        label: 'Search languages',
+        label: l10n.searchLanguages,
         child: TextField(
           controller: _searchCtrl,
           autofocus: true,

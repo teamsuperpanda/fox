@@ -530,6 +530,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English'**
   String get nativeName;
+
+  /// No description provided for @folderAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'A folder with this name already exists'**
+  String get folderAlreadyExists;
+
+  /// No description provided for @searchLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Search languages'**
+  String get searchLanguages;
+
+  /// No description provided for @startupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Startup failed: {error}'**
+  String startupFailed(String error);
 }
 
 class _AppLocalizationsDelegate

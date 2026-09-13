@@ -83,7 +83,17 @@
     }
   },
   "emptyNoteDiscarded": "Empty note discarded",
-  "nativeName": "English"
+  "nativeName": "English",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}",
+  "@startupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 
 
 

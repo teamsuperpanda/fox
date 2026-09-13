@@ -202,6 +202,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nativeName => '中文（简体）';
+
+  @override
+  String get folderAlreadyExists => 'A folder with this name already exists';
+
+  @override
+  String get searchLanguages => 'Search languages';
+
+  @override
+  String startupFailed(String error) {
+    return 'Startup failed: $error';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

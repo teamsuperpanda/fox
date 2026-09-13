@@ -204,6 +204,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nativeName => 'Português (Brasil)';
+
+  @override
+  String get folderAlreadyExists => 'A folder with this name already exists';
+
+  @override
+  String get searchLanguages => 'Search languages';
+
+  @override
+  String startupFailed(String error) {
+    return 'Startup failed: $error';
+  }
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).

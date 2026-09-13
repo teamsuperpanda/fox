@@ -45,8 +45,9 @@ void main() async {
       ),
     );
   } catch (e) {
+    final l10n = lookupAppLocalizations(const Locale('en'));
     app = MaterialApp(
-      home: Scaffold(body: Center(child: Text('Startup failed: $e'))),
+      home: Scaffold(body: Center(child: Text(l10n.startupFailed('$e')))),
     );
   }
 

@@ -204,4 +204,15 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get nativeName => 'Čeština';
+
+  @override
+  String get folderAlreadyExists => 'A folder with this name already exists';
+
+  @override
+  String get searchLanguages => 'Search languages';
+
+  @override
+  String startupFailed(String error) {
+    return 'Startup failed: $error';
+  }
 }

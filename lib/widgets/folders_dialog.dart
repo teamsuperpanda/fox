@@ -65,7 +65,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
           controller.folders.any((f) => f.name == newName.trim() && f.id != id);
       if (isDuplicate) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('A folder with this name already exists')),
+          SnackBar(content: Text(l10n.folderAlreadyExists)),
         );
         return;
       }

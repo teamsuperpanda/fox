@@ -203,4 +203,15 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nativeName => 'Italiano';
+
+  @override
+  String get folderAlreadyExists => 'A folder with this name already exists';
+
+  @override
+  String get searchLanguages => 'Search languages';
+
+  @override
+  String startupFailed(String error) {
+    return 'Startup failed: $error';
+  }
 }

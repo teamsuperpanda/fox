@@ -202,4 +202,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nativeName => '한국어';
+
+  @override
+  String get folderAlreadyExists => 'A folder with this name already exists';
+
+  @override
+  String get searchLanguages => 'Search languages';
+
+  @override
+  String startupFailed(String error) {
+    return 'Startup failed: $error';
+  }
 }
