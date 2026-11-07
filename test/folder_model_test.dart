@@ -43,5 +43,28 @@ void main() {
       expect(copy.name, folder.name);
       expect(copy.createdAt, folder.createdAt);
     });
+
+    test('icon and colour default to null', () {
+      expect(folder.icon, isNull);
+      expect(folder.color, isNull);
+    });
+
+    test('copyWith sets and clears the icon and colour', () {
+      final decorated = folder.copyWith(icon: 'work', color: '#AB47BC');
+      expect(decorated.icon, 'work');
+      expect(decorated.color, '#AB47BC');
+
+      final stripped = decorated.copyWith(clearIcon: true, clearColor: true);
+      expect(stripped.icon, isNull);
+      expect(stripped.color, isNull);
+      expect(stripped.id, folder.id);
+    });
+
+    test('copyWith keeps the icon and colour when not passed', () {
+      final decorated = folder.copyWith(icon: 'work', color: '#AB47BC');
+      final renamed = decorated.copyWith(name: 'Renamed');
+      expect(renamed.icon, 'work');
+      expect(renamed.color, '#AB47BC');
+    });
   });
 }

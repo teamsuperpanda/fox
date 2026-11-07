@@ -11,6 +11,7 @@ import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
+import 'package:fox/widgets/folder_icon.dart';
 import 'package:fox/widgets/folders_dialog.dart';
 import 'package:fox/widgets/note_list.dart';
 import 'package:fox/widgets/view_options_sheet.dart';
@@ -268,6 +269,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             return const Center(child: CircularProgressIndicator());
           }
           final notes = controller.notes;
+          final selectedFolder =
+              controller.findFolder(controller.selectedFolderId);
           return Column(
             children: [
               // Folder filter chip bar
@@ -281,11 +284,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.folder,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        if (selectedFolder != null)
+                          FolderIcon(selectedFolder, size: 16)
+                        else
+                          Icon(
+                            Icons.folder,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         const SizedBox(width: 6),
                         Text(
                           controller.selectedFolderId ==

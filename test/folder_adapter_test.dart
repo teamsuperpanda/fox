@@ -48,6 +48,36 @@ void main() {
       expect(restored.id, original.id);
       expect(restored.name, original.name);
       expect(restored.createdAt, original.createdAt);
+      expect(restored.icon, isNull);
+      expect(restored.color, isNull);
+
+      await box.close();
+      await Hive.deleteFromDisk();
+    });
+
+    test('round-trip preserves the icon and colour', () async {
+      Hive.init('./test/hive_folder_adapter_test');
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(FolderAdapter());
+      }
+
+      final box = await Hive.openBox('folder_adapter_test_appearance');
+      final original = Folder(
+        id: 'abc-456',
+        name: 'Decorated',
+        createdAt: DateTime(2025, 7, 4, 15, 30),
+        icon: 'work',
+        color: '#AB47BC',
+      );
+
+      await box.put('testFolder', original);
+      final restored = box.get('testFolder') as Folder;
+
+      expect(restored.id, original.id);
+      expect(restored.name, original.name);
+      expect(restored.createdAt, original.createdAt);
+      expect(restored.icon, 'work');
+      expect(restored.color, '#AB47BC');
 
       await box.close();
       await Hive.deleteFromDisk();

@@ -127,11 +127,17 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addFolder(String name) async {
+  Future<void> addFolder(
+    String name, {
+    String? icon,
+    String? color,
+  }) async {
     final folder = Folder(
       id: _uuid.v4(),
       name: name.trim(),
       createdAt: DateTime.now(),
+      icon: icon,
+      color: color,
     );
     await _repo.upsertFolder(folder);
     _folders = [..._folders, folder];
@@ -176,6 +182,33 @@ class NotesController extends ChangeNotifier {
   String? getFolderName(String? folderId) {
     if (folderId == null) return null;
     return _folders.firstWhereOrNull((f) => f.id == folderId)?.name;
+  }
+
+  Folder? findFolder(String? folderId) {
+    if (folderId == null) return null;
+    return _folders.firstWhereOrNull((f) => f.id == folderId);
+  }
+
+  /// Sets or clears a folder's icon and colour. Omitted arguments keep the
+  /// current value; pass [clearIcon] or [clearColor] to remove one.
+  Future<void> setFolderAppearance(
+    String id, {
+    String? icon,
+    String? color,
+    bool clearIcon = false,
+    bool clearColor = false,
+  }) async {
+    final folder = _folders.firstWhereOrNull((f) => f.id == id);
+    if (folder == null) return;
+    final updated = folder.copyWith(
+      icon: icon,
+      color: color,
+      clearIcon: clearIcon,
+      clearColor: clearColor,
+    );
+    await _repo.upsertFolder(updated);
+    _folders = _folders.map((f) => f.id == id ? updated : f).toList();
+    notifyListeners();
   }
 
   Future<void> addOrUpdate({

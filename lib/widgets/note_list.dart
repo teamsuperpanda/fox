@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
+import 'package:fox/widgets/folder_icon.dart';
 import 'package:intl/intl.dart';
 
 InlineSpan _highlightText(
@@ -54,8 +56,8 @@ class NoteList extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final highlightColor = colorScheme.tertiaryContainer.withValues(alpha: 0.5);
     final highlightQuery = controller.searchTerm.toLowerCase();
-    final folderNames = {
-      for (final folder in controller.folders) folder.id: folder.name,
+    final folders = {
+      for (final folder in controller.folders) folder.id: folder,
     };
 
     return ListView.builder(
@@ -66,7 +68,7 @@ class NoteList extends StatelessWidget {
         index: index,
         onNoteTap: onNoteTap,
         l10n: l10n,
-        folderNames: folderNames,
+        folders: folders,
         highlightQuery: highlightQuery,
         highlightColor: highlightColor,
       ),
@@ -81,7 +83,7 @@ class _NoteListTile extends StatelessWidget {
     required this.index,
     required this.onNoteTap,
     required this.l10n,
-    required this.folderNames,
+    required this.folders,
     required this.highlightQuery,
     required this.highlightColor,
   });
@@ -105,7 +107,7 @@ class _NoteListTile extends StatelessWidget {
   final int index;
   final void Function(Note note)? onNoteTap;
   final AppLocalizations l10n;
-  final Map<String, String> folderNames;
+  final Map<String, Folder> folders;
   final String highlightQuery;
   final Color highlightColor;
 
@@ -113,6 +115,7 @@ class _NoteListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final noteColor = parseHexColor(note.color);
+    final noteFolder = folders[note.folderId];
     final trimmedText = note.plainText.trim();
     return Dismissible(
       key: ValueKey(note.id),
@@ -273,14 +276,17 @@ class _NoteListTile extends StatelessWidget {
                     ),
                     if (note.folderId != null) ...[
                       const SizedBox(width: 8),
-                      Icon(
-                        Icons.folder_outlined,
-                        size: 12,
-                        color: colorScheme.outline,
-                      ),
+                      if (noteFolder != null)
+                        FolderIcon(noteFolder, size: 12)
+                      else
+                        Icon(
+                          Icons.folder_outlined,
+                          size: 12,
+                          color: colorScheme.outline,
+                        ),
                       const SizedBox(width: 2),
                       Text(
-                        folderNames[note.folderId] ?? l10n.unknown,
+                        noteFolder?.name ?? l10n.unknown,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: colorScheme.outline,
                             ),

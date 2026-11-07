@@ -548,6 +548,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @folderAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder icon and colour'**
+  String get folderAppearance;
+
+  /// No description provided for @folderIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get folderIcon;
+
+  /// No description provided for @folderColour.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour'**
+  String get folderColour;
+
+  /// No description provided for @noIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'No icon'**
+  String get noIcon;
+
+  /// No description provided for @noColour.
+  ///
+  /// In en, this message translates to:
+  /// **'No colour'**
+  String get noColour;
 }
 
 class _AppLocalizationsDelegate
