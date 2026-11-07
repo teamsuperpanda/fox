@@ -2,10 +2,19 @@ name: CI
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ['main', 'v3']
     types: [opened, synchronize, reopened]
   push:
-    branches: ['main']
+    branches: ['main', 'v3']
+
+# Cancel superseded runs on the same ref (a re-run of the same commit wins).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Pinned on purpose: a Flutter upgrade is a deliberate PR, not an ambient change.
+  FLUTTER_VERSION: '3.47.6'
 
 jobs:
   analyze_and_test:
@@ -19,9 +28,7 @@ jobs:
       - name: Cache Pub
         uses: actions/cache@v6
         with:
-          path: |
-            ~/.pub-cache
-            .dart_tool
+          path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-pub-
@@ -29,7 +36,9 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
@@ -37,11 +46,14 @@ jobs:
       - name: Generate localization
         run: flutter gen-l10n
 
-      - name: Format generated files
-        run: dart format lib/ test/
+      # The generated l10n files are formatter output, not contributor code.
+      - name: Format generated localization
+        run: dart format lib/l10n
 
+      # This is the real gate: it fails instead of rewriting the tree, so an
+      # unformatted file cannot slip through.
       - name: Verify formatting
-        run: dart format --set-exit-if-changed lib/ test/
+        run: dart format --output=none --set-exit-if-changed lib test
 
       - name: Run flutter analyze
         run: flutter analyze
