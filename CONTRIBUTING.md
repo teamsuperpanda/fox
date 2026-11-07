@@ -50,6 +50,9 @@ Golden test failures with small pixel diffs? Regenerate with `--update-goldens` 
 - Run `dart fix --apply` before committing
 - Run `flutter analyze` -- zero issues required
 - Run `dart format lib/ test/` to auto-format
+- Run `dart run tool/dcl_ratchet.dart` -- dart_code_linter findings are ratcheted against
+  `tool/dcl_baseline.json`; a new finding fails CI. Burn the baseline down with refactors, not by
+  running `--update`.
 
 ## Localization
 

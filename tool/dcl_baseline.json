@@ -1,0 +1,24 @@
+{
+  "total": 39,
+  "findings": {
+    "lib/home_page.dart|issue:no-empty-block": 2,
+    "lib/home_page.dart|metric:maintainability-index": 1,
+    "lib/main.dart|metric:maintainability-index": 1,
+    "lib/note_detail_page.dart|issue:avoid-non-null-assertion": 1,
+    "lib/note_detail_page.dart|issue:no-empty-block": 2,
+    "lib/note_detail_page.dart|metric:maintainability-index": 4,
+    "lib/note_detail_page.dart|metric:cyclomatic-complexity": 1,
+    "lib/services/constants.dart|issue:avoid-non-null-assertion": 1,
+    "lib/services/notes_controller.dart|metric:number-of-methods": 1,
+    "lib/services/notes_controller.dart|metric:maintainability-index": 1,
+    "lib/theme/app_theme.dart|issue:avoid-non-null-assertion": 2,
+    "lib/widgets/folders_dialog.dart|issue:no-empty-block": 6,
+    "lib/widgets/folders_dialog.dart|metric:maintainability-index": 3,
+    "lib/widgets/language_picker_dialog.dart|metric:maintainability-index": 1,
+    "lib/widgets/note_list.dart|issue:avoid-non-null-assertion": 1,
+    "lib/widgets/note_list.dart|metric:cyclomatic-complexity": 1,
+    "lib/widgets/view_options_sheet.dart|issue:avoid-non-null-assertion": 1,
+    "lib/widgets/view_options_sheet.dart|issue:no-empty-block": 5,
+    "lib/widgets/view_options_sheet.dart|metric:maintainability-index": 4
+  }
+}

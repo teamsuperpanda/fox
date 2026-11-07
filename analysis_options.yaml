@@ -38,6 +38,9 @@ linter:
     sort_pub_dependencies: false
     prefer_constructors_over_static_methods: false
 
+# dart_code_linter is a CI gate, not an analyzer plugin: the legacy analyzer
+# plugin mechanism is deprecated in Dart 3.13 and reports no diagnostics, so
+# tool/dcl_ratchet.dart runs the metrics CLI against tool/dcl_baseline.json.
 dart_code_linter:
   metrics:
     cyclomatic-complexity: 20
