@@ -214,4 +214,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get folderAppearance => 'Folder icon and colour';
+
+  @override
+  String get folderIcon => 'Icon';
+
+  @override
+  String get folderColour => 'Colour';
+
+  @override
+  String get noIcon => 'No icon';
+
+  @override
+  String get noColour => 'No colour';
 }

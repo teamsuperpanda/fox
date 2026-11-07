@@ -93,9 +93,12 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "save": "Save",
+  "appearance": "Appearance",
+  "folderAppearance": "Folder icon and colour",
+  "folderIcon": "Icon",
+  "folderColour": "Colour",
+  "noIcon": "No icon",
+  "noColour": "No colour"
 }

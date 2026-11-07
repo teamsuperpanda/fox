@@ -5,6 +5,7 @@ import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
+import 'package:fox/widgets/folder_icon.dart';
 
 class NoteDetailResult {
   const NoteDetailResult({this.changed = false, this.deleted = false});
@@ -151,12 +152,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 ),
                 ...widget.controller.folders.map((folder) {
                   return ListTile(
-                    leading: Icon(
-                      Icons.folder,
-                      color: _folderId == folder.id
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                    ),
+                    leading: FolderIcon(folder),
                     title: Text(folder.name),
                     selected: _folderId == folder.id,
                     contentPadding: EdgeInsets.zero,

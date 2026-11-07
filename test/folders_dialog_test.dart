@@ -154,5 +154,88 @@ void main() {
 
       expect(controller.selectedFolderId, equals(AppConstants.unfiledFolderId));
     });
+
+    testWidgets('setFolderAppearance stores an icon and colour',
+        (tester) async {
+      await controller.addFolder('Work');
+      final folder = controller.folders.single;
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.more_vert).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Appearance'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.work_outline));
+      await tester.pump();
+      await tester.tap(find.byTooltip('#AB47BC'));
+      await tester.pump();
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      final updated = controller.findFolder(folder.id)!;
+      expect(updated.icon, 'work');
+      expect(updated.color, '#AB47BC');
+      expect(find.byIcon(Icons.work_outline), findsOneWidget);
+    });
+
+    testWidgets('appearance dialog can clear an icon and colour',
+        (tester) async {
+      await controller.addFolder('Decorated', icon: 'work', color: '#AB47BC');
+      final folder = controller.folders.single;
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.more_vert).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Appearance'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('No icon'));
+      await tester.pump();
+      await tester.tap(find.byTooltip('No colour'));
+      await tester.pump();
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      final updated = controller.findFolder(folder.id)!;
+      expect(updated.icon, isNull);
+      expect(updated.color, isNull);
+    });
   });
 }
