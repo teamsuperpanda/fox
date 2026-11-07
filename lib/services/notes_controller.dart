@@ -27,6 +27,11 @@ class NotesController extends ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
+  int _unreadableNotes = 0;
+
+  /// Notes and folders skipped because Hive could not decode them.
+  int get unreadableNotes => _unreadableNotes;
+
   SortBy _sortBy = SortBy.dateDesc;
   SortBy get sortBy => _sortBy;
 
@@ -67,6 +72,7 @@ class NotesController extends ChangeNotifier {
     await _repo.init();
     _unfilteredNotes = await _repo.getAll();
     _folders = await _repo.getAllFolders();
+    _unreadableNotes = _repo.unreadableRecords;
     _loadSettings();
     _updateView();
     _loading = false;
@@ -74,13 +80,18 @@ class NotesController extends ChangeNotifier {
   }
 
   void _loadSettings() {
-    _showTags = _settingsRepository.getShowTags();
-    _showContent = _settingsRepository.getShowContent();
-    _alternatingColors = _settingsRepository.getAlternatingColors();
-    _fabAnimation = _settingsRepository.getFabAnimation();
-    final sortStr = _settingsRepository.getSortBy();
-    final sort = SortBy.values.where((e) => e.name == sortStr).firstOrNull;
-    if (sort != null) _sortBy = sort;
+    try {
+      _showTags = _settingsRepository.getShowTags();
+      _showContent = _settingsRepository.getShowContent();
+      _alternatingColors = _settingsRepository.getAlternatingColors();
+      _fabAnimation = _settingsRepository.getFabAnimation();
+      final sortStr = _settingsRepository.getSortBy();
+      final sort = SortBy.values.where((e) => e.name == sortStr).firstOrNull;
+      if (sort != null) _sortBy = sort;
+    } catch (e) {
+      // Keep the defaults rather than failing the whole load.
+      debugPrint('NotesController: failed to load settings: $e');
+    }
   }
 
   void _updateView() {

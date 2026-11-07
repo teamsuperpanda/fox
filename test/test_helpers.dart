@@ -82,6 +82,9 @@ class MemoryRepo implements NoteAndFolderRepository {
   bool _inited = false;
 
   @override
+  int get unreadableRecords => 0;
+
+  @override
   Future<void> init() async {
     _inited = true;
   }
@@ -129,6 +132,9 @@ class MemoryRepo implements NoteAndFolderRepository {
 class MockRepository implements NoteAndFolderRepository {
   final List<Note> notes = [];
   final List<Folder> folders = [];
+
+  @override
+  int get unreadableRecords => 0;
 
   @override
   Future<void> init() async {}

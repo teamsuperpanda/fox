@@ -215,6 +215,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Retry';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).

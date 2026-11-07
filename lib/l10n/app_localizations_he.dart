@@ -214,4 +214,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Retry';
 }

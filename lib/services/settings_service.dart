@@ -17,7 +17,16 @@ class SettingsService {
     }
   }
 
-  Settings _get() => _box?.get(_key) ?? _memory;
+  Settings _get() {
+    try {
+      return _box?.get(_key) ?? _memory;
+    } catch (e) {
+      // A corrupt settings record must not block startup: fall back to the
+      // in-memory defaults.
+      debugPrint('SettingsService: unreadable settings, using defaults: $e');
+      return _memory;
+    }
+  }
 
   Future<void> _update(Settings Function(Settings) update) async {
     final updated = update(_get());
