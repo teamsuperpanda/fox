@@ -18,9 +18,19 @@ dart run build_runner build --delete-conflicting-outputs
 
 ## Running Tests
 
-**Fast tests (no golden comparisons):**
 ```bash
 flutter test --exclude-tags golden
+```
+
+The suite under `test/` is the regression gate and runs in CI.
+
+### Integration test
+
+`integration_test/app_test.dart` runs the real app against a real Hive database on an Android
+emulator. CI runs it in the `Integration (Android)` job on every PR. Locally:
+
+```bash
+flutter test integration_test/app_test.dart -d <device-id>
 ```
 
 **Golden screenshot tests:**
