@@ -165,6 +165,9 @@ None. This is a fully offline, local-first application with no network dependenc
 
 - **Data at rest:** Stored locally in Hive boxes via path_provider. No encryption.
 - **Network:** No network requests. No telemetry. No analytics.
+- **iOS privacy manifest:** `ios/Runner/PrivacyInfo.xcprivacy` declares the
+  required-reason APIs in use (file timestamp, user defaults, disk space), no
+  tracking and no collected data. See `docs/PRIVACY.md`.
 
 ## 9. Development & Testing
 
