@@ -59,5 +59,6 @@
   "startupError": "Fox 啟動時出現問題。\n\n請嘗試清除應用程式資料或重新安裝。\n\n錯誤：{error}",  "note": "筆記",
   "emptyNoteDiscarded": "空筆記已丢弃",
 
-  "nativeName": "中文（繁體）"
+  "nativeName": "中文（繁體）",
+  "saveFailed": "無法儲存你的變更。請再試一次。"
 }

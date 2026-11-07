@@ -213,4 +213,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed => '変更を保存できませんでした。もう一度お試しください。';
 }

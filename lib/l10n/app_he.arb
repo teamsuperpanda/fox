@@ -59,5 +59,6 @@
   "startupError": "אירעה שגיאה בהפעלת Fox.\n\nנסה לנקות את נתוני האפליקציה או להתקין מחדש.\n\nשגיאה: {error}",  "note": "פתק",
   "emptyNoteDiscarded": "פתק ריק נמחק",
 
-  "nativeName": "עברית"
+  "nativeName": "עברית",
+  "saveFailed": "לא ניתן לשמור את השינויים שלך. נסה שוב."
 }

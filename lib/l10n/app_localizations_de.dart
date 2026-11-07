@@ -216,4 +216,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed =>
+      'Änderungen konnten nicht gespeichert werden. Bitte versuche es erneut.';
 }

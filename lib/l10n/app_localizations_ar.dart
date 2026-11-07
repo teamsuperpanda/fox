@@ -214,4 +214,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed => 'تعذر حفظ تغييراتك. يرجى المحاولة مرة أخرى.';
 }

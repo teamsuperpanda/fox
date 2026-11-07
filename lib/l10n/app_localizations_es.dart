@@ -215,6 +215,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed =>
+      'No se pudieron guardar los cambios. Inténtalo de nuevo.';
 }
 
 /// The translations for Spanish Castilian, as used in Latin America and the Caribbean (`es_419`).
@@ -409,4 +413,8 @@ class AppLocalizationsEs419 extends AppLocalizationsEs {
 
   @override
   String get nativeName => 'Español (Latinoamérica)';
+
+  @override
+  String get saveFailed =>
+      'No se pudieron guardar los cambios. Inténtalo de nuevo.';
 }

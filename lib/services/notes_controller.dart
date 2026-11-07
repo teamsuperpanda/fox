@@ -27,20 +27,19 @@ class NotesController extends ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
-  SortBy _sortBy = SortBy.dateDesc;
-  SortBy get sortBy => _sortBy;
+  SortBy get sortBy {
+    final name = _settingsRepository.getSortBy();
+    return SortBy.values.where((e) => e.name == name).firstOrNull ??
+        SortBy.dateDesc;
+  }
 
-  bool _showTags = true;
-  bool get showTags => _showTags;
+  bool get showTags => _settingsRepository.getShowTags();
 
-  bool _showContent = true;
-  bool get showContent => _showContent;
+  bool get showContent => _settingsRepository.getShowContent();
 
-  bool _alternatingColors = false;
-  bool get alternatingColors => _alternatingColors;
+  bool get alternatingColors => _settingsRepository.getAlternatingColors();
 
-  bool _fabAnimation = true;
-  bool get fabAnimation => _fabAnimation;
+  bool get fabAnimation => _settingsRepository.getFabAnimation();
 
   List<Note> _unfilteredNotes = const [];
   List<Note> _visibleNotes = const [];
@@ -67,20 +66,9 @@ class NotesController extends ChangeNotifier {
     await _repo.init();
     _unfilteredNotes = await _repo.getAll();
     _folders = await _repo.getAllFolders();
-    _loadSettings();
     _updateView();
     _loading = false;
     notifyListeners();
-  }
-
-  void _loadSettings() {
-    _showTags = _settingsRepository.getShowTags();
-    _showContent = _settingsRepository.getShowContent();
-    _alternatingColors = _settingsRepository.getAlternatingColors();
-    _fabAnimation = _settingsRepository.getFabAnimation();
-    final sortStr = _settingsRepository.getSortBy();
-    final sort = SortBy.values.where((e) => e.name == sortStr).firstOrNull;
-    if (sort != null) _sortBy = sort;
   }
 
   void _updateView() {
@@ -95,30 +83,44 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSortBy(SortBy value) {
-    _sortBy = value;
+  /// Persists the sort order. The view updates with the pending value first,
+  /// so a caller that does not await still sees the new order; a failed write
+  /// rolls the view back and rethrows so the caller can surface it.
+  Future<void> setSortBy(SortBy value) async {
+    final write = _settingsRepository.setSortBy(value.name);
     _updateView();
     notifyListeners();
+    try {
+      await write;
+    } catch (e) {
+      _updateView();
+      notifyListeners();
+      rethrow;
+    }
   }
 
-  void setShowTags(bool value) {
-    _showTags = value;
-    notifyListeners();
-  }
+  Future<void> setShowTags(bool value) =>
+      _persistPreference(_settingsRepository.setShowTags(value));
 
-  void setShowContent(bool value) {
-    _showContent = value;
-    notifyListeners();
-  }
+  Future<void> setShowContent(bool value) =>
+      _persistPreference(_settingsRepository.setShowContent(value));
 
-  void setAlternatingColors(bool value) {
-    _alternatingColors = value;
-    notifyListeners();
-  }
+  Future<void> setAlternatingColors(bool value) =>
+      _persistPreference(_settingsRepository.setAlternatingColors(value));
 
-  void setFabAnimation(bool value) {
-    _fabAnimation = value;
+  Future<void> setFabAnimation(bool value) =>
+      _persistPreference(_settingsRepository.setFabAnimation(value));
+
+  /// Notifies with the pending value, then rolls back and rethrows when the
+  /// write fails so the UI never keeps a preference that was not saved.
+  Future<void> _persistPreference(Future<void> write) async {
     notifyListeners();
+    try {
+      await write;
+    } catch (e) {
+      notifyListeners();
+      rethrow;
+    }
   }
 
   void setSelectedFolder(String? folderId) {
@@ -256,6 +258,7 @@ class NotesController extends ChangeNotifier {
 
   List<Note> _filterAndSort(List<Note> list) {
     final copy = [...list];
+    final sort = sortBy;
 
     if (_selectedFolderId != null) {
       if (_selectedFolderId == AppConstants.unfiledFolderId) {
@@ -278,7 +281,7 @@ class NotesController extends ChangeNotifier {
     copy.sort((a, b) {
       if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
 
-      switch (_sortBy) {
+      switch (sort) {
         case SortBy.titleAsc:
           return a.title.compareTo(b.title);
         case SortBy.titleDesc:

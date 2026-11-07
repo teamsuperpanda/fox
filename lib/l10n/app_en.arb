@@ -93,9 +93,6 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "saveFailed": "Could not save your changes. Please try again."
 }

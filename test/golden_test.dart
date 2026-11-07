@@ -113,7 +113,7 @@ Future<NotesController> _createControllerWithNotes() async {
     title: 'Ideas for Weekend',
     content: Document()..insert(0, 'Hike in the mountains, visit museum'),
   );
-  controller.setFabAnimation(false);
+  await controller.setFabAnimation(false);
   return controller;
 }
 
