@@ -548,6 +548,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @aboutTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'A simple, local-first notes app.'**
+  String get aboutTagline;
+
+  /// No description provided for @versionBuild.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version} ({build})'**
+  String versionBuild(String version, String build);
+
+  /// No description provided for @openSourceLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Fox is free and open source.'**
+  String get openSourceLine;
+
+  /// No description provided for @repository.
+  ///
+  /// In en, this message translates to:
+  /// **'Source code'**
+  String get repository;
+
+  /// No description provided for @licence.
+  ///
+  /// In en, this message translates to:
+  /// **'Licence'**
+  String get licence;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// No description provided for @privacyStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything stays on this device. No accounts, no analytics, no network requests.'**
+  String get privacyStatement;
+
+  /// No description provided for @madeBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Made by {team}'**
+  String madeBy(String team);
+
+  /// No description provided for @openSourceLicences.
+  ///
+  /// In en, this message translates to:
+  /// **'Open source licences'**
+  String get openSourceLicences;
+
+  /// No description provided for @copyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get copyLink;
+
+  /// No description provided for @linkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied'**
+  String get linkCopied;
 }
 
 class _AppLocalizationsDelegate

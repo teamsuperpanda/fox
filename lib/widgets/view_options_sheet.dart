@@ -3,6 +3,7 @@ import 'package:fox/data/locale_display_names.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
+import 'package:fox/services/app_info.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
@@ -17,6 +18,10 @@ class ViewOptionsSheet extends StatefulWidget {
     required this.accentColorOptions,
     super.key,
   });
+
+  /// Returned by the sheet when the user asks for the About screen, so the
+  /// page stays outside this widget layer.
+  static const aboutRequest = 'about';
 
   final NotesController controller;
   final SettingsService settingsService;
@@ -89,6 +94,8 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                 const SizedBox(height: 24),
                                 ..._buildLanguageSection(
                                     context, setDialogState),
+                                const SizedBox(height: 24),
+                                _buildAboutTile(context),
                                 const SizedBox(height: 16),
                               ],
                             ),
@@ -406,6 +413,20 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAboutTile(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return ListTile(
+      leading: const Icon(Icons.info_outline),
+      title: Text(l10n.about),
+      subtitle: Text(
+        l10n.versionBuild(AppInfo.version, AppInfo.buildNumber),
+      ),
+      trailing: const Icon(Icons.chevron_right),
+      contentPadding: EdgeInsets.zero,
+      onTap: () => Navigator.of(context).pop(ViewOptionsSheet.aboutRequest),
     );
   }
 

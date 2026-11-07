@@ -1,0 +1,50 @@
+# NOTICE
+
+Fox - a simple, local-first notes application.
+
+Copyright 2026 teamsuperpanda.
+
+This file lists the licences of the software and assets that ship with the
+app. The full licence text of every dependency is also available offline in
+the app, from About > Open source licences (Flutter's licence registry).
+
+## Fox itself
+
+The Fox application source is licensed under the PolyForm Noncommercial
+License 1.0.0. See `LICENSE` for the full text.
+
+## Bundled software
+
+| Component | Licence |
+| --- | --- |
+| Flutter SDK and `flutter_localizations` (The Flutter Authors) | BSD-3-Clause |
+| `collection` (Dart project authors) | BSD-3-Clause |
+| `intl` (Dart project authors) | BSD-3-Clause |
+| `path` (Dart project authors) | BSD-3-Clause |
+| `path_provider` (The Flutter Authors) | BSD-3-Clause |
+| `image_picker` (The Flutter Authors) | BSD-3-Clause |
+| `provider` (Remi Rousselet) | MIT |
+| `hive`, `hive_flutter` (Simon Leier and contributors) | Apache-2.0 |
+| `uuid` (Yulian Kuncheff) | MIT |
+| `flutter_quill` (Flutter Quill project and contributors) | MIT |
+| `flutter_native_splash` (Jon Hanson) | MIT |
+
+Transitive dependencies are not listed here because the list changes with
+every dependency update; the in-app licence registry is generated from the
+linked packages and is authoritative.
+
+## Assets
+
+All application assets, including icons in `assets/images/icon/`, launch
+screen images in `assets/images/launchscreen/`, logos and branding, are
+copyright 2026 teamsuperpanda and are not covered by the PolyForm licence.
+They may be used only as part of the Fox application. See
+`ASSETS-LICENSE.md` for the full terms.
+
+The Inter font family in `assets/fonts/` is by Rasmus Andersson and is
+licensed under the SIL Open Font License, Version 1.1.
+
+## No third-party network services
+
+Fox bundles no analytics, advertising or crash-reporting SDK, and sends no
+data off the device. Nothing in this notice corresponds to a remote service.

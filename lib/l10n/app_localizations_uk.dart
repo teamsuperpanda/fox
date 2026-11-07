@@ -214,4 +214,45 @@ class AppLocalizationsUk extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get aboutTagline => 'A simple, local-first notes app.';
+
+  @override
+  String versionBuild(String version, String build) {
+    return 'Version $version ($build)';
+  }
+
+  @override
+  String get openSourceLine => 'Fox is free and open source.';
+
+  @override
+  String get repository => 'Source code';
+
+  @override
+  String get licence => 'Licence';
+
+  @override
+  String get privacy => 'Privacy';
+
+  @override
+  String get privacyStatement =>
+      'Everything stays on this device. No accounts, no analytics, no network requests.';
+
+  @override
+  String madeBy(String team) {
+    return 'Made by $team';
+  }
+
+  @override
+  String get openSourceLicences => 'Open source licences';
+
+  @override
+  String get copyLink => 'Copy link';
+
+  @override
+  String get linkCopied => 'Link copied';
 }
