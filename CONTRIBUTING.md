@@ -1,84 +1,124 @@
-# Contributing
+# Contributing to Fox
 
-Contributions are welcome! Please follow these guidelines.
+Thanks for helping. Fox is a small, local-first notes app and the codebase is
+deliberately simple, so a useful contribution is usually a short one.
 
-## Prerequisites
+By taking part you agree to the [Code of Conduct](CODE_OF_CONDUCT.md). Security
+issues go through [SECURITY.md](SECURITY.md), never a public issue.
 
-- Flutter SDK (stable channel)
-- Dart (included with Flutter SDK)
+## Before you start
+
+- Search the [issues](https://github.com/teamsuperpanda/fox/issues) and
+  [pull requests](https://github.com/teamsuperpanda/fox/pulls) first.
+- Ask in [Discussions Q&A](https://github.com/teamsuperpanda/fox/discussions/categories/q-a)
+  if you are not sure an idea fits.
+- Open an issue before a large change. Small fixes and docs can go straight to a
+  pull request.
+- New here? The [`good first issue`](https://github.com/teamsuperpanda/fox/labels/good%20first%20issue)
+  label marks issues that are self-contained and have clear acceptance criteria.
 
 ## Setup
 
+You need the Flutter SDK on the stable channel (Dart 3.6 or newer).
+
 ```bash
+git clone https://github.com/teamsuperpanda/fox.git
+cd fox
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
+flutter run
 ```
 
-> `*.g.dart` files are gitignored -- you must run code generation before building.
+There is no code generation step. Hive adapters in `lib/models/` are
+handwritten, and the repository does not use `build_runner` or `*.g.dart` files.
+Localizations are generated from ARB files, see [Localization](#localization).
 
-## Running Tests
+`ARCHITECTURE.md` explains the layers and where code belongs. Read it before
+adding a service or a provider.
 
-**Fast tests (no golden comparisons):**
+## Checks
+
+Run these before pushing. They are the same checks CI runs on every pull request.
+
 ```bash
+flutter pub get
+dart format lib/ test/
+dart format --output=none --set-exit-if-changed lib/ test/
+flutter analyze
 flutter test --exclude-tags golden
 ```
 
-**Golden screenshot tests:**
+`flutter analyze` must report zero issues. Fix warnings rather than adding
+`// ignore:` comments.
+
+### Golden screenshot tests
+
+`test/golden_test.dart` renders the store screenshots. It is tagged `golden` and
+excluded from the normal test run and from CI. Run it when you change the UI:
+
 ```bash
 flutter test test/golden_test.dart
 ```
 
-**Update golden screenshots (after intentional UI changes):**
+Regenerate the images after an intentional UI change:
+
 ```bash
 flutter test test/golden_test.dart --update-goldens
 ```
 
-Golden test failures with small pixel diffs? Regenerate with `--update-goldens` and commit the new goldens.
+The images are written to `assets/images/screenshots/`, which is gitignored and
+regenerated on demand. Do not commit them.
 
-## Architecture
+## Branches, commits and pull requests
 
-- `lib/data/` - Local persistence and data sources
-- `lib/l10n/` - Localization ARB files
-- `lib/models/` - Data models
-- `lib/providers/` - State management (Provider)
-- `lib/services/` - Business logic and services
-- `lib/theme/` - App theming
-- `lib/widgets/` - Reusable UI components
+- Branch from `v3`, the current development branch, and open pull requests
+  against `v3`.
+- One logical change per pull request. Keep unrelated refactors out.
+- Commit messages follow conventional commits: `feat:`, `fix:`, `docs:`,
+  `chore:`, `test:`, `refactor:`, with an optional scope, for example
+  `fix(editor): keep cursor position after save`. Reference the issue number in
+  the body when one exists.
+- Fill in the pull request template. Say what changed, why, and how you tested
+  it. Add a screenshot or recording for UI changes, and note new strings for
+  translators.
 
-## Code Style
-
-- Run `dart fix --apply` before committing
-- Run `flutter analyze` -- zero issues required
-- Run `dart format lib/ test/` to auto-format
+CI must be green before review. A maintainer merges; do not merge your own pull
+request or push to `v3` directly.
 
 ## Localization
 
-This app supports 30+ languages via ARB files in `lib/l10n/`.
-
-**Adding a new locale:**
-1. Create `lib/l10n/app_{locale}.arb` (copy `app_en.arb` as a template)
-2. Run `flutter gen-l10n` to regenerate localizations
-3. Add the locale to any locale picker UI
-
-**Rules:**
-- Always include all keys from `app_en.arb` (the source of truth)
-- Do not modify generated `AppLocalizations` files directly
-- Run `flutter gen-l10n` after any ARB change
-
-## Release Screenshots
-
-Store screenshots are auto-generated via golden tests. Run locally to preview:
+User-facing strings live in `lib/l10n/app_en.arb`, the source of truth. Generated
+`AppLocalizations` files are committed and regenerated with:
 
 ```bash
-flutter test test/golden_test.dart --update-goldens
+flutter gen-l10n
 ```
 
-The `release_screenshots.yml` workflow copies generated goldens to Android/iOS Fastlane metadata on release commits. Generated images live in `assets/images/screenshots/`.
+When you add a key, add it to `app_en.arb` with a description, run `flutter gen-l10n`,
+and use `AppLocalizations.of(context)` in the widget. Do not edit the generated
+`app_localizations*.dart` files by hand. Add the key to the five priority locales
+in the same pull request. The full workflow, rules and current status are in
+[docs/TRANSLATING.md](docs/TRANSLATING.md).
 
-## Pull Request Process
+## Code style
 
-1. Create a feature branch from `main`
-2. Make your changes
-3. Ensure `flutter analyze` and all tests pass
-4. Update tests if adding functionality
-5. Submit a PR with a clear description
+- Follow the existing layer boundaries: `widgets/` has no business logic,
+  `services/` has no UI, `models/` stay pure data.
+- Prefer the smallest change that solves the problem. No speculative abstraction.
+- Use `AppLocalizations` for text, `AppTheme` for colour and typography, and the
+  existing providers for state.
+- No em dashes in user-facing text or comments.
+
+## Licensing of contributions
+
+Fox code is MIT licensed. By opening a pull request you agree that your
+contribution is licensed under the same terms. The Fox name, logo and brand
+assets are proprietary and are not covered by MIT, see
+[ASSETS-LICENSE.md](ASSETS-LICENSE.md). Do not add assets you do not have the
+right to license.
+
+## Security
+
+Do not open a public issue for a vulnerability. Report it privately through
+GitHub's [private vulnerability reporting](https://github.com/teamsuperpanda/fox/security/advisories/new).
+See [SECURITY.md](SECURITY.md) for the supported versions, response times, scope
+and the threat model.

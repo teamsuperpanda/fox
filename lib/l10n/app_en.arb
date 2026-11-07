@@ -8,12 +8,27 @@
   "noNotesYet": "No notes yet...",
   "noNotesMatchSearch": "No notes match your search.",
   "folders": "Folders",
+  "@folders": {
+    "description": "Title of the folder picker and the folder management dialog."
+  },
   "viewOptions": "View options",
+  "@viewOptions": {
+    "description": "Title of the sheet with sort, view, theme and language settings."
+  },
   "toggleTheme": "Toggle theme",
   "clearFolderFilter": "Clear folder filter",
   "unfiled": "Unfiled",
+  "@unfiled": {
+    "description": "Label for a note that belongs to no folder."
+  },
   "unknown": "Unknown",
+  "@unknown": {
+    "description": "Fallback label when a value is not recognised."
+  },
   "allNotes": "All Notes",
+  "@allNotes": {
+    "description": "Filter option that shows notes from every folder."
+  },
   "newFolderName": "New folder name...",
   "renameFolder": "Rename Folder",
   "folderName": "Folder name",
@@ -32,16 +47,37 @@
   "folder": "Folder",
   "tags": "Tags",
   "noteColour": "Note Colour",
+  "@noteColour": {
+    "description": "Label for the highlight colour palette applied to a note in the editor."
+  },
   "hideFormattingToolbar": "Hide formatting toolbar",
   "showFormattingToolbar": "Show formatting toolbar",
   "unpin": "Unpin",
   "pin": "Pin",
   "startTyping": "Start typing...",
+  "@startTyping": {
+    "description": "Placeholder shown in the body of an empty note."
+  },
   "manageTags": "Manage Tags",
+  "@manageTags": {
+    "description": "Title of the tag management dialog."
+  },
   "newTag": "New tag...",
+  "@newTag": {
+    "description": "Placeholder for the new tag input."
+  },
   "moveToFolder": "Move to Folder",
+  "@moveToFolder": {
+    "description": "Menu action that moves a note into a folder."
+  },
   "noFolder": "No Folder",
+  "@noFolder": {
+    "description": "Option for a note that has no folder."
+  },
   "note": "Note",
+  "@note": {
+    "description": "Generic label for a single note."
+  },
   "noteCannotBeEmpty": "Note cannot be empty",
   "savingTitleOnly": "Saving note with title only",
   "errorSavingNote": "Error saving note: {error}",
@@ -67,13 +103,31 @@
   "titleZA": "Title (Z-A)",
   "showTags": "Show Tags",
   "showNotePreviews": "Show Note Previews",
+  "@showNotePreviews": {
+    "description": "Setting that shows part of the note body under its title in the list."
+  },
   "alternatingRowColors": "Alternating Row Colors",
+  "@alternatingRowColors": {
+    "description": "Setting that alternates the background colour of note list rows."
+  },
   "animateAddButton": "Animate Add Button",
+  "@animateAddButton": {
+    "description": "Setting that rotates the add button when the editor opens."
+  },
   "untitled": "(Untitled)",
+  "@untitled": {
+    "description": "Title shown for a note that has no title."
+  },
   "today": "Today",
   "language": "Language",
   "accentColor": "Theme Color",
+  "@accentColor": {
+    "description": "Theme accent colour used for buttons and highlights."
+  },
   "systemDefault": "System Default",
+  "@systemDefault": {
+    "description": "Option that follows the operating system setting for theme or language."
+  },
   "startupError": "Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: {error}",
   "@startupError": {
     "placeholders": {
@@ -84,8 +138,17 @@
   },
   "emptyNoteDiscarded": "Empty note discarded",
   "nativeName": "English",
+  "@nativeName": {
+    "description": "Name of the current language shown in that language."
+  },
   "folderAlreadyExists": "A folder with this name already exists",
+  "@folderAlreadyExists": {
+    "description": "Validation error when a new folder duplicates an existing name."
+  },
   "searchLanguages": "Search languages",
+  "@searchLanguages": {
+    "description": "Placeholder in the search field of the language picker."
+  },
   "startupFailed": "Startup failed: {error}",
   "@startupFailed": {
     "placeholders": {
