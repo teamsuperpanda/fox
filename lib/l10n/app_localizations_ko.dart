@@ -141,6 +141,23 @@ class AppLocalizationsKo extends AppLocalizations {
   String get savingTitleOnly => '제목만으로 노트 저장';
 
   @override
+  String get shareNote => 'Share note';
+
+  @override
+  String get shareAsMarkdown => 'Markdown (.md)';
+
+  @override
+  String get shareAsPlainText => 'Plain text (.txt)';
+
+  @override
+  String get shareAsHtml => 'HTML (.html)';
+
+  @override
+  String errorSharingNote(String error) {
+    return 'Could not share note: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return '저장 오류: $error';
   }

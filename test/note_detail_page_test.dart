@@ -141,6 +141,25 @@ void main() {
       expect(mockRepo.notes.length, 0);
     });
 
+    testWidgets('share action offers markdown, text and html', (tester) async {
+      await tester.pumpWidget(
+        buildTestApp(
+            NoteDetailPage(controller: controller, showToolbar: false)),
+      );
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
+      );
+
+      await tester.tap(find.byIcon(Icons.share_outlined));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text(l10n.shareNote), findsOneWidget);
+      expect(find.text(l10n.shareAsMarkdown), findsOneWidget);
+      expect(find.text(l10n.shareAsPlainText), findsOneWidget);
+      expect(find.text(l10n.shareAsHtml), findsOneWidget);
+    });
+
     testWidgets('shows error for empty title save', (tester) async {
       final existingNote = makeNote(id: 'existing', title: 'Existing');
       mockRepo.notes.add(existingNote);

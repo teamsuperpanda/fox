@@ -145,6 +145,23 @@ class AppLocalizationsFr extends AppLocalizations {
       'Enregistrement de la note avec titre uniquement';
 
   @override
+  String get shareNote => 'Share note';
+
+  @override
+  String get shareAsMarkdown => 'Markdown (.md)';
+
+  @override
+  String get shareAsPlainText => 'Plain text (.txt)';
+
+  @override
+  String get shareAsHtml => 'HTML (.html)';
+
+  @override
+  String errorSharingNote(String error) {
+    return 'Could not share note: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return 'Erreur lors de l\'enregistrement : $error';
   }
