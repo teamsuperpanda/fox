@@ -6,6 +6,9 @@ class SettingsAdapter extends TypeAdapter<Settings> {
   @override
   final int typeId = 2;
 
+  /// Number of fields written by this version. Append at this index next.
+  static const int fieldCount = 9;
+
   @override
   Settings read(BinaryReader reader) {
     final numOfFields = reader.readByte();
@@ -23,12 +26,13 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       showContent: fields[5] as bool? ?? true,
       sortBy: fields[6] as String? ?? 'dateDesc',
       accentColor: fields[7] as String?,
+      includeArchived: fields[8] == true,
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
-    writer.writeByte(8); // Number of fields
+    writer.writeByte(fieldCount); // Number of fields
     writer.writeByte(0);
     writer.write(obj.themeMode);
     writer.writeByte(1);
@@ -45,6 +49,8 @@ class SettingsAdapter extends TypeAdapter<Settings> {
     writer.write(obj.sortBy);
     writer.writeByte(7);
     writer.write(obj.accentColor);
+    writer.writeByte(8);
+    writer.write(obj.includeArchived);
   }
 
   @override

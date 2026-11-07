@@ -315,6 +315,36 @@ abstract class AppLocalizations {
   /// **'Undo'**
   String get undo;
 
+  /// No description provided for @archive.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get archive;
+
+  /// No description provided for @archiveEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is archived.'**
+  String get archiveEmpty;
+
+  /// No description provided for @archiveInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived notes stay out of the main list and search. Restore one to bring it back.'**
+  String get archiveInfo;
+
+  /// No description provided for @includeArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Include archived notes'**
+  String get includeArchived;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
   /// No description provided for @noteTitle.
   ///
   /// In en, this message translates to:

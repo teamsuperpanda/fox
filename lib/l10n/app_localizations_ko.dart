@@ -90,6 +90,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get undo => '실행 취소';
 
   @override
+  String get archive => 'Archive';
+
+  @override
+  String get archiveEmpty => 'Nothing is archived.';
+
+  @override
+  String get archiveInfo =>
+      'Archived notes stay out of the main list and search. Restore one to bring it back.';
+
+  @override
+  String get includeArchived => 'Include archived notes';
+
+  @override
+  String get restore => 'Restore';
+
+  @override
   String get noteTitle => '노트 제목...';
 
   @override

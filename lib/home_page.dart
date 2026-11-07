@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fox/archive_page.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
@@ -143,6 +144,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {});
   }
 
+  Future<void> _openArchive() async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(builder: (_) => ArchivePage(controller: controller)),
+    );
+    if (!mounted) return;
+    setState(() {});
+  }
+
   Future<void> _showViewOptions() async {
     await showModalBottomSheet(
       context: context,
@@ -216,6 +225,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
               ),
             ),
+          if (_isSearching)
+            AnimatedBuilder(
+              animation: controller,
+              builder: (context, _) => IconButton(
+                tooltip: l10n.includeArchived,
+                icon: Icon(
+                  controller.includeArchived
+                      ? Icons.archive
+                      : Icons.archive_outlined,
+                ),
+                onPressed: () =>
+                    controller.setIncludeArchived(!controller.includeArchived),
+              ),
+            ),
           Semantics(
             label: l10n.folders,
             child: IconButton(
@@ -230,6 +253,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               icon: const Icon(Icons.tune),
               onPressed: _showViewOptions,
               tooltip: l10n.viewOptions,
+            ),
+          ),
+          Semantics(
+            label: l10n.archive,
+            child: IconButton(
+              icon: const Icon(Icons.archive_outlined),
+              onPressed: _openArchive,
+              tooltip: l10n.archive,
             ),
           ),
           Padding(
