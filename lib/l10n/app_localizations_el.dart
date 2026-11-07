@@ -181,6 +181,11 @@ class AppLocalizationsEl extends AppLocalizations {
   String get animateAddButton => 'Κινούμενο κουμπί προσθήκης';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Χωρίς τίτλο)';
 
   @override

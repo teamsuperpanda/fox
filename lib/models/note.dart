@@ -30,6 +30,40 @@ class Note {
   String get lowerTitle => _lowerTitle;
   List<String> get lowerTags => _lowerTags;
 
+  /// Checked and total checklist items in the note. Both are zero when the
+  /// note has no checklist.
+  ({int done, int total}) get checklistProgress {
+    var done = 0;
+    var total = 0;
+    for (final state in _checklistLineStates()) {
+      if (state == null) continue;
+      total++;
+      if (state == 'checked') done++;
+    }
+    return (done: done, total: total);
+  }
+
+  /// One entry per line: `checked`, `unchecked` or `null`.
+  Iterable<String?> _checklistLineStates() sync* {
+    String? current;
+    for (final op in _decodeOps(content)) {
+      if (op is! Map) continue;
+      final attrs = op['attributes'];
+      if (attrs is Map) {
+        final list = attrs['list'];
+        if (list == 'checked' || list == 'unchecked') current = list as String;
+      }
+      final insert = op['insert'];
+      if (insert is String && insert.contains('\n')) {
+        final breaks = '\n'.allMatches(insert).length;
+        for (var i = 0; i < breaks; i++) {
+          yield current;
+          current = null;
+        }
+      }
+    }
+  }
+
   // Create content JSON from a Document
   static String documentToContent(Document document) =>
       jsonEncode(document.toDelta().toJson());

@@ -178,6 +178,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get animateAddButton => '追加ボタンをアニメーション';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '（無題）';
 
   @override

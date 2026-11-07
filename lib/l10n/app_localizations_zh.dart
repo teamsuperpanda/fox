@@ -178,6 +178,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get animateAddButton => '添加按钮动画';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '（无标题）';
 
   @override

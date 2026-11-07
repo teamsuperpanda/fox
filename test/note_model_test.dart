@@ -259,5 +259,28 @@ void main() {
       final doc = n.document;
       expect(doc.isEmpty(), isTrue);
     });
+
+    test('checklist progress counts checked and unchecked lines', () {
+      final n = note.copyWith(
+        content: '{"ops":['
+            '{"insert":"Milk"},'
+            r'{"insert":"\n","attributes":{"list":"checked"}},'
+            '{"insert":"Eggs"},'
+            r'{"insert":"\n","attributes":{"list":"unchecked"}},'
+            '{"insert":"Bread"},'
+            r'{"insert":"\n","attributes":{"list":"bullet"}}'
+            ']}',
+      );
+
+      final progress = n.checklistProgress;
+      expect(progress.done, 1);
+      expect(progress.total, 2);
+    });
+
+    test('checklist progress is zero without a checklist', () {
+      final progress = note.checklistProgress;
+      expect(progress.done, 0);
+      expect(progress.total, 0);
+    });
   });
 }

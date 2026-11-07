@@ -389,7 +389,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                           showRightAlignment: false,
                           showJustifyAlignment: false,
                           showHeaderStyle: false,
-                          showListCheck: false,
                           showCodeBlock: false,
                           showIndent: false,
                           showLink: false,

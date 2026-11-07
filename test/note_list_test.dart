@@ -42,6 +42,29 @@ void main() {
       expect(find.text('Second Note'), findsOneWidget);
     });
 
+    testWidgets('shows checklist progress on the note card', (tester) async {
+      final note = makeNote(
+        title: 'Shopping',
+        content: '{"ops":['
+            '{"insert":"Milk"},'
+            r'{"insert":"\n","attributes":{"list":"checked"}},'
+            '{"insert":"Eggs"},'
+            r'{"insert":"\n","attributes":{"list":"unchecked"}}'
+            ']}',
+      );
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: NoteList(controller: controller, notes: [note]),
+          ),
+        ),
+      );
+
+      expect(find.text('1 of 2 done'), findsOneWidget);
+      expect(find.byIcon(Icons.check_box_outlined), findsOneWidget);
+    });
+
     testWidgets('shows pin icon for pinned notes', (tester) async {
       final pinnedNote = makeNote(title: 'Pinned', pinned: true);
 

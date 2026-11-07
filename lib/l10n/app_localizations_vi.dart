@@ -180,6 +180,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get animateAddButton => 'Hiệu ứng nút thêm';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Chưa đặt tên)';
 
   @override

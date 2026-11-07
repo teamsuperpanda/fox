@@ -181,6 +181,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get animateAddButton => 'Toevoegknop animeren';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Naamloos)';
 
   @override

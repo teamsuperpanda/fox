@@ -181,6 +181,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get animateAddButton => 'Animasi tombol tambah';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Tanpa judul)';
 
   @override

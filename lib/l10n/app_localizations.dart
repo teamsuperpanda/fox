@@ -483,6 +483,12 @@ abstract class AppLocalizations {
   /// **'Animate Add Button'**
   String get animateAddButton;
 
+  /// No description provided for @checklistProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} done'**
+  String checklistProgress(int done, int total);
+
   /// No description provided for @untitled.
   ///
   /// In en, this message translates to:

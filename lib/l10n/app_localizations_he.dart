@@ -179,6 +179,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get animateAddButton => 'הנפש כפתור הוספה';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(ללא כותרת)';
 
   @override

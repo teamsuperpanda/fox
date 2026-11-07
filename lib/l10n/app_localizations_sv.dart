@@ -180,6 +180,11 @@ class AppLocalizationsSv extends AppLocalizations {
   String get animateAddButton => 'Animera lägg till-knapp';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Namnlös)';
 
   @override
