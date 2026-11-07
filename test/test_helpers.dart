@@ -17,11 +17,13 @@ Widget buildTestApp(
   ThemeMode themeMode = ThemeMode.system,
   Locale? locale,
   ThemeData? theme,
+  ThemeProvider? themeProvider,
+  LocaleProvider? localeProvider,
 }) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider.value(value: ThemeProvider()),
-      ChangeNotifierProvider.value(value: LocaleProvider()),
+      ChangeNotifierProvider.value(value: themeProvider ?? ThemeProvider()),
+      ChangeNotifierProvider.value(value: localeProvider ?? LocaleProvider()),
     ],
     child: MaterialApp(
       localizationsDelegates: const [
