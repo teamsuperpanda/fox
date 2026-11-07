@@ -142,6 +142,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get savingTitleOnly => 'حفظ الملاحظة بالعنوان فقط';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return 'خطأ في الحفظ: $error';
   }

@@ -144,6 +144,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get savingTitleOnly => 'Menyimpan catatan dengan judul saja';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return 'Kesalahan menyimpan: $error';
   }

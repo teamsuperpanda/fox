@@ -142,6 +142,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get savingTitleOnly => 'Сохранение заметки только с заголовком';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return 'Ошибка сохранения: $error';
   }

@@ -142,6 +142,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get savingTitleOnly => 'บันทึกเฉพาะชื่อเรื่อง';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return 'เกิดข้อผิดพลาดในการบันทึก: $error';
   }

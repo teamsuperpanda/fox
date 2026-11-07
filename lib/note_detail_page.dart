@@ -12,6 +12,8 @@ class NoteDetailResult {
   final bool deleted;
 }
 
+enum _SaveState { editing, saving, saved, failed }
+
 class NoteDetailPage extends StatefulWidget {
   const NoteDetailPage({
     required this.controller,
@@ -39,7 +41,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   late List<String> _tags;
   late String? _folderId;
   late String? _color;
-  bool _saving = false;
+  _SaveState _saveState = _SaveState.editing;
+  bool _hasPopped = false;
+
+  bool get _saving => _saveState == _SaveState.saving;
 
   @override
   void initState() {
@@ -175,9 +180,14 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
   }
 
+  void _popOnce(NavigatorState navigator, NoteDetailResult result) {
+    if (_hasPopped) return;
+    _hasPopped = true;
+    if (navigator.mounted) navigator.pop(result);
+  }
+
   Future<void> _saveAndPop() async {
-    if (_saving) return;
-    _saving = true;
+    if (_saving || _hasPopped) return;
 
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.maybeOf(context);
@@ -192,12 +202,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       messenger?.showSnackBar(
         SnackBar(content: Text(l10n.emptyNoteDiscarded)),
       );
-      navigator.pop(const NoteDetailResult());
+      _popOnce(navigator, const NoteDetailResult());
       return;
     }
 
     if (title.isEmpty && plainText.isEmpty && widget.existing != null) {
-      _saving = false;
       messenger?.showSnackBar(
         SnackBar(
           content: Text(l10n.noteCannotBeEmpty),
@@ -216,6 +225,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       );
     }
 
+    setState(() => _saveState = _SaveState.saving);
+
     try {
       await widget.controller.addOrUpdate(
         id: widget.existing?.id,
@@ -227,13 +238,20 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         color: _color,
       );
       if (!mounted) return;
-      navigator.pop(const NoteDetailResult(changed: true));
+      setState(() => _saveState = _SaveState.saved);
+      _popOnce(navigator, const NoteDetailResult(changed: true));
     } catch (e) {
-      _saving = false;
+      if (!mounted) return;
+      setState(() => _saveState = _SaveState.failed);
+      messenger?.hideCurrentSnackBar();
       messenger?.showSnackBar(
         SnackBar(
           content: Text(l10n.errorSavingNote(e.toString())),
           backgroundColor: errorColor,
+          action: SnackBarAction(
+            label: l10n.retry,
+            onPressed: _saveAndPop,
+          ),
         ),
       );
     }
@@ -247,22 +265,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
         if (didPop) return;
-        final navigator = Navigator.of(context);
-        var timedOut = false;
-        try {
-          await _saveAndPop().timeout(_snackBarDuration);
-        } catch (_) {
-          timedOut = true;
-        }
-        if (timedOut && mounted) {
-          navigator.pop();
-        }
+        await _saveAndPop();
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: _saveAndPop,
+            onPressed: _saving ? null : _saveAndPop,
             tooltip: l10n.back,
           ),
           actions: [
@@ -342,8 +351,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 ),
               FloatingActionButton(
                 heroTag: _heroTagSave,
-                onPressed: _saveAndPop,
-                child: const Icon(Icons.save),
+                onPressed: _saving ? null : _saveAndPop,
+                child: _saving
+                    ? SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      )
+                    : const Icon(Icons.save),
               ),
             ],
           ),

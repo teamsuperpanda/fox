@@ -417,6 +417,12 @@ abstract class AppLocalizations {
   /// **'Saving note with title only'**
   String get savingTitleOnly;
 
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
   /// No description provided for @errorSavingNote.
   ///
   /// In en, this message translates to:

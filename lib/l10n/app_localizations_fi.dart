@@ -144,6 +144,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get savingTitleOnly => 'Tallennetaan muistiinpano vain otsikolla';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return 'Virhe tallennuksessa: $error';
   }

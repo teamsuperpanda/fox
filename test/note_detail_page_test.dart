@@ -230,7 +230,7 @@ void main() {
       expect(mockRepo.notes.first.tags, contains('another-tag'));
     });
 
-    testWidgets('save failure keeps user on page and shows error',
+    testWidgets('save failure keeps user on page and offers retry',
         (tester) async {
       final failingRepo = FailingSaveRepository();
       final failingController = NotesController(failingRepo);
@@ -238,15 +238,62 @@ void main() {
       await tester.pumpWidget(
         buildTestApp(NoteDetailPage(controller: failingController)),
       );
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
+      );
 
       await tester.enterText(find.byType(TextField).first, 'Will Fail');
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.save));
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.byType(NoteDetailPage), findsOneWidget);
       expect(failingRepo.notes, isEmpty);
+      expect(find.text(l10n.retry), findsOneWidget);
+      expect(
+        find.text(l10n.errorSavingNote('Exception: save failed')),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text(l10n.retry));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+      expect(failingRepo.notes, isEmpty);
+    });
+
+    testWidgets('save in flight shows saving state and blocks extra pops',
+        (tester) async {
+      final delayedRepo = DelayedRepository();
+      final delayedController = NotesController(delayedRepo);
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: delayedController)),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Still Saving');
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byIcon(Icons.save), findsNothing);
+
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+
+      delayedRepo.upsertCompleter.complete();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
+      expect(delayedRepo.notes, hasLength(1));
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('save pops only after awaited write success', (tester) async {

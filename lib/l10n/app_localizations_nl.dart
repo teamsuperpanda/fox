@@ -144,6 +144,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get savingTitleOnly => 'Notitie opslaan met alleen titel';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return 'Fout bij opslaan: $error';
   }
