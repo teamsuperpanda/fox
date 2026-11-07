@@ -35,10 +35,15 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+  # Explicit files: a directory entry bundles every file in it, including
+  # assets only used by the icon or splash generators. banner.png is README
+  # only and is intentionally not bundled.
   assets:
-    - assets/images/
-    - assets/images/icon/
-    - assets/images/launchscreen/
+    - assets/images/icon/icon.png
+    - assets/images/launchscreen/logo_light.png
+    - assets/images/launchscreen/logo_dark.png
+    - assets/images/launchscreen/branding_light.png
+    - assets/images/launchscreen/branding_dark.png
   fonts:
     - family: Inter
       fonts:
