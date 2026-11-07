@@ -24,11 +24,24 @@ class Note {
   final String? color; // Hex string e.g. '#FF5252'
 
   String? _plainText;
+  String? _searchableText;
   final String _lowerTitle;
   final List<String> _lowerTags;
 
   String get lowerTitle => _lowerTitle;
   List<String> get lowerTags => _lowerTags;
+
+  /// Normalised haystack for search: title, plain text and tags, lowercased
+  /// and cached. Computed on first search so repeated keystrokes never rebuild
+  /// it, and so filtering does one `contains` per note instead of three.
+  String get searchableText {
+    final cached = _searchableText;
+    if (cached != null) return cached;
+    final computed =
+        '$_lowerTitle\n${plainText.toLowerCase()}\n${_lowerTags.join('\n')}';
+    _searchableText = computed;
+    return computed;
+  }
 
   // Create content JSON from a Document
   static String documentToContent(Document document) =>
