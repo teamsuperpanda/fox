@@ -173,6 +173,21 @@ None. This is a fully offline, local-first application with no network dependenc
 - **Localization:** ARB-based (`l10n.yaml`, 31 ARB files, 31 supported locales)
 - **CI Script:** `tool/ci_test.sh` runs `flutter test --exclude-tags golden`
 
+### Performance budgets
+
+`test/benchmark_test.dart` builds a 5,000 note library in memory and fails when a budget is exceeded. It runs in the normal suite, so `tool/ci_test.sh` enforces it.
+
+| Operation | Budget | Measured in this container |
+|---|---|---|
+| Load 5,000 notes and build the visible list | 2 s | ~17 ms |
+| First search (cold text cache) | 1.5 s | ~83 ms |
+| Warm search | 100 ms | ~3 ms |
+| Re-sort 5,000 notes | 100 ms | ~2 ms |
+| Pin one note | 50 ms | ~2 ms |
+
+The measurements are a container baseline, not a mid-range device baseline, so the budgets are deliberately loose: CI fails on an order-of-magnitude regression, not on noise. Three structures keep these paths cheap: `Note.searchableText` caches the lowercased title, plain text and tags so a keystroke costs one `contains` per note; `NotesController` keeps an id to index map so an update or pin does not copy the whole list; and `lib/widgets/note_list.dart` uses `ListView.builder`, so only visible rows build. Memory for 10,000 notes is not measured here; the plain-text cache is the dominant per-note cost and is bounded by note size.
+
+
 ## 10. Future Considerations
 
 - **Named Routing:** Consider as pages grow beyond current two screens

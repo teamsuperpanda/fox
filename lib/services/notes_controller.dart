@@ -42,11 +42,26 @@ class NotesController extends ChangeNotifier {
   bool _fabAnimation = true;
   bool get fabAnimation => _fabAnimation;
 
-  List<Note> _unfilteredNotes = const [];
+  List<Note> _unfilteredNotes = [];
+  final Map<String, int> _noteIndex = {};
   List<Note> _visibleNotes = const [];
   List<Note> get notes => _visibleNotes;
 
   bool get hasNotes => _unfilteredNotes.isNotEmpty;
+
+  /// Replaces the whole list and rebuilds the id index once.
+  void _replaceNotes(List<Note> notes) {
+    _unfilteredNotes = List<Note>.of(notes);
+    _noteIndex.clear();
+    for (var i = 0; i < _unfilteredNotes.length; i++) {
+      _noteIndex[_unfilteredNotes[i].id] = i;
+    }
+  }
+
+  void _appendNote(Note note) {
+    _noteIndex[note.id] = _unfilteredNotes.length;
+    _unfilteredNotes.add(note);
+  }
 
   Note? _lastRemovedNote;
   Note? get lastRemovedNote => _lastRemovedNote;
@@ -65,7 +80,7 @@ class NotesController extends ChangeNotifier {
     _loading = true;
     notifyListeners();
     await _repo.init();
-    _unfilteredNotes = await _repo.getAll();
+    _replaceNotes(await _repo.getAll());
     _folders = await _repo.getAllFolders();
     _loadSettings();
     _updateView();
@@ -168,7 +183,7 @@ class NotesController extends ChangeNotifier {
     if (_selectedFolderId == id) {
       _selectedFolderId = null;
     }
-    _unfilteredNotes = cleared;
+    _replaceNotes(cleared);
     _updateView();
     notifyListeners();
   }
@@ -207,34 +222,44 @@ class NotesController extends ChangeNotifier {
     );
     await _repo.upsert(note);
     _lastRemovedNote = null;
-    _unfilteredNotes = [
-      ...(_unfilteredNotes.where((n) => n.id != note.id)),
-      note,
-    ];
+    final index = _noteIndex[note.id];
+    if (index == null) {
+      _appendNote(note);
+    } else {
+      _unfilteredNotes[index] = note;
+    }
     _updateView();
     notifyListeners();
   }
 
   Future<void> setPinned(String id, bool pinned) async {
-    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    final note = find(id);
     if (note == null) return;
     final updated = note.copyWith(pinned: pinned, updatedAt: DateTime.now());
     await _repo.upsert(updated);
     _lastRemovedNote = null;
-    _unfilteredNotes = [
-      ...(_unfilteredNotes.where((n) => n.id != id)),
-      updated,
-    ];
+    final index = _noteIndex[id];
+    if (index == null) {
+      _appendNote(updated);
+    } else {
+      _unfilteredNotes[index] = updated;
+    }
     _updateView();
     notifyListeners();
   }
 
   Future<void> remove(String id) async {
-    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    final note = find(id);
     if (note == null) return;
     await _repo.delete(id);
     _lastRemovedNote = note;
-    _unfilteredNotes = _unfilteredNotes.where((n) => n.id != id).toList();
+    final index = _noteIndex.remove(id);
+    if (index != null) {
+      _unfilteredNotes.removeAt(index);
+      for (var i = index; i < _unfilteredNotes.length; i++) {
+        _noteIndex[_unfilteredNotes[i].id] = i;
+      }
+    }
     _updateView();
     notifyListeners();
   }
@@ -243,7 +268,7 @@ class NotesController extends ChangeNotifier {
     final note = _lastRemovedNote;
     if (note != null) {
       await _repo.upsert(note);
-      _unfilteredNotes = [..._unfilteredNotes, note];
+      _appendNote(note);
       if (identical(_lastRemovedNote, note)) {
         _lastRemovedNote = null;
       }
@@ -252,43 +277,43 @@ class NotesController extends ChangeNotifier {
     }
   }
 
-  Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+  Note? find(String id) {
+    final index = _noteIndex[id];
+    return index == null ? null : _unfilteredNotes[index];
+  }
 
   List<Note> _filterAndSort(List<Note> list) {
-    final copy = [...list];
+    final folderId = _selectedFolderId;
+    final term = _searchTerm.isEmpty ? null : _searchTerm.toLowerCase();
+    final result = <Note>[];
 
-    if (_selectedFolderId != null) {
-      if (_selectedFolderId == AppConstants.unfiledFolderId) {
-        copy.retainWhere((note) => note.folderId == null);
-      } else {
-        copy.retainWhere((note) => note.folderId == _selectedFolderId);
+    for (final note in list) {
+      if (folderId != null) {
+        final matchesFolder = folderId == AppConstants.unfiledFolderId
+            ? note.folderId == null
+            : note.folderId == folderId;
+        if (!matchesFolder) continue;
       }
+      if (term != null && !note.searchableText.contains(term)) continue;
+      result.add(note);
     }
 
-    if (_searchTerm.isNotEmpty) {
-      final term = _searchTerm.toLowerCase();
-      copy.retainWhere(
-        (note) =>
-            note.lowerTitle.contains(term) ||
-            note.plainText.toLowerCase().contains(term) ||
-            note.lowerTags.any((t) => t.contains(term)),
-      );
+    result.sort(_compare);
+    return result;
+  }
+
+  int _compare(Note a, Note b) {
+    if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
+
+    switch (_sortBy) {
+      case SortBy.titleAsc:
+        return a.title.compareTo(b.title);
+      case SortBy.titleDesc:
+        return b.title.compareTo(a.title);
+      case SortBy.dateAsc:
+        return a.updatedAt.compareTo(b.updatedAt);
+      case SortBy.dateDesc:
+        return b.updatedAt.compareTo(a.updatedAt);
     }
-
-    copy.sort((a, b) {
-      if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
-
-      switch (_sortBy) {
-        case SortBy.titleAsc:
-          return a.title.compareTo(b.title);
-        case SortBy.titleDesc:
-          return b.title.compareTo(a.title);
-        case SortBy.dateAsc:
-          return a.updatedAt.compareTo(b.updatedAt);
-        case SortBy.dateDesc:
-          return b.updatedAt.compareTo(a.updatedAt);
-      }
-    });
-    return copy;
   }
 }
