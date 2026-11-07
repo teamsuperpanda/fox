@@ -8,13 +8,13 @@ import 'package:fox/services/notes_controller.dart';
 
 import 'test_helpers.dart';
 
-class _FailingDeleteRepo extends MemoryRepo {
-  bool failDeletes = false;
+class _FailingUpsertRepo extends MemoryRepo {
+  bool failUpserts = false;
 
   @override
-  Future<void> delete(String id) {
-    if (failDeletes) throw StateError('delete failed');
-    return super.delete(id);
+  Future<void> upsert(Note note) {
+    if (failUpserts) throw StateError('upsert failed');
+    return super.upsert(note);
   }
 }
 
@@ -33,12 +33,15 @@ class _FailingFolderNoteUpdateRepo extends MemoryRepo {
 
 class _BlockingUpsertRepo extends MemoryRepo {
   bool blockUpserts = false;
+  String? blockedNoteId;
   final upsertStarted = Completer<void>();
   final resumeUpsert = Completer<void>();
 
   @override
   Future<void> upsert(Note note) async {
-    if (blockUpserts) {
+    final blocks =
+        blockUpserts && (blockedNoteId == null || note.id == blockedNoteId);
+    if (blocks) {
       upsertStarted.complete();
       await resumeUpsert.future;
     }
@@ -125,7 +128,7 @@ void main() {
     });
 
     test('failed remove preserves the previous undo target', () async {
-      final failingRepo = _FailingDeleteRepo();
+      final failingRepo = _FailingUpsertRepo();
       final failingController = NotesController(failingRepo);
       await failingController.load();
       await failingController.addOrUpdate(
@@ -144,7 +147,7 @@ void main() {
       );
 
       await failingController.remove(first.id);
-      failingRepo.failDeletes = true;
+      failingRepo.failUpserts = true;
 
       await expectLater(
         failingController.remove(second.id),
@@ -321,7 +324,9 @@ void main() {
         (note) => note.title == 'Second',
       );
       await blockingController.remove(first.id);
-      blockingRepo.blockUpserts = true;
+      blockingRepo
+        ..blockUpserts = true
+        ..blockedNoteId = first.id;
 
       final undoFuture = blockingController.undoRemove();
       await blockingRepo.upsertStarted.future;
@@ -329,8 +334,11 @@ void main() {
       blockingRepo.resumeUpsert.complete();
       await undoFuture;
 
-      expect(blockingController.find(first.id), same(first));
-      expect(blockingController.find(second.id), isNull);
+      final restoredFirst = blockingController.find(first.id);
+      expect(restoredFirst, isNotNull);
+      expect(restoredFirst!.deletedAt, isNull);
+      expect(blockingController.notes.any((n) => n.id == second.id), isFalse);
+      expect(blockingController.trash.any((n) => n.id == second.id), isTrue);
       expect(blockingController.lastRemovedNote?.id, second.id);
     });
 

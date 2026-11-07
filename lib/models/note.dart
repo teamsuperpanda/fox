@@ -12,6 +12,7 @@ class Note {
     this.tags = const [],
     this.folderId,
     this.color,
+    this.deletedAt,
   })  : _lowerTitle = title.toLowerCase(),
         _lowerTags = tags.map((t) => t.toLowerCase()).toList(growable: false);
   final String id;
@@ -22,6 +23,12 @@ class Note {
   final List<String> tags;
   final String? folderId;
   final String? color; // Hex string e.g. '#FF5252'
+
+  /// When the note was moved to the trash, or null while it is active.
+  final DateTime? deletedAt;
+
+  /// How long a trashed note is kept before it is purged forever.
+  static const Duration trashRetention = Duration(days: 30);
 
   String? _plainText;
   final String _lowerTitle;
@@ -85,8 +92,10 @@ class Note {
     List<String>? tags,
     String? folderId,
     String? color,
+    DateTime? deletedAt,
     bool clearFolder = false,
     bool clearColor = false,
+    bool clearDeletedAt = false,
   }) {
     return Note(
       id: id ?? this.id,
@@ -97,6 +106,7 @@ class Note {
       tags: tags ?? this.tags,
       folderId: clearFolder ? null : (folderId ?? this.folderId),
       color: clearColor ? null : (color ?? this.color),
+      deletedAt: clearDeletedAt ? null : (deletedAt ?? this.deletedAt),
     );
   }
 
@@ -114,6 +124,9 @@ class Note {
               const [],
       folderId: map['folderId'] as String?,
       color: map['color'] as String?,
+      deletedAt: map['deletedAt'] is int
+          ? DateTime.fromMillisecondsSinceEpoch(map['deletedAt']! as int)
+          : null,
     );
   }
 
@@ -128,6 +141,7 @@ class Note {
       'tags': tags,
       'folderId': folderId,
       'color': color,
+      'deletedAt': deletedAt?.millisecondsSinceEpoch,
     };
   }
 }

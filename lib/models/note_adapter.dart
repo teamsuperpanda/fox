@@ -6,6 +6,9 @@ class NoteAdapter extends TypeAdapter<Note> {
   @override
   final int typeId = 3; // Different from Settings (typeId: 2)
 
+  /// Number of fields written by this version. Append at this index next.
+  static const int fieldCount = 9;
+
   @override
   Note read(BinaryReader reader) {
     final numOfFields = reader.readByte();
@@ -14,6 +17,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       final field = reader.readByte();
       fields[field] = reader.read();
     }
+    final deletedAt = fields[8];
     return Note(
       id: fields[0] as String,
       title: fields[1] as String? ?? '',
@@ -24,12 +28,15 @@ class NoteAdapter extends TypeAdapter<Note> {
           const [],
       folderId: fields[6] as String?,
       color: fields[7] as String?,
+      deletedAt: deletedAt is int
+          ? DateTime.fromMillisecondsSinceEpoch(deletedAt)
+          : null,
     );
   }
 
   @override
   void write(BinaryWriter writer, Note obj) {
-    writer.writeByte(8); // Number of fields
+    writer.writeByte(fieldCount); // Number of fields
     writer.writeByte(0);
     writer.write(obj.id);
     writer.writeByte(1);
@@ -46,6 +53,8 @@ class NoteAdapter extends TypeAdapter<Note> {
     writer.write(obj.folderId);
     writer.writeByte(7);
     writer.write(obj.color);
+    writer.writeByte(8);
+    writer.write(obj.deletedAt?.millisecondsSinceEpoch);
   }
 
   @override

@@ -32,7 +32,11 @@ Future<bool?> showDeleteConfirmDialog(BuildContext context) {
 }
 
 /// Shows a "Note deleted" snackbar with an Undo action.
+///
+/// Does nothing when the undo stack is empty, so the button can never be a
+/// no-op.
 void showUndoDeleteSnackBar(BuildContext context, NotesController controller) {
+  if (!controller.canUndo) return;
   final l10n = AppLocalizations.of(context);
   ScaffoldMessenger.maybeOf(context)?.showSnackBar(
     SnackBar(

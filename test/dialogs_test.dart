@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/services/notes_controller.dart';
@@ -66,9 +67,13 @@ void main() {
   });
 
   group('showUndoDeleteSnackBar', () {
-    testWidgets('displays snackbar with Undo action', (tester) async {
+    testWidgets('displays snackbar with Undo action after a delete',
+        (tester) async {
       final controller = NotesController(MemoryRepo());
       await controller.load();
+      await controller.addOrUpdate(title: 'Gone', content: Document());
+      final id = controller.notes.first.id;
+      await controller.remove(id);
 
       await tester.pumpWidget(
         buildTestApp(
@@ -93,6 +98,30 @@ void main() {
 
       expect(find.text(l10n.noteDeleted), findsOneWidget);
       expect(find.text('Undo'), findsOneWidget);
+    });
+
+    testWidgets('shows nothing when the undo stack is empty', (tester) async {
+      final controller = NotesController(MemoryRepo());
+      await controller.load();
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Builder(
+            builder: (context) => Scaffold(
+              body: ElevatedButton(
+                onPressed: () => showUndoDeleteSnackBar(context, controller),
+                child: const Text('Show Snackbar'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Show Snackbar'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SnackBar), findsNothing);
     });
   });
 }

@@ -315,6 +315,54 @@ abstract class AppLocalizations {
   /// **'Undo'**
   String get undo;
 
+  /// No description provided for @trash.
+  ///
+  /// In en, this message translates to:
+  /// **'Trash'**
+  String get trash;
+
+  /// No description provided for @trashEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The trash is empty.'**
+  String get trashEmpty;
+
+  /// No description provided for @trashRetentionInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes in the trash are deleted permanently after 30 days.'**
+  String get trashRetentionInfo;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @deleteForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete permanently'**
+  String get deleteForever;
+
+  /// No description provided for @deleteForeverConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this note permanently? This cannot be undone.'**
+  String get deleteForeverConfirm;
+
+  /// No description provided for @emptyTrash.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty trash'**
+  String get emptyTrash;
+
+  /// No description provided for @emptyTrashConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete every note in the trash?'**
+  String get emptyTrashConfirm;
+
   /// No description provided for @noteTitle.
   ///
   /// In en, this message translates to:
