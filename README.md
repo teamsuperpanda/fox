@@ -68,4 +68,4 @@ flutter test --coverage
 
 The code is [MIT licensed](LICENSE). You can use it, modify it and ship it, including commercially.
 
-The Fox name, logo and brand assets are proprietary and are not covered by the MIT licence. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md) and [NOTICE](NOTICE).
+The Fox name, logo and brand assets are proprietary and are not covered by the MIT licence. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md) and [NOTICE](NOTICE), and the [trademark and brand policy](TRADEMARKS.md) for what forks may and may not do.

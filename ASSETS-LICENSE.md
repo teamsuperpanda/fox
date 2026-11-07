@@ -40,6 +40,8 @@ including selling a product built from it, provided you:
 - Use the Fox name or assets in a way that confuses users about the source
 - Claim ownership of or relicense the brand assets
 
+Full rules, including the trademark policy, are in [TRADEMARKS.md](TRADEMARKS.md).
+
 ## Questions or exceptions
 
 For permission to use any Fox brand asset, or to ask about a use this policy does
