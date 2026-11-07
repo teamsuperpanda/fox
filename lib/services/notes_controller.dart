@@ -4,6 +4,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/services/constants.dart';
+import 'package:fox/services/note_search.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:uuid/uuid.dart';
@@ -265,18 +266,25 @@ class NotesController extends ChangeNotifier {
       }
     }
 
-    if (_searchTerm.isNotEmpty) {
-      final term = _searchTerm.toLowerCase();
-      copy.retainWhere(
-        (note) =>
-            note.lowerTitle.contains(term) ||
-            note.plainText.toLowerCase().contains(term) ||
-            note.lowerTags.any((t) => t.contains(term)),
-      );
+    final query = SearchQuery(_searchTerm);
+    Map<String, int>? relevance;
+    if (!query.isEmpty) {
+      relevance = <String, int>{};
+      copy.retainWhere((note) {
+        final score = scoreNote(note, query);
+        if (score == null) return false;
+        relevance![note.id] = score;
+        return true;
+      });
     }
 
     copy.sort((a, b) {
       if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
+
+      if (relevance != null) {
+        final byScore = relevance[b.id]!.compareTo(relevance[a.id]!);
+        if (byScore != 0) return byScore;
+      }
 
       switch (_sortBy) {
         case SortBy.titleAsc:

@@ -12,8 +12,7 @@ class Note {
     this.tags = const [],
     this.folderId,
     this.color,
-  })  : _lowerTitle = title.toLowerCase(),
-        _lowerTags = tags.map((t) => t.toLowerCase()).toList(growable: false);
+  });
   final String id;
   final String title;
   final String content; // JSON string representing Quill Delta
@@ -24,11 +23,6 @@ class Note {
   final String? color; // Hex string e.g. '#FF5252'
 
   String? _plainText;
-  final String _lowerTitle;
-  final List<String> _lowerTags;
-
-  String get lowerTitle => _lowerTitle;
-  List<String> get lowerTags => _lowerTags;
 
   // Create content JSON from a Document
   static String documentToContent(Document document) =>

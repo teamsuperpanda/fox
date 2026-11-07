@@ -2,34 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/note_search.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:intl/intl.dart';
 
 InlineSpan _highlightText(
   String text,
-  String query,
+  List<String> tokens,
   TextStyle? style,
   Color highlightColor,
 ) {
-  if (query.isEmpty) return TextSpan(text: text, style: style);
-  final lower = text.toLowerCase();
-  final q = query.toLowerCase();
+  final ranges = findMatchRanges(text, tokens);
+  if (ranges.isEmpty) return TextSpan(text: text, style: style);
   final spans = <InlineSpan>[];
   var start = 0;
-  while (true) {
-    final idx = lower.indexOf(q, start);
-    if (idx < 0) break;
-    if (idx > start) {
-      spans.add(TextSpan(text: text.substring(start, idx), style: style));
+  for (final range in ranges) {
+    if (range.start > start) {
+      spans.add(
+          TextSpan(text: text.substring(start, range.start), style: style));
     }
     spans.add(TextSpan(
-      text: text.substring(idx, idx + q.length),
+      text: text.substring(range.start, range.end),
       style: style?.copyWith(
         backgroundColor: highlightColor,
       ),
     ));
-    start = idx + q.length;
+    start = range.end;
   }
   if (start < text.length) {
     spans.add(TextSpan(text: text.substring(start), style: style));
@@ -53,7 +52,7 @@ class NoteList extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final highlightColor = colorScheme.tertiaryContainer.withValues(alpha: 0.5);
-    final highlightQuery = controller.searchTerm.toLowerCase();
+    final highlightTokens = SearchQuery(controller.searchTerm).tokens;
     final folderNames = {
       for (final folder in controller.folders) folder.id: folder.name,
     };
@@ -67,7 +66,7 @@ class NoteList extends StatelessWidget {
         onNoteTap: onNoteTap,
         l10n: l10n,
         folderNames: folderNames,
-        highlightQuery: highlightQuery,
+        highlightTokens: highlightTokens,
         highlightColor: highlightColor,
       ),
     );
@@ -82,7 +81,7 @@ class _NoteListTile extends StatelessWidget {
     required this.onNoteTap,
     required this.l10n,
     required this.folderNames,
-    required this.highlightQuery,
+    required this.highlightTokens,
     required this.highlightColor,
   });
 
@@ -106,7 +105,7 @@ class _NoteListTile extends StatelessWidget {
   final void Function(Note note)? onNoteTap;
   final AppLocalizations l10n;
   final Map<String, String> folderNames;
-  final String highlightQuery;
+  final List<String> highlightTokens;
   final Color highlightColor;
 
   @override
@@ -201,7 +200,7 @@ class _NoteListTile extends StatelessWidget {
                       child: Text.rich(
                         _highlightText(
                           note.title.isEmpty ? l10n.untitled : note.title,
-                          highlightQuery,
+                          highlightTokens,
                           Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.15,
@@ -225,7 +224,7 @@ class _NoteListTile extends StatelessWidget {
                   Text.rich(
                     _highlightText(
                       trimmedText,
-                      highlightQuery,
+                      highlightTokens,
                       Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                             height: 1.2,

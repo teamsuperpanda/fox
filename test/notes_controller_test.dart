@@ -200,7 +200,7 @@ void main() {
       controller.setSearchTerm('a');
       expect(controller.notes.length, 3); // Apple, Banana, Car all contain 'a'
       expect(controller.notes.map((n) => n.title),
-          ['Car', 'Banana', 'Apple']); // sorted by date desc
+          ['Apple', 'Car', 'Banana']); // ranked: title prefix first
 
       controller.setSearchTerm('fruit');
       expect(controller.notes.length, 1);
@@ -228,6 +228,84 @@ void main() {
 
       controller.setSearchTerm('Note');
       expect(controller.notes.length, 3);
+    });
+
+    test('search is diacritic insensitive', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Café', content: Document());
+      await controller.addOrUpdate(title: 'Tea', content: Document());
+
+      controller.setSearchTerm('cafe');
+      expect(controller.notes.map((n) => n.title), ['Café']);
+
+      controller.setSearchTerm('CAFÉ');
+      expect(controller.notes.map((n) => n.title), ['Café']);
+    });
+
+    test('search requires every word in any order', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Tax return',
+        content: Document.fromJson([
+          {'insert': 'filing for 2025\n'}
+        ]),
+      );
+      await controller.addOrUpdate(
+        title: 'Tax notes',
+        content: Document.fromJson([
+          {'insert': 'no year here\n'}
+        ]),
+      );
+
+      controller.setSearchTerm('tax 2025');
+      expect(controller.notes.map((n) => n.title), ['Tax return']);
+
+      controller.setSearchTerm('2025 tax');
+      expect(controller.notes.map((n) => n.title), ['Tax return']);
+    });
+
+    test('search tolerates a single typo in longer words', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Shopping',
+        content: Document.fromJson([
+          {'insert': 'keep the receipt\n'}
+        ]),
+      );
+
+      controller.setSearchTerm('reciept');
+      expect(controller.notes.map((n) => n.title), ['Shopping']);
+    });
+
+    test('search ranks title, then tag, then body matches', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Other',
+        content: Document.fromJson([
+          {'insert': 'apple\n'}
+        ]),
+      );
+      await controller.addOrUpdate(
+        title: 'Shopping list',
+        content: Document(),
+        tags: ['apple'],
+      );
+      await controller.addOrUpdate(title: 'Apple pie', content: Document());
+
+      controller.setSearchTerm('apple');
+      expect(
+        controller.notes.map((n) => n.title),
+        ['Apple pie', 'Shopping list', 'Other'],
+      );
+    });
+
+    test('search ranks title prefixes above title substrings', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Pineapple', content: Document());
+      await controller.addOrUpdate(title: 'Apple', content: Document());
+
+      controller.setSearchTerm('apple');
+      expect(controller.notes.map((n) => n.title), ['Apple', 'Pineapple']);
     });
 
     test('sort by title ascending', () async {
