@@ -91,6 +91,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get undo => 'पूर्ववत करें';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'नोट शीर्षक...';
 
   @override

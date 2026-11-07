@@ -93,6 +93,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get undo => 'Annuler';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Titre de la note...';
 
   @override

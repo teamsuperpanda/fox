@@ -157,7 +157,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                           ? Theme.of(context).colorScheme.primary
                           : null,
                     ),
-                    title: Text(folder.name),
+                    title: Text(widget.controller.folderPath(folder.id)),
                     selected: _folderId == folder.id,
                     contentPadding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,

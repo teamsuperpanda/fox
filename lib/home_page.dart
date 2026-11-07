@@ -11,6 +11,7 @@ import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
+import 'package:fox/widgets/folder_drop_bar.dart';
 import 'package:fox/widgets/folders_dialog.dart';
 import 'package:fox/widgets/note_list.dart';
 import 'package:fox/widgets/view_options_sheet.dart';
@@ -132,6 +133,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (result != null && result.deleted) {
       showUndoDeleteSnackBar(context, controller);
     }
+  }
+
+  Future<void> _moveNote(Note note, String? folderId) async {
+    await controller.moveToFolder(note.id, folderId);
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+      SnackBar(
+        content: Text(l10n.noteMoved),
+        action: SnackBarAction(
+          label: l10n.undo,
+          onPressed: () => controller.undoMove(),
+        ),
+      ),
+    );
   }
 
   Future<void> _showFoldersDialog() async {
@@ -270,6 +286,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           final notes = controller.notes;
           return Column(
             children: [
+              FolderDropBar(
+                controller: controller,
+                onMove: _moveNote,
+              ),
               // Folder filter chip bar
               if (controller.selectedFolderId != null)
                 Semantics(

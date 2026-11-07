@@ -92,6 +92,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get undo => 'Deshacer';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Título de la nota...';
 
   @override

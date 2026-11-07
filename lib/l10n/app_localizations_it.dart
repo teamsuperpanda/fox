@@ -91,6 +91,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get undo => 'Annulla';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Titolo della nota...';
 
   @override

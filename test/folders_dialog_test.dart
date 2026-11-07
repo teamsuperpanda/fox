@@ -154,5 +154,72 @@ void main() {
 
       expect(controller.selectedFolderId, equals(AppConstants.unfiledFolderId));
     });
+
+    testWidgets('nested folders show a breadcrumb in the list', (tester) async {
+      await controller.addFolder('Work');
+      await controller.addFolder(
+        'Recipes',
+        parentId: controller.rootFolders.single.id,
+      );
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Work'), findsOneWidget);
+      expect(find.text('Work / Recipes'), findsOneWidget);
+    });
+
+    testWidgets('can add a subfolder from a folder menu', (tester) async {
+      await controller.addFolder('Work');
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Subfolder'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).last, 'Recipes');
+      await tester.tap(find.text('Create'));
+      await tester.pumpAndSettle();
+
+      expect(controller.rootFolders.single.name, 'Work');
+      expect(
+          controller.childFolders(controller.rootFolders.single.id).single.name,
+          'Recipes');
+    });
   });
 }

@@ -176,121 +176,150 @@ class _NoteListTile extends StatelessWidget {
           ],
         ),
       ),
-      child: Semantics(
-        label:
-            '${l10n.note}: ${note.title.isEmpty ? l10n.untitled : note.title}',
-        child: InkWell(
-          onTap: onNoteTap == null ? null : () => onNoteTap!(note),
-          child: Container(
-            decoration: BoxDecoration(
-              color: controller.alternatingColors && index.isEven
-                  ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
-                  : null,
-              border: noteColor != null
-                  ? Border(left: BorderSide(color: noteColor, width: 4))
-                  : null,
-            ),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text.rich(
-                        _highlightText(
-                          note.title.isEmpty ? l10n.untitled : note.title,
-                          highlightQuery,
-                          Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.15,
-                              ),
-                          highlightColor,
+      child: LongPressDraggable<Note>(
+        data: note,
+        feedback: _dragFeedback(context),
+        childWhenDragging: Opacity(
+          opacity: 0.4,
+          child: _dragFeedback(context),
+        ),
+        child: Semantics(
+          label:
+              '${l10n.note}: ${note.title.isEmpty ? l10n.untitled : note.title}',
+          child: InkWell(
+            onTap: onNoteTap == null ? null : () => onNoteTap!(note),
+            child: Container(
+              decoration: BoxDecoration(
+                color: controller.alternatingColors && index.isEven
+                    ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
+                    : null,
+                border: noteColor != null
+                    ? Border(left: BorderSide(color: noteColor, width: 4))
+                    : null,
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text.rich(
+                          _highlightText(
+                            note.title.isEmpty ? l10n.untitled : note.title,
+                            highlightQuery,
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.15,
+                                ),
+                            highlightColor,
+                          ),
                         ),
                       ),
-                    ),
-                    if (note.pinned) ...[
-                      const SizedBox(width: 8),
-                      Icon(
-                        Icons.push_pin,
-                        size: 16,
-                        color: colorScheme.primary,
-                      ),
+                      if (note.pinned) ...[
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.push_pin,
+                          size: 16,
+                          color: colorScheme.primary,
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-                if (controller.showContent && trimmedText.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text.rich(
-                    _highlightText(
-                      trimmedText,
-                      highlightQuery,
-                      Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                            height: 1.2,
-                          ),
-                      highlightColor,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-                if (controller.showTags && note.tags.isNotEmpty) ...[
-                  const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: note.tags.map((tag) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: colorScheme.secondaryContainer
-                              .withValues(alpha: 0.5),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          tag,
-                          style:
-                              Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: colorScheme.onSecondaryContainer,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Text(
-                      _formatDate(note.updatedAt, l10n),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: colorScheme.outline,
-                          ),
-                    ),
-                    if (note.folderId != null) ...[
-                      const SizedBox(width: 8),
-                      Icon(
-                        Icons.folder_outlined,
-                        size: 12,
-                        color: colorScheme.outline,
+                  if (controller.showContent && trimmedText.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text.rich(
+                      _highlightText(
+                        trimmedText,
+                        highlightQuery,
+                        Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              height: 1.2,
+                            ),
+                        highlightColor,
                       ),
-                      const SizedBox(width: 2),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  if (controller.showTags && note.tags.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: note.tags.map((tag) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: colorScheme.secondaryContainer
+                                .withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            tag,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                  color: colorScheme.onSecondaryContainer,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
                       Text(
-                        folderNames[note.folderId] ?? l10n.unknown,
+                        _formatDate(note.updatedAt, l10n),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: colorScheme.outline,
                             ),
                       ),
+                      if (note.folderId != null) ...[
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.folder_outlined,
+                          size: 12,
+                          color: colorScheme.outline,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          folderNames[note.folderId] ?? l10n.unknown,
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: colorScheme.outline,
+                                  ),
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _dragFeedback(BuildContext context) {
+    return Material(
+      elevation: 4,
+      borderRadius: BorderRadius.circular(12),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      child: Container(
+        width: 240,
+        padding: const EdgeInsets.all(12),
+        child: Text(
+          note.title.isEmpty ? l10n.untitled : note.title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleSmall,
         ),
       ),
     );

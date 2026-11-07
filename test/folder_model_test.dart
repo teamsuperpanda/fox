@@ -42,6 +42,16 @@ void main() {
       expect(copy.id, folder.id);
       expect(copy.name, folder.name);
       expect(copy.createdAt, folder.createdAt);
+      expect(copy.parentId, isNull);
+    });
+
+    test('copyWith sets and clears parentId', () {
+      final child = folder.copyWith(parentId: 'parent-1');
+      expect(child.parentId, 'parent-1');
+
+      final moved = child.copyWith(clearParent: true);
+      expect(moved.parentId, isNull);
+      expect(moved.copyWith().parentId, isNull);
     });
   });
 }

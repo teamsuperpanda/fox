@@ -90,6 +90,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get undo => '撤销';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => '笔记标题...';
 
   @override

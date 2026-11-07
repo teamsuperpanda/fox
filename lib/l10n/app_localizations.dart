@@ -315,6 +315,24 @@ abstract class AppLocalizations {
   /// **'Undo'**
   String get undo;
 
+  /// No description provided for @noteMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Note moved'**
+  String get noteMoved;
+
+  /// No description provided for @subfolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Subfolder'**
+  String get subfolder;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
   /// No description provided for @noteTitle.
   ///
   /// In en, this message translates to:
