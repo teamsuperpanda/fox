@@ -164,6 +164,9 @@ None. This is a fully offline, local-first application with no network dependenc
 ## 8. Security Considerations
 
 - **Data at rest:** Stored locally in Hive boxes via path_provider. No encryption.
+- **Backups:** the iOS app excludes its Documents and Application Support
+  directories from device backups (`NSURLIsExcludedFromBackupKey`), and Android
+  sets `android:allowBackup="false"`. See `SECURITY.md`.
 - **Network:** No network requests. No telemetry. No analytics.
 
 ## 9. Development & Testing

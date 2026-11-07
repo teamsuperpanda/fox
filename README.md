@@ -43,7 +43,10 @@ Fox is a Flutter app with a deliberately simple stack:
 | Editor | Flutter Quill |
 | Fonts | Inter (bundled, no network calls) |
 
-No backend. No sync. No app data leaves your device.
+No backend. No sync. Your notes stay on your device, and device backups
+(Android Auto Backup and iCloud/iTunes) exclude the app database.
+
+See [SECURITY.md](SECURITY.md) for how that is enforced on each platform.
 
 ---
 
