@@ -88,6 +88,14 @@ class AppLocalizationsHe extends AppLocalizations {
   String get noteDeleted => 'הפתק נמחק';
 
   @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
+
+  @override
   String get undo => 'בטל';
 
   @override

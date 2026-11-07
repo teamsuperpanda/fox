@@ -88,6 +88,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noteDeleted => 'Notatka usunięta';
 
   @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
+
+  @override
   String get undo => 'Cofnij';
 
   @override

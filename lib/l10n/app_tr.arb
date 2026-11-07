@@ -23,6 +23,15 @@
   "deleteNote": "Not silinsin mi?",
   "deleteNoteMessage": "Bu notu silmek istediğinizden emin misiniz?",
   "noteDeleted": "Not silindi",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Geri Al",
   "noteTitle": "Not başlığı...",
   "back": "Geri",

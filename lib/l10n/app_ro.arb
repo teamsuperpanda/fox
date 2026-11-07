@@ -23,6 +23,15 @@
   "deleteNote": "Ștergi nota?",
   "deleteNoteMessage": "Ești sigur că vrei să ștergi această notă?",
   "noteDeleted": "Notă ștearsă",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Anulează",
   "noteTitle": "Titlul notei...",
   "back": "Înapoi",

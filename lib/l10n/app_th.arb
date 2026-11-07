@@ -23,6 +23,15 @@
   "deleteNote": "ลบบันทึก?",
   "deleteNoteMessage": "คุณแน่ใจหรือไม่ว่าต้องการลบบันทึกนี้?",
   "noteDeleted": "ลบบันทึกแล้ว",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "เลิกทำ",
   "noteTitle": "ชื่อบันทึก...",
   "back": "กลับ",

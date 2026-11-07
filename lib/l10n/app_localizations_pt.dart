@@ -89,6 +89,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noteDeleted => 'Nota excluída';
 
   @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
+
+  @override
   String get undo => 'Desfazer';
 
   @override
@@ -291,6 +299,14 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get noteDeleted => 'Nota eliminada';
+
+  @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
 
   @override
   String get undo => 'Anular';

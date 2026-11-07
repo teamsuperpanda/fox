@@ -23,6 +23,15 @@
   "deleteNote": "Excluir nota?",
   "deleteNoteMessage": "Tem certeza de que deseja excluir esta nota?",
   "noteDeleted": "Nota excluída",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Desfazer",
   "noteTitle": "Título da nota...",
   "back": "Voltar",

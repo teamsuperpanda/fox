@@ -44,3 +44,20 @@ void showUndoDeleteSnackBar(BuildContext context, NotesController controller) {
     ),
   );
 }
+
+/// Shows a "Folder deleted" snackbar with an Undo action.
+void showUndoDeleteFolderSnackBar(
+  BuildContext context,
+  NotesController controller,
+) {
+  final l10n = AppLocalizations.of(context);
+  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+    SnackBar(
+      content: Text(l10n.folderDeleted),
+      action: SnackBarAction(
+        label: l10n.undo,
+        onPressed: () => controller.undoDeleteFolder(),
+      ),
+    ),
+  );
+}

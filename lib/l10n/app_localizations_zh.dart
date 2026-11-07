@@ -87,6 +87,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noteDeleted => '笔记已删除';
 
   @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
+
+  @override
   String get undo => '撤销';
 
   @override
@@ -287,6 +295,14 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get noteDeleted => '筆記已刪除';
+
+  @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
 
   @override
   String get undo => '復原';

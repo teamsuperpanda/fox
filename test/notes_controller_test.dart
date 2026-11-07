@@ -31,6 +31,12 @@ class _FailingFolderNoteUpdateRepo extends MemoryRepo {
   }
 }
 
+class _FailingFolderDeleteRepo extends MemoryRepo {
+  @override
+  Future<void> deleteFolder(String id) =>
+      Future.error(StateError('folder delete failed'));
+}
+
 class _BlockingUpsertRepo extends MemoryRepo {
   bool blockUpserts = false;
   final upsertStarted = Completer<void>();
@@ -421,8 +427,7 @@ void main() {
       expect(controller.notes.first.folderId, isNull);
     });
 
-    test('deleteFolder clears selectedFolderId when deleting active filter',
-        () async {
+    test('deleteFolder moves the filter to Unfiled when deleting it', () async {
       await controller.load();
       await controller.addFolder('Active');
       final folderId = controller.folders.first.id;
@@ -430,7 +435,55 @@ void main() {
       expect(controller.selectedFolderId, folderId);
 
       await controller.deleteFolder(folderId);
-      expect(controller.selectedFolderId, isNull);
+      expect(controller.selectedFolderId, AppConstants.unfiledFolderId);
+    });
+
+    test('deleteFolder keeps note timestamps', () async {
+      await controller.load();
+      await controller.addFolder('Keep Date');
+      final folderId = controller.folders.first.id;
+      await controller.addOrUpdate(
+        title: 'Filed note',
+        content: Document(),
+        folderId: folderId,
+      );
+      final before = controller.notes.single.updatedAt;
+
+      await controller.deleteFolder(folderId);
+
+      final after = controller.notes.single.updatedAt;
+      expect(after, before);
+      expect(controller.notes.single.folderId, isNull);
+    });
+
+    test('undoDeleteFolder restores the folder and its memberships', () async {
+      await controller.load();
+      await controller.addFolder('Undo Me');
+      final folderId = controller.folders.first.id;
+      await controller.addOrUpdate(
+        title: 'Filed',
+        content: Document(),
+        folderId: folderId,
+      );
+      await controller.addOrUpdate(title: 'Unfiled', content: Document());
+
+      await controller.deleteFolder(folderId);
+      expect(controller.folders, isEmpty);
+      expect(controller.lastDeletedFolder?.id, folderId);
+
+      await controller.undoDeleteFolder();
+
+      expect(controller.folders.single.id, folderId);
+      expect(controller.find(controller.notes.first.id), isNotNull);
+      final filed = controller.find(
+        controller.notes.firstWhere((n) => n.title == 'Filed').id,
+      );
+      expect(filed?.folderId, folderId);
+      final loose = controller.find(
+        controller.notes.firstWhere((n) => n.title == 'Unfiled').id,
+      );
+      expect(loose?.folderId, isNull);
+      expect(controller.lastDeletedFolder, isNull);
     });
 
     test('deleteFolder keeps folder when clearing note references fails',
@@ -461,8 +514,31 @@ void main() {
       );
     });
 
-    // --- Folder filter ---
+    test('deleteFolder rolls back note writes when the folder delete fails',
+        () async {
+      final failingRepo = _FailingFolderDeleteRepo();
+      final failingController = NotesController(failingRepo);
+      await failingController.load();
+      await failingController.addFolder('Doomed');
+      final folderId = failingController.folders.single.id;
+      await failingController.addOrUpdate(
+        title: 'Filed note',
+        content: Document(),
+        folderId: folderId,
+      );
 
+      await expectLater(
+        failingController.deleteFolder(folderId),
+        throwsA(isA<StateError>()),
+      );
+
+      expect(failingController.folders.single.id, folderId);
+      expect(failingController.notes.single.folderId, folderId);
+      expect(failingRepo.getAll().then((n) => n.single.folderId),
+          completion(folderId));
+    });
+
+    // --- Folder filter ---
     test('setSelectedFolder filters notes by folder', () async {
       await controller.load();
       await controller.addFolder('A');

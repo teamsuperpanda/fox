@@ -23,6 +23,15 @@
   "deleteNote": "Видалити нотатку?",
   "deleteNoteMessage": "Ви впевнені, що хочете видалити цю нотатку?",
   "noteDeleted": "Нотатку видалено",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Скасувати",
   "noteTitle": "Назва нотатки...",
   "back": "Назад",

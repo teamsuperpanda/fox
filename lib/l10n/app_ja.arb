@@ -23,6 +23,15 @@
   "deleteNote": "ノートを削除しますか？",
   "deleteNoteMessage": "このノートを本当に削除しますか？",
   "noteDeleted": "ノートを削除しました",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "元に戻す",
   "noteTitle": "ノートのタイトル...",
   "back": "戻る",

@@ -23,6 +23,15 @@
   "deleteNote": "删除笔记？",
   "deleteNoteMessage": "确定要删除此笔记吗？",
   "noteDeleted": "笔记已删除",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "撤销",
   "noteTitle": "笔记标题...",
   "back": "返回",

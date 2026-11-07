@@ -89,6 +89,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noteDeleted => 'Nota eliminada';
 
   @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
+
+  @override
   String get undo => 'Deshacer';
 
   @override
@@ -292,6 +300,14 @@ class AppLocalizationsEs419 extends AppLocalizationsEs {
 
   @override
   String get noteDeleted => 'Nota eliminada';
+
+  @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
 
   @override
   String get undo => 'Deshacer';

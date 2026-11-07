@@ -129,6 +129,48 @@ void main() {
       expect(controller.selectedFolderId, isNull);
     });
 
+    testWidgets('delete folder offers undo that restores it', (tester) async {
+      await controller.addFolder('Temporary');
+      final folderId = controller.folders.first.id;
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(PopupMenuButton<String>).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Folder deleted'), findsOneWidget);
+      expect(controller.folders, isEmpty);
+
+      // The snackbar sits behind the dialog barrier, so dismiss the dialog
+      // first, as a user would.
+      await tester.tap(find.text('Close'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Undo'));
+      await tester.pumpAndSettle();
+
+      expect(controller.folders.single.id, folderId);
+    });
+
     testWidgets('tapping Unfiled sets unfiled filter', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
