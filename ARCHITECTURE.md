@@ -42,8 +42,8 @@ fox/
 │   ├── flutter_test_config.dart    # Custom golden comparator, font preloading
 │   ├── golden_test.dart            # Store screenshot goldens
 │   ├── store_frame.dart            # Store listing screenshot frame widget
-│   ├── test_helpers.dart           # MemoryRepo, MockRepository
-│   └── hive_*/                     # Test Hive box fixtures
+│   ├── test_helpers.dart           # MemoryRepo, MockRepository, temp Hive dirs
+│   └── hive_*/                     # gitignored, written to the system temp dir instead
 ├── integration_test/       # Smoke tests
 │   └── app_test.dart
 ├── assets/                 # Static assets

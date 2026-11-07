@@ -48,3 +48,13 @@ jobs:
 
       - name: Run tests
         run: flutter test --coverage --exclude-tags golden
+
+      # Fixtures live in the temp directory. If a test writes into the repo,
+      # this fails instead of silently dirtying the tree.
+      - name: Verify tests did not modify the tree
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Tests modified tracked files:"
+            git status --porcelain
+            exit 1
+          fi

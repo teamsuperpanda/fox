@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_adapter.dart';
@@ -10,8 +12,11 @@ void main() {
   group('HiveNoteRepository', () {
     late HiveNoteRepository repository;
 
+    late Directory hiveDir;
+
     setUpAll(() async {
-      Hive.init('./test/hive_notes_test');
+      hiveDir = createHiveTestDir();
+      Hive.init(hiveDir.path);
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(NoteAdapter());
       }
@@ -32,7 +37,7 @@ void main() {
     });
 
     tearDownAll(() async {
-      await Hive.deleteFromDisk();
+      await deleteHiveTestDir(hiveDir);
     });
 
     test('creates and retrieves a note', () async {

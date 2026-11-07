@@ -47,8 +47,7 @@ windows/flutter/ephemeral/
 # Coverage
 coverage/
 
-# Hive test artifacts
-test/hive_*/
+# Hive test artifacts (tests write to the system temp directory)
 test/**/*.hive
 
 # Golden test failure artifacts

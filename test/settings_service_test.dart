@@ -12,7 +12,7 @@ void main() {
     late SettingsService settingsService;
 
     setUp(() async {
-      await hiveTestSetup('./test/hive_settings_test');
+      await hiveTestSetup();
       settingsService = SettingsService();
     });
 

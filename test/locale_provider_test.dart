@@ -13,7 +13,7 @@ void main() {
     late LocaleProvider provider;
 
     setUp(() async {
-      await hiveTestSetup('./test/hive_locale_provider_test');
+      await hiveTestSetup();
       provider = LocaleProvider(settingsRepository: SettingsService());
     });
 
