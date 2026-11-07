@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fox/about_page.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Future<void> _showViewOptions() async {
-    await showModalBottomSheet(
+    final result = await showModalBottomSheet<Object?>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -156,6 +157,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         accentColorOptions: accentColorOptions,
       ),
     );
+    if (!mounted) return;
+    if (result == ViewOptionsSheet.aboutRequest) {
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute(builder: (_) => const AboutPage()),
+      );
+    }
   }
 
   @override

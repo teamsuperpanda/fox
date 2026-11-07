@@ -93,9 +93,34 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "about": "About",
+  "aboutTagline": "A simple, local-first notes app.",
+  "versionBuild": "Version {version} ({build})",
+  "@versionBuild": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "openSourceLine": "Fox is free and open source.",
+  "repository": "Source code",
+  "licence": "Licence",
+  "privacy": "Privacy",
+  "privacyStatement": "Everything stays on this device. No accounts, no analytics, no network requests.",
+  "madeBy": "Made by {team}",
+  "@madeBy": {
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+  "openSourceLicences": "Open source licences",
+  "copyLink": "Copy link",
+  "linkCopied": "Link copied"
 }
