@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 // Handwritten Hive TypeAdapter for Folder to avoid build_runner.
 import 'package:fox/models/folder.dart';
 import 'package:hive/hive.dart';

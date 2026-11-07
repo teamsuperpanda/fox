@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/services/notes_controller.dart';

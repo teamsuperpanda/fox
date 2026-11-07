@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 import 'package:flutter/material.dart';
 
 /// Predefined app-wide accent colours.  The first entry is the app default.

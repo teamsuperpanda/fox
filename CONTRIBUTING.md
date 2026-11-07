@@ -82,3 +82,22 @@ The `release_screenshots.yml` workflow copies generated goldens to Android/iOS F
 3. Ensure `flutter analyze` and all tests pass
 4. Update tests if adding functionality
 5. Submit a PR with a clear description
+
+## Licensing
+
+Fox code is MIT licensed. By opening a pull request you agree that your
+contribution is licensed under the same terms. The Fox name, logo and brand
+assets are proprietary and are not covered by MIT, see
+[ASSETS-LICENSE.md](ASSETS-LICENSE.md) and [TRADEMARKS.md](TRADEMARKS.md).
+
+Every first-party Dart and shell file starts with this header:
+
+```dart
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+```
+
+Add it to new `lib/`, `test/`, `integration_test/` and `tool/` files. Generated
+`lib/l10n/app_localizations*.dart` files and JSON ARB files are exempt. Run
+`bash tool/check_licenses.sh` before pushing; CI runs the same check and fails
+when a source file has no attribution.

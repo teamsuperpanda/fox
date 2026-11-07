@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 // Handwritten Hive TypeAdapter for Settings to avoid build_runner for now.
 import 'package:fox/models/settings.dart';
 import 'package:hive/hive.dart';
