@@ -133,6 +133,8 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 
 **Technologies:** `archive` (zip), `share_plus` (OS share sheet), `path_provider` (exports directory). The codec lives in `lib/services/export/` and has no Flutter plugin dependency, so it is unit tested directly.
 
+**Encrypted export:** the optional "Encrypt export" switch asks for a passphrase and writes `fox-export-YYYYMMDD-HHMM.foxenc` instead of a zip. The container is PBKDF2-HMAC-SHA256 (120000 iterations, 16-byte random salt) deriving an AES-256-GCM key with a fresh 12-byte nonce per export (`lib/services/export/export_encryption.dart`, via the pure-Dart `cryptography` package). The passphrase is never stored and there is no recovery. See section 8 for why the Hive boxes themselves are not encrypted.
+
 
 ## 4. Module Boundary Convention
 
@@ -172,7 +174,18 @@ None. This is a fully offline, local-first application with no network dependenc
 ## 8. Security Considerations
 
 - **Data at rest:** Stored locally in Hive boxes via path_provider. No encryption.
+- **Encrypted exports:** `lib/services/export/export_encryption.dart` wraps an export zip in a PBKDF2 + AES-256-GCM container keyed by a user passphrase. The passphrase is never stored; a lost passphrase means an unreadable backup, and the UI says so before encrypting.
 - **Network:** No network requests. No telemetry. No analytics.
+
+### At-rest encryption decision (not implemented)
+
+Hive supports AES-256-CBC boxes (`HiveAesCipher` with a 32-byte key). That was evaluated and deferred, for these reasons:
+
+- **Key custody is the hard part.** The key would live in `flutter_secure_storage` (Keychain / Keystore). Uninstall, keystore reset or a device migration without the keystore backup would leave the box unreadable, which is exactly the permanent data loss this feature exists to prevent. A user passphrase would avoid that but makes every cold start depend on typing one.
+- **Cold-start cost.** Hive decrypts each frame on read, and startup currently reads every record to build the list. That adds per-record AES work to the one path that must stay under two seconds for large libraries. No device measurement has been taken in this environment, so the cost is unquantified; it must be benchmarked before adoption.
+- **Migration.** `Hive.openBox(encryptionCipher:)` only applies at box creation. Encrypting an existing library needs a rewrite into a new box (read plain, write encrypted, swap atomically, keep a rollback copy) plus a path for downgrades and for exports whose key no longer exists.
+
+Decision: keep the boxes plain for now and ship encrypted *exports*, which cover the "backup leaked from cloud storage" risk without a key-management trap. Revisit at-rest encryption with measured startup numbers and a key-recovery story; the export container in `export_encryption.dart` is the reference for the primitive choice (PBKDF2-HMAC-SHA256 120000 iterations, AES-256-GCM, random salt and nonce).
 
 ## 9. Development & Testing
 

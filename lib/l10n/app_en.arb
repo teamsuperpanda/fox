@@ -114,5 +114,13 @@
       }
     }
   },
-  "shareExport": "Share export"
+  "shareExport": "Share export",
+  "encryptExport": "Encrypt export",
+  "encryptExportSubtitle": "Opens only with your passphrase",
+  "encryptExportWarning": "There is no recovery. If you lose this passphrase, the backup cannot be opened.",
+  "passphrase": "Passphrase",
+  "confirmPassphrase": "Confirm passphrase",
+  "passphraseTooShort": "Use at least 8 characters",
+  "passphraseMismatch": "The passphrases do not match",
+  "encrypt": "Encrypt"
 }

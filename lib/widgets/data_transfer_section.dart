@@ -7,6 +7,7 @@ import 'package:fox/models/settings.dart';
 import 'package:fox/services/export/export_service.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
+import 'package:fox/widgets/export_passphrase_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -36,6 +37,7 @@ class DataTransferSection extends StatefulWidget {
 
 class _DataTransferSectionState extends State<DataTransferSection> {
   bool _exporting = false;
+  bool _encryptExport = false;
   ExportProgress? _progress;
 
   Settings get _settingsSnapshot => Settings(
@@ -61,6 +63,12 @@ class _DataTransferSectionState extends State<DataTransferSection> {
     final directoryProvider =
         widget.outputDirectoryProvider ?? _defaultOutputDirectory;
 
+    String? passphrase;
+    if (_encryptExport) {
+      passphrase = await ExportPassphraseDialog.show(context);
+      if (passphrase == null || !mounted) return;
+    }
+
     setState(() {
       _exporting = true;
       _progress = const ExportProgress(
@@ -77,6 +85,7 @@ class _DataTransferSectionState extends State<DataTransferSection> {
         folders: widget.controller.folders,
         settings: _settingsSnapshot,
         outputDirectory: directory,
+        passphrase: passphrase,
         onProgress: (progress) {
           if (mounted) setState(() => _progress = progress);
         },
@@ -156,6 +165,22 @@ class _DataTransferSectionState extends State<DataTransferSection> {
                       )
                     : const Icon(Icons.chevron_right),
                 onTap: _exporting ? null : _export,
+              ),
+              Divider(
+                height: 1,
+                thickness: 1,
+                indent: 16,
+                endIndent: 16,
+                color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+              ),
+              SwitchListTile(
+                secondary: Icon(Icons.lock_outline, color: colorScheme.primary),
+                title: Text(l10n.encryptExport),
+                subtitle: Text(l10n.encryptExportSubtitle),
+                value: _encryptExport,
+                onChanged: _exporting
+                    ? null
+                    : (value) => setState(() => _encryptExport = value),
               ),
               if (_exporting)
                 Padding(

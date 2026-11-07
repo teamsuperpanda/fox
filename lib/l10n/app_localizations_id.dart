@@ -241,4 +241,29 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get shareExport => 'Share export';
+
+  @override
+  String get encryptExport => 'Encrypt export';
+
+  @override
+  String get encryptExportSubtitle => 'Opens only with your passphrase';
+
+  @override
+  String get encryptExportWarning =>
+      'There is no recovery. If you lose this passphrase, the backup cannot be opened.';
+
+  @override
+  String get passphrase => 'Passphrase';
+
+  @override
+  String get confirmPassphrase => 'Confirm passphrase';
+
+  @override
+  String get passphraseTooShort => 'Use at least 8 characters';
+
+  @override
+  String get passphraseMismatch => 'The passphrases do not match';
+
+  @override
+  String get encrypt => 'Encrypt';
 }

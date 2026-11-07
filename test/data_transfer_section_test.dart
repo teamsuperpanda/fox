@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/settings.dart';
+import 'package:fox/services/export/export_encryption.dart';
 import 'package:fox/services/export/export_service.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
@@ -18,6 +19,7 @@ class _StubExporter extends FoxExporter {
   _StubExporter(this.onExport);
 
   final Future<ExportResult> Function() onExport;
+  String? lastPassphrase;
 
   @override
   Future<ExportResult> export({
@@ -25,8 +27,11 @@ class _StubExporter extends FoxExporter {
     required List<Folder> folders,
     required Settings settings,
     required Directory outputDirectory,
+    String? passphrase,
+    ExportEncryption? encryption,
     ValueChanged<ExportProgress>? onProgress,
   }) {
+    lastPassphrase = passphrase;
     return onExport();
   }
 }
@@ -115,5 +120,59 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('disk full'), findsOneWidget);
+  });
+
+  testWidgets('encrypted export asks for a passphrase first', (tester) async {
+    final controller = NotesController(MemoryRepo());
+    await controller.load();
+
+    final file = File('${tempDir.path}/fox-export.foxenc')
+      ..writeAsBytesSync(<int>[]);
+    final exporter = _StubExporter(
+      () async => ExportResult(
+        archive: file,
+        noteCount: 0,
+        folderCount: 0,
+        bytes: Uint8List(0),
+        encrypted: true,
+      ),
+    );
+
+    await tester.pumpWidget(
+      buildTestApp(
+        Scaffold(
+          body: SingleChildScrollView(
+            child: DataTransferSection(
+              controller: controller,
+              settingsService: SettingsService(),
+              exporter: exporter,
+              outputDirectoryProvider: () async => tempDir,
+              shareFile: (_) async {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Encrypt export'));
+    await tester.pump();
+
+    await tester.tap(find.text('Export all notes'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('no recovery'), findsOneWidget);
+
+    await tester.enterText(
+      find.byType(TextField).at(0),
+      'a long passphrase',
+    );
+    await tester.enterText(
+      find.byType(TextField).at(1),
+      'a long passphrase',
+    );
+    await tester.tap(find.text('Encrypt'));
+    await tester.pumpAndSettle();
+
+    expect(exporter.lastPassphrase, 'a long passphrase');
   });
 }

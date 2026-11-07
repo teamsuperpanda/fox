@@ -6,6 +6,7 @@ import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/settings.dart';
 import 'package:fox/services/export/export_codec.dart';
+import 'package:fox/services/export/export_encryption.dart';
 import 'package:fox/services/export/markdown_codec.dart';
 
 /// App version written into an export envelope. Kept in sync with
@@ -46,15 +47,19 @@ class ExportResult {
     required this.noteCount,
     required this.folderCount,
     required this.bytes,
+    this.encrypted = false,
   });
 
-  /// The `.zip` file written on disk.
+  /// The `.zip` (or `.foxenc`) file written on disk.
   final File archive;
   final int noteCount;
   final int folderCount;
 
-  /// Raw bytes of the archive, already on disk. Exposed for encrypted export.
+  /// Raw bytes of the archive, already on disk.
   final Uint8List bytes;
+
+  /// Whether a passphrase was used.
+  final bool encrypted;
 }
 
 /// Builds a Fox export archive: `fox-backup.json`, a Markdown tree and a
@@ -69,11 +74,17 @@ class FoxExporter {
   final String appVersion;
 
   /// Writes `fox-export-YYYYMMDD-HHMM.zip` into [outputDirectory].
+  ///
+  /// When [passphrase] is set the zip bytes are wrapped in a passphrase
+  /// encrypted container and written as `.foxenc` instead. The passphrase is
+  /// not stored: losing it means losing the backup.
   Future<ExportResult> export({
     required List<Note> notes,
     required List<Folder> folders,
     required Settings settings,
     required Directory outputDirectory,
+    String? passphrase,
+    ExportEncryption? encryption,
     ValueChanged<ExportProgress>? onProgress,
   }) async {
     if (!outputDirectory.existsSync()) {
@@ -151,8 +162,17 @@ class FoxExporter {
 
     final archive = Archive();
     archiveFiles.forEach(archive.add);
-    final bytes = ZipEncoder().encodeBytes(archive);
-    final file = File('${outputDirectory.path}/$baseName.zip');
+    final zipBytes = ZipEncoder().encodeBytes(archive);
+
+    final encrypted = passphrase != null && passphrase.isNotEmpty;
+    final bytes = encrypted
+        ? await (encryption ?? ExportEncryption()).encrypt(
+            bytes: zipBytes,
+            passphrase: passphrase,
+          )
+        : zipBytes;
+    final extension = encrypted ? ExportEncryption.fileExtension : 'zip';
+    final file = File('${outputDirectory.path}/$baseName.$extension');
     await file.writeAsBytes(bytes, flush: true);
 
     onProgress?.call(
@@ -168,6 +188,7 @@ class FoxExporter {
       noteCount: notes.length,
       folderCount: folders.length,
       bytes: bytes,
+      encrypted: encrypted,
     );
   }
 

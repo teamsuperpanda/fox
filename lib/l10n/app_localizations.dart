@@ -590,6 +590,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share export'**
   String get shareExport;
+
+  /// No description provided for @encryptExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt export'**
+  String get encryptExport;
+
+  /// No description provided for @encryptExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens only with your passphrase'**
+  String get encryptExportSubtitle;
+
+  /// No description provided for @encryptExportWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no recovery. If you lose this passphrase, the backup cannot be opened.'**
+  String get encryptExportWarning;
+
+  /// No description provided for @passphrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Passphrase'**
+  String get passphrase;
+
+  /// No description provided for @confirmPassphrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm passphrase'**
+  String get confirmPassphrase;
+
+  /// No description provided for @passphraseTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters'**
+  String get passphraseTooShort;
+
+  /// No description provided for @passphraseMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The passphrases do not match'**
+  String get passphraseMismatch;
+
+  /// No description provided for @encrypt.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt'**
+  String get encrypt;
 }
 
 class _AppLocalizationsDelegate
