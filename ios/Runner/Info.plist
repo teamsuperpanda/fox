@@ -102,6 +102,8 @@
 		<false/>
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false/>
+		<key>NSCameraUsageDescription</key>
+		<string>Fox uses the camera so you can take a photo and add it to a note. Photos are stored on this device only.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Fox needs access to your photo library to save and share images.</string>
 	</dict>

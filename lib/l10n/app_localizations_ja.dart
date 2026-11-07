@@ -213,4 +213,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get insertImage => 'Insert image';
+
+  @override
+  String get takePhoto => 'Take photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get imageUnavailable => 'Image unavailable';
+
+  @override
+  String imageInsertFailed(String error) {
+    return 'Could not add the image: $error';
+  }
 }

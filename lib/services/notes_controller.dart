@@ -4,6 +4,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/services/constants.dart';
+import 'package:fox/services/image_store.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:uuid/uuid.dart';
@@ -16,11 +17,19 @@ enum SortBy {
 }
 
 class NotesController extends ChangeNotifier {
-  NotesController(this._repo, {SettingsService? settingsRepository})
-      : _settingsRepository = settingsRepository ?? SettingsService();
+  NotesController(
+    this._repo, {
+    SettingsService? settingsRepository,
+    ImageStore? imageStore,
+  })  : _settingsRepository = settingsRepository ?? SettingsService(),
+        imageStore = imageStore ?? ImageStore();
   final NoteAndFolderRepository _repo;
 
   final SettingsService _settingsRepository;
+
+  /// Local store for note image attachments. Shared with the editor so
+  /// deleting a note can clean up the files it owned.
+  final ImageStore imageStore;
 
   static const Uuid _uuid = Uuid();
 
@@ -205,14 +214,31 @@ class NotesController extends ChangeNotifier {
       folderId: folderId,
       color: color,
     );
+    final previous = find(note.id);
     await _repo.upsert(note);
     _lastRemovedNote = null;
     _unfilteredNotes = [
       ...(_unfilteredNotes.where((n) => n.id != note.id)),
       note,
     ];
+    // Images removed from the editor are no longer referenced by this note.
+    await _purgeImages(previous);
     _updateView();
     notifyListeners();
+  }
+
+  /// Deletes the image files of [note] that no remaining note references.
+  Future<void> _purgeImages(Note? note) async {
+    if (note == null || note.embeddedImagePaths.isEmpty) return;
+    final stillReferenced = <String>{
+      ..._unfilteredNotes.expand((n) => n.embeddedImagePaths),
+      // A removed note can still be restored by undo, so its images stay.
+      ...?_lastRemovedNote?.embeddedImagePaths,
+    };
+    await imageStore.deleteUnreferenced(
+      note.embeddedImagePaths,
+      stillReferenced: stillReferenced,
+    );
   }
 
   Future<void> setPinned(String id, bool pinned) async {
@@ -232,9 +258,13 @@ class NotesController extends ChangeNotifier {
   Future<void> remove(String id) async {
     final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
     if (note == null) return;
+    final previous = _lastRemovedNote;
     await _repo.delete(id);
     _lastRemovedNote = note;
     _unfilteredNotes = _unfilteredNotes.where((n) => n.id != id).toList();
+    // The note removed before this one can no longer be restored, so its
+    // image files are safe to delete now.
+    await _purgeImages(previous);
     _updateView();
     notifyListeners();
   }

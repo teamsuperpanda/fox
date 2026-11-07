@@ -6,6 +6,7 @@ import 'package:fox/home_page.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
+import 'package:fox/services/image_store.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
@@ -23,8 +24,13 @@ void main() async {
     await StorageService.init();
     final repository = HiveNoteRepository.create();
     final settingsService = SettingsService();
-    final notesController =
-        NotesController(repository, settingsRepository: settingsService);
+    final imageStore = ImageStore();
+    await imageStore.init();
+    final notesController = NotesController(
+      repository,
+      settingsRepository: settingsService,
+      imageStore: imageStore,
+    );
     await notesController.load();
 
     final themeProvider = ThemeProvider(settingsRepository: settingsService);

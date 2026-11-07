@@ -5,6 +5,8 @@ import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
+import 'package:fox/widgets/local_image_embed.dart';
+import 'package:image_picker/image_picker.dart';
 
 class NoteDetailResult {
   const NoteDetailResult({this.changed = false, this.deleted = false});
@@ -71,6 +73,37 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         onChanged: (tags) => setState(() => _tags = tags),
       ),
     );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final store = widget.controller.imageStore;
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final l10n = AppLocalizations.of(context);
+    try {
+      final picked = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 2048,
+        maxHeight: 2048,
+        imageQuality: 90,
+      );
+      if (picked == null || !mounted) return;
+      final relativePath = await store.save(picked.path);
+      if (!mounted) return;
+      final offset = _contentCtrl.selection.baseOffset;
+      final index = offset < 0
+          ? (_contentCtrl.document.length - 1).clamp(0, 1 << 31)
+          : offset;
+      _contentCtrl.document.insert(index, BlockEmbed.image(relativePath));
+      _contentCtrl.updateSelection(
+        TextSelection.collapsed(offset: index + 1),
+        ChangeSource.local,
+      );
+      setState(() {});
+    } catch (e) {
+      messenger?.showSnackBar(
+        SnackBar(content: Text(l10n.imageInsertFailed(e.toString()))),
+      );
+    }
   }
 
   Future<void> _showColorPicker() async {
@@ -371,43 +404,76 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 child: Column(
                   children: [
                     if (_showToolbar)
-                      QuillSimpleToolbar(
-                        controller: _contentCtrl,
-                        config: QuillSimpleToolbarConfig(
-                          color: Theme.of(context).appBarTheme.backgroundColor,
-                          multiRowsDisplay: false,
-                          toolbarIconAlignment: WrapAlignment.start,
-                          showDividers: false,
-                          showFontFamily: false,
-                          showFontSize: false,
-                          showStrikeThrough: false,
-                          showInlineCode: false,
-                          showColorButton: false,
-                          showBackgroundColorButton: false,
-                          showLeftAlignment: false,
-                          showCenterAlignment: false,
-                          showRightAlignment: false,
-                          showJustifyAlignment: false,
-                          showHeaderStyle: false,
-                          showListCheck: false,
-                          showCodeBlock: false,
-                          showIndent: false,
-                          showLink: false,
-                          buttonOptions: QuillSimpleToolbarButtonOptions(
-                            base: QuillToolbarBaseButtonOptions(
-                              iconTheme: QuillIconTheme(
-                                iconButtonSelectedData: IconButtonData(
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withValues(alpha: 0.1),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: QuillSimpleToolbar(
+                              controller: _contentCtrl,
+                              config: QuillSimpleToolbarConfig(
+                                color: Theme.of(context)
+                                    .appBarTheme
+                                    .backgroundColor,
+                                multiRowsDisplay: false,
+                                toolbarIconAlignment: WrapAlignment.start,
+                                showDividers: false,
+                                showFontFamily: false,
+                                showFontSize: false,
+                                showStrikeThrough: false,
+                                showInlineCode: false,
+                                showColorButton: false,
+                                showBackgroundColorButton: false,
+                                showLeftAlignment: false,
+                                showCenterAlignment: false,
+                                showRightAlignment: false,
+                                showJustifyAlignment: false,
+                                showHeaderStyle: false,
+                                showListCheck: false,
+                                showCodeBlock: false,
+                                showIndent: false,
+                                showLink: false,
+                                buttonOptions: QuillSimpleToolbarButtonOptions(
+                                  base: QuillToolbarBaseButtonOptions(
+                                    iconTheme: QuillIconTheme(
+                                      iconButtonSelectedData: IconButtonData(
+                                        style: IconButton.styleFrom(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withValues(alpha: 0.1),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                          if (widget.controller.imageStore.isSupported &&
+                              widget.controller.imageStore.isReady)
+                            PopupMenuButton<ImageSource>(
+                              tooltip: l10n.insertImage,
+                              icon: const Icon(Icons.image_outlined),
+                              onSelected: _pickImage,
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  value: ImageSource.camera,
+                                  child: ListTile(
+                                    leading: const Icon(Icons.camera_alt),
+                                    title: Text(l10n.takePhoto),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: ImageSource.gallery,
+                                  child: ListTile(
+                                    leading: const Icon(
+                                        Icons.photo_library_outlined),
+                                    title: Text(l10n.chooseFromGallery),
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
                       ),
                     if (_showToolbar) const SizedBox(height: 8),
                     Expanded(
@@ -416,6 +482,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         config: QuillEditorConfig(
                           placeholder: l10n.startTyping,
                           autoFocus: widget.existing?.title.isNotEmpty ?? false,
+                          embedBuilders: [
+                            LocalImageEmbedBuilder(
+                                widget.controller.imageStore),
+                          ],
                         ),
                       ),
                     ),

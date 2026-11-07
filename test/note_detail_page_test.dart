@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/note_detail_page.dart';
+import 'package:fox/services/image_store.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'test_helpers.dart';
 
@@ -325,6 +327,87 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(NoteDetailPage), findsNothing);
+    });
+
+    testWidgets('image button is hidden when image storage is not ready',
+        (tester) async {
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+      await tester.pump();
+
+      expect(find.byIcon(Icons.image_outlined), findsNothing);
+
+      // Pop the page so the editor's caret timer is disposed.
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('image button offers camera and gallery', (tester) async {
+      final root = Directory.systemTemp.createTempSync('fox_ui_images');
+      addTearDown(() {
+        if (root.existsSync()) root.deleteSync(recursive: true);
+      });
+      final store = ImageStore(rootPath: root.path);
+      final imageController =
+          NotesController(MockRepository(), imageStore: store);
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: imageController)),
+      );
+      await tester.pump();
+
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
+      );
+
+      await tester.tap(find.byIcon(Icons.image_outlined));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.takePhoto), findsOneWidget);
+      expect(find.text(l10n.chooseFromGallery), findsOneWidget);
+
+      // Close the menu without picking a source, then leave the page so the
+      // editor's caret timer is disposed.
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('renders a placeholder when an image cannot be resolved',
+        (tester) async {
+      final imageController = NotesController(MockRepository());
+      final note = makeNote(
+        id: 'with-image',
+        title: 'Has image',
+        content: Note.documentToContent(
+          Document.fromJson([
+            {'insert': 'text\n'},
+            {
+              'insert': {'image': 'attachments/missing.jpg'},
+            },
+            {'insert': '\n'},
+          ]),
+        ),
+      );
+
+      await tester.pumpWidget(
+        buildTestApp(
+          NoteDetailPage(
+            existing: note,
+            controller: imageController,
+            showToolbar: false,
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
+      );
+      expect(find.text(l10n.imageUnavailable), findsOneWidget);
     });
   });
 }

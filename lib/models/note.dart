@@ -65,6 +65,22 @@ class Note {
     }
   }
 
+  // Every image stored in the Delta, as the relative paths written by
+  // ImageStore. Used to find files that no note references any more.
+  List<String> get embeddedImagePaths {
+    final ops = _decodeOps(content);
+    final paths = <String>[];
+    for (final op in ops) {
+      if (op is! Map) continue;
+      final insert = op['insert'];
+      if (insert is Map && insert['image'] is String) {
+        final path = insert['image'] as String;
+        if (path.isNotEmpty) paths.add(path);
+      }
+    }
+    return paths;
+  }
+
   static List<dynamic> _decodeOps(String content) {
     if (content.isEmpty) return const [];
     try {
