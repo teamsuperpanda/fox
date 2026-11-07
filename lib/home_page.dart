@@ -53,6 +53,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _fabAnimation = Tween<double>(begin: -0.05, end: 0.05).animate(
       CurvedAnimation(parent: _fabController, curve: Curves.easeInOut),
     );
+    // Rest upright. The tween spans -0.05 to 0.05 rad, so 0 rad is 0.5. Without
+    // this the FAB stays tilted at -0.05 rad when the animation is disabled.
+    _fabController.value = 0.5;
 
     _searchController.addListener(() {
       _searchDebounce?.cancel();
