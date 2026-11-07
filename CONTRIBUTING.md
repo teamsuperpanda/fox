@@ -51,6 +51,13 @@ Golden test failures with small pixel diffs? Regenerate with `--update-goldens` 
 - Run `flutter analyze` -- zero issues required
 - Run `dart format lib/ test/` to auto-format
 
+## Dependencies
+
+Direct dependencies use caret ranges and `pubspec.lock` is committed. Patch and
+minor updates are grouped and merged after green CI; majors need the manual
+checklist. The policy, the release checklist and the flutter_quill upgrade
+runbook live in [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md).
+
 ## Localization
 
 This app supports 30+ languages via ARB files in `lib/l10n/`.
