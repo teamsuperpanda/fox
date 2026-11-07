@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
+import 'package:fox/widgets/dialogs.dart';
 
 /// A dialog that lets the user manage folders: create, rename, delete, and
 /// select a folder filter.
@@ -99,8 +100,20 @@ class _FoldersDialogState extends State<FoldersDialog> {
     );
     if (!mounted) return;
     if (confirmed ?? false) {
-      await controller.deleteFolder(id);
+      try {
+        await controller.deleteFolder(id);
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.errorDeletingFolder(e.toString())),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+        return;
+      }
       if (!mounted) return;
+      showUndoDeleteFolderSnackBar(context, controller);
       setState(() {});
     }
   }

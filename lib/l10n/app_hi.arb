@@ -23,6 +23,15 @@
   "deleteNote": "नोट हटाएं?",
   "deleteNoteMessage": "क्या आप वाकई इस नोट को हटाना चाहते हैं?",
   "noteDeleted": "नोट हटाया गया",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "पूर्ववत करें",
   "noteTitle": "नोट शीर्षक...",
   "back": "वापस",

@@ -87,6 +87,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String get noteDeleted => '노트가 삭제되었습니다';
 
   @override
+  String get folderDeleted => 'Folder deleted';
+
+  @override
+  String errorDeletingFolder(String error) {
+    return 'Error deleting folder: $error';
+  }
+
+  @override
   String get undo => '실행 취소';
 
   @override

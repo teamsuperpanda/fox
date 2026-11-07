@@ -23,6 +23,15 @@
   "deleteNote": "Notitie verwijderen?",
   "deleteNoteMessage": "Weet u zeker dat u deze notitie wilt verwijderen?",
   "noteDeleted": "Notitie verwijderd",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Ongedaan maken",
   "noteTitle": "Notitietitel...",
   "back": "Terug",

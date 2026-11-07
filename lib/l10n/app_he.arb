@@ -23,6 +23,15 @@
   "deleteNote": "למחוק פתק?",
   "deleteNoteMessage": "האם אתה בטוח שברצונך למחוק פתק זה?",
   "noteDeleted": "הפתק נמחק",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "בטל",
   "noteTitle": "כותרת הפתק...",
   "back": "חזרה",

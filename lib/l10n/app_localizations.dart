@@ -309,6 +309,18 @@ abstract class AppLocalizations {
   /// **'Note deleted'**
   String get noteDeleted;
 
+  /// No description provided for @folderDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder deleted'**
+  String get folderDeleted;
+
+  /// No description provided for @errorDeletingFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Error deleting folder: {error}'**
+  String errorDeletingFolder(String error);
+
   /// No description provided for @undo.
   ///
   /// In en, this message translates to:

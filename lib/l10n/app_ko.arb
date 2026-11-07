@@ -23,6 +23,15 @@
   "deleteNote": "노트를 삭제하시겠습니까?",
   "deleteNoteMessage": "이 노트를 정말 삭제하시겠습니까?",
   "noteDeleted": "노트가 삭제되었습니다",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "실행 취소",
   "noteTitle": "노트 제목...",
   "back": "뒤로",

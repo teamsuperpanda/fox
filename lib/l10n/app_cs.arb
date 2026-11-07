@@ -23,6 +23,15 @@
   "deleteNote": "Smazat poznámku?",
   "deleteNoteMessage": "Opravdu chcete smazat tuto poznámku?",
   "noteDeleted": "Poznámka smazána",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Zpět",
   "noteTitle": "Název poznámky...",
   "back": "Zpět",

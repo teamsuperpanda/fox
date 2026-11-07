@@ -23,6 +23,15 @@
   "deleteNote": "Ta bort anteckning?",
   "deleteNoteMessage": "Är du säker på att du vill ta bort denna anteckning?",
   "noteDeleted": "Anteckning borttagen",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Ångra",
   "noteTitle": "Anteckningstitel...",
   "back": "Tillbaka",

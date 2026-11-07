@@ -23,6 +23,15 @@
   "deleteNote": "Slet note?",
   "deleteNoteMessage": "Er du sikker på, at du vil slette denne note?",
   "noteDeleted": "Note slettet",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Fortryd",
   "noteTitle": "Notetitel...",
   "back": "Tilbage",

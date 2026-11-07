@@ -23,6 +23,15 @@
   "deleteNote": "Usunąć notatkę?",
   "deleteNoteMessage": "Czy na pewno chcesz usunąć tę notatkę?",
   "noteDeleted": "Notatka usunięta",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Cofnij",
   "noteTitle": "Tytuł notatki...",
   "back": "Wstecz",

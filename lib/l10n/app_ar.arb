@@ -23,6 +23,15 @@
   "deleteNote": "حذف الملاحظة؟",
   "deleteNoteMessage": "هل أنت متأكد من حذف هذه الملاحظة؟",
   "noteDeleted": "تم حذف الملاحظة",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "تراجع",
   "noteTitle": "عنوان الملاحظة...",
   "back": "رجوع",

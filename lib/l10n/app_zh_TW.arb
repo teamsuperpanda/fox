@@ -23,6 +23,15 @@
   "deleteNote": "刪除筆記？",
   "deleteNoteMessage": "確定要刪除此筆記嗎？",
   "noteDeleted": "筆記已刪除",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "復原",
   "noteTitle": "筆記標題...",
   "back": "返回",

@@ -147,28 +147,80 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Note> _clearFolderFrom(List<Note> notes, String folderId, DateTime now) {
+  List<Note> _clearFolderFrom(List<Note> notes, String folderId) {
     return notes
-        .map((n) => n.folderId == folderId
-            ? n.copyWith(clearFolder: true, updatedAt: now)
-            : n)
+        .map((n) => n.folderId == folderId ? n.copyWith(clearFolder: true) : n)
         .toList();
   }
 
+  Folder? _lastDeletedFolder;
+  Folder? get lastDeletedFolder => _lastDeletedFolder;
+  int _lastDeletedFolderIndex = 0;
+  List<String> _lastDeletedFolderNoteIds = const [];
+
+  /// Deletes [id] and unfiles its notes without touching their timestamps.
+  /// The folder and its memberships stay in memory so [undoDeleteFolder] can
+  /// put them back while the snackbar is visible.
   Future<void> deleteFolder(String id) async {
-    final now = DateTime.now();
-    final cleared = _clearFolderFrom(_unfilteredNotes, id, now);
-    final batch = [
-      for (var i = 0; i < cleared.length; i++)
-        if (_unfilteredNotes[i].folderId == id) cleared[i],
-    ];
-    if (batch.isNotEmpty) await _repo.upsertAll(batch);
-    await _repo.deleteFolder(id);
-    _folders = _folders.where((f) => f.id != id).toList();
-    if (_selectedFolderId == id) {
-      _selectedFolderId = null;
+    final folder = _folders.firstWhereOrNull((f) => f.id == id);
+    if (folder == null) return;
+
+    final members =
+        _unfilteredNotes.where((n) => n.folderId == id).toList(growable: false);
+    final unfiled = _clearFolderFrom(members, id);
+
+    try {
+      if (unfiled.isNotEmpty) await _repo.upsertAll(unfiled);
+      await _repo.deleteFolder(id);
+    } catch (e) {
+      // Put the memberships back so a failed delete leaves state unchanged.
+      if (unfiled.isNotEmpty) {
+        try {
+          await _repo.upsertAll(members);
+        } catch (_) {
+          // Nothing more we can do; the caller reports the original error.
+        }
+      }
+      rethrow;
     }
-    _unfilteredNotes = cleared;
+
+    final unfiledById = {for (final n in unfiled) n.id: n};
+    _unfilteredNotes = [
+      for (final note in _unfilteredNotes) unfiledById[note.id] ?? note,
+    ];
+    _lastDeletedFolder = folder;
+    _lastDeletedFolderIndex = _folders.indexWhere((f) => f.id == id);
+    _folders = _folders.where((f) => f.id != id).toList();
+    _lastDeletedFolderNoteIds = [for (final n in members) n.id];
+    if (_selectedFolderId == id) {
+      // Land on the notes that just moved out of the folder.
+      _selectedFolderId = AppConstants.unfiledFolderId;
+    }
+    _updateView();
+    notifyListeners();
+  }
+
+  /// Restores the folder deleted last, together with its memberships.
+  Future<void> undoDeleteFolder() async {
+    final folder = _lastDeletedFolder;
+    if (folder == null) return;
+    final ids = _lastDeletedFolderNoteIds.toSet();
+    final restored = [
+      for (final note in _unfilteredNotes)
+        if (ids.contains(note.id)) note.copyWith(folderId: folder.id),
+    ];
+
+    await _repo.upsertFolder(folder);
+    if (restored.isNotEmpty) await _repo.upsertAll(restored);
+
+    final restoredById = {for (final n in restored) n.id: n};
+    _unfilteredNotes = [
+      for (final note in _unfilteredNotes) restoredById[note.id] ?? note,
+    ];
+    _folders = [..._folders]
+      ..insert(_lastDeletedFolderIndex.clamp(0, _folders.length), folder);
+    _lastDeletedFolder = null;
+    _lastDeletedFolderNoteIds = const [];
     _updateView();
     notifyListeners();
   }

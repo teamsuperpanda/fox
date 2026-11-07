@@ -23,6 +23,15 @@
   "deleteNote": "Hapus catatan?",
   "deleteNoteMessage": "Apakah Anda yakin ingin menghapus catatan ini?",
   "noteDeleted": "Catatan dihapus",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Urungkan",
   "noteTitle": "Judul catatan...",
   "back": "Kembali",

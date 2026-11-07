@@ -23,6 +23,15 @@
   "deleteNote": "Διαγραφή σημείωσης;",
   "deleteNoteMessage": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή τη σημείωση;",
   "noteDeleted": "Η σημείωση διαγράφηκε",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Αναίρεση",
   "noteTitle": "Τίτλος σημείωσης...",
   "back": "Πίσω",

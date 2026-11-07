@@ -23,6 +23,15 @@
   "deleteNote": "Notiz löschen?",
   "deleteNoteMessage": "Bist du sicher, dass du diese Notiz löschen möchtest?",
   "noteDeleted": "Notiz gelöscht",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Rückgängig",
   "noteTitle": "Notiztitel...",
   "back": "Zurück",

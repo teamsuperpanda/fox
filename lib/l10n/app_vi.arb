@@ -23,6 +23,15 @@
   "deleteNote": "Xóa ghi chú?",
   "deleteNoteMessage": "Bạn có chắc muốn xóa ghi chú này không?",
   "noteDeleted": "Đã xóa ghi chú",
+  "folderDeleted": "Folder deleted",
+  "errorDeletingFolder": "Error deleting folder: {error}",
+  "@errorDeletingFolder": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "undo": "Hoàn tác",
   "noteTitle": "Tiêu đề ghi chú...",
   "back": "Quay lại",
