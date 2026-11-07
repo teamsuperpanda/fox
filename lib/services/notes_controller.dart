@@ -150,7 +150,7 @@ class NotesController extends ChangeNotifier {
   List<Note> _clearFolderFrom(List<Note> notes, String folderId, DateTime now) {
     return notes
         .map((n) => n.folderId == folderId
-            ? n.copyWith(clearFolder: true, updatedAt: now)
+            ? n.copyWith(folderId: null, updatedAt: now)
             : n)
         .toList();
   }

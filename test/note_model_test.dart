@@ -183,19 +183,19 @@ void main() {
 
     // --- copyWith sentinels ---
 
-    test('copyWith clearFolder sets folderId to null', () {
+    test('copyWith folderId null clears folderId', () {
       final n = note.copyWith(folderId: 'f1');
       expect(n.folderId, 'f1');
 
-      final cleared = n.copyWith(clearFolder: true);
+      final cleared = n.copyWith(folderId: null);
       expect(cleared.folderId, isNull);
     });
 
-    test('copyWith clearColor sets color to null', () {
+    test('copyWith color null clears color', () {
       final n = note.copyWith(color: '#FF0000');
       expect(n.color, '#FF0000');
 
-      final cleared = n.copyWith(clearColor: true);
+      final cleared = n.copyWith(color: null);
       expect(cleared.color, isNull);
     });
 
