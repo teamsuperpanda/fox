@@ -1,0 +1,19 @@
+Fox
+Copyright (c) 2026 Team Super Panda Limited
+
+The Fox source code is licensed under the MIT License. See LICENSE.
+
+The Fox name, logo, icons, launch screen artwork, screenshots and store listing
+copy are NOT covered by the MIT License. They remain the proprietary property of
+Team Super Panda Limited. See ASSETS-LICENSE.md.
+
+Third-party dependencies and their licences:
+
+- flutter_quill - MIT
+- hive, hive_flutter - Apache License 2.0
+- provider - MIT
+- intl, collection - BSD 3-Clause (Dart project authors)
+- uuid - MIT
+- flutter_native_splash - MIT
+
+All of the above are compatible with distributing Fox under the MIT License.
