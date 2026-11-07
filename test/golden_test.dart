@@ -103,15 +103,17 @@ Future<NotesController> _createControllerWithNotes() async {
   await controller.load();
   await controller.addOrUpdate(
     title: 'Meeting Notes',
-    content: Document()..insert(0, 'Discuss Q3 roadmap and sprint planning'),
+    content: contentOf(
+        Document()..insert(0, 'Discuss Q3 roadmap and sprint planning')),
   );
   await controller.addOrUpdate(
     title: 'Shopping List',
-    content: Document()..insert(0, 'Milk, eggs, bread, coffee'),
+    content: contentOf(Document()..insert(0, 'Milk, eggs, bread, coffee')),
   );
   await controller.addOrUpdate(
     title: 'Ideas for Weekend',
-    content: Document()..insert(0, 'Hike in the mountains, visit museum'),
+    content:
+        contentOf(Document()..insert(0, 'Hike in the mountains, visit museum')),
   );
   controller.setFabAnimation(false);
   return controller;

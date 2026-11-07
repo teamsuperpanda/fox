@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
@@ -70,10 +69,9 @@ void main() {
     });
 
     test('controller adds new note', () async {
-      final doc = Document();
       await controller.addOrUpdate(
         title: 'New Note',
-        content: doc,
+        content: noteContent(),
       );
 
       expect(mockRepo.notes.length, equals(1));
@@ -88,7 +86,7 @@ void main() {
       await controller.addOrUpdate(
         id: 'test-id',
         title: 'Updated',
-        content: Document(),
+        content: noteContent(),
         pinned: true,
       );
 
@@ -100,7 +98,7 @@ void main() {
     test('controller saves pinned state', () async {
       await controller.addOrUpdate(
         title: 'Pinned Note',
-        content: Document(),
+        content: noteContent(),
         pinned: true,
       );
 
@@ -112,7 +110,7 @@ void main() {
     test('controller allows title-only notes', () async {
       await controller.addOrUpdate(
         title: 'Title Only',
-        content: Document(),
+        content: noteContent(),
       );
 
       expect(mockRepo.notes.length, equals(1));
@@ -278,7 +276,7 @@ void main() {
       await failingController.load();
       await failingController.addOrUpdate(
         title: 'Delete Me',
-        content: Document(),
+        content: noteContent(),
       );
       final existing = failingController.notes.first;
 
@@ -305,7 +303,7 @@ void main() {
       delayedRepo.upsertCompleter.complete();
       await delayedController.addOrUpdate(
         title: 'Delayed Delete',
-        content: Document(),
+        content: noteContent(),
       );
       final existing = delayedController.notes.first;
 

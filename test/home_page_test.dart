@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/home_page.dart';
 import 'package:fox/note_detail_page.dart';
@@ -34,7 +33,7 @@ void main() {
 
     testWidgets('shows note in list when note exists', (tester) async {
       await controller.load();
-      await controller.addOrUpdate(title: 'Test Note', content: Document());
+      await controller.addOrUpdate(title: 'Test Note', content: noteContent());
 
       await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();
@@ -55,7 +54,7 @@ void main() {
     testWidgets('Search icon toggles search bar when notes exist',
         (tester) async {
       await controller.load();
-      await controller.addOrUpdate(title: 'Test', content: Document());
+      await controller.addOrUpdate(title: 'Test', content: noteContent());
 
       await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
       await tester.pump();

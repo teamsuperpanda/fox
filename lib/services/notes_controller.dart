@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/note_content.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
@@ -180,7 +180,7 @@ class NotesController extends ChangeNotifier {
 
   Future<void> addOrUpdate({
     required String title,
-    required Document content,
+    required NoteContent content,
     String? id,
     bool pinned = false,
     List<String> tags = const [],
@@ -188,7 +188,7 @@ class NotesController extends ChangeNotifier {
     String? color,
   }) async {
     final trimmedTitle = title.trim();
-    final plainText = content.toPlainText().trim();
+    final plainText = content.plainText.trim();
 
     if (trimmedTitle.isEmpty && plainText.isEmpty) {
       throw ArgumentError(
@@ -198,7 +198,7 @@ class NotesController extends ChangeNotifier {
     final note = Note(
       id: id ?? _uuid.v4(),
       title: trimmedTitle,
-      content: Note.documentToContent(content),
+      content: content.deltaJson,
       pinned: pinned,
       updatedAt: DateTime.now(),
       tags: tags,

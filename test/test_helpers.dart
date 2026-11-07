@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:fox/editor/quill_codec.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/note_content.dart';
 import 'package:fox/models/settings.dart';
 import 'package:fox/models/settings_adapter.dart';
 import 'package:fox/providers/locale_provider.dart';
@@ -75,6 +77,17 @@ Note makeNote({
     color: color,
   );
 }
+
+/// Wraps an editor document as stored note content.
+NoteContent contentOf(Document document) =>
+    const NoteContentCodec().fromDocument(document);
+
+/// Builds note content from plain [text], or empty content when omitted.
+NoteContent noteContent([String text = '']) => text.isEmpty
+    ? contentOf(Document())
+    : contentOf(Document.fromJson([
+        {'insert': '$text\n'},
+      ]));
 
 class MemoryRepo implements NoteAndFolderRepository {
   final List<Note> _data = [];
