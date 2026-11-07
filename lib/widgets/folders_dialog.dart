@@ -123,6 +123,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
                   hintText: l10n.newFolderName,
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.add),
+                    tooltip: l10n.addFolder,
                     onPressed: _addFolder,
                   ),
                 ),
@@ -130,80 +131,70 @@ class _FoldersDialogState extends State<FoldersDialog> {
               ),
               const SizedBox(height: 16),
               // "All Notes" option
-              Semantics(
-                label: l10n.allNotes,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.folder_open,
-                    color: controller.selectedFolderId == null
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
-                  ),
-                  title: Text(l10n.allNotes),
-                  selected: controller.selectedFolderId == null,
-                  contentPadding: EdgeInsets.zero,
-                  visualDensity: VisualDensity.compact,
-                  onTap: () {
-                    controller.setSelectedFolder(null);
-                    setState(() {});
-                  },
+              ListTile(
+                leading: Icon(
+                  Icons.folder_open,
+                  color: controller.selectedFolderId == null
+                      ? Theme.of(context).colorScheme.primary
+                      : null,
                 ),
+                title: Text(l10n.allNotes),
+                selected: controller.selectedFolderId == null,
+                contentPadding: EdgeInsets.zero,
+                visualDensity: VisualDensity.compact,
+                onTap: () {
+                  controller.setSelectedFolder(null);
+                  setState(() {});
+                },
               ),
               // "Unfiled" option
-              Semantics(
-                label: l10n.unfiled,
-                child: ListTile(
+              ListTile(
+                leading: Icon(
+                  Icons.notes,
+                  color: controller.selectedFolderId ==
+                          AppConstants.unfiledFolderId
+                      ? Theme.of(context).colorScheme.primary
+                      : null,
+                ),
+                title: Text(l10n.unfiled),
+                selected:
+                    controller.selectedFolderId == AppConstants.unfiledFolderId,
+                contentPadding: EdgeInsets.zero,
+                visualDensity: VisualDensity.compact,
+                onTap: () {
+                  controller.setSelectedFolder(AppConstants.unfiledFolderId);
+                  setState(() {});
+                },
+              ),
+              ...controller.folders.map((folder) {
+                return ListTile(
                   leading: Icon(
-                    Icons.notes,
-                    color: controller.selectedFolderId ==
-                            AppConstants.unfiledFolderId
+                    Icons.folder,
+                    color: controller.selectedFolderId == folder.id
                         ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
-                  title: Text(l10n.unfiled),
-                  selected: controller.selectedFolderId ==
-                      AppConstants.unfiledFolderId,
+                  title: Text(folder.name),
+                  selected: controller.selectedFolderId == folder.id,
                   contentPadding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
                   onTap: () {
-                    controller.setSelectedFolder(AppConstants.unfiledFolderId);
+                    controller.setSelectedFolder(folder.id);
                     setState(() {});
                   },
-                ),
-              ),
-              ...controller.folders.map((folder) {
-                return Semantics(
-                  label: 'Folder: ${folder.name}',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.folder,
-                      color: controller.selectedFolderId == folder.id
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                    ),
-                    title: Text(folder.name),
-                    selected: controller.selectedFolderId == folder.id,
-                    contentPadding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                    onTap: () {
-                      controller.setSelectedFolder(folder.id);
-                      setState(() {});
+                  trailing: PopupMenuButton<String>(
+                    tooltip: l10n.folderActions,
+                    itemBuilder: (_) => [
+                      PopupMenuItem(value: 'rename', child: Text(l10n.rename)),
+                      PopupMenuItem(value: 'delete', child: Text(l10n.delete)),
+                    ],
+                    onSelected: (action) async {
+                      if (action == 'rename') {
+                        await _renameFolder(folder.id, folder.name);
+                      } else if (action == 'delete') {
+                        await _deleteFolder(folder.id);
+                      }
                     },
-                    trailing: PopupMenuButton<String>(
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                            value: 'rename', child: Text(l10n.rename)),
-                        PopupMenuItem(
-                            value: 'delete', child: Text(l10n.delete)),
-                      ],
-                      onSelected: (action) async {
-                        if (action == 'rename') {
-                          await _renameFolder(folder.id, folder.name);
-                        } else if (action == 'delete') {
-                          await _deleteFolder(folder.id);
-                        }
-                      },
-                    ),
                   ),
                 );
               }),
