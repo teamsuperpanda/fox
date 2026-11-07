@@ -64,6 +64,14 @@ flutter test --coverage
 
 ---
 
+## Community
+
+- Questions, ideas and show and tell: [Discussions](https://github.com/teamsuperpanda/fox/discussions)
+- How to set up, test and send a pull request: [CONTRIBUTING.md](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+
+---
+
 ## License
 
 The code is [PolyForm Noncommercial 1.0.0](LICENSE). Free for personal use, not for resale.  
