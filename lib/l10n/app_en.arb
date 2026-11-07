@@ -93,9 +93,17 @@
         "type": "String"
       }
     }
+  },
+  "insertImage": "Insert image",
+  "takePhoto": "Take photo",
+  "chooseFromGallery": "Choose from gallery",
+  "imageUnavailable": "Image unavailable",
+  "imageInsertFailed": "Could not add the image: {error}",
+  "@imageInsertFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
-
-
-
-
 }

@@ -548,6 +548,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @insertImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert image'**
+  String get insertImage;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @imageUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Image unavailable'**
+  String get imageUnavailable;
+
+  /// No description provided for @imageInsertFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not add the image: {error}'**
+  String imageInsertFailed(String error);
 }
 
 class _AppLocalizationsDelegate
