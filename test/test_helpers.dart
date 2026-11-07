@@ -9,7 +9,7 @@ import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/box_names.dart';
 import 'package:fox/services/repository_hive.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:provider/provider.dart';
 
 Widget buildTestApp(

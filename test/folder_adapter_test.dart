@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/folder_adapter.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 void main() {
   group('FolderAdapter', () {

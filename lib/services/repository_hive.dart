@@ -1,7 +1,7 @@
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/services/box_names.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 abstract class NoteAndFolderRepository {
   Future<void> init();

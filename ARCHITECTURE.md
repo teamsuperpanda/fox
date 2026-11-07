@@ -82,7 +82,7 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 
 **Description:** A simple, local-first notes app with rich text editing. Supports folders, search, dark mode, and 30+ languages. Zero cloud dependency.
 
-**Technologies:** Flutter, Dart 3.6+, Provider, Hive, Flutter Quill
+**Technologies:** Flutter, Dart 3.6+, Provider, hive_ce, Flutter Quill
 
 **Deployment:** GitHub Releases (web), App Store / Play Store (mobile)
 
@@ -149,6 +149,12 @@ The app follows a simple layered architecture:
 **Purpose:** Authoritative data store for all app data. Offline-first — never bypassed.
 
 **Key Boxes:** notes_db, folders_db, settings_db
+
+**Version:** `hive_ce` 2.x / `hive_ce_flutter` 2.x (the maintained fork of
+Hive 2). Migrated from `hive` 2.2.3 / `hive_flutter` 1.1.0 with box names,
+adapter `typeId`s and field indices unchanged, so boxes written by 2.1.1 open
+as-is; `test/hive_ce_migration_test.dart` reads a committed 2.1.1 fixture to
+prove it.
 
 ## 6. External Integrations / APIs
 

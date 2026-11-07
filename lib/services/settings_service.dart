@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fox/models/settings.dart';
 import 'package:fox/services/box_names.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 class SettingsService {
   static const _key = 'app_settings';
