@@ -115,8 +115,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (result.deleted) {
         showUndoDeleteSnackBar(context, controller);
       }
+      // A leftover query would hide the note that was just created.
+      _clearSearch();
       setState(() {});
     }
+  }
+
+  void _clearSearch() {
+    _searchDebounce?.cancel();
+    _searchController.clear();
+    controller.setSearchTerm('');
+    _isSearching = false;
   }
 
   Future<void> _openNote(Note note) async {
@@ -195,11 +204,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           if (_isSearching)
             IconButton(
               icon: const Icon(Icons.clear),
-              onPressed: () {
-                _searchController.clear();
-                controller.setSearchTerm('');
-                setState(() => _isSearching = false);
-              },
+              onPressed: () => setState(_clearSearch),
             )
           else
             Semantics(
