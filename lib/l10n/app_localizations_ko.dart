@@ -213,4 +213,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String tooLong(int count) {
+    return 'Too long: maximum $count characters';
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:characters/characters.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -128,6 +129,7 @@ class NotesController extends ChangeNotifier {
   }
 
   Future<void> addFolder(String name) async {
+    _checkLength(name.trim(), AppConstants.maxFolderNameLength, 'Folder name');
     final folder = Folder(
       id: _uuid.v4(),
       name: name.trim(),
@@ -141,6 +143,8 @@ class NotesController extends ChangeNotifier {
   Future<void> renameFolder(String id, String newName) async {
     final folder = _folders.firstWhereOrNull((f) => f.id == id);
     if (folder == null) return;
+    _checkLength(
+        newName.trim(), AppConstants.maxFolderNameLength, 'Folder name');
     final updated = folder.copyWith(name: newName.trim());
     await _repo.upsertFolder(updated);
     _folders = _folders.map((f) => f.id == id ? updated : f).toList();
@@ -193,6 +197,10 @@ class NotesController extends ChangeNotifier {
     if (trimmedTitle.isEmpty && plainText.isEmpty) {
       throw ArgumentError(
           'Note cannot be empty - title and content are both blank');
+    }
+    _checkLength(trimmedTitle, AppConstants.maxTitleLength, 'Title');
+    for (final tag in tags) {
+      _checkLength(tag.trim(), AppConstants.maxTagLength, 'Tag');
     }
 
     final note = Note(
@@ -253,6 +261,14 @@ class NotesController extends ChangeNotifier {
   }
 
   Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+
+  /// Grapheme-aware length guard. Stored values are never truncated; a write
+  /// that would exceed the limit is rejected instead.
+  static void _checkLength(String value, int maxLength, String field) {
+    if (value.characters.length > maxLength) {
+      throw ArgumentError('$field cannot be longer than $maxLength characters');
+    }
+  }
 
   List<Note> _filterAndSort(List<Note> list) {
     final copy = [...list];

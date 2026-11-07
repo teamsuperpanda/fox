@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:characters/characters.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
@@ -459,6 +460,76 @@ void main() {
         failingController.find(failingController.notes.single.id)?.folderId,
         folderId,
       );
+    });
+
+    // --- Length limits ---
+
+    test('addOrUpdate rejects a title over the limit', () async {
+      await controller.load();
+      await expectLater(
+        controller.addOrUpdate(
+          title: 'a' * (AppConstants.maxTitleLength + 1),
+          content: Document(),
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(controller.notes, isEmpty);
+    });
+
+    test('addOrUpdate accepts a title at the limit', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'a' * AppConstants.maxTitleLength,
+        content: Document(),
+      );
+      expect(controller.notes.single.title.characters.length,
+          AppConstants.maxTitleLength);
+    });
+
+    test('title limit counts graphemes, so emoji count as one', () async {
+      await controller.load();
+      // A family emoji is one grapheme but many code units.
+      const emoji = '👨‍👩‍👧‍👦';
+      await controller.addOrUpdate(
+        title: emoji * AppConstants.maxTitleLength,
+        content: Document(),
+      );
+      expect(controller.notes.single.title.characters.length,
+          AppConstants.maxTitleLength);
+    });
+
+    test('addFolder rejects a name over the limit', () async {
+      await controller.load();
+      await expectLater(
+        controller.addFolder('a' * (AppConstants.maxFolderNameLength + 1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(controller.folders, isEmpty);
+    });
+
+    test('renameFolder rejects a name over the limit', () async {
+      await controller.load();
+      await controller.addFolder('Work');
+      final id = controller.folders.single.id;
+      await expectLater(
+        controller.renameFolder(
+            id, 'a' * (AppConstants.maxFolderNameLength + 1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(controller.folders.single.name, 'Work');
+    });
+
+    test('addOrUpdate rejects a tag over the limit', () async {
+      await controller.load();
+      await expectLater(
+        controller.addOrUpdate(
+          title: 'Tagged',
+          content: Document(),
+          tags: ['a' * (AppConstants.maxTagLength + 1)],
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(controller.notes, isEmpty);
     });
 
     // --- Folder filter ---
