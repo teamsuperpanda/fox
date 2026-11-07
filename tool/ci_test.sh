@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 set -e
-flutter test --exclude-tags golden
+# Store screenshots live in tool/ and are not run by `flutter test`.
+flutter test

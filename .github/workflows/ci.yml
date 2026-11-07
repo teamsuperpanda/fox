@@ -46,5 +46,7 @@ jobs:
       - name: Run flutter analyze
         run: flutter analyze
 
+      # Store screenshots (tool/store_screenshots_test.dart) are a screenshot
+      # generator, not a regression gate, and live outside test/.
       - name: Run tests
-        run: flutter test --coverage --exclude-tags golden
+        run: flutter test --coverage
