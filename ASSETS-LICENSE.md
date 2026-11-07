@@ -1,43 +1,47 @@
-# Assets License
+# Brand Assets License
 
-## Restrictions on Application Assets
+The Fox source code is licensed under the [MIT License](LICENSE). That licence
+covers the code only. The Fox name, logo and the visual assets listed below are
+proprietary and remain copyright Team Super Panda Limited.
 
-All application assets, including but not limited to:
+"Proprietary" means: source available for reading, not free to reuse. The assets
+are not MIT, not public domain and not licensed for reuse in another product.
 
-- Icons in `assets/images/icon/`
-- Launch screen images in `assets/images/launchscreen/`
-- Logos and branding materials
-- Any other visual or multimedia content provided with this project
+## What is proprietary
 
-are copyright © 2025 teamsuperpanda and are **NOT** licensed under the MIT License.
+- The Fox name and wordmark
+- The panda mark and the app icon (`assets/images/icon/`)
+- Launch screen artwork (`assets/images/launchscreen/`)
+- Banners and store listing art (`assets/images/github/`)
+- Screenshots and store listing copy
+- The Android application ID `com.teamsuperpanda.fox` and the iOS bundle ID
+- The Play Store and App Store listings
 
-## Permitted Use
+## What forks may do
 
-These assets may be used **only** as part of the Fox application and are provided for that purpose alone.
+You may fork the code under MIT and do anything MIT allows with the code,
+including selling a product built from it, provided you:
 
-## Prohibited Use
+1. **Rename the app.** Do not ship a build called "Fox" or use the Fox name or
+   wordmark as your product name.
+2. **Replace all brand assets** in `assets/images/` with your own original or
+   properly licensed artwork.
+3. **Change the application ID and bundle ID.** They belong to Team Super Panda.
+4. **Say what it is based on**, for example "Based on Fox by Team Super Panda",
+   in your README or About screen. Nominative references like this are allowed
+   and do not require permission.
+5. **Avoid implying endorsement.** Do not state or suggest that Team Super Panda
+   endorses, sponsors or maintains your fork.
 
-You may **NOT**:
+## What forks may not do
 
-- Reuse, redistribute, or modify these assets outside of this project
-- Include these assets in derivative works or forks without explicit written permission
-- Use these assets for commercial purposes or in competing products
-- Alter, remix, or create derivative works from these assets
-- Claim ownership of or relicense these assets
+- Reuse, redistribute or modify the brand assets outside this project
+- Ship a fork under the Fox name, icon or bundle ID
+- Use the Fox name or assets in a way that confuses users about the source
+- Claim ownership of or relicense the brand assets
 
-## How to Create a Derivative Work
+## Questions or exceptions
 
-If you wish to create a fork or derivative of Fox with your own branding:
-
-1. **Replace all assets** in `assets/images/` with your own original or properly licensed material
-2. **Update branding references** in `pubspec.yaml` and Flutter configuration files
-3. **Clearly distinguish** your fork from the original Fox project
-4. **Request written permission** if you wish to use any original Fox assets
-
-## Questions or Exceptions
-
-For questions about asset licensing or to request exceptions, please contact teamsuperpanda directly.
-
----
-
-**The application source code** is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE) and may be used, modified, and distributed according to those terms. This restriction applies **only** to the visual and multimedia assets, not to the code.
+For permission to use any Fox brand asset, or to ask about a use this policy does
+not cover, contact Team Super Panda through the repository issue tracker or
+[www.teamsuperpanda.com](https://www.teamsuperpanda.com).
