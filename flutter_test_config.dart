@@ -92,8 +92,10 @@ Future<void> testExecutable(Future<void> Function() testRunner) async {
     'NotoSansSC-Regular.ttf',
   ]);
 
+  // Baselines are resolved relative to the screenshot tool, which lives in
+  // tool/ and writes to assets/images/screenshots/.
   goldenFileComparator = _TolerantComparator(
-    Uri.file('${Directory.current.path}/test/golden_test.dart'),
+    Uri.file('${Directory.current.path}/tool/store_screenshots_test.dart'),
   );
 
   await testRunner();

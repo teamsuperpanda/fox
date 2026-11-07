@@ -18,22 +18,27 @@ dart run build_runner build --delete-conflicting-outputs
 
 ## Running Tests
 
-**Fast tests (no golden comparisons):**
 ```bash
-flutter test --exclude-tags golden
+flutter test
 ```
 
-**Golden screenshot tests:**
+The suite under `test/` is the regression gate and runs in CI.
+
+### Store screenshots
+
+`tool/store_screenshots_test.dart` is a screenshot generator, not a regression test. It renders the
+store listing frames for five device sizes and writes PNGs to `assets/images/screenshots/`, which is
+gitignored. Because it is outside `test/`, `flutter test` does not pick it up, and CI does not run
+it. A widget test change can never be blocked by a screenshot diff.
+
+Regenerate the store screenshots in one command:
+
 ```bash
-flutter test test/golden_test.dart
+flutter test tool/store_screenshots_test.dart --update-goldens
 ```
 
-**Update golden screenshots (after intentional UI changes):**
-```bash
-flutter test test/golden_test.dart --update-goldens
-```
-
-Golden test failures with small pixel diffs? Regenerate with `--update-goldens` and commit the new goldens.
+Treat the output as build artifacts: preview it locally, then copy the images into the store
+listing. Do not commit them.
 
 ## Architecture
 
@@ -67,13 +72,9 @@ This app supports 30+ languages via ARB files in `lib/l10n/`.
 
 ## Release Screenshots
 
-Store screenshots are auto-generated via golden tests. Run locally to preview:
-
-```bash
-flutter test test/golden_test.dart --update-goldens
-```
-
-The `release_screenshots.yml` workflow copies generated goldens to Android/iOS Fastlane metadata on release commits. Generated images live in `assets/images/screenshots/`.
+Store screenshots are generated with `tool/store_screenshots_test.dart` (see above). The images are
+not committed; regenerate them with `--update-goldens` and copy them into the Android/iOS Fastlane
+metadata when cutting a release.
 
 ## Pull Request Process
 

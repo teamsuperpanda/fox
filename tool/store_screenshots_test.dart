@@ -13,10 +13,9 @@ import 'package:fox/services/settings_service.dart';
 import 'package:fox/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-import 'store_frame.dart';
-import 'test_helpers.dart';
+import '../test/store_frame.dart';
+import '../test/test_helpers.dart';
 
-const _golden = <String>['golden'];
 const _goldenDir = '../assets/images/screenshots';
 
 class _DeviceConfig {
@@ -192,11 +191,11 @@ void main() {
       testWidgets('light', (tester) async {
         await pumpRaw(
             tester: tester, themeMode: ThemeMode.light, label: 'light');
-      }, tags: _golden);
+      });
 
       testWidgets('dark', (tester) async {
         await pumpRaw(tester: tester, themeMode: ThemeMode.dark, label: 'dark');
-      }, tags: _golden);
+      });
 
       testWidgets('settings', (tester) async {
         setViewport(tester);
@@ -217,7 +216,7 @@ void main() {
           find.byType(MaterialApp),
           matchesGoldenFile('$_goldenDir/$deviceName/raw/settings.png'),
         );
-      }, tags: _golden);
+      });
 
       testWidgets('detail', (tester) async {
         setViewport(tester);
@@ -238,7 +237,7 @@ void main() {
           find.byType(MaterialApp),
           matchesGoldenFile('$_goldenDir/$deviceName/raw/detail.png'),
         );
-      }, tags: _golden);
+      });
 
       testWidgets('detail_new', (tester) async {
         setViewport(tester);
@@ -299,17 +298,17 @@ void main() {
           find.byType(MaterialApp),
           matchesGoldenFile('$_goldenDir/$deviceName/raw/detail_new.png'),
         );
-      }, tags: _golden);
+      });
 
       testWidgets('store_light', (tester) async {
         await pumpStore(
             tester: tester, themeMode: ThemeMode.light, label: 'light');
-      }, tags: _golden);
+      });
 
       testWidgets('store_dark', (tester) async {
         await pumpStore(
             tester: tester, themeMode: ThemeMode.dark, label: 'dark');
-      }, tags: _golden);
+      });
 
       testWidgets('store_settings', (tester) async {
         setViewport(tester);
@@ -330,7 +329,7 @@ void main() {
           find.byType(StoreFrame),
           matchesGoldenFile('$_goldenDir/$deviceName/store/settings.png'),
         );
-      }, tags: _golden);
+      });
 
       testWidgets('store_detail', (tester) async {
         setViewport(tester);
@@ -351,7 +350,7 @@ void main() {
           find.byType(StoreFrame),
           matchesGoldenFile('$_goldenDir/$deviceName/store/detail.png'),
         );
-      }, tags: _golden);
+      });
 
       testWidgets('store_detail_new', (tester) async {
         setViewport(tester);
@@ -412,7 +411,7 @@ void main() {
           find.byType(StoreFrame),
           matchesGoldenFile('$_goldenDir/$deviceName/store/detail_new.png'),
         );
-      }, tags: _golden);
+      });
     });
   }
 }
