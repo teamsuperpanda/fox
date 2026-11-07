@@ -324,6 +324,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
         } catch (e) {
           debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
         }
+        if (!mounted) return;
         setDialogState(() {});
       },
     );
@@ -346,6 +347,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
         } catch (e) {
           debugPrint('ViewOptionsSheet: failed to persist preference: $e');
         }
+        if (!mounted) return;
         setDialogState(() {});
       },
     );
@@ -531,9 +533,11 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
             );
             if (selected == LanguagePickerDialog.sentinelSystemDefault) {
               await localeProvider.setLocale(null);
+              if (!mounted) return;
               setDialogState(() {});
             } else if (selected != null) {
               await localeProvider.setLocale(selected);
+              if (!mounted) return;
               setDialogState(() {});
             }
           },
