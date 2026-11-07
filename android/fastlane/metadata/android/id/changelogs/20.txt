@@ -1,0 +1,5 @@
+Yang baru di 2.1.1:
+• Pencarian lebih cepat.
+• Memperbaiki crash saat menghapus folder.
+• Peningkatan keandalan startup.
+• Perbaikan bug tambahan dan peningkatan kinerja.

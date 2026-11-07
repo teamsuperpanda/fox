@@ -1,0 +1,5 @@
+Nyheter i 2.1.1:
+• Snabbare sökning.
+• Åtgärdat en krasch vid borttagning av mappar.
+• Förbättrad starttillförlitlighet.
+• Ytterligare buggfixar och prestandaförbättringar.

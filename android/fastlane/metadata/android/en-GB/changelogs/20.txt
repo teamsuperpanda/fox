@@ -1,0 +1,5 @@
+What's new in 2.1.1:
+• Faster search.
+• Fixed a crash when deleting folders.
+• Improved startup reliability.
+• Additional bug fixes and performance improvements.

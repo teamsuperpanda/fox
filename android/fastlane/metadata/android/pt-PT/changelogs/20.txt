@@ -1,0 +1,5 @@
+Novidades na versão 2.1.1:
+• Pesquisa mais rápida.
+• Correção de falha ao eliminar pastas.
+• Fiabilidade de inicialização melhorada.
+• Correções de erros adicionais e melhorias de desempenho.

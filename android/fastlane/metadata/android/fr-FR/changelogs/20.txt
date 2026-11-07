@@ -1,0 +1,5 @@
+Nouveautés de la version 2.1.1 :
+• Recherche plus rapide.
+• Correction d'un plantage lors de la suppression de dossiers.
+• Fiabilité améliorée au démarrage.
+• Corrections de bugs supplémentaires et améliorations des performances.

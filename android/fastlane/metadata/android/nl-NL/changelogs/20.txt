@@ -1,0 +1,5 @@
+Wat is nieuw in 2.1.1:
+• Sneller zoeken.
+• Crash bij het verwijderen van mappen verholpen.
+• Verbeterde opstartbetrouwbaarheid.
+• Aanvullende bugfixes en prestatieverbeteringen.

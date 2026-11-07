@@ -1,0 +1,5 @@
+Neu in Version 2.1.1:
+• Schnellere Suche.
+• Absturz beim Löschen von Ordnern behoben.
+• Verbesserte Startzuverlässigkeit.
+• Weitere Fehlerbehebungen und Leistungsverbesserungen.
