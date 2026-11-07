@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/feedback_service.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:intl/intl.dart';
@@ -121,17 +122,14 @@ class _NoteListTile extends StatelessWidget {
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
           final confirmed = await showDeleteConfirmDialog(context);
-          if (confirmed != true) return false;
-          await controller.remove(note.id);
-          if (context.mounted) {
-            showUndoDeleteSnackBar(context, controller);
-          }
-          return false; // Never let Dismissible remove the widget
+          if (confirmed != true || !context.mounted) return false;
+          await _delete(context);
         } else if (direction == DismissDirection.startToEnd) {
           // Pin action - toggle pin
-          await controller.setPinned(note.id, !note.pinned);
-          return false;
+          await _togglePin(context);
         }
+        // Never let Dismissible remove the widget: the list updates through
+        // the controller, and a failed write leaves the row in place.
         return false;
       },
       // Background for Pin Action (Left to Right)
@@ -294,5 +292,34 @@ class _NoteListTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _delete(BuildContext context) async {
+    try {
+      await controller.remove(note.id);
+      if (context.mounted) showUndoDeleteSnackBar(context, controller);
+    } catch (e) {
+      if (!context.mounted) return;
+      const FeedbackService().error(
+        context,
+        AppLocalizations.of(context).errorDeletingNote(e.toString()),
+        retryLabel: AppLocalizations.of(context).retry,
+        onRetry: () => _delete(context),
+      );
+    }
+  }
+
+  Future<void> _togglePin(BuildContext context) async {
+    try {
+      await controller.setPinned(note.id, !note.pinned);
+    } catch (e) {
+      if (!context.mounted) return;
+      const FeedbackService().error(
+        context,
+        AppLocalizations.of(context).errorSavingNote(e.toString()),
+        retryLabel: AppLocalizations.of(context).retry,
+        onRetry: () => _togglePin(context),
+      );
+    }
   }
 }

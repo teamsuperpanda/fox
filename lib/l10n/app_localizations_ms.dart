@@ -214,4 +214,16 @@ class AppLocalizationsMs extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Cuba lagi';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Tetapan tidak dapat disimpan: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'Perubahan anda tidak dapat disimpan. Sila cuba lagi.';
 }

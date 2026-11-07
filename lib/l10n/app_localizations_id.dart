@@ -216,4 +216,15 @@ class AppLocalizationsId extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Coba lagi';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Tidak dapat menyimpan pengaturan: $error';
+  }
+
+  @override
+  String get saveFailed => 'Perubahan Anda tidak dapat disimpan. Coba lagi.';
 }

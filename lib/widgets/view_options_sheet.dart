@@ -4,6 +4,7 @@ import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
+import 'package:fox/services/feedback_service.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/theme/app_theme.dart';
@@ -214,6 +215,12 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
     ];
   }
 
+  void _reportLocaleSave(BuildContext context, bool saved) {
+    if (saved || !context.mounted) return;
+    final l10n = AppLocalizations.of(context);
+    const FeedbackService().error(context, l10n.saveFailed);
+  }
+
   Widget _buildHandle(ColorScheme colorScheme) {
     return Container(
       width: 48,
@@ -312,20 +319,29 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
     String title,
     SortBy value,
   ) {
+    Future<void> attempt() async {
+      try {
+        widget.controller.setSortBy(value);
+        await widget.settingsService.setSortBy(value.name);
+      } catch (e) {
+        if (!context.mounted) return;
+        final l10n = AppLocalizations.of(context);
+        const FeedbackService().error(
+          context,
+          l10n.errorSavingSettings(e.toString()),
+          retryLabel: l10n.retry,
+          onRetry: attempt,
+        );
+      }
+      setDialogState(() {});
+    }
+
     return _buildRadioTile(
       context: context,
       title: title,
       value: value,
       groupValue: widget.controller.sortBy,
-      onChanged: (val) async {
-        try {
-          widget.controller.setSortBy(val);
-          await widget.settingsService.setSortBy(val.name);
-        } catch (e) {
-          debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
-        }
-        setDialogState(() {});
-      },
+      onChanged: (_) => attempt(),
     );
   }
 
@@ -336,18 +352,27 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
     required bool value,
     required Future<void> Function(bool) onChanged,
   }) {
+    Future<void> attempt(bool val) async {
+      try {
+        await onChanged(val);
+      } catch (e) {
+        if (!context.mounted) return;
+        final l10n = AppLocalizations.of(context);
+        const FeedbackService().error(
+          context,
+          l10n.errorSavingSettings(e.toString()),
+          retryLabel: l10n.retry,
+          onRetry: () => attempt(val),
+        );
+      }
+      setDialogState(() {});
+    }
+
     return _buildSwitchTile(
       context: context,
       title: title,
       value: value,
-      onChanged: (val) async {
-        try {
-          await onChanged(val);
-        } catch (e) {
-          debugPrint('ViewOptionsSheet: failed to persist preference: $e');
-        }
-        setDialogState(() {});
-      },
+      onChanged: attempt,
     );
   }
 
@@ -443,8 +468,12 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
             button: true,
             label: l10n.accentColor,
             child: GestureDetector(
-              onTap: () {
-                themeProvider.setAccentColor(color);
+              onTap: () async {
+                final saved = await themeProvider.setAccentColor(color);
+                if (!saved && context.mounted) {
+                  final l10n = AppLocalizations.of(context);
+                  const FeedbackService().error(context, l10n.saveFailed);
+                }
                 setDialogState(() {});
               },
               child: AnimatedContainer(
@@ -530,10 +559,14 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
               ),
             );
             if (selected == LanguagePickerDialog.sentinelSystemDefault) {
-              await localeProvider.setLocale(null);
+              final saved = await localeProvider.setLocale(null);
+              if (!context.mounted) return;
+              _reportLocaleSave(context, saved);
               setDialogState(() {});
             } else if (selected != null) {
-              await localeProvider.setLocale(selected);
+              final saved = await localeProvider.setLocale(selected);
+              if (!context.mounted) return;
+              _reportLocaleSave(context, saved);
               setDialogState(() {});
             }
           },

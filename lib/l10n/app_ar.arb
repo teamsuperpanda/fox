@@ -59,5 +59,8 @@
   "startupError": "حدث خطأ أثناء بدء تشغيل Fox.\n\nحاول مسح بيانات التطبيق أو إعادة تثبيته.\n\nخطأ: {error}",  "note": "ملاحظة",
   "emptyNoteDiscarded": "تم تجاهل الملاحظة الفارغة",
 
-  "nativeName": "العربية"
+  "nativeName": "العربية",
+  "retry": "إعادة المحاولة",
+  "errorSavingSettings": "تعذر حفظ الإعدادات: {error}",
+  "saveFailed": "تعذر حفظ تغييراتك. يرجى المحاولة مرة أخرى."
 }

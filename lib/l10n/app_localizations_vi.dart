@@ -215,4 +215,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Thử lại';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Không thể lưu cài đặt: $error';
+  }
+
+  @override
+  String get saveFailed => 'Không thể lưu thay đổi của bạn. Vui lòng thử lại.';
 }

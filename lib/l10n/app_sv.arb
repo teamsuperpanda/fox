@@ -59,5 +59,8 @@
   "startupError": "Något gick fel vid start av Fox.\n\nFörsök rensa appdata eller installera om.\n\nFel: {error}",  "note": "Anteckning",
   "emptyNoteDiscarded": "Tom anteckning kasserad",
 
-  "nativeName": "Svenska"
+  "nativeName": "Svenska",
+  "retry": "Försök igen",
+  "errorSavingSettings": "Det gick inte att spara inställningarna: {error}",
+  "saveFailed": "Dina ändringar kunde inte sparas. Försök igen."
 }

@@ -11,6 +11,11 @@ class _FailingUpsertRepository extends MockRepository {
   Future<void> upsert(Note note) => Future.error(StateError('upsert failed'));
 }
 
+class _FailingDeleteRepository extends MockRepository {
+  @override
+  Future<void> delete(String id) => Future.error(StateError('delete failed'));
+}
+
 void main() {
   group('NoteList Widget', () {
     late MockRepository mockRepo;
@@ -93,7 +98,8 @@ void main() {
       expect(find.byType(NoteList), findsOneWidget);
     });
 
-    testWidgets('pin gesture propagates persistence errors', (tester) async {
+    testWidgets('pin gesture failure shows an error and keeps the row',
+        (tester) async {
       final failingRepo = _FailingUpsertRepository();
       final failingController = NotesController(failingRepo);
       final note = makeNote();
@@ -112,10 +118,44 @@ void main() {
       );
       final dismissible = tester.widget<Dismissible>(find.byType(Dismissible));
 
-      await expectLater(
-        dismissible.confirmDismiss!(DismissDirection.startToEnd),
-        throwsA(isA<StateError>()),
+      await dismissible.confirmDismiss!(DismissDirection.startToEnd);
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Error saving note'), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
+      expect(find.text('Test Note'), findsOneWidget);
+      expect(failingController.find(note.id), isNotNull);
+    });
+
+    testWidgets('delete gesture failure shows an error and keeps the row',
+        (tester) async {
+      final failingRepo = _FailingDeleteRepository();
+      final failingController = NotesController(failingRepo);
+      final note = makeNote();
+      failingRepo.notes.add(note);
+      await failingController.load();
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: NoteList(
+              controller: failingController,
+              notes: [note],
+            ),
+          ),
+        ),
       );
+      final dismissible = tester.widget<Dismissible>(find.byType(Dismissible));
+
+      final confirm = dismissible.confirmDismiss!(DismissDirection.endToStart);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+      await confirm;
+
+      expect(find.textContaining('Error deleting note'), findsOneWidget);
+      expect(find.text('Test Note'), findsOneWidget);
+      expect(failingController.find(note.id), isNotNull);
     });
 
     testWidgets('note with empty title shows (Untitled)', (tester) async {

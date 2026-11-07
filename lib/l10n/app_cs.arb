@@ -59,5 +59,8 @@
   "startupError": "Při spuštění Fox došlo k chybě.\n\nZkuste vymazat data aplikace nebo ji znovu nainstalovat.\n\nChyba: {error}",  "note": "Poznámka",
   "emptyNoteDiscarded": "Prázdná poznámka zahozena",
 
-  "nativeName": "Čeština"
+  "nativeName": "Čeština",
+  "retry": "Zkusit znovu",
+  "errorSavingSettings": "Nastavení se nepodařilo uložit: {error}",
+  "saveFailed": "Změny se nepodařilo uložit. Zkuste to prosím znovu."
 }

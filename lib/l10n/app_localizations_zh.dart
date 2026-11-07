@@ -213,6 +213,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => '重试';
+
+  @override
+  String errorSavingSettings(String error) {
+    return '无法保存设置：$error';
+  }
+
+  @override
+  String get saveFailed => '无法保存你的更改。请重试。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -404,4 +415,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get nativeName => '中文（繁體）';
+
+  @override
+  String get retry => '重試';
+
+  @override
+  String errorSavingSettings(String error) {
+    return '無法儲存設定：$error';
+  }
+
+  @override
+  String get saveFailed => '無法儲存你的變更。請再試一次。';
 }

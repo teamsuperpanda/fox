@@ -59,5 +59,8 @@
   "startupError": "Foxの起動中にエラーが発生しました。\n\nアプリデータを消去するか再インストールしてください。\n\nエラー: {error}",  "note": "ノート",
   "emptyNoteDiscarded": "空のノートは破棄されました",
 
-  "nativeName": "日本語"
+  "nativeName": "日本語",
+  "retry": "再試行",
+  "errorSavingSettings": "設定を保存できませんでした: {error}",
+  "saveFailed": "変更を保存できませんでした。もう一度お試しください。"
 }

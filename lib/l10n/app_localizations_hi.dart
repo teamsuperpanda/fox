@@ -214,4 +214,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'पुनः प्रयास करें';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'सेटिंग्स सहेजी नहीं जा सकीं: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'आपके परिवर्तन सहेजे नहीं जा सके। कृपया पुनः प्रयास करें।';
 }

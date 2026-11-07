@@ -213,4 +213,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => '再試行';
+
+  @override
+  String errorSavingSettings(String error) {
+    return '設定を保存できませんでした: $error';
+  }
+
+  @override
+  String get saveFailed => '変更を保存できませんでした。もう一度お試しください。';
 }

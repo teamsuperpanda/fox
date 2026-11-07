@@ -239,17 +239,17 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> undoRemove() async {
+  Future<bool> undoRemove() async {
     final note = _lastRemovedNote;
-    if (note != null) {
-      await _repo.upsert(note);
-      _unfilteredNotes = [..._unfilteredNotes, note];
-      if (identical(_lastRemovedNote, note)) {
-        _lastRemovedNote = null;
-      }
-      _updateView();
-      notifyListeners();
+    if (note == null) return false;
+    await _repo.upsert(note);
+    _unfilteredNotes = [..._unfilteredNotes, note];
+    if (identical(_lastRemovedNote, note)) {
+      _lastRemovedNote = null;
     }
+    _updateView();
+    notifyListeners();
+    return true;
   }
 
   Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);

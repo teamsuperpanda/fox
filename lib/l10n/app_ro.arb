@@ -59,5 +59,8 @@
   "startupError": "A apărut o eroare la pornirea Fox.\n\nÎncercați să ștergeți datele aplicației sau să o reinstalați.\n\nEroare: {error}",  "note": "Notă",
   "emptyNoteDiscarded": "Nota goală a fost eliminată",
 
-  "nativeName": "Română"
+  "nativeName": "Română",
+  "retry": "Reîncearcă",
+  "errorSavingSettings": "Setările nu au putut fi salvate: {error}",
+  "saveFailed": "Modificările nu au putut fi salvate. Încearcă din nou."
 }

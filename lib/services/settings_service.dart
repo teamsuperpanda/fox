@@ -13,6 +13,7 @@ class SettingsService {
       if (!Hive.isBoxOpen(BoxNames.settings)) return null;
       return Hive.box<Settings>(BoxNames.settings);
     } catch (_) {
+      // Storage not ready: reads and writes fall back to the in-memory copy.
       return null;
     }
   }

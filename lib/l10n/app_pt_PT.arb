@@ -59,5 +59,8 @@
   "startupError": "Algo correu mal ao iniciar o Fox.\n\nTente limpar os dados da aplicação ou reinstalá-la.\n\nErro: {error}",  "note": "Nota",
   "emptyNoteDiscarded": "Nota vazia descartada",
 
-  "nativeName": "Português (Portugal)"
+  "nativeName": "Português (Portugal)",
+  "retry": "Tentar novamente",
+  "errorSavingSettings": "Não foi possível guardar as definições: {error}",
+  "saveFailed": "Não foi possível guardar as alterações. Tente novamente."
 }

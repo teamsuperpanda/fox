@@ -59,5 +59,8 @@
   "startupError": "Ralat berlaku semasa memulakan Fox.\n\nSila cuba kosongkan data apl atau pasang semula.\n\nRalat: {error}",  "note": "Nota",
   "emptyNoteDiscarded": "Nota kosong dibuang",
 
-  "nativeName": "Bahasa Melayu"
+  "nativeName": "Bahasa Melayu",
+  "retry": "Cuba lagi",
+  "errorSavingSettings": "Tetapan tidak dapat disimpan: {error}",
+  "saveFailed": "Perubahan anda tidak dapat disimpan. Sila cuba lagi."
 }

@@ -59,5 +59,8 @@
   "startupError": "Une erreur est survenue au lancement de Fox.\n\nEssayez de vider les données de l'application ou de la réinstaller.\n\nErreur : {error}",  "note": "Note",
   "emptyNoteDiscarded": "Note vide abandonnée",
 
-  "nativeName": "Français"
+  "nativeName": "Français",
+  "retry": "Réessayer",
+  "errorSavingSettings": "Impossible d'enregistrer les paramètres : {error}",
+  "saveFailed": "Impossible d'enregistrer vos modifications. Réessayez."
 }

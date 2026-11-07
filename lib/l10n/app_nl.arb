@@ -59,5 +59,8 @@
   "startupError": "Er is iets misgegaan bij het starten van Fox.\n\nProbeer de app-gegevens te wissen of opnieuw te installeren.\n\nFout: {error}",  "note": "Notitie",
   "emptyNoteDiscarded": "Lege notitie weggegooid",
 
-  "nativeName": "Nederlands"
+  "nativeName": "Nederlands",
+  "retry": "Opnieuw proberen",
+  "errorSavingSettings": "Instellingen konden niet worden opgeslagen: {error}",
+  "saveFailed": "Je wijzigingen konden niet worden opgeslagen. Probeer het opnieuw."
 }

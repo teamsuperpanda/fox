@@ -214,4 +214,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'আবার চেষ্টা করুন';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'সেটিংস সংরক্ষণ করা যায়নি: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'আপনার পরিবর্তনগুলি সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।';
 }
