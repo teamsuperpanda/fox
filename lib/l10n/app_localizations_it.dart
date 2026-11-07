@@ -214,4 +214,42 @@ class AppLocalizationsIt extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get renameTag => 'Rename tag';
+
+  @override
+  String get tagName => 'Tag name';
+
+  @override
+  String get deleteTag => 'Delete tag?';
+
+  @override
+  String get deleteTagMessage =>
+      'This removes the tag from every note. The notes themselves are kept.';
+
+  @override
+  String get noTags => 'No tags yet';
+
+  @override
+  String tagNoteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notes',
+      one: '1 note',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tagRenamed(String tag) {
+    return 'Tag renamed to $tag';
+  }
+
+  @override
+  String get tagFilter => 'Tag filter';
+
+  @override
+  String get clearTagFilter => 'Clear tag filter';
 }

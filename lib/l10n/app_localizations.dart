@@ -548,6 +548,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @renameTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename tag'**
+  String get renameTag;
+
+  /// No description provided for @tagName.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag name'**
+  String get tagName;
+
+  /// No description provided for @deleteTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tag?'**
+  String get deleteTag;
+
+  /// No description provided for @deleteTagMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes the tag from every note. The notes themselves are kept.'**
+  String get deleteTagMessage;
+
+  /// No description provided for @noTags.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet'**
+  String get noTags;
+
+  /// No description provided for @tagNoteCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 note} other{{count} notes}}'**
+  String tagNoteCount(int count);
+
+  /// No description provided for @tagRenamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag renamed to {tag}'**
+  String tagRenamed(String tag);
+
+  /// No description provided for @tagFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag filter'**
+  String get tagFilter;
+
+  /// No description provided for @clearTagFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear tag filter'**
+  String get clearTagFilter;
 }
 
 class _AppLocalizationsDelegate
