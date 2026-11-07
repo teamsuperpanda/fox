@@ -23,6 +23,25 @@ class Note {
   final String? folderId;
   final String? color; // Hex string e.g. '#FF5252'
 
+  /// Every stored field, in one place.
+  ///
+  /// Adding a field to [Note] means adding its name here and to the field
+  /// switch in `test/note_field_registry_test.dart`; that test then checks
+  /// `copyWith`, the adapter and the map codec for the new field.
+  static const List<String> fieldNames = [
+    'id',
+    'title',
+    'content',
+    'pinned',
+    'updatedAt',
+    'tags',
+    'folderId',
+    'color',
+  ];
+
+  /// Sentinel for a nullable field that was not passed to [copyWith].
+  static const Object _unset = Object();
+
   String? _plainText;
   final String _lowerTitle;
   final List<String> _lowerTags;
@@ -83,10 +102,8 @@ class Note {
     bool? pinned,
     DateTime? updatedAt,
     List<String>? tags,
-    String? folderId,
-    String? color,
-    bool clearFolder = false,
-    bool clearColor = false,
+    Object? folderId = _unset,
+    Object? color = _unset,
   }) {
     return Note(
       id: id ?? this.id,
@@ -95,8 +112,9 @@ class Note {
       pinned: pinned ?? this.pinned,
       updatedAt: updatedAt ?? this.updatedAt,
       tags: tags ?? this.tags,
-      folderId: clearFolder ? null : (folderId ?? this.folderId),
-      color: clearColor ? null : (color ?? this.color),
+      folderId:
+          identical(folderId, _unset) ? this.folderId : folderId as String?,
+      color: identical(color, _unset) ? this.color : color as String?,
     );
   }
 
