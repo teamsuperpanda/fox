@@ -11,10 +11,10 @@ Contributions are welcome! Please follow these guidelines.
 
 ```bash
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
 ```
 
-> `*.g.dart` files are gitignored -- you must run code generation before building.
+> Hive adapters in `lib/models/` are handwritten. There is no `build_runner` step
+> and no `*.g.dart` files to generate.
 
 ## Running Tests
 
@@ -33,7 +33,10 @@ flutter test test/golden_test.dart
 flutter test test/golden_test.dart --update-goldens
 ```
 
-Golden test failures with small pixel diffs? Regenerate with `--update-goldens` and commit the new goldens.
+Golden test failures with small pixel diffs? Regenerate with `--update-goldens`
+and inspect the result. The generated images live in
+`assets/images/screenshots/`, which is gitignored and rebuilt on demand, so they
+are not committed.
 
 ## Architecture
 
@@ -67,18 +70,21 @@ This app supports 30+ languages via ARB files in `lib/l10n/`.
 
 ## Release Screenshots
 
-Store screenshots are auto-generated via golden tests. Run locally to preview:
+Store screenshots are generated from the golden tests. Run locally to preview
+and regenerate:
 
 ```bash
 flutter test test/golden_test.dart --update-goldens
 ```
 
-The `release_screenshots.yml` workflow copies generated goldens to Android/iOS Fastlane metadata on release commits. Generated images live in `assets/images/screenshots/`.
+The images are written to `assets/images/screenshots/`, which is gitignored and
+not committed. There is no release screenshot workflow; `ci.yml` is the only
+workflow in the repository.
 
 ## Pull Request Process
 
-1. Create a feature branch from `main`
+1. Create a feature branch from `v3`
 2. Make your changes
-3. Ensure `flutter analyze` and all tests pass
+3. Ensure `flutter analyze` and `flutter test --exclude-tags golden` pass
 4. Update tests if adding functionality
-5. Submit a PR with a clear description
+5. Submit a PR against `v3` with a clear description

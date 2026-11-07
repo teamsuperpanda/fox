@@ -2,10 +2,10 @@ name: CI
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ['main', 'v3']
     types: [opened, synchronize, reopened]
   push:
-    branches: ['main']
+    branches: ['main', 'v3']
 
 jobs:
   analyze_and_test:
@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Check documentation
+        run: bash tool/check_docs.sh
 
       - name: Cache Pub
         uses: actions/cache@v6
