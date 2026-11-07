@@ -155,6 +155,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get sortBy => 'इसके अनुसार क्रमबद्ध करें';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => 'तिथि (नवीनतम पहले)';
 
   @override

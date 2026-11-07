@@ -155,6 +155,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sortBy => 'Сортувати за';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => 'Дата (спочатку нові)';
 
   @override

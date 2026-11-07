@@ -28,6 +28,8 @@ void main() {
       expect(settingsService.getAlternatingColors(), isFalse);
       expect(settingsService.getFabAnimation(), isTrue);
       expect(settingsService.getSortBy(), 'dateDesc');
+      expect(settingsService.getSelectedFolderId(), isNull);
+      expect(settingsService.getFolderSorts(), isEmpty);
     });
 
     test('getThemeMode returns system by default', () {
@@ -147,6 +149,27 @@ void main() {
       expect(settingsService.getSortBy(), 'titleAsc');
     });
 
+    test('setSelectedFolderId persists and clears the folder filter', () async {
+      await settingsService.setSelectedFolderId('folder-1');
+      expect(settingsService.getSelectedFolderId(), 'folder-1');
+
+      await settingsService.setSelectedFolderId(null);
+      expect(settingsService.getSelectedFolderId(), isNull);
+    });
+
+    test('setFolderSort keeps an override per folder', () async {
+      await settingsService.setFolderSort('folder-1', 'titleAsc');
+      await settingsService.setFolderSort('folder-2', 'dateAsc');
+
+      expect(settingsService.getFolderSort('folder-1'), 'titleAsc');
+      expect(settingsService.getFolderSort('folder-2'), 'dateAsc');
+      expect(settingsService.getFolderSort('folder-3'), isNull);
+
+      await settingsService.clearFolderSort('folder-1');
+      expect(settingsService.getFolderSort('folder-1'), isNull);
+      expect(settingsService.getFolderSort('folder-2'), 'dateAsc');
+    });
+
     test('getShowTags returns true by default', () {
       expect(settingsService.getShowTags(), isTrue);
     });
@@ -165,6 +188,8 @@ void main() {
         alternatingColors: true,
         fabAnimation: false,
         sortBy: 'titleDesc',
+        selectedFolderId: 'folder-1',
+        folderSorts: const {'folder-1': 'titleAsc'},
       );
       final copy = s.copyWith();
       expect(copy.themeMode, s.themeMode);
@@ -174,6 +199,8 @@ void main() {
       expect(copy.alternatingColors, s.alternatingColors);
       expect(copy.fabAnimation, s.fabAnimation);
       expect(copy.sortBy, s.sortBy);
+      expect(copy.selectedFolderId, 'folder-1');
+      expect(copy.folderSorts, {'folder-1': 'titleAsc'});
     });
 
     test('Settings.copyWith clearLocale sets locale to null', () {

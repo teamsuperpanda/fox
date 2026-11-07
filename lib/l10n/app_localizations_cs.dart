@@ -156,6 +156,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get sortBy => 'Řadit podle';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => 'Datum (nejnovější)';
 
   @override

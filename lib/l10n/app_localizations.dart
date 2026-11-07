@@ -435,6 +435,12 @@ abstract class AppLocalizations {
   /// **'Sort By'**
   String get sortBy;
 
+  /// No description provided for @sortForFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by ({folder})'**
+  String sortForFolder(String folder);
+
   /// No description provided for @dateNewestFirst.
   ///
   /// In en, this message translates to:

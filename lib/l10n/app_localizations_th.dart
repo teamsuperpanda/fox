@@ -155,6 +155,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get sortBy => 'เรียงตาม';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => 'วันที่ (ใหม่สุดก่อน)';
 
   @override

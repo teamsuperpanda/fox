@@ -156,6 +156,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sortBy => 'Sắp xếp theo';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => 'Ngày (mới nhất)';
 
   @override

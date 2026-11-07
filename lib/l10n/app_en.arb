@@ -61,6 +61,14 @@
     }
   },
   "sortBy": "Sort By",
+  "sortForFolder": "Sort by ({folder})",
+  "@sortForFolder": {
+    "placeholders": {
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
   "dateNewestFirst": "Date (Newest First)",
   "dateOldestFirst": "Date (Oldest First)",
   "titleAZ": "Title (A-Z)",

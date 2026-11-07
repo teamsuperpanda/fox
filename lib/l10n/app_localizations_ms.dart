@@ -155,6 +155,11 @@ class AppLocalizationsMs extends AppLocalizations {
   String get sortBy => 'Isih mengikut';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => 'Tarikh (terbaharu dahulu)';
 
   @override
