@@ -179,6 +179,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get animateAddButton => 'Анимация кнопки добавления';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Без заголовка)';
 
   @override

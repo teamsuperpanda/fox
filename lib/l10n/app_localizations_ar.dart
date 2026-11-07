@@ -179,6 +179,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get animateAddButton => 'تحريك زر الإضافة';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(بدون عنوان)';
 
   @override

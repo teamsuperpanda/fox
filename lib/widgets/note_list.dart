@@ -114,6 +114,7 @@ class _NoteListTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final noteColor = parseHexColor(note.color);
     final trimmedText = note.plainText.trim();
+    final progress = note.checklistProgress;
     return Dismissible(
       key: ValueKey(note.id),
       // Deletion is handled inside confirmDismiss so Dismissible never removes
@@ -234,6 +235,28 @@ class _NoteListTile extends StatelessWidget {
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+                if (progress.total > 0) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.check_box_outlined,
+                        size: 14,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        l10n.checklistProgress(
+                          progress.done,
+                          progress.total,
+                        ),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                    ],
                   ),
                 ],
                 if (controller.showTags && note.tags.isNotEmpty) ...[

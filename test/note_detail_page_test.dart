@@ -163,6 +163,38 @@ void main() {
       expect(mockRepo.notes.length, 1);
     });
 
+    testWidgets('renders checklist items and keeps them on save',
+        (tester) async {
+      const content = '{"ops":['
+          '{"insert":"Milk"},'
+          r'{"insert":"\n","attributes":{"list":"checked"}},'
+          '{"insert":"Eggs"},'
+          r'{"insert":"\n","attributes":{"list":"unchecked"}}'
+          ']}';
+      final note = makeNote(
+        id: 'checklist',
+        title: 'Shopping',
+        content: content,
+      );
+      mockRepo.notes.add(note);
+      await controller.load();
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(existing: note, controller: controller)),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.byIcon(Icons.check_box), findsOneWidget);
+      expect(find.byIcon(Icons.check), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(mockRepo.notes.single.content, contains('"list":"checked"'));
+      expect(mockRepo.notes.single.content, contains('"list":"unchecked"'));
+    });
+
     testWidgets('pin button shows correct state', (tester) async {
       final note = makeNote(title: '');
 

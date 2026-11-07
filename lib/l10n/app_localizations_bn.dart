@@ -179,6 +179,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get animateAddButton => 'যোগ বোতাম অ্যানিমেট করুন';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(শিরোনামহীন)';
 
   @override

@@ -179,6 +179,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String get animateAddButton => 'Animuj przycisk dodawania';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Bez tytułu)';
 
   @override

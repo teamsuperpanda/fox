@@ -179,6 +179,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get animateAddButton => 'जोड़ें बटन एनिमेट करें';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(शीर्षकहीन)';
 
   @override

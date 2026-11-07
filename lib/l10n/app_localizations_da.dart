@@ -180,6 +180,11 @@ class AppLocalizationsDa extends AppLocalizations {
   String get animateAddButton => 'Animer tilføj-knap';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Uden titel)';
 
   @override

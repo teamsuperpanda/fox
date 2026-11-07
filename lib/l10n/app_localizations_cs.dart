@@ -180,6 +180,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get animateAddButton => 'Animovat tlačítko přidání';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Bez názvu)';
 
   @override

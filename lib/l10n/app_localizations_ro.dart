@@ -179,6 +179,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get animateAddButton => 'Animează butonul de adăugare';
 
   @override
+  String checklistProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
   String get untitled => '(Fără titlu)';
 
   @override

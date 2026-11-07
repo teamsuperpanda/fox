@@ -69,6 +69,17 @@
   "showNotePreviews": "Show Note Previews",
   "alternatingRowColors": "Alternating Row Colors",
   "animateAddButton": "Animate Add Button",
+  "checklistProgress": "{done} of {total} done",
+  "@checklistProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "untitled": "(Untitled)",
   "today": "Today",
   "language": "Language",
