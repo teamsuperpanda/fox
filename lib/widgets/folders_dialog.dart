@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
+import 'package:fox/widgets/input_counter.dart';
 
 /// A dialog that lets the user manage folders: create, rename, delete, and
 /// select a folder filter.
@@ -26,12 +28,18 @@ class _FoldersDialogState extends State<FoldersDialog> {
 
   Future<void> _addFolder() async {
     final name = _folderNameCtrl.text.trim();
-    if (name.isNotEmpty) {
-      await controller.addFolder(name);
-      if (!mounted) return;
-      _folderNameCtrl.clear();
-      setState(() {});
+    if (name.isEmpty) return;
+    final l10n = AppLocalizations.of(context);
+    if (name.characters.length > AppConstants.maxFolderNameLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.tooLong(AppConstants.maxFolderNameLength))),
+      );
+      return;
     }
+    await controller.addFolder(name);
+    if (!mounted) return;
+    _folderNameCtrl.clear();
+    setState(() {});
   }
 
   Future<void> _renameFolder(String id, String currentName) async {
@@ -45,6 +53,9 @@ class _FoldersDialogState extends State<FoldersDialog> {
           controller: renameCtrl,
           autofocus: true,
           decoration: InputDecoration(hintText: l10n.folderName),
+          maxLength: AppConstants.maxFolderNameLength,
+          maxLengthEnforcement: MaxLengthEnforcement.none,
+          buildCounter: inputCounter,
         ),
         actions: [
           TextButton(
@@ -127,6 +138,9 @@ class _FoldersDialogState extends State<FoldersDialog> {
                   ),
                 ),
                 onSubmitted: (_) => _addFolder(),
+                maxLength: AppConstants.maxFolderNameLength,
+                maxLengthEnforcement: MaxLengthEnforcement.none,
+                buildCounter: inputCounter,
               ),
               const SizedBox(height: 16),
               // "All Notes" option

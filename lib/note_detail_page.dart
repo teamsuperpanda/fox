@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
+import 'package:fox/widgets/input_counter.dart';
 
 class NoteDetailResult {
   const NoteDetailResult({this.changed = false, this.deleted = false});
@@ -207,6 +210,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       return;
     }
 
+    if (title.characters.length > AppConstants.maxTitleLength) {
+      _saving = false;
+      messenger?.showSnackBar(
+        SnackBar(
+          content: Text(l10n.tooLong(AppConstants.maxTitleLength)),
+          backgroundColor: errorColor,
+        ),
+      );
+      return;
+    }
+
     if (title.isNotEmpty && plainText.isEmpty) {
       messenger?.showSnackBar(
         SnackBar(
@@ -362,6 +376,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 ),
                 style: Theme.of(context).textTheme.headlineSmall,
                 autofocus: widget.existing?.title.isEmpty ?? true,
+                maxLength: AppConstants.maxTitleLength,
+                maxLengthEnforcement: MaxLengthEnforcement.none,
+                buildCounter: inputCounter,
               ),
             ),
             const Divider(height: 1),
@@ -452,6 +469,16 @@ class _TagsDialogState extends State<_TagsDialog> {
   String? _normalizeTag(String raw) {
     final normalized = raw.trim().toLowerCase();
     if (normalized.isEmpty || _tags.contains(normalized)) return null;
+    if (normalized.characters.length > AppConstants.maxTagLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).tooLong(AppConstants.maxTagLength),
+          ),
+        ),
+      );
+      return null;
+    }
     return normalized;
   }
 
@@ -489,6 +516,9 @@ class _TagsDialogState extends State<_TagsDialog> {
                 ),
               ),
               onSubmitted: _addTag,
+              maxLength: AppConstants.maxTagLength,
+              maxLengthEnforcement: MaxLengthEnforcement.none,
+              buildCounter: inputCounter,
             ),
             const SizedBox(height: 16),
             Wrap(

@@ -129,6 +129,42 @@ void main() {
       expect(controller.selectedFolderId, isNull);
     });
 
+    testWidgets('rejects a folder name over the limit', (tester) async {
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byType(TextField),
+        'a' * (AppConstants.maxFolderNameLength + 1),
+      );
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'Too long: maximum ${AppConstants.maxFolderNameLength} characters',
+        ),
+        findsOneWidget,
+      );
+      expect(controller.folders, isEmpty);
+    });
+
     testWidgets('tapping Unfiled sets unfiled filter', (tester) async {
       await tester.pumpWidget(
         buildTestApp(

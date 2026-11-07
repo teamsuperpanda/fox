@@ -215,6 +215,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String tooLong(int count) {
+    return 'Too long: maximum $count characters';
+  }
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).

@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/note_detail_page.dart';
+import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'test_helpers.dart';
 
@@ -139,6 +140,71 @@ void main() {
 
       expect(find.byType(NoteDetailPage), findsNothing);
       expect(mockRepo.notes.length, 0);
+    });
+
+    testWidgets('a title over the limit is not saved', (tester) async {
+      await controller.load();
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+
+      await tester.enterText(
+        find.byType(TextField).first,
+        'a' * (AppConstants.maxTitleLength + 1),
+      );
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+            'Too long: maximum ${AppConstants.maxTitleLength} characters'),
+        findsOneWidget,
+      );
+      expect(find.byType(NoteDetailPage), findsOneWidget);
+      expect(mockRepo.notes, isEmpty);
+    });
+
+    testWidgets('a pre-existing long title is shown and can be shortened',
+        (tester) async {
+      final longTitle = 'a' * (AppConstants.maxTitleLength + 50);
+      final note = makeNote(id: 'long', title: longTitle);
+      mockRepo.notes.add(note);
+      await controller.load();
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(existing: note, controller: controller)),
+      );
+
+      expect(find.text(longTitle), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField).first, 'Short title');
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(controller.find('long')?.title, 'Short title');
+    });
+
+    testWidgets('a tag over the limit is rejected', (tester) async {
+      await controller.load();
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+
+      await tester.tap(find.byIcon(Icons.label_outline));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byType(TextField).last,
+        'a' * (AppConstants.maxTagLength + 1),
+      );
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Too long: maximum ${AppConstants.maxTagLength} characters'),
+        findsOneWidget,
+      );
+      expect(find.byType(Chip), findsNothing);
     });
 
     testWidgets('shows error for empty title save', (tester) async {

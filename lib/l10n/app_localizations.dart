@@ -548,6 +548,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @tooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Too long: maximum {count} characters'**
+  String tooLong(int count);
 }
 
 class _AppLocalizationsDelegate

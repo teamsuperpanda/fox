@@ -213,6 +213,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String tooLong(int count) {
+    return 'Too long: maximum $count characters';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
