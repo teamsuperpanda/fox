@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+import 'package:fox/editor/quill_codec.dart';
 import 'package:fox/home_page.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/providers/locale_provider.dart';
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         ...AppLocalizations.localizationsDelegates,
-        FlutterQuillLocalizations.delegate,
+        ...quillLocalizationsDelegates,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       locale: localeProvider.locale,

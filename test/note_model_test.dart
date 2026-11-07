@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
 
@@ -138,27 +136,6 @@ void main() {
       expect(recreated.updatedAt, equals(note.updatedAt));
     });
 
-    test('document getter parses valid JSON content', () {
-      final document = note.document;
-      expect(document, isA<Document>());
-    });
-
-    test('document getter returns empty Document for empty content', () {
-      final emptyNote = note.copyWith(content: '');
-      final document = emptyNote.document;
-
-      expect(document, isA<Document>());
-      expect(document.isEmpty(), isTrue);
-    });
-
-    test('document getter handles corrupted JSON gracefully', () {
-      final corruptedNote = note.copyWith(content: '{invalid json}');
-      final document = corruptedNote.document;
-
-      expect(document, isA<Document>());
-      expect(document.isEmpty(), isTrue);
-    });
-
     test('plainText extracts text from document', () {
       final plainText = note.plainText;
       expect(plainText, isA<String>());
@@ -170,15 +147,6 @@ void main() {
 
       // Empty document returns newline by default in flutter_quill
       expect(plainText.trim(), equals(''));
-    });
-
-    test('documentToContent creates valid JSON string', () {
-      final doc = Document();
-      final content = Note.documentToContent(doc);
-
-      expect(content, isA<String>());
-      // Should be valid JSON that can be decoded
-      expect(() => jsonDecode(content), returnsNormally);
     });
 
     // --- copyWith sentinels ---
@@ -246,18 +214,16 @@ void main() {
 
     // --- document with ops wrapped in Map ---
 
-    test('document getter handles content with ops key', () {
+    test('plainText handles content with ops key', () {
       final n = note.copyWith(
         content: r'{"ops":[{"insert":"wrapped\n"}]}',
       );
-      final doc = n.document;
-      expect(doc.toPlainText(), contains('wrapped'));
+      expect(n.plainText, contains('wrapped'));
     });
 
-    test('document getter handles empty ops list', () {
+    test('plainText is empty for an empty ops list', () {
       final n = note.copyWith(content: '{"ops":[]}');
-      final doc = n.document;
-      expect(doc.isEmpty(), isTrue);
+      expect(n.plainText, '');
     });
   });
 }

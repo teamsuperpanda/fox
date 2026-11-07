@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+import 'package:fox/editor/quill_codec.dart';
 
 class Note {
   Note({
@@ -30,50 +29,16 @@ class Note {
   String get lowerTitle => _lowerTitle;
   List<String> get lowerTags => _lowerTags;
 
-  // Create content JSON from a Document
-  static String documentToContent(Document document) =>
-      jsonEncode(document.toDelta().toJson());
+  static const NoteContentCodec _codec = NoteContentCodec();
 
-  // Parse document with error handling - returns empty Document if JSON is corrupted
-  Document get document {
-    final ops = _decodeOps(content);
-    if (ops.isEmpty) return Document();
-    try {
-      return Document.fromJson(ops);
-    } catch (e) {
-      return Document(); // Fallback to empty document
-    }
-  }
-
-  // Get plain text from the Document for search/display.
+  // Get plain text from the stored content for search/display.
   // Computed lazily and cached after the first access.
   String get plainText {
     final cached = _plainText;
     if (cached != null) return cached;
-    final computed = _parsePlainText(content);
+    final computed = _codec.plainTextOf(content);
     _plainText = computed;
     return computed;
-  }
-
-  static String _parsePlainText(String content) {
-    final ops = _decodeOps(content);
-    if (ops.isEmpty) return '';
-    try {
-      return Document.fromJson(ops).toPlainText();
-    } catch (e) {
-      return '';
-    }
-  }
-
-  static List<dynamic> _decodeOps(String content) {
-    if (content.isEmpty) return const [];
-    try {
-      final decoded = jsonDecode(content);
-      final ops = decoded is Map ? decoded['ops'] ?? [] : decoded;
-      return ops is List ? ops : const [];
-    } catch (e) {
-      return const [];
-    }
   }
 
   Note copyWith({

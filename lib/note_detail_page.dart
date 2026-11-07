@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:fox/editor/quill_codec.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
@@ -31,6 +32,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   static const _snackBarDuration = Duration(seconds: 5);
   static const _heroTagDelete = 'delete';
   static const _heroTagSave = 'save';
+  static const _codec = NoteContentCodec();
 
   late final TextEditingController _titleCtrl;
   late QuillController _contentCtrl;
@@ -46,7 +48,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     super.initState();
     _titleCtrl = TextEditingController(text: widget.existing?.title ?? '');
     _contentCtrl = QuillController(
-      document: widget.existing?.document ?? Document(),
+      document: _codec.toDocument(widget.existing?.content ?? ''),
       selection: const TextSelection.collapsed(offset: 0),
     );
     _pinned = widget.existing?.pinned ?? false;
@@ -185,8 +187,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     final l10n = AppLocalizations.of(context);
 
     final title = _titleCtrl.text.trim();
-    final content = _contentCtrl.document;
-    final plainText = content.toPlainText().trim();
+    final content = _codec.fromDocument(_contentCtrl.document);
+    final plainText = content.plainText.trim();
 
     if (title.isEmpty && plainText.isEmpty && widget.existing == null) {
       messenger?.showSnackBar(
