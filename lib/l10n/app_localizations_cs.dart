@@ -143,6 +143,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get savingTitleOnly => 'Ukládání poznámky pouze s názvem';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Chyba při ukládání: $error';
   }

@@ -143,6 +143,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get savingTitleOnly => 'Gemmer note kun med titel';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Fejl ved lagring: $error';
   }

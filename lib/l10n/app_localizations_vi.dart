@@ -143,6 +143,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get savingTitleOnly => 'Lưu ghi chú chỉ có tiêu đề';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Lỗi khi lưu: $error';
   }

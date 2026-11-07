@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
@@ -5,6 +7,7 @@ import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
+import 'package:uuid/uuid.dart';
 
 class NoteDetailResult {
   const NoteDetailResult({this.changed = false, this.deleted = false});
@@ -27,10 +30,13 @@ class NoteDetailPage extends StatefulWidget {
   State<NoteDetailPage> createState() => _NoteDetailPageState();
 }
 
-class _NoteDetailPageState extends State<NoteDetailPage> {
+class _NoteDetailPageState extends State<NoteDetailPage>
+    with WidgetsBindingObserver {
   static const _snackBarDuration = Duration(seconds: 5);
+  static const _autosaveDebounce = Duration(milliseconds: 600);
   static const _heroTagDelete = 'delete';
   static const _heroTagSave = 'save';
+  static const Uuid _uuid = Uuid();
 
   late final TextEditingController _titleCtrl;
   late QuillController _contentCtrl;
@@ -39,11 +45,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   late List<String> _tags;
   late String? _folderId;
   late String? _color;
+  late final String _noteId;
+  Timer? _autosaveTimer;
+  bool _dirty = false;
+  bool _autoSaving = false;
+  bool _savedQuietly = false;
   bool _saving = false;
 
   @override
   void initState() {
     super.initState();
+    _noteId = widget.existing?.id ?? _uuid.v4();
     _titleCtrl = TextEditingController(text: widget.existing?.title ?? '');
     _contentCtrl = QuillController(
       document: widget.existing?.document ?? Document(),
@@ -54,13 +66,80 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     _tags = List.from(widget.existing?.tags ?? []);
     _folderId = widget.existing?.folderId;
     _color = widget.existing?.color;
+    _titleCtrl.addListener(_onEdited);
+    _contentCtrl.addListener(_onEdited);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    _autosaveTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     _titleCtrl.dispose();
     _contentCtrl.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _autosaveTimer?.cancel();
+      unawaited(_autosave());
+    }
+  }
+
+  void _onEdited() {
+    _dirty = true;
+    if (_savedQuietly) {
+      setState(() => _savedQuietly = false);
+    }
+    _scheduleAutosave();
+  }
+
+  void _scheduleAutosave() {
+    _autosaveTimer?.cancel();
+    _autosaveTimer = Timer(_autosaveDebounce, _autosave);
+  }
+
+  Future<bool> _persistNote() async {
+    final title = _titleCtrl.text.trim();
+    final content = _contentCtrl.document;
+    final plainText = content.toPlainText().trim();
+    if (title.isEmpty && plainText.isEmpty) return false;
+
+    await widget.controller.addOrUpdate(
+      id: _noteId,
+      title: title,
+      content: content,
+      pinned: _pinned,
+      tags: _tags,
+      folderId: _folderId,
+      color: _color,
+    );
+    _dirty = false;
+    return true;
+  }
+
+  Future<void> _autosave() async {
+    if (!_dirty || _saving) return;
+    if (_autoSaving) {
+      _scheduleAutosave();
+      return;
+    }
+
+    _autoSaving = true;
+    try {
+      final saved = await _persistNote();
+      if (saved && mounted && !_savedQuietly) {
+        setState(() => _savedQuietly = true);
+      }
+    } catch (_) {
+      // Keep the note dirty. The explicit save button surfaces the error.
+    } finally {
+      _autoSaving = false;
+    }
   }
 
   Future<void> _showTagsDialog() async {
@@ -178,6 +257,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   Future<void> _saveAndPop() async {
     if (_saving) return;
     _saving = true;
+    _autosaveTimer?.cancel();
 
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.maybeOf(context);
@@ -217,15 +297,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
 
     try {
-      await widget.controller.addOrUpdate(
-        id: widget.existing?.id,
-        title: title,
-        content: content,
-        pinned: _pinned,
-        tags: _tags,
-        folderId: _folderId,
-        color: _color,
-      );
+      await _persistNote();
       if (!mounted) return;
       navigator.pop(const NoteDetailResult(changed: true));
     } catch (e) {
@@ -266,6 +338,14 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             tooltip: l10n.back,
           ),
           actions: [
+            if (_savedQuietly)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Tooltip(
+                  message: l10n.saved,
+                  child: const Icon(Icons.check_circle_outline, size: 20),
+                ),
+              ),
             IconButton(
               tooltip: l10n.folder,
               icon: Icon(

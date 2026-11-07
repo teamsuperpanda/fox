@@ -142,6 +142,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get savingTitleOnly => 'Se salvează nota doar cu titlul';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Eroare la salvare: $error';
   }

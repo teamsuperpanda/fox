@@ -143,6 +143,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get savingTitleOnly => 'Sparar anteckning med enbart titel';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Fel vid sparning: $error';
   }

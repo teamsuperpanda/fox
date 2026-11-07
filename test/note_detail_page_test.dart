@@ -23,6 +23,16 @@ class FailingDeleteRepository extends MockRepository {
   }
 }
 
+class CountingRepository extends MockRepository {
+  int upsertCount = 0;
+
+  @override
+  Future<void> upsert(Note note) async {
+    upsertCount++;
+    await super.upsert(note);
+  }
+}
+
 class DelayedRepository extends MockRepository {
   final Completer<void> upsertCompleter = Completer<void>();
   final Completer<void> deleteCompleter = Completer<void>();
@@ -325,6 +335,115 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(NoteDetailPage), findsNothing);
+    });
+  });
+
+  group('NoteDetailPage - Autosave', () {
+    testWidgets('autosave persists a new note after the debounce', (
+      tester,
+    ) async {
+      final repo = CountingRepository();
+      final controller = NotesController(repo);
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Debounced');
+      await tester.pump(const Duration(milliseconds: 700));
+      await tester.pump();
+
+      expect(repo.upsertCount, 1);
+      expect(repo.notes, hasLength(1));
+      expect(repo.notes.single.title, 'Debounced');
+      expect(find.byTooltip(l10n.saved), findsOneWidget);
+    });
+
+    testWidgets('autosave fires once per debounce window', (tester) async {
+      final repo = CountingRepository();
+      final controller = NotesController(repo);
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+
+      final titleField = find.byType(TextField).first;
+      await tester.enterText(titleField, 'A');
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.enterText(titleField, 'AB');
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.enterText(titleField, 'ABC');
+      await tester.pump(const Duration(milliseconds: 700));
+      await tester.pump();
+
+      expect(repo.upsertCount, 1);
+      expect(repo.notes.single.title, 'ABC');
+    });
+
+    testWidgets('pausing the app flushes the open note', (tester) async {
+      final repo = CountingRepository();
+      final controller = NotesController(repo);
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Lifecycle Draft');
+      await tester.pump(const Duration(milliseconds: 100));
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await tester.pumpAndSettle();
+
+      expect(repo.upsertCount, 1);
+      expect(repo.notes.single.title, 'Lifecycle Draft');
+    });
+
+    testWidgets('autosaved note is restored by a fresh controller', (
+      tester,
+    ) async {
+      final repo = CountingRepository();
+      final controller = NotesController(repo);
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Crash Draft');
+      await tester.pump(const Duration(milliseconds: 700));
+      await tester.pump();
+
+      final relaunched = NotesController(repo);
+      await relaunched.load();
+
+      expect(relaunched.notes, hasLength(1));
+      expect(relaunched.notes.single.title, 'Crash Draft');
+    });
+
+    testWidgets('autosave plus save button does not duplicate the note', (
+      tester,
+    ) async {
+      final repo = CountingRepository();
+      final controller = NotesController(repo);
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Single Note');
+      await tester.pump(const Duration(milliseconds: 700));
+      await tester.pump();
+
+      expect(repo.notes, hasLength(1));
+
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
+      expect(repo.notes, hasLength(1));
+      expect(repo.notes.single.title, 'Single Note');
     });
   });
 }

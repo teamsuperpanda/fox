@@ -142,6 +142,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get savingTitleOnly => 'শুধু শিরোনাম সহ নোট সংরক্ষণ করা হচ্ছে';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'সংরক্ষণে ত্রুটি: $error';
   }

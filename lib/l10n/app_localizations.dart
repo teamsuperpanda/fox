@@ -417,6 +417,12 @@ abstract class AppLocalizations {
   /// **'Saving note with title only'**
   String get savingTitleOnly;
 
+  /// No description provided for @saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get saved;
+
   /// No description provided for @errorSavingNote.
   ///
   /// In en, this message translates to:

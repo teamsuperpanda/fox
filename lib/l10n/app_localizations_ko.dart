@@ -141,6 +141,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get savingTitleOnly => '제목만으로 노트 저장';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return '저장 오류: $error';
   }
