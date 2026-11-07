@@ -1,14 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/folder_adapter.dart';
 import 'package:hive/hive.dart';
 
+import 'test_helpers.dart';
+
 void main() {
   group('FolderAdapter', () {
     late FolderAdapter adapter;
+    late Directory hiveDir;
 
     setUp(() {
       adapter = FolderAdapter();
+      hiveDir = createHiveTestDir();
+    });
+
+    tearDown(() async {
+      await deleteHiveTestDir(hiveDir);
     });
 
     test('typeId is 4', () {
@@ -25,7 +35,7 @@ void main() {
     });
 
     test('round-trip write and read preserves data', () async {
-      Hive.init('./test/hive_folder_adapter_test');
+      Hive.init(hiveDir.path);
       if (!Hive.isAdapterRegistered(4)) {
         Hive.registerAdapter(FolderAdapter());
       }
@@ -50,7 +60,6 @@ void main() {
       expect(restored.createdAt, original.createdAt);
 
       await box.close();
-      await Hive.deleteFromDisk();
     });
   });
 }

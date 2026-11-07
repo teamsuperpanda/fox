@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
@@ -40,8 +42,28 @@ Widget buildTestApp(
   );
 }
 
-Future<void> hiveTestSetup(String dir) async {
-  Hive.init(dir);
+/// Creates a throwaway directory for a Hive test database.
+///
+/// Fixtures live in the system temp directory, never in the repository, so a
+/// test run can never modify or delete tracked files.
+Directory createHiveTestDir() =>
+    Directory.systemTemp.createTempSync('fox_hive_test_');
+
+/// Closes Hive, deletes its data from disk and removes [dir].
+///
+/// Only the directory this helper created is removed.
+Future<void> deleteHiveTestDir(Directory? dir) async {
+  await Hive.close();
+  await Hive.deleteFromDisk();
+  if (dir != null && dir.existsSync()) {
+    await dir.delete(recursive: true);
+  }
+}
+
+/// Opens the settings box in a fresh temp directory for [hiveTestTeardown].
+Future<void> hiveTestSetup() async {
+  hiveTestDir = createHiveTestDir();
+  Hive.init(hiveTestDir!.path);
   if (!Hive.isAdapterRegistered(2)) {
     Hive.registerAdapter(SettingsAdapter());
   }
@@ -49,9 +71,12 @@ Future<void> hiveTestSetup(String dir) async {
   await Hive.box<Settings>(BoxNames.settings).clear();
 }
 
+/// The temp directory created by the most recent [hiveTestSetup].
+Directory? hiveTestDir;
+
 Future<void> hiveTestTeardown() async {
-  await Hive.close();
-  await Hive.deleteFromDisk();
+  await deleteHiveTestDir(hiveTestDir);
+  hiveTestDir = null;
 }
 
 Note makeNote({

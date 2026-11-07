@@ -8,7 +8,7 @@ import 'test_helpers.dart';
 void main() {
   group('StorageService', () {
     setUp(() async {
-      await hiveTestSetup('./test/hive_storage_test');
+      await hiveTestSetup();
     });
 
     tearDown(() async {

@@ -35,6 +35,13 @@ flutter test test/golden_test.dart --update-goldens
 
 Golden test failures with small pixel diffs? Regenerate with `--update-goldens` and commit the new goldens.
 
+### Test fixtures
+
+Hive tests never write into the repository. `createHiveTestDir()` (in `test/test_helpers.dart`)
+makes a directory under the system temp directory, and `deleteHiveTestDir()` closes Hive, removes
+only that directory and leaves the tree untouched. CI runs `git status --porcelain` after the tests
+and fails if a test modified a tracked file.
+
 ## Architecture
 
 - `lib/data/` - Local persistence and data sources
