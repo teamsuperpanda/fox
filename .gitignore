@@ -58,3 +58,11 @@ test/failures/
 assets/images/screenshots/
 
 
+
+# Android release signing material -- never commit
+android/key.properties
+android/keystore.properties
+android/*.jks
+android/*.keystore
+*.jks
+*.keystore
