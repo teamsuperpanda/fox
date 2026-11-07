@@ -140,10 +140,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           setDialogState: setDialogState,
           title: l10n.showTags,
           value: widget.controller.showTags,
-          onChanged: (val) async {
-            widget.controller.setShowTags(val);
-            await widget.settingsService.setShowTags(val);
-          },
+          onChanged: (val) => widget.controller.setShowTags(val),
         ),
         _buildDivider(context),
         _prefSwitchTile(
@@ -151,10 +148,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           setDialogState: setDialogState,
           title: l10n.showNotePreviews,
           value: widget.controller.showContent,
-          onChanged: (val) async {
-            widget.controller.setShowContent(val);
-            await widget.settingsService.setShowContent(val);
-          },
+          onChanged: (val) => widget.controller.setShowContent(val),
         ),
         _buildDivider(context),
         _prefSwitchTile(
@@ -162,10 +156,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           setDialogState: setDialogState,
           title: l10n.alternatingRowColors,
           value: widget.controller.alternatingColors,
-          onChanged: (val) async {
-            widget.controller.setAlternatingColors(val);
-            await widget.settingsService.setAlternatingColors(val);
-          },
+          onChanged: (val) => widget.controller.setAlternatingColors(val),
         ),
         _buildDivider(context),
         _prefSwitchTile(
@@ -173,10 +164,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           setDialogState: setDialogState,
           title: l10n.animateAddButton,
           value: widget.controller.fabAnimation,
-          onChanged: (val) async {
-            widget.controller.setFabAnimation(val);
-            await widget.settingsService.setFabAnimation(val);
-          },
+          onChanged: (val) => widget.controller.setFabAnimation(val),
         ),
       ]),
     ];
@@ -212,6 +200,13 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
         setDialogState,
       ),
     ];
+  }
+
+  void _showSaveFailed(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+      SnackBar(content: Text(l10n.saveFailed)),
+    );
   }
 
   Widget _buildHandle(ColorScheme colorScheme) {
@@ -319,9 +314,9 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
       groupValue: widget.controller.sortBy,
       onChanged: (val) async {
         try {
-          widget.controller.setSortBy(val);
-          await widget.settingsService.setSortBy(val.name);
+          await widget.controller.setSortBy(val);
         } catch (e) {
+          if (context.mounted) _showSaveFailed(context);
           debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
         }
         setDialogState(() {});
@@ -344,6 +339,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
         try {
           await onChanged(val);
         } catch (e) {
+          if (context.mounted) _showSaveFailed(context);
           debugPrint('ViewOptionsSheet: failed to persist preference: $e');
         }
         setDialogState(() {});

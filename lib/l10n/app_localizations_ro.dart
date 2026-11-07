@@ -214,4 +214,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed =>
+      'Modificările nu au putut fi salvate. Încearcă din nou.';
 }

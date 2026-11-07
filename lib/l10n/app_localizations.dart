@@ -548,6 +548,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @saveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save your changes. Please try again.'**
+  String get saveFailed;
 }
 
 class _AppLocalizationsDelegate

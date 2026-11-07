@@ -214,4 +214,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed =>
+      'ไม่สามารถบันทึกการเปลี่ยนแปลงของคุณได้ โปรดลองอีกครั้ง';
 }

@@ -215,4 +215,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed =>
+      'Změny se nepodařilo uložit. Zkuste to prosím znovu.';
 }

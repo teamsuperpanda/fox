@@ -7,6 +7,12 @@ import 'package:hive/hive.dart';
 
 import 'test_helpers.dart';
 
+class _FailingSettingsService extends SettingsService {
+  @override
+  Future<void> save(Settings settings) =>
+      Future.error(StateError('write failed'));
+}
+
 void main() {
   group('SettingsService', () {
     late SettingsService settingsService;
@@ -28,6 +34,53 @@ void main() {
       expect(settingsService.getAlternatingColors(), isFalse);
       expect(settingsService.getFabAnimation(), isTrue);
       expect(settingsService.getSortBy(), 'dateDesc');
+    });
+
+    test('settings getter returns the whole stored value', () async {
+      await settingsService.save(
+        Settings(
+          themeMode: 'dark',
+          locale: 'fr',
+          showTags: false,
+          showContent: false,
+          alternatingColors: true,
+          fabAnimation: false,
+          sortBy: 'titleAsc',
+          accentColor: '#8B9A6B',
+        ),
+      );
+
+      final settings = settingsService.settings;
+      expect(settings.themeMode, 'dark');
+      expect(settings.locale, 'fr');
+      expect(settings.showTags, isFalse);
+      expect(settings.showContent, isFalse);
+      expect(settings.alternatingColors, isTrue);
+      expect(settings.fabAnimation, isFalse);
+      expect(settings.sortBy, 'titleAsc');
+      expect(settings.accentColor, '#8B9A6B');
+    });
+
+    test('save replaces the stored value in one write', () async {
+      await settingsService.save(Settings(themeMode: 'light'));
+      await settingsService.save(
+        Settings(themeMode: 'dark', showTags: false),
+      );
+
+      expect(settingsService.getThemeMode(), ThemeMode.dark);
+      expect(settingsService.getShowTags(), isFalse);
+      expect(settingsService.getLocale(), isNull);
+    });
+
+    test('a failed write propagates and keeps the old settings', () async {
+      final failing = _FailingSettingsService();
+
+      await expectLater(
+        failing.setShowTags(false),
+        throwsA(isA<StateError>()),
+      );
+
+      expect(failing.getShowTags(), isTrue);
     });
 
     test('getThemeMode returns system by default', () {

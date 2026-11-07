@@ -215,4 +215,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed => 'Dine ændringer kunne ikke gemmes. Prøv igen.';
 }

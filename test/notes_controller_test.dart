@@ -3,10 +3,18 @@ import 'dart:async';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/settings.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
+import 'package:fox/services/settings_service.dart';
 
 import 'test_helpers.dart';
+
+class _FailingSettingsService extends SettingsService {
+  @override
+  Future<void> save(Settings settings) =>
+      Future.error(StateError('write failed'));
+}
 
 class _FailingDeleteRepo extends MemoryRepo {
   bool failDeletes = false;
@@ -234,7 +242,7 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Zebra', content: Document());
       await controller.addOrUpdate(title: 'Apple', content: Document());
-      controller.setSortBy(SortBy.titleAsc);
+      await controller.setSortBy(SortBy.titleAsc);
       expect(controller.notes.map((n) => n.title), ['Apple', 'Zebra']);
     });
 
@@ -242,7 +250,7 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Apple', content: Document());
       await controller.addOrUpdate(title: 'Zebra', content: Document());
-      controller.setSortBy(SortBy.titleDesc);
+      await controller.setSortBy(SortBy.titleDesc);
       expect(controller.notes.map((n) => n.title), ['Zebra', 'Apple']);
     });
 
@@ -251,7 +259,7 @@ void main() {
       await controller.addOrUpdate(title: 'Old', content: Document());
       await Future<void>.delayed(const Duration(milliseconds: 5));
       await controller.addOrUpdate(title: 'New', content: Document());
-      controller.setSortBy(SortBy.dateAsc);
+      await controller.setSortBy(SortBy.dateAsc);
       expect(controller.notes.map((n) => n.title), ['Old', 'New']);
     });
 
@@ -355,7 +363,7 @@ void main() {
       await controller.load();
       var count = 0;
       controller.addListener(() => count++);
-      controller.setShowTags(false);
+      await controller.setShowTags(false);
       expect(controller.showTags, isFalse);
       expect(count, 1);
     });
@@ -364,7 +372,7 @@ void main() {
       await controller.load();
       var count = 0;
       controller.addListener(() => count++);
-      controller.setShowContent(false);
+      await controller.setShowContent(false);
       expect(controller.showContent, isFalse);
       expect(count, 1);
     });
@@ -373,7 +381,7 @@ void main() {
       await controller.load();
       var count = 0;
       controller.addListener(() => count++);
-      controller.setAlternatingColors(true);
+      await controller.setAlternatingColors(true);
       expect(controller.alternatingColors, isTrue);
       expect(count, 1);
     });
@@ -382,9 +390,50 @@ void main() {
       await controller.load();
       var count = 0;
       controller.addListener(() => count++);
-      controller.setFabAnimation(false);
+      await controller.setFabAnimation(false);
       expect(controller.fabAnimation, isFalse);
       expect(count, 1);
+    });
+
+    test('reads preferences from the settings service', () async {
+      final settings = SettingsService();
+      await settings.setSortBy('titleAsc');
+      await settings.setShowTags(false);
+      final controller = NotesController(
+        MockRepository(),
+        settingsRepository: settings,
+      );
+
+      expect(controller.sortBy, SortBy.titleAsc);
+      expect(controller.showTags, isFalse);
+    });
+
+    test('failed preference write surfaces and keeps the old value', () async {
+      final controller = NotesController(
+        MockRepository(),
+        settingsRepository: _FailingSettingsService(),
+      );
+      await controller.load();
+
+      await expectLater(
+        controller.setShowTags(false),
+        throwsA(isA<StateError>()),
+      );
+      expect(controller.showTags, isTrue);
+    });
+
+    test('failed sort write rolls back the view order', () async {
+      final controller = NotesController(
+        MockRepository(),
+        settingsRepository: _FailingSettingsService(),
+      );
+      await controller.load();
+
+      await expectLater(
+        controller.setSortBy(SortBy.titleAsc),
+        throwsA(isA<StateError>()),
+      );
+      expect(controller.sortBy, SortBy.dateDesc);
     });
 
     // --- Folder CRUD ---
@@ -534,9 +583,9 @@ void main() {
 
     test('sorting empty list does not crash', () async {
       await controller.load();
-      controller.setSortBy(SortBy.titleAsc);
+      await controller.setSortBy(SortBy.titleAsc);
       expect(controller.notes, isEmpty);
-      controller.setSortBy(SortBy.dateAsc);
+      await controller.setSortBy(SortBy.dateAsc);
       expect(controller.notes, isEmpty);
     });
 

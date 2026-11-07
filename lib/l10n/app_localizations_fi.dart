@@ -216,4 +216,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed => 'Muutoksiasi ei voitu tallentaa. Yritä uudelleen.';
 }

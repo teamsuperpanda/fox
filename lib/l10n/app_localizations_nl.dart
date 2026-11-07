@@ -216,4 +216,8 @@ class AppLocalizationsNl extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed =>
+      'Je wijzigingen konden niet worden opgeslagen. Probeer het opnieuw.';
 }

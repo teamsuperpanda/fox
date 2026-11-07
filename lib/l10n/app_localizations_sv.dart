@@ -215,4 +215,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed => 'Dina ändringar kunde inte sparas. Försök igen.';
 }

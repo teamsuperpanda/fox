@@ -214,4 +214,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get saveFailed =>
+      'आपके परिवर्तन सहेजे नहीं जा सके। कृपया पुनः प्रयास करें।';
 }
