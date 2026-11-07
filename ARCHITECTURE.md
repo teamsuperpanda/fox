@@ -171,6 +171,7 @@ None. This is a fully offline, local-first application with no network dependenc
 ## 9. Development & Testing
 
 - **Testing:** `flutter_test` for unit and widget tests (~28 test files). Golden screenshot tests for store listing. Integration smoke tests.
+- **Contract tests:** `test/repository_contract_test.dart` runs one suite against both `MemoryRepo` and `HiveNoteRepository`. `test/adapter_compat_test.dart` reads old v1 Hive payloads with the current adapters. `test/startup_failure_test.dart` covers the failure screen and retry.
 - **Linting:** `very_good_analysis` + `dart_code_linter`
 - **Localization:** ARB-based (`l10n.yaml`, 31 ARB files, 31 supported locales)
 - **CI Script:** `tool/ci_test.sh` runs `flutter test --exclude-tags golden`

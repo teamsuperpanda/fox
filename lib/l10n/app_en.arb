@@ -94,5 +94,6 @@
       }
     }
   },
-  "retry": "Retry"
+  "retry": "Retry",
+  "savePreferencesFailed": "Could not save your changes"
 }

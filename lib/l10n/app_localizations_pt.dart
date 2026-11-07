@@ -218,6 +218,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get savePreferencesFailed => 'Could not save your changes';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).

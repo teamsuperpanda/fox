@@ -15,11 +15,11 @@ class NoteAdapter extends TypeAdapter<Note> {
       fields[field] = reader.read();
     }
     return Note(
-      id: fields[0] as String,
+      id: fields[0] as String? ?? '',
       title: fields[1] as String? ?? '',
       content: fields[2] as String? ?? '',
       pinned: fields[3] as bool? ?? false,
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(fields[4] as int),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(fields[4] as int? ?? 0),
       tags: (fields[5] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
           const [],
       folderId: fields[6] as String?,

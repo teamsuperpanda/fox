@@ -17,7 +17,7 @@ class FolderAdapter extends TypeAdapter<Folder> {
     return Folder(
       id: fields[0] as String,
       name: fields[1] as String? ?? '',
-      createdAt: DateTime.fromMillisecondsSinceEpoch(fields[2] as int),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(fields[2] as int? ?? 0),
     );
   }
 

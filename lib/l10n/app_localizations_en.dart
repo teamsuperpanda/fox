@@ -217,4 +217,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get savePreferencesFailed => 'Could not save your changes';
 }

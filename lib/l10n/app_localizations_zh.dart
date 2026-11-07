@@ -216,6 +216,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get savePreferencesFailed => 'Could not save your changes';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

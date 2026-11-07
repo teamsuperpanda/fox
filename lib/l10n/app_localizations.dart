@@ -554,6 +554,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// No description provided for @savePreferencesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save your changes'**
+  String get savePreferencesFailed;
 }
 
 class _AppLocalizationsDelegate

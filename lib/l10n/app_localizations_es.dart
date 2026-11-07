@@ -218,6 +218,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get savePreferencesFailed => 'Could not save your changes';
 }
 
 /// The translations for Spanish Castilian, as used in Latin America and the Caribbean (`es_419`).
