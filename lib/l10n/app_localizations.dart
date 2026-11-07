@@ -548,6 +548,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate

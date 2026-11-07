@@ -216,4 +216,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Δοκιμάστε ξανά';
 }

@@ -1,121 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:fox/models/settings.dart';
-import 'package:fox/services/box_names.dart';
-import 'package:hive/hive.dart';
+import 'package:fox/services/repository_hive.dart';
+import 'package:fox/services/settings_store.dart';
 
+/// Persisted preferences.
+///
+/// Reads and writes go through the injected [SettingsStore]; the default is the
+/// Hive store from the repository layer, so this service never touches Hive
+/// directly.
 class SettingsService {
-  static const _key = 'app_settings';
+  SettingsService({SettingsStore? store})
+      : _store = store ?? HiveSettingsStore();
 
-  Settings _memory = Settings(themeMode: 'system');
+  final SettingsStore _store;
 
-  Box<Settings>? get _box {
+  Settings? _memory;
+
+  /// Latest value passed to [save] before the store write completes, so a
+  /// synchronous read straight after a write sees the new value.
+  Settings? _pending;
+
+  static final Settings _defaults = Settings(themeMode: 'system');
+
+  Settings get settings => _pending ?? _store.read() ?? _memory ?? _defaults;
+
+  Future<void> save(Settings settings) async {
+    _pending = settings;
     try {
-      if (!Hive.isBoxOpen(BoxNames.settings)) return null;
-      return Hive.box<Settings>(BoxNames.settings);
-    } catch (_) {
-      return null;
+      await _store.write(settings);
+      _memory = settings;
+    } finally {
+      if (identical(_pending, settings)) _pending = null;
     }
   }
 
-  Settings _get() => _box?.get(_key) ?? _memory;
+  ThemeMode getThemeMode() => settings.theme;
 
-  Future<void> _update(Settings Function(Settings) update) async {
-    final updated = update(_get());
-    final box = _box;
-    if (box != null) {
-      await box.put(_key, updated);
-    } else {
-      _memory = updated;
-    }
-  }
+  Future<void> setThemeMode(ThemeMode mode) =>
+      save(settings.copyWith(themeMode: mode.name));
 
-  dynamic _getValue(String key, {dynamic defaultValue}) {
-    final settings = _get();
-    return switch (key) {
-      'themeMode' => settings.themeMode,
-      'showTags' => settings.showTags,
-      'showContent' => settings.showContent,
-      'alternatingColors' => settings.alternatingColors,
-      'fabAnimation' => settings.fabAnimation,
-      'sortBy' => settings.sortBy,
-      'accentColor' => settings.accentColor,
-      'locale' => settings.locale,
-      _ => defaultValue,
-    };
-  }
+  bool getShowTags() => settings.showTags;
 
-  Future<void> _setValue(String key, dynamic value) async {
-    switch (key) {
-      case 'themeMode':
-        await _update((s) => s.copyWith(themeMode: value as String));
-      case 'showTags':
-        await _update((s) => s.copyWith(showTags: value as bool));
-      case 'showContent':
-        await _update((s) => s.copyWith(showContent: value as bool));
-      case 'alternatingColors':
-        await _update((s) => s.copyWith(alternatingColors: value as bool));
-      case 'fabAnimation':
-        await _update((s) => s.copyWith(fabAnimation: value as bool));
-      case 'sortBy':
-        await _update((s) => s.copyWith(sortBy: value as String));
-      case 'accentColor':
-        await _update((s) => value == null
-            ? s.copyWith(clearAccentColor: true)
-            : s.copyWith(accentColor: value as String));
-      case 'locale':
-        await _update((s) => value == null
-            ? s.copyWith(clearLocale: true)
-            : s.copyWith(locale: value as String));
-    }
-  }
+  Future<void> setShowTags(bool show) =>
+      save(settings.copyWith(showTags: show));
 
-  ThemeMode getThemeMode() => _get().theme;
+  bool getShowContent() => settings.showContent;
 
-  Future<void> setThemeMode(ThemeMode mode) async {
-    await _setValue('themeMode', mode.name);
-  }
+  Future<void> setShowContent(bool show) =>
+      save(settings.copyWith(showContent: show));
 
-  bool getShowTags() => _getValue('showTags', defaultValue: true) as bool;
+  bool getAlternatingColors() => settings.alternatingColors;
 
-  Future<void> setShowTags(bool show) async {
-    await _setValue('showTags', show);
-  }
+  Future<void> setAlternatingColors(bool value) =>
+      save(settings.copyWith(alternatingColors: value));
 
-  bool getShowContent() => _getValue('showContent', defaultValue: true) as bool;
+  bool getFabAnimation() => settings.fabAnimation;
 
-  Future<void> setShowContent(bool show) async {
-    await _setValue('showContent', show);
-  }
+  Future<void> setFabAnimation(bool value) =>
+      save(settings.copyWith(fabAnimation: value));
 
-  bool getAlternatingColors() =>
-      _getValue('alternatingColors', defaultValue: false) as bool;
+  String getSortBy() => settings.sortBy;
 
-  Future<void> setAlternatingColors(bool value) async {
-    await _setValue('alternatingColors', value);
-  }
+  Future<void> setSortBy(String value) =>
+      save(settings.copyWith(sortBy: value));
 
-  bool getFabAnimation() =>
-      _getValue('fabAnimation', defaultValue: true) as bool;
+  String? getAccentColor() => settings.accentColor;
 
-  Future<void> setFabAnimation(bool value) async {
-    await _setValue('fabAnimation', value);
-  }
+  Future<void> setAccentColor(String? value) => save(
+        value == null
+            ? settings.copyWith(clearAccentColor: true)
+            : settings.copyWith(accentColor: value),
+      );
 
-  String getSortBy() => _getValue('sortBy', defaultValue: 'dateDesc') as String;
+  String? getLocale() => settings.locale;
 
-  Future<void> setSortBy(String value) async {
-    await _setValue('sortBy', value);
-  }
-
-  String? getAccentColor() => _getValue('accentColor') as String?;
-
-  Future<void> setAccentColor(String? value) async {
-    await _setValue('accentColor', value);
-  }
-
-  String? getLocale() => _getValue('locale') as String?;
-
-  Future<void> setLocale(String? value) async {
-    await _setValue('locale', value);
-  }
+  Future<void> setLocale(String? value) => save(
+        value == null
+            ? settings.copyWith(clearLocale: true)
+            : settings.copyWith(locale: value),
+      );
 }

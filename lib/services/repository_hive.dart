@@ -1,6 +1,8 @@
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/settings.dart';
 import 'package:fox/services/box_names.dart';
+import 'package:fox/services/settings_store.dart';
 import 'package:hive/hive.dart';
 
 abstract class NoteAndFolderRepository {
@@ -76,5 +78,29 @@ class HiveNoteRepository implements NoteAndFolderRepository {
   @override
   Future<void> deleteFolder(String id) async {
     await _foldersBox.delete(id);
+  }
+}
+
+/// Hive-backed [SettingsStore]. All global Hive access for settings stays in
+/// the repository layer.
+class HiveSettingsStore implements SettingsStore {
+  static const _key = 'app_settings';
+
+  Box<Settings>? get _box {
+    try {
+      if (!Hive.isBoxOpen(BoxNames.settings)) return null;
+      return Hive.box<Settings>(BoxNames.settings);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Settings? read() => _box?.get(_key);
+
+  @override
+  Future<void> write(Settings settings) async {
+    final box = _box;
+    if (box != null) await box.put(_key, settings);
   }
 }

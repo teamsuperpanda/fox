@@ -59,5 +59,6 @@
   "startupError": "Fox başlatılırken bir sorun oluştu.\n\nUygulama verilerini temizlemeyi veya yeniden yüklemeyi deneyin.\n\nHata: {error}",  "note": "Not",
   "emptyNoteDiscarded": "Boş not atıldı",
 
-  "nativeName": "Türkçe"
+  "nativeName": "Türkçe",
+  "retry": "Tekrar dene"
 }

@@ -213,6 +213,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => '重试';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -404,4 +407,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get nativeName => '中文（繁體）';
+
+  @override
+  String get retry => '重試';
 }
