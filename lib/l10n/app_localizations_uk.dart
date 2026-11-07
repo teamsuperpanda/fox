@@ -142,6 +142,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get savingTitleOnly => 'Збереження нотатки лише з назвою';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return 'Помилка збереження: $error';
   }

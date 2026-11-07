@@ -141,6 +141,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get savingTitleOnly => 'タイトルのみでノートを保存';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String errorSavingNote(String error) {
     return '保存エラー: $error';
   }
