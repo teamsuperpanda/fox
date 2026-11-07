@@ -3,6 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/note_export.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
 
@@ -175,6 +176,63 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
   }
 
+  Note _draftNote() => Note(
+        id: widget.existing?.id ?? 'draft',
+        title: _titleCtrl.text.trim(),
+        content: Note.documentToContent(_contentCtrl.document),
+        pinned: _pinned,
+        updatedAt: DateTime.now(),
+        tags: _tags,
+        folderId: _folderId,
+        color: _color,
+      );
+
+  Future<void> _showShareOptions() async {
+    final l10n = AppLocalizations.of(context);
+    final format = await showDialog<NoteExportFormat>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l10n.shareNote),
+        children: [
+          SimpleDialogOption(
+            onPressed: () =>
+                Navigator.of(context).pop(NoteExportFormat.markdown),
+            child: Text(l10n.shareAsMarkdown),
+          ),
+          SimpleDialogOption(
+            onPressed: () =>
+                Navigator.of(context).pop(NoteExportFormat.plainText),
+            child: Text(l10n.shareAsPlainText),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.of(context).pop(NoteExportFormat.html),
+            child: Text(l10n.shareAsHtml),
+          ),
+        ],
+      ),
+    );
+    if (format == null || !mounted) return;
+
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final errorColor = Theme.of(context).colorScheme.error;
+    final size = MediaQuery.sizeOf(context);
+    final origin = Rect.fromCenter(
+      center: Offset(size.width / 2, size.height / 2),
+      width: 1,
+      height: 1,
+    );
+    try {
+      await shareNote(_draftNote(), format, sharePositionOrigin: origin);
+    } catch (e) {
+      messenger?.showSnackBar(
+        SnackBar(
+          content: Text(l10n.errorSharingNote(e.toString())),
+          backgroundColor: errorColor,
+        ),
+      );
+    }
+  }
+
   Future<void> _saveAndPop() async {
     if (_saving) return;
     _saving = true;
@@ -297,6 +355,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               tooltip: _pinned ? l10n.unpin : l10n.pin,
               icon: Icon(_pinned ? Icons.push_pin : Icons.push_pin_outlined),
               onPressed: () => setState(() => _pinned = !_pinned),
+            ),
+            IconButton(
+              tooltip: l10n.shareNote,
+              icon: const Icon(Icons.share_outlined),
+              onPressed: _showShareOptions,
             ),
           ],
         ),

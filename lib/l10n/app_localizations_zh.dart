@@ -141,6 +141,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get savingTitleOnly => '仅保存标题';
 
   @override
+  String get shareNote => 'Share note';
+
+  @override
+  String get shareAsMarkdown => 'Markdown (.md)';
+
+  @override
+  String get shareAsPlainText => 'Plain text (.txt)';
+
+  @override
+  String get shareAsHtml => 'HTML (.html)';
+
+  @override
+  String errorSharingNote(String error) {
+    return 'Could not share note: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return '保存出错：$error';
   }

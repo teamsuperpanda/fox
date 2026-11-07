@@ -142,6 +142,23 @@ class AppLocalizationsHi extends AppLocalizations {
   String get savingTitleOnly => 'केवल शीर्षक वाला नोट सहेजा जा रहा है';
 
   @override
+  String get shareNote => 'Share note';
+
+  @override
+  String get shareAsMarkdown => 'Markdown (.md)';
+
+  @override
+  String get shareAsPlainText => 'Plain text (.txt)';
+
+  @override
+  String get shareAsHtml => 'HTML (.html)';
+
+  @override
+  String errorSharingNote(String error) {
+    return 'Could not share note: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return 'सहेजने में त्रुटि: $error';
   }

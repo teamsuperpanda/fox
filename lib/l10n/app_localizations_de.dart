@@ -144,6 +144,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get savingTitleOnly => 'Notiz nur mit Titel speichern';
 
   @override
+  String get shareNote => 'Share note';
+
+  @override
+  String get shareAsMarkdown => 'Markdown (.md)';
+
+  @override
+  String get shareAsPlainText => 'Plain text (.txt)';
+
+  @override
+  String get shareAsHtml => 'HTML (.html)';
+
+  @override
+  String errorSharingNote(String error) {
+    return 'Could not share note: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return 'Fehler beim Speichern: $error';
   }

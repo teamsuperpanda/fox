@@ -44,6 +44,18 @@
   "note": "Note",
   "noteCannotBeEmpty": "Note cannot be empty",
   "savingTitleOnly": "Saving note with title only",
+  "shareNote": "Share note",
+  "shareAsMarkdown": "Markdown (.md)",
+  "shareAsPlainText": "Plain text (.txt)",
+  "shareAsHtml": "HTML (.html)",
+  "errorSharingNote": "Could not share note: {error}",
+  "@errorSharingNote": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "errorSavingNote": "Error saving note: {error}",
   "@errorSavingNote": {
     "placeholders": {

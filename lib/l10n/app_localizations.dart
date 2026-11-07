@@ -417,6 +417,36 @@ abstract class AppLocalizations {
   /// **'Saving note with title only'**
   String get savingTitleOnly;
 
+  /// No description provided for @shareNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Share note'**
+  String get shareNote;
+
+  /// No description provided for @shareAsMarkdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Markdown (.md)'**
+  String get shareAsMarkdown;
+
+  /// No description provided for @shareAsPlainText.
+  ///
+  /// In en, this message translates to:
+  /// **'Plain text (.txt)'**
+  String get shareAsPlainText;
+
+  /// No description provided for @shareAsHtml.
+  ///
+  /// In en, this message translates to:
+  /// **'HTML (.html)'**
+  String get shareAsHtml;
+
+  /// No description provided for @errorSharingNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not share note: {error}'**
+  String errorSharingNote(String error);
+
   /// No description provided for @errorSavingNote.
   ///
   /// In en, this message translates to:

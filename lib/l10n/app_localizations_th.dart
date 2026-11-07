@@ -142,6 +142,23 @@ class AppLocalizationsTh extends AppLocalizations {
   String get savingTitleOnly => 'บันทึกเฉพาะชื่อเรื่อง';
 
   @override
+  String get shareNote => 'Share note';
+
+  @override
+  String get shareAsMarkdown => 'Markdown (.md)';
+
+  @override
+  String get shareAsPlainText => 'Plain text (.txt)';
+
+  @override
+  String get shareAsHtml => 'HTML (.html)';
+
+  @override
+  String errorSharingNote(String error) {
+    return 'Could not share note: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return 'เกิดข้อผิดพลาดในการบันทึก: $error';
   }
