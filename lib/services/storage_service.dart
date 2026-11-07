@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/folder_adapter.dart';
 import 'package:fox/models/note.dart';

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 import 'package:flutter/widgets.dart';
 
 /// Convert a [Locale] to a storable string tag (e.g. Locale('pt', 'BR') → 'pt_BR').

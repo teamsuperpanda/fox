@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 class LocaleDisplayNames {
   static const Map<String, String> names = {
     'ar': 'العربية',

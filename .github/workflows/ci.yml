@@ -16,6 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Check licence attribution
+        run: bash tool/check_licenses.sh
+
       - name: Cache Pub
         uses: actions/cache@v6
         with:

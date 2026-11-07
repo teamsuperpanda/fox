@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';

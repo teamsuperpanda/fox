@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Team Super Panda Limited
+// SPDX-License-Identifier: MIT
+
 // Handwritten Hive TypeAdapter for Note to avoid build_runner.
 import 'package:fox/models/note.dart';
 import 'package:hive/hive.dart';
