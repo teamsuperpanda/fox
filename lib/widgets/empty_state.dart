@@ -26,15 +26,12 @@ class EmptyState extends StatelessWidget {
                   .withValues(alpha: 0.4),
             ),
             const SizedBox(height: 16),
-            Semantics(
-              label: isSearching ? l10n.noNotesMatchSearch : l10n.noNotesYet,
-              child: Text(
-                isSearching ? l10n.noNotesMatchSearch : l10n.noNotesYet,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
+            Text(
+              isSearching ? l10n.noNotesMatchSearch : l10n.noNotesYet,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
             ),
           ],
         ),

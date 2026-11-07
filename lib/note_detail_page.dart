@@ -86,33 +86,54 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             children: noteColorOptions.map((hex) {
               final isSelected = _color == hex;
               final displayColor = parseHexColor(hex);
-              return GestureDetector(
-                onTap: () {
-                  setState(() => _color = hex.isEmpty ? null : hex);
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: displayColor ??
-                        Theme.of(context).colorScheme.surfaceContainerHighest,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
-                      width: 3,
+              final checkColor = displayColor == null ||
+                      ThemeData.estimateBrightnessForColor(displayColor) ==
+                          Brightness.light
+                  ? Colors.black
+                  : Colors.white;
+              return Semantics(
+                button: true,
+                selected: isSelected,
+                label: hex.isEmpty ? l10n.noColour : l10n.noteColour,
+                child: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() => _color = hex.isEmpty ? null : hex);
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: displayColor ??
+                              Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.transparent,
+                            width: 3,
+                          ),
+                        ),
+                        child: hex.isEmpty
+                            ? Icon(
+                                Icons.block,
+                                size: 20,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              )
+                            : isSelected
+                                ? Icon(Icons.check, size: 20, color: checkColor)
+                                : null,
+                      ),
                     ),
                   ),
-                  child: hex.isEmpty
-                      ? Icon(Icons.block,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant)
-                      : isSelected
-                          ? const Icon(Icons.check,
-                              size: 20, color: Colors.white)
-                          : null,
                 ),
               );
             }).toList(),
@@ -311,6 +332,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               if (widget.existing != null)
                 FloatingActionButton(
                   heroTag: _heroTagDelete,
+                  tooltip: l10n.delete,
                   backgroundColor: Theme.of(context).colorScheme.error,
                   onPressed: () async {
                     final navigator = Navigator.of(context);
@@ -342,6 +364,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 ),
               FloatingActionButton(
                 heroTag: _heroTagSave,
+                tooltip: l10n.saveNote,
                 onPressed: _saveAndPop,
                 child: const Icon(Icons.save),
               ),
@@ -485,6 +508,7 @@ class _TagsDialogState extends State<_TagsDialog> {
                 hintText: l10n.newTag,
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.add),
+                  tooltip: l10n.newTag,
                   onPressed: () => _addTag(null),
                 ),
               ),

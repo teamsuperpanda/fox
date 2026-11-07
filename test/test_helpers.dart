@@ -17,6 +17,8 @@ Widget buildTestApp(
   ThemeMode themeMode = ThemeMode.system,
   Locale? locale,
   ThemeData? theme,
+  TextScaler? textScaler,
+  bool? disableAnimations,
 }) {
   return MultiProvider(
     providers: [
@@ -35,6 +37,15 @@ Widget buildTestApp(
       locale: locale,
       themeMode: themeMode,
       theme: theme,
+      builder: textScaler == null && disableAnimations == null
+          ? null
+          : (context, appChild) => MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: textScaler,
+                  disableAnimations: disableAnimations,
+                ),
+                child: appChild!,
+              ),
       home: child,
     ),
   );

@@ -53,13 +53,27 @@ class AppTheme {
         foregroundColor: bg,
       ),
       textTheme: ThemeData(brightness: brightness).textTheme,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: accent,
-        brightness: brightness,
-      ).copyWith(
-        secondary: secondary,
-        error: const Color(0xFFD9534F),
-      ),
+      colorScheme: _colorScheme(brightness, accent, secondary),
+    );
+  }
+
+  /// WCAG AA friendly error colours. The Material defaults derived from a
+  /// light seed can drop below 4.5:1 on our tinted backgrounds, so error and
+  /// onError are pinned to a pair that passes in both themes.
+  static ColorScheme _colorScheme(
+    Brightness brightness,
+    Color accent,
+    Color secondary,
+  ) {
+    final base = ColorScheme.fromSeed(
+      seedColor: accent,
+      brightness: brightness,
+    );
+    final isLight = brightness == Brightness.light;
+    return base.copyWith(
+      secondary: secondary,
+      error: isLight ? const Color(0xFFB3261E) : const Color(0xFFF2B8B5),
+      onError: isLight ? Colors.white : const Color(0xFF601410),
     );
   }
 }

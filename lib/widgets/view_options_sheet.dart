@@ -247,6 +247,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           ),
           IconButton(
             icon: const Icon(Icons.close),
+            tooltip: l10n.close,
             onPressed: () => Navigator.of(context).pop(),
             style: IconButton.styleFrom(
               backgroundColor:
@@ -260,7 +261,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, bottom: 8),
+      padding: const EdgeInsetsDirectional.only(start: 8, bottom: 8),
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -441,45 +442,53 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
           final isSelected = color.toARGB32() == currentColor.toARGB32();
           return Semantics(
             button: true,
+            selected: isSelected,
             label: l10n.accentColor,
-            child: GestureDetector(
-              onTap: () {
-                themeProvider.setAccentColor(color);
-                setDialogState(() {});
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: isSelected ? 42 : 36,
-                height: isSelected ? 42 : 36,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                  boxShadow: isSelected
-                      ? [
-                          BoxShadow(
-                            color: color.withValues(alpha: 0.4),
-                            blurRadius: 8,
-                            spreadRadius: 2,
-                          ),
-                        ]
-                      : null,
-                  border: isSelected
-                      ? Border.all(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          width: 2.5,
-                        )
-                      : null,
+            child: SizedBox(
+              width: 48,
+              height: 48,
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    themeProvider.setAccentColor(color);
+                    setDialogState(() {});
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: isSelected ? 42 : 36,
+                    height: isSelected ? 42 : 36,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: color.withValues(alpha: 0.4),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                              ),
+                            ]
+                          : null,
+                      border: isSelected
+                          ? Border.all(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              width: 2.5,
+                            )
+                          : null,
+                    ),
+                    child: isSelected
+                        ? Icon(
+                            Icons.check,
+                            size: 20,
+                            color:
+                                ThemeData.estimateBrightnessForColor(color) ==
+                                        Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black,
+                          )
+                        : null,
+                  ),
                 ),
-                child: isSelected
-                    ? Icon(
-                        Icons.check,
-                        size: 20,
-                        color: ThemeData.estimateBrightnessForColor(color) ==
-                                Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
-                      )
-                    : null,
               ),
             ),
           );

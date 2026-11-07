@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
   bool _isSearching = false;
+  bool _reduceMotion = false;
   final _searchController = TextEditingController();
   Timer? _searchDebounce;
 
@@ -63,10 +64,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // Kick off the FAB wiggle after the first frame so it doesn't block
     // pumpAndSettle in tests (a repeating animation never "settles").
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && controller.fabAnimation) {
-        _fabController.repeat(reverse: true);
-      }
+      if (mounted) _syncFabAnimation();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _reduceMotion = MediaQuery.disableAnimationsOf(context);
+    _syncFabAnimation();
   }
 
   @override
@@ -81,7 +87,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _onChanged() {
     if (!mounted) return;
-    if (controller.fabAnimation) {
+    _syncFabAnimation();
+  }
+
+  /// Runs the decorative FAB wiggle only when the user allows animation.
+  ///
+  /// `MediaQuery.disableAnimationsOf` is true when the platform asks for
+  /// reduced motion, and the view option switches it off independently.
+  void _syncFabAnimation() {
+    if (controller.fabAnimation && !_reduceMotion) {
       if (!_fabController.isAnimating) {
         _fabController.repeat(reverse: true);
       }
@@ -89,7 +103,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (_fabController.isAnimating) {
         _fabController.stop();
       }
-      // Force neutral position (0 degrees). Tween is -0.05 to 0.05. Neutral is 0.0, which is t=0.5
+      // Force neutral position (0 degrees). Tween is -0.05 to 0.05.
+      // Neutral is 0.0, which is t=0.5.
       _fabController.value = 0.5;
     }
   }
@@ -180,14 +195,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ? null
                 : Text(l10n.appTitle),
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: _toggleRotation,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: RotationTransition(
-              turns:
-                  Tween<double>(begin: 0, end: 1).animate(_animationController),
-              child: Image.asset('assets/images/icon/icon.png', cacheWidth: 64),
+        leading: Semantics(
+          button: true,
+          label: l10n.appTitle,
+          child: GestureDetector(
+            onTap: _toggleRotation,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(start: 16),
+              child: RotationTransition(
+                turns: Tween<double>(begin: 0, end: 1)
+                    .animate(_animationController),
+                child:
+                    Image.asset('assets/images/icon/icon.png', cacheWidth: 64),
+              ),
             ),
           ),
         ),
@@ -195,6 +215,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           if (_isSearching)
             IconButton(
               icon: const Icon(Icons.clear),
+              tooltip: l10n.clearSearch,
               onPressed: () {
                 _searchController.clear();
                 controller.setSearchTerm('');
@@ -202,63 +223,50 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               },
             )
           else
-            Semantics(
-              label: l10n.search,
-              child: AnimatedBuilder(
-                animation: controller,
-                builder: (context, _) => IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: !controller.hasNotes
-                      ? null
-                      : () {
-                          setState(() => _isSearching = true);
-                        },
-                ),
+            AnimatedBuilder(
+              animation: controller,
+              builder: (context, _) => IconButton(
+                icon: const Icon(Icons.search),
+                tooltip: l10n.search,
+                onPressed: !controller.hasNotes
+                    ? null
+                    : () {
+                        setState(() => _isSearching = true);
+                      },
               ),
             ),
-          Semantics(
-            label: l10n.folders,
-            child: IconButton(
-              icon: const Icon(Icons.folder_outlined),
-              onPressed: _showFoldersDialog,
-              tooltip: l10n.folders,
-            ),
+          IconButton(
+            icon: const Icon(Icons.folder_outlined),
+            onPressed: _showFoldersDialog,
+            tooltip: l10n.folders,
           ),
-          Semantics(
-            label: l10n.viewOptions,
-            child: IconButton(
-              icon: const Icon(Icons.tune),
-              onPressed: _showViewOptions,
-              tooltip: l10n.viewOptions,
-            ),
+          IconButton(
+            icon: const Icon(Icons.tune),
+            onPressed: _showViewOptions,
+            tooltip: l10n.viewOptions,
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Semantics(
-              label: l10n.toggleTheme,
-              child: IconButton(
-                icon: Icon(context.watch<ThemeProvider>().getThemeIcon()),
-                onPressed: () {
-                  unawaited(context.read<ThemeProvider>().toggleTheme());
-                },
-                tooltip: l10n.toggleTheme,
-              ),
+            padding: const EdgeInsetsDirectional.only(end: 16),
+            child: IconButton(
+              icon: Icon(context.watch<ThemeProvider>().getThemeIcon()),
+              onPressed: () {
+                unawaited(context.read<ThemeProvider>().toggleTheme());
+              },
+              tooltip: l10n.toggleTheme,
             ),
           ),
         ],
       ),
-      floatingActionButton: Semantics(
-        label: l10n.addNote,
-        child: AnimatedBuilder(
-          animation: _fabAnimation,
-          builder: (context, child) => Transform.rotate(
-            angle: _fabAnimation.value,
-            child: child,
-          ),
-          child: FloatingActionButton(
-            onPressed: _addNote,
-            child: const Icon(Icons.add),
-          ),
+      floatingActionButton: AnimatedBuilder(
+        animation: _fabAnimation,
+        builder: (context, child) => Transform.rotate(
+          angle: _fabAnimation.value,
+          child: child,
+        ),
+        child: FloatingActionButton(
+          onPressed: _addNote,
+          tooltip: l10n.addNote,
+          child: const Icon(Icons.add),
         ),
       ),
       body: AnimatedBuilder(
@@ -272,22 +280,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             children: [
               // Folder filter chip bar
               if (controller.selectedFolderId != null)
-                Semantics(
-                  label: l10n.folderFilter,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 4,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.folder,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.folder,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: 6),
+                      Flexible(
+                        child: Text(
                           controller.selectedFolderId ==
                                   AppConstants.unfiledFolderId
                               ? l10n.unfiled
@@ -295,6 +302,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     controller.selectedFolderId,
                                   ) ??
                                   l10n.unknown,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .labelLarge
@@ -302,20 +311,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
-                        const SizedBox(width: 4),
-                        IconButton(
-                          onPressed: () => controller.setSelectedFolder(null),
-                          icon: Icon(
-                            Icons.close,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          tooltip: l10n.clearFolderFilter,
+                      ),
+                      const SizedBox(width: 4),
+                      IconButton(
+                        onPressed: () => controller.setSelectedFolder(null),
+                        icon: Icon(
+                          Icons.close,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ],
-                    ),
+                        tooltip: l10n.clearFolderFilter,
+                      ),
+                    ],
                   ),
                 ),
               Expanded(

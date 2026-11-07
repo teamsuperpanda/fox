@@ -214,4 +214,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get addFolder => 'Add folder';
+
+  @override
+  String get folderActions => 'Folder actions';
+
+  @override
+  String get noColour => 'No colour';
+
+  @override
+  String get saveNote => 'Save note';
 }

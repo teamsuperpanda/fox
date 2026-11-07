@@ -548,6 +548,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
+
+  /// No description provided for @addFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add folder'**
+  String get addFolder;
+
+  /// No description provided for @folderActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder actions'**
+  String get folderActions;
+
+  /// No description provided for @noColour.
+  ///
+  /// In en, this message translates to:
+  /// **'No colour'**
+  String get noColour;
+
+  /// No description provided for @saveNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Save note'**
+  String get saveNote;
 }
 
 class _AppLocalizationsDelegate

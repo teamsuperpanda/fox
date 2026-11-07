@@ -93,9 +93,10 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "clearSearch": "Clear search",
+  "addFolder": "Add folder",
+  "folderActions": "Folder actions",
+  "noColour": "No colour",
+  "saveNote": "Save note"
 }
