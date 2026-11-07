@@ -141,6 +141,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get savingTitleOnly => '仅保存标题';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return '保存出错：$error';
   }

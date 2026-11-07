@@ -142,6 +142,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savingTitleOnly => 'Saving note with title only';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Error saving note: $error';
   }

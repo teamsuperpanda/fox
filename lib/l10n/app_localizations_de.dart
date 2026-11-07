@@ -144,6 +144,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get savingTitleOnly => 'Notiz nur mit Titel speichern';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Fehler beim Speichern: $error';
   }

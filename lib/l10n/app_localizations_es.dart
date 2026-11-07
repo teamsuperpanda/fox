@@ -143,6 +143,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get savingTitleOnly => 'Guardando nota solo con título';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Error al guardar nota: $error';
   }

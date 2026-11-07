@@ -142,6 +142,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get savingTitleOnly => 'Yalnızca başlıklı not kaydediliyor';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Kaydetme hatası: $error';
   }

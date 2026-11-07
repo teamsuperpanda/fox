@@ -142,6 +142,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get savingTitleOnly => 'केवल शीर्षक वाला नोट सहेजा जा रहा है';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'सहेजने में त्रुटि: $error';
   }

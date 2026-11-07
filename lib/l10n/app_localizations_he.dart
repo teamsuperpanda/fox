@@ -142,6 +142,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get savingTitleOnly => 'שומר פתק עם כותרת בלבד';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'שגיאה בשמירה: $error';
   }

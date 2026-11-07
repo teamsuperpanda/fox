@@ -144,6 +144,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get savingTitleOnly => 'Αποθήκευση σημείωσης μόνο με τίτλο';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Σφάλμα κατά την αποθήκευση: $error';
   }

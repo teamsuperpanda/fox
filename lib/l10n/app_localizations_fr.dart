@@ -145,6 +145,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Enregistrement de la note avec titre uniquement';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Erreur lors de l\'enregistrement : $error';
   }

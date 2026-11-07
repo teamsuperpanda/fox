@@ -142,6 +142,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get savingTitleOnly => 'Zapisywanie notatki tylko z tytułem';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Błąd zapisu: $error';
   }

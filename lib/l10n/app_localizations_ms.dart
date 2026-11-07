@@ -142,6 +142,9 @@ class AppLocalizationsMs extends AppLocalizations {
   String get savingTitleOnly => 'Menyimpan nota dengan tajuk sahaja';
 
   @override
+  String get saved => 'Saved';
+
+  @override
   String errorSavingNote(String error) {
     return 'Ralat semasa menyimpan: $error';
   }
