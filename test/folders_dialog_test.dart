@@ -129,6 +129,38 @@ void main() {
       expect(controller.selectedFolderId, isNull);
     });
 
+    testWidgets('announces each folder name once', (tester) async {
+      await controller.addFolder('Work');
+      final semantics = tester.ensureSemantics();
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      final labels = collectSemanticsLabels(tester, find.byType(AlertDialog));
+      expect(labels.where((label) => label.contains('Work')), hasLength(1));
+      expect(
+          labels.where((label) => label.contains('All Notes')), hasLength(1));
+      // The hardcoded English "Folder: ..." label must be gone.
+      expect(labels.where((label) => label.startsWith('Folder:')), isEmpty);
+
+      semantics.dispose();
+    });
+
     testWidgets('tapping Unfiled sets unfiled filter', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
