@@ -48,3 +48,20 @@ jobs:
 
       - name: Run tests
         run: flutter test --coverage --exclude-tags golden
+
+      - name: Coverage gate (app code only, floor 55%)
+        run: tool/coverage_gate.sh coverage/lcov.info
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/lcov.app.info
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/lcov.app.info
+          fail_ci_if_error: false
