@@ -93,9 +93,7 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "retry": "Retry",
+  "savePreferencesFailed": "Could not save your changes"
 }

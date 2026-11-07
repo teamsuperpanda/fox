@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/services/box_names.dart';
@@ -12,12 +13,21 @@ abstract class NoteAndFolderRepository {
   Future<List<Folder>> getAllFolders();
   Future<void> upsertFolder(Folder folder);
   Future<void> deleteFolder(String id);
+
+  /// Records that could not be decoded and were skipped by the last read.
+  /// Always zero for in-memory repositories.
+  int get unreadableRecords => 0;
 }
 
 class HiveNoteRepository implements NoteAndFolderRepository {
   HiveNoteRepository._();
   Box<Note> get _box => Hive.box<Note>(BoxNames.notes);
   Box<Folder> get _foldersBox => Hive.box<Folder>(BoxNames.folders);
+
+  int _unreadable = 0;
+
+  @override
+  int get unreadableRecords => _unreadable;
 
   static HiveNoteRepository create() {
     return HiveNoteRepository._();
@@ -31,9 +41,22 @@ class HiveNoteRepository implements NoteAndFolderRepository {
     }
   }
 
+  /// Reads every record individually. One truncated or wrong-typed record is
+  /// skipped and counted instead of aborting the whole load.
   @override
   Future<List<Note>> getAll() async {
-    return _box.values.toList();
+    _unreadable = 0;
+    final notes = <Note>[];
+    for (final key in _box.keys) {
+      try {
+        final note = _box.get(key);
+        if (note != null) notes.add(note);
+      } catch (e) {
+        _unreadable++;
+        debugPrint('HiveNoteRepository: unreadable note "$key": $e');
+      }
+    }
+    return notes;
   }
 
   @override
@@ -56,7 +79,12 @@ class HiveNoteRepository implements NoteAndFolderRepository {
   }
 
   Future<Note?> getById(String id) async {
-    return _box.get(id);
+    try {
+      return _box.get(id);
+    } catch (e) {
+      debugPrint('HiveNoteRepository: unreadable note "$id": $e');
+      return null;
+    }
   }
 
   Future<void> clear() async {
@@ -65,7 +93,17 @@ class HiveNoteRepository implements NoteAndFolderRepository {
 
   @override
   Future<List<Folder>> getAllFolders() async {
-    return _foldersBox.values.toList();
+    final folders = <Folder>[];
+    for (final key in _foldersBox.keys) {
+      try {
+        final folder = _foldersBox.get(key);
+        if (folder != null) folders.add(folder);
+      } catch (e) {
+        _unreadable++;
+        debugPrint('HiveNoteRepository: unreadable folder "$key": $e');
+      }
+    }
+    return folders;
   }
 
   @override

@@ -99,6 +99,8 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 - `folders_db` — Folder objects (UUID key, name, timestamps)
 - `settings_db` — Single Settings object (theme, locale, view preferences, sort, accent color)
 
+**Startup resilience:** `StorageService.init` opens `notes_db` and `folders_db` before `settings_db`; a settings failure falls back to in-memory defaults. Every record is decoded individually, so one corrupt entry is skipped and counted (`NotesController.unreadableNotes`) instead of aborting the load. A failed init leaves the service uninitialised, and `FoxRoot` re-runs the whole startup from the failure screen's Retry button.
+
 ### 3.3. Rich Text Editor
 
 **Name:** Flutter Quill Integration
@@ -169,6 +171,7 @@ None. This is a fully offline, local-first application with no network dependenc
 ## 9. Development & Testing
 
 - **Testing:** `flutter_test` for unit and widget tests (~28 test files). Golden screenshot tests for store listing. Integration smoke tests.
+- **Contract tests:** `test/repository_contract_test.dart` runs one suite against both `MemoryRepo` and `HiveNoteRepository`. `test/adapter_compat_test.dart` reads old v1 Hive payloads with the current adapters. `test/startup_failure_test.dart` covers the failure screen and retry.
 - **Linting:** `very_good_analysis` + `dart_code_linter`
 - **Localization:** ARB-based (`l10n.yaml`, 31 ARB files, 31 supported locales)
 - **CI Script:** `tool/ci_test.sh` runs `flutter test --exclude-tags golden`

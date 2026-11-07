@@ -306,6 +306,17 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
     );
   }
 
+  /// A failed write is user visible: the preference was still applied in
+  /// memory, so say it could not be saved rather than swallowing the error.
+  void _reportSaveFailure(BuildContext context, Exception error) {
+    debugPrint('ViewOptionsSheet: failed to persist preference: $error');
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context).savePreferencesFailed),
+      ),
+    );
+  }
+
   Widget _sortRadioTile(
     BuildContext context,
     StateSetter setDialogState,
@@ -321,8 +332,8 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
         try {
           widget.controller.setSortBy(val);
           await widget.settingsService.setSortBy(val.name);
-        } catch (e) {
-          debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
+        } on Exception catch (e) {
+          if (context.mounted) _reportSaveFailure(context, e);
         }
         setDialogState(() {});
       },
@@ -343,8 +354,8 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
       onChanged: (val) async {
         try {
           await onChanged(val);
-        } catch (e) {
-          debugPrint('ViewOptionsSheet: failed to persist preference: $e');
+        } on Exception catch (e) {
+          if (context.mounted) _reportSaveFailure(context, e);
         }
         setDialogState(() {});
       },
