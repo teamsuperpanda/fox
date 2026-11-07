@@ -260,4 +260,68 @@ void main() {
       expect(doc.isEmpty(), isTrue);
     });
   });
+
+  group('Note content status', () {
+    Note withContent(String content) => Note(
+          id: 'broken-id',
+          title: 'Title',
+          content: content,
+          pinned: false,
+          updatedAt: DateTime(2025, 11, 14),
+        );
+
+    test('valid delta is parseable', () {
+      final n = withContent(r'{"ops":[{"insert":"Hello\n"}]}');
+      expect(n.contentStatus, NoteContentStatus.valid);
+      expect(n.plainText, 'Hello\n');
+    });
+
+    test('empty content variants are empty', () {
+      expect(withContent('').contentStatus, NoteContentStatus.empty);
+      expect(withContent('{}').contentStatus, NoteContentStatus.empty);
+      expect(withContent('{"ops":[]}').contentStatus, NoteContentStatus.empty);
+      expect(withContent('[]').contentStatus, NoteContentStatus.empty);
+    });
+
+    test('truncated JSON is unparseable and is not blanked', () {
+      final n = withContent('{"ops":[{"insert":"Truncated');
+      expect(n.contentStatus, NoteContentStatus.unparseable);
+      expect(n.document.isEmpty(), isTrue);
+      expect(n.plainText, isEmpty);
+      expect(n.searchableText, contains('Truncated'));
+      expect(n.content, '{"ops":[{"insert":"Truncated');
+    });
+
+    test('non-list JSON is unparseable', () {
+      expect(
+        withContent('{"ops":"not-a-list"}').contentStatus,
+        NoteContentStatus.unparseable,
+      );
+      expect(withContent('"a string"').contentStatus,
+          NoteContentStatus.unparseable);
+      expect(withContent('{"foo":"bar"}').contentStatus,
+          NoteContentStatus.unparseable);
+      expect(withContent('null').contentStatus, NoteContentStatus.unparseable);
+    });
+
+    test('malformed unknown embeds are unparseable', () {
+      expect(
+        withContent(
+          r'{"ops":[{"insert":{"image":"a","video":"b"}},{"insert":"\n"}]}',
+        ).contentStatus,
+        NoteContentStatus.unparseable,
+      );
+      expect(
+        withContent(r'{"ops":[{"insert":{}},{"insert":"\n"}]}').contentStatus,
+        NoteContentStatus.unparseable,
+      );
+    });
+
+    test('a single-key unknown embed is preserved as valid', () {
+      final n = withContent(
+        r'{"ops":[{"insert":{"custom":"payload"}},{"insert":"\n"}]}',
+      );
+      expect(n.contentStatus, NoteContentStatus.valid);
+    });
+  });
 }

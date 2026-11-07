@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/l10n/app_localizations.dart';
@@ -325,6 +326,71 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(NoteDetailPage), findsNothing);
+    });
+
+    testWidgets('unparseable note opens a read-only broken state',
+        (tester) async {
+      const raw = '{"ops":[{"insert":"truncated';
+      final broken = makeNote(id: 'broken', title: 'Garbled', content: raw);
+      mockRepo.notes.add(broken);
+      await controller.load();
+
+      await tester.pumpWidget(
+        buildTestApp(
+          NoteDetailPage(existing: broken, controller: controller),
+        ),
+      );
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
+      );
+
+      expect(find.text(l10n.brokenNoteTitle), findsOneWidget);
+      expect(find.text(raw), findsOneWidget);
+      expect(find.byIcon(Icons.save), findsNothing);
+      expect(find.byIcon(Icons.text_format), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NoteDetailPage), findsNothing);
+      expect(mockRepo.notes.single.content, raw);
+    });
+
+    testWidgets('broken state can copy the raw content', (tester) async {
+      const raw = 'not a delta at all';
+      final broken = makeNote(id: 'broken', title: 'Garbled', content: raw);
+      mockRepo.notes.add(broken);
+      await controller.load();
+
+      final calls = <MethodCall>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          calls.add(call);
+          return null;
+        },
+      );
+      addTearDown(() {
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        );
+      });
+
+      await tester.pumpWidget(
+        buildTestApp(
+          NoteDetailPage(existing: broken, controller: controller),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.copy));
+      await tester.pump();
+
+      final copyCall = calls.firstWhere(
+        (call) => call.method == 'Clipboard.setData',
+      );
+      expect((copyCall.arguments as Map)['text'], raw);
+      expect(mockRepo.notes.single.content, raw);
     });
   });
 }

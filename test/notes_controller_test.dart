@@ -210,6 +210,46 @@ void main() {
       expect(controller.notes.length, 3);
     });
 
+    test('search matches raw content of unparseable notes', () async {
+      await controller.load();
+      await repo.upsert(
+        makeNote(
+          id: 'broken',
+          title: 'Garbled',
+          content: '{"ops":[{"insert":"needle in raw text"',
+        ),
+      );
+      await controller.load();
+
+      expect(controller.brokenNotes, hasLength(1));
+
+      controller.setSearchTerm('needle');
+      expect(controller.notes, hasLength(1));
+      expect(controller.notes.single.title, 'Garbled');
+
+      controller.setSearchTerm('');
+    });
+
+    test('addOrUpdate refuses to overwrite unparseable content', () async {
+      await controller.load();
+      await repo.upsert(
+        makeNote(id: 'broken', title: 'Garbled', content: '{"broken":'),
+      );
+      await controller.load();
+
+      await expectLater(
+        controller.addOrUpdate(
+          id: 'broken',
+          title: 'Garbled',
+          content: Document(),
+        ),
+        throwsStateError,
+      );
+
+      final stored = await repo.getAll();
+      expect(stored.single.content, '{"broken":');
+    });
+
     test('search filters notes by tags', () async {
       await controller.load();
       await controller.addOrUpdate(

@@ -83,5 +83,25 @@ void main() {
 
       expect(find.byIcon(Icons.tune), findsOneWidget);
     });
+
+    testWidgets('repair action lists unparseable notes', (tester) async {
+      await controller.load();
+      await mockRepo.upsert(
+        makeNote(id: 'broken', title: 'Garbled', content: '{"broken":'),
+      );
+      await controller.load();
+
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.report_outlined), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.report_outlined));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Repair notes'), findsOneWidget);
+      expect(find.text('Garbled'), findsWidgets);
+    });
   });
 }

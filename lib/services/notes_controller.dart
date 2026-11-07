@@ -48,6 +48,13 @@ class NotesController extends ChangeNotifier {
 
   bool get hasNotes => _unfilteredNotes.isNotEmpty;
 
+  List<Note> get allNotes => List.unmodifiable(_unfilteredNotes);
+
+  /// Notes whose stored content cannot be parsed and must not be overwritten.
+  List<Note> get brokenNotes => _unfilteredNotes
+      .where((note) => note.contentStatus == NoteContentStatus.unparseable)
+      .toList();
+
   Note? _lastRemovedNote;
   Note? get lastRemovedNote => _lastRemovedNote;
 
@@ -195,6 +202,15 @@ class NotesController extends ChangeNotifier {
           'Note cannot be empty - title and content are both blank');
     }
 
+    final existing = id == null
+        ? null
+        : _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    if (existing?.contentStatus == NoteContentStatus.unparseable) {
+      throw StateError(
+        'Cannot overwrite unparseable note content. Copy the raw data first.',
+      );
+    }
+
     final note = Note(
       id: id ?? _uuid.v4(),
       title: trimmedTitle,
@@ -270,7 +286,7 @@ class NotesController extends ChangeNotifier {
       copy.retainWhere(
         (note) =>
             note.lowerTitle.contains(term) ||
-            note.plainText.toLowerCase().contains(term) ||
+            note.searchableText.toLowerCase().contains(term) ||
             note.lowerTags.any((t) => t.contains(term)),
       );
     }

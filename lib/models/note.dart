@@ -2,6 +2,19 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
+/// Whether a note's stored Delta JSON can be read back into an editor.
+enum NoteContentStatus {
+  /// A valid Quill Delta that can be opened and edited.
+  valid,
+
+  /// No content, or an empty Delta.
+  empty,
+
+  /// Content that cannot be parsed. It must never be replaced by an empty
+  /// document.
+  unparseable,
+}
+
 class Note {
   Note({
     required this.id,
@@ -24,6 +37,7 @@ class Note {
   final String? color; // Hex string e.g. '#FF5252'
 
   String? _plainText;
+  NoteContentStatus? _contentStatus;
   final String _lowerTitle;
   final List<String> _lowerTags;
 
@@ -34,14 +48,81 @@ class Note {
   static String documentToContent(Document document) =>
       jsonEncode(document.toDelta().toJson());
 
-  // Parse document with error handling - returns empty Document if JSON is corrupted
-  Document get document {
-    final ops = _decodeOps(content);
-    if (ops.isEmpty) return Document();
+  /// The parse state of [content]. Cached after the first access.
+  NoteContentStatus get contentStatus {
+    final cached = _contentStatus;
+    if (cached != null) return cached;
+    final status = _classifyContent(content);
+    _contentStatus = status;
+    if (status == NoteContentStatus.unparseable) {
+      // Note id only, never the content.
+      debugPrint('Fox: unparseable note content (note $id)');
+    }
+    return status;
+  }
+
+  /// Text used by search. Unparseable notes fall back to the raw stored
+  /// content so they stay findable instead of disappearing from search.
+  String get searchableText =>
+      contentStatus == NoteContentStatus.unparseable ? content : plainText;
+
+  static NoteContentStatus _classifyContent(String content) {
+    final trimmed = content.trim();
+    if (trimmed.isEmpty) return NoteContentStatus.empty;
+
+    final Object? decoded;
     try {
-      return Document.fromJson(ops);
-    } catch (e) {
-      return Document(); // Fallback to empty document
+      decoded = jsonDecode(trimmed);
+    } catch (_) {
+      return NoteContentStatus.unparseable;
+    }
+
+    final List<dynamic> ops;
+    if (decoded is List) {
+      ops = decoded;
+    } else if (decoded is Map) {
+      if (!decoded.containsKey('ops')) {
+        return decoded.isEmpty
+            ? NoteContentStatus.empty
+            : NoteContentStatus.unparseable;
+      }
+      final rawOps = decoded['ops'];
+      if (rawOps is! List) return NoteContentStatus.unparseable;
+      ops = rawOps;
+    } else {
+      return NoteContentStatus.unparseable;
+    }
+
+    if (ops.isEmpty) return NoteContentStatus.empty;
+    if (!ops.every(_isValidOp)) return NoteContentStatus.unparseable;
+
+    try {
+      Document.fromJson(ops);
+      return NoteContentStatus.valid;
+    } catch (_) {
+      return NoteContentStatus.unparseable;
+    }
+  }
+
+  static bool _isValidOp(Object? op) {
+    if (op is! Map) return false;
+    final insert = op['insert'];
+    if (insert is String) return true;
+    if (insert is Map) {
+      // A single string key identifies an embed. Anything else is malformed.
+      return insert.length == 1 && insert.keys.single is String;
+    }
+    return false;
+  }
+
+  /// Parses the content. Returns an empty document for empty or unparseable
+  /// content; callers that write back must check [contentStatus] first.
+  Document get document {
+    if (contentStatus != NoteContentStatus.valid) return Document();
+    try {
+      return Document.fromJson(_decodeOps(content));
+    } catch (_) {
+      return Document();
     }
   }
 
@@ -50,7 +131,9 @@ class Note {
   String get plainText {
     final cached = _plainText;
     if (cached != null) return cached;
-    final computed = _parsePlainText(content);
+    final computed = contentStatus == NoteContentStatus.valid
+        ? _parsePlainText(content)
+        : '';
     _plainText = computed;
     return computed;
   }

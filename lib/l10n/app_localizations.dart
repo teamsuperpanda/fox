@@ -411,6 +411,48 @@ abstract class AppLocalizations {
   /// **'Note cannot be empty'**
   String get noteCannotBeEmpty;
 
+  /// No description provided for @brokenNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This note could not be opened'**
+  String get brokenNoteTitle;
+
+  /// No description provided for @brokenNoteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The saved content is not valid rich text. It is shown exactly as stored below and Fox will not overwrite it.'**
+  String get brokenNoteMessage;
+
+  /// No description provided for @copyRawContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy raw content'**
+  String get copyRawContent;
+
+  /// No description provided for @rawContentCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw content copied'**
+  String get rawContentCopied;
+
+  /// No description provided for @repairNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair notes'**
+  String get repairNotes;
+
+  /// No description provided for @repairNotesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'These notes contain content Fox cannot read. Copy the raw data out before deleting them.'**
+  String get repairNotesMessage;
+
+  /// No description provided for @noBrokenNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'No notes need repair'**
+  String get noBrokenNotes;
+
   /// No description provided for @savingTitleOnly.
   ///
   /// In en, this message translates to:
