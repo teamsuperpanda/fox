@@ -462,7 +462,6 @@ void main() {
     });
 
     // --- Folder filter ---
-
     test('setSelectedFolder filters notes by folder', () async {
       await controller.load();
       await controller.addFolder('A');
@@ -492,6 +491,25 @@ void main() {
       controller.setSelectedFolder(AppConstants.unfiledFolderId);
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Unfiled');
+    });
+
+    // --- folderNameExists ---
+
+    test('folderNameExists is case-insensitive and ignores whitespace',
+        () async {
+      await controller.load();
+      await controller.addFolder('Work');
+      expect(controller.folderNameExists('Work'), isTrue);
+      expect(controller.folderNameExists(' work '), isTrue);
+      expect(controller.folderNameExists('Work '), isTrue);
+      expect(controller.folderNameExists('Play'), isFalse);
+    });
+
+    test('folderNameExists ignores the folder being renamed', () async {
+      await controller.load();
+      await controller.addFolder('Work');
+      final id = controller.folders.single.id;
+      expect(controller.folderNameExists('Work', exceptId: id), isFalse);
     });
 
     // --- getFolderName ---

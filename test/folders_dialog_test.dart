@@ -129,6 +129,73 @@ void main() {
       expect(controller.selectedFolderId, isNull);
     });
 
+    testWidgets('rejects a duplicate folder name on create', (tester) async {
+      await controller.addFolder('Work');
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), ' work ');
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(
+          find.text('A folder with this name already exists'), findsOneWidget);
+      expect(controller.folders, hasLength(1));
+    });
+
+    testWidgets('rejects renaming a folder to an existing name',
+        (tester) async {
+      await controller.addFolder('Work');
+      await controller.addFolder('Play');
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => FoldersDialog(controller: controller),
+                ),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(PopupMenuButton<String>).last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Rename'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).last, 'WORK');
+      await tester.tap(find.widgetWithText(TextButton, 'Rename'));
+      await tester.pumpAndSettle();
+
+      expect(
+          find.text('A folder with this name already exists'), findsOneWidget);
+      expect(controller.folders.map((f) => f.name), ['Work', 'Play']);
+    });
+
     testWidgets('tapping Unfiled sets unfiled filter', (tester) async {
       await tester.pumpWidget(
         buildTestApp(
