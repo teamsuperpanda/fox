@@ -548,6 +548,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @searchScopeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All notes'**
+  String get searchScopeAll;
+
+  /// No description provided for @searchScopeFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder'**
+  String get searchScopeFolder;
+
+  /// No description provided for @filterPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned'**
+  String get filterPinned;
+
+  /// No description provided for @filterTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag'**
+  String get filterTag;
+
+  /// No description provided for @filterColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour'**
+  String get filterColor;
+
+  /// No description provided for @filterDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Date range'**
+  String get filterDateRange;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get clearFilters;
+
+  /// No description provided for @searchResultCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No results} =1{1 result} other{{count} results}}'**
+  String searchResultCount(int count);
 }
 
 class _AppLocalizationsDelegate

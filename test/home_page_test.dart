@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/home_page.dart';
+import 'package:fox/models/search_filters.dart';
 import 'package:fox/note_detail_page.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
+import 'package:fox/widgets/search_filters_bar.dart';
 
 import 'test_helpers.dart';
 
@@ -82,6 +84,34 @@ void main() {
       await tester.pump();
 
       expect(find.byIcon(Icons.tune), findsOneWidget);
+    });
+
+    testWidgets('search shows the filters bar with a result count',
+        (tester) async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Test', content: Document());
+
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pump();
+
+      expect(find.byType(SearchFiltersBar), findsOneWidget);
+      expect(find.text('1 result'), findsOneWidget);
+    });
+
+    testWidgets('filter chip bar stays visible after clearing the query',
+        (tester) async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Test', content: Document());
+      controller.setFilters(const SearchFilters(pinnedOnly: true));
+
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
+      await tester.pump();
+
+      expect(find.byType(SearchFiltersBar), findsOneWidget);
+      expect(find.text('Clear filters'), findsOneWidget);
     });
   });
 }

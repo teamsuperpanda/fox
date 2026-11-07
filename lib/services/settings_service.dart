@@ -39,6 +39,7 @@ class SettingsService {
       'fabAnimation' => settings.fabAnimation,
       'sortBy' => settings.sortBy,
       'accentColor' => settings.accentColor,
+      'searchScope' => settings.searchScope,
       'locale' => settings.locale,
       _ => defaultValue,
     };
@@ -62,6 +63,8 @@ class SettingsService {
         await _update((s) => value == null
             ? s.copyWith(clearAccentColor: true)
             : s.copyWith(accentColor: value as String));
+      case 'searchScope':
+        await _update((s) => s.copyWith(searchScope: value as String));
       case 'locale':
         await _update((s) => value == null
             ? s.copyWith(clearLocale: true)
@@ -117,5 +120,12 @@ class SettingsService {
 
   Future<void> setLocale(String? value) async {
     await _setValue('locale', value);
+  }
+
+  String getSearchScope() =>
+      _getValue('searchScope', defaultValue: 'all') as String;
+
+  Future<void> setSearchScope(String value) async {
+    await _setValue('searchScope', value);
   }
 }

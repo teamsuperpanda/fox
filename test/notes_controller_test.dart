@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/search_filters.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
+import 'package:fox/services/settings_service.dart';
 
 import 'test_helpers.dart';
 
@@ -492,6 +494,192 @@ void main() {
       controller.setSelectedFolder(AppConstants.unfiledFolderId);
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Unfiled');
+    });
+
+    // --- Search scope ---
+
+    test('search with a folder selected sees notes from other folders',
+        () async {
+      await controller.load();
+      await controller.addFolder('Work');
+      final folderId = controller.folders.single.id;
+      await controller.addOrUpdate(
+        title: 'Folder budget',
+        content: Document(),
+        folderId: folderId,
+      );
+      await controller.addOrUpdate(title: 'Other budget', content: Document());
+
+      controller.setSelectedFolder(folderId);
+      expect(controller.notes.map((n) => n.title), ['Folder budget']);
+
+      controller.setSearchTerm('budget');
+      expect(
+        controller.notes.map((n) => n.title),
+        ['Other budget', 'Folder budget'],
+      );
+    });
+
+    test('folder scope keeps the search inside the selected folder', () async {
+      await controller.load();
+      await controller.addFolder('Work');
+      final folderId = controller.folders.single.id;
+      await controller.addOrUpdate(
+        title: 'Folder budget',
+        content: Document(),
+        folderId: folderId,
+      );
+      await controller.addOrUpdate(title: 'Other budget', content: Document());
+
+      controller.setSelectedFolder(folderId);
+      controller.setSearchScope(SearchScope.folder);
+      controller.setSearchTerm('budget');
+
+      expect(controller.notes.map((n) => n.title), ['Folder budget']);
+    });
+
+    test('search scope persists through the settings service', () async {
+      final settings = SettingsService();
+      final first = NotesController(MemoryRepo(), settingsRepository: settings);
+      await first.load();
+      first.setSearchScope(SearchScope.folder);
+      await Future<void>.delayed(Duration.zero);
+
+      final second =
+          NotesController(MemoryRepo(), settingsRepository: settings);
+      await second.load();
+      expect(second.searchScope, SearchScope.folder);
+    });
+
+    // --- Search filters ---
+
+    test('pinned filter narrows results', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Pinned', content: Document());
+      await controller.addOrUpdate(title: 'Loose', content: Document());
+      final pinned = controller.notes.firstWhere((n) => n.title == 'Pinned');
+      await controller.setPinned(pinned.id, true);
+
+      controller.setFilters(const SearchFilters(pinnedOnly: true));
+      expect(controller.notes.map((n) => n.title), ['Pinned']);
+    });
+
+    test('tag filter is case insensitive', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Tagged',
+        content: Document(),
+        tags: ['Work'],
+      );
+      await controller.addOrUpdate(title: 'Untagged', content: Document());
+
+      controller.setFilters(const SearchFilters(tag: 'work'));
+      expect(controller.notes.map((n) => n.title), ['Tagged']);
+    });
+
+    test('colour filter narrows results', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Red',
+        content: Document(),
+        color: '#FF5252',
+      );
+      await controller.addOrUpdate(title: 'Plain', content: Document());
+
+      controller.setFilters(const SearchFilters(color: '#FF5252'));
+      expect(controller.notes.map((n) => n.title), ['Red']);
+    });
+
+    test('date range filter uses the last updated date', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Recent', content: Document());
+      final now = DateTime.now();
+
+      controller.setFilters(
+        SearchFilters(
+          from: now.subtract(const Duration(minutes: 1)),
+          to: now.add(const Duration(minutes: 1)),
+        ),
+      );
+      expect(controller.notes.map((n) => n.title), ['Recent']);
+
+      controller.setFilters(
+        SearchFilters(
+          from: now.subtract(const Duration(days: 2)),
+          to: now.subtract(const Duration(days: 1)),
+        ),
+      );
+      expect(controller.notes, isEmpty);
+    });
+
+    test('combining two filters narrows correctly', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Pinned work',
+        content: Document(),
+        tags: ['work'],
+      );
+      await controller.addOrUpdate(
+        title: 'Loose work',
+        content: Document(),
+        tags: ['work'],
+      );
+      await controller.addOrUpdate(
+        title: 'Pinned home',
+        content: Document(),
+        tags: ['home'],
+      );
+      final pinned =
+          controller.notes.firstWhere((n) => n.title == 'Pinned work');
+      await controller.setPinned(pinned.id, true);
+      final pinnedHome =
+          controller.notes.firstWhere((n) => n.title == 'Pinned home');
+      await controller.setPinned(pinnedHome.id, true);
+
+      controller.setFilters(
+        const SearchFilters(tag: 'work', pinnedOnly: true),
+      );
+      expect(controller.notes.map((n) => n.title), ['Pinned work']);
+    });
+
+    test('filters apply while searching and clearFilters restores the list',
+        () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'Project plan',
+        content: Document(),
+        tags: ['work'],
+      );
+      await controller.addOrUpdate(
+        title: 'Project notes',
+        content: Document(),
+        tags: ['home'],
+      );
+
+      controller.setSearchTerm('project');
+      expect(controller.notes, hasLength(2));
+
+      controller.setFilters(const SearchFilters(tag: 'home'));
+      expect(controller.notes.map((n) => n.title), ['Project notes']);
+
+      controller.clearFilters();
+      expect(controller.notes, hasLength(2));
+    });
+
+    test('allTags lists unique tags sorted', () async {
+      await controller.load();
+      await controller.addOrUpdate(
+        title: 'A',
+        content: Document(),
+        tags: ['work', 'Home'],
+      );
+      await controller.addOrUpdate(
+        title: 'B',
+        content: Document(),
+        tags: ['work', 'zebra'],
+      );
+
+      expect(controller.allTags, ['Home', 'work', 'zebra']);
     });
 
     // --- getFolderName ---
