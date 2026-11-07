@@ -4,7 +4,7 @@
 </picture>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
   <img src="https://img.shields.io/badge/Dart-3.6+-blue?logo=dart" alt="Dart">
   <img src="https://img.shields.io/github/last-commit/teamsuperpanda/fox" alt="Last commit">
 </p>
@@ -66,5 +66,6 @@ flutter test --coverage
 
 ## License
 
-The code is [PolyForm Noncommercial 1.0.0](LICENSE). Free for personal use, not for resale.  
-Assets are copyright 2026 Team Super Panda (see [ASSETS-LICENSE.md](ASSETS-LICENSE.md)).
+The code is [MIT licensed](LICENSE). You can use it, modify it and ship it, including commercially.
+
+The Fox name, logo and brand assets are proprietary and are not covered by the MIT licence. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md) and [NOTICE](NOTICE).
