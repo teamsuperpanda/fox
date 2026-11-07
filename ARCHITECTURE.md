@@ -99,6 +99,8 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 - `folders_db` — Folder objects (UUID key, name, timestamps)
 - `settings_db` — Single Settings object (theme, locale, view preferences, sort, accent color)
 
+**Startup resilience:** `StorageService.init` opens `notes_db` and `folders_db` before `settings_db`; a settings failure falls back to in-memory defaults. Every record is decoded individually, so one corrupt entry is skipped and counted (`NotesController.unreadableNotes`) instead of aborting the load. A failed init leaves the service uninitialised, and `FoxRoot` re-runs the whole startup from the failure screen's Retry button.
+
 ### 3.3. Rich Text Editor
 
 **Name:** Flutter Quill Integration
