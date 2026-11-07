@@ -39,6 +39,7 @@ class SettingsService {
       'fabAnimation' => settings.fabAnimation,
       'sortBy' => settings.sortBy,
       'accentColor' => settings.accentColor,
+      'includeArchived' => settings.includeArchived,
       'locale' => settings.locale,
       _ => defaultValue,
     };
@@ -66,6 +67,8 @@ class SettingsService {
         await _update((s) => value == null
             ? s.copyWith(clearLocale: true)
             : s.copyWith(locale: value as String));
+      case 'includeArchived':
+        await _update((s) => s.copyWith(includeArchived: value as bool));
     }
   }
 
@@ -117,5 +120,12 @@ class SettingsService {
 
   Future<void> setLocale(String? value) async {
     await _setValue('locale', value);
+  }
+
+  bool getIncludeArchived() =>
+      _getValue('includeArchived', defaultValue: false) as bool;
+
+  Future<void> setIncludeArchived(bool value) async {
+    await _setValue('includeArchived', value);
   }
 }

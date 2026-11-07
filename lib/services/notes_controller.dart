@@ -46,7 +46,14 @@ class NotesController extends ChangeNotifier {
   List<Note> _visibleNotes = const [];
   List<Note> get notes => _visibleNotes;
 
+  /// Notes that are archived and therefore out of the main list.
+  List<Note> _archivedNotes = const [];
+  List<Note> get archivedNotes => _archivedNotes;
+
   bool get hasNotes => _unfilteredNotes.isNotEmpty;
+
+  bool _includeArchived = false;
+  bool get includeArchived => _includeArchived;
 
   Note? _lastRemovedNote;
   Note? get lastRemovedNote => _lastRemovedNote;
@@ -65,7 +72,10 @@ class NotesController extends ChangeNotifier {
     _loading = true;
     notifyListeners();
     await _repo.init();
-    _unfilteredNotes = await _repo.getAll();
+    final all = await _repo.getAll();
+    _unfilteredNotes = all.where((n) => n.archivedAt == null).toList();
+    _archivedNotes = all.where((n) => n.archivedAt != null).toList()
+      ..sort((a, b) => b.archivedAt!.compareTo(a.archivedAt!));
     _folders = await _repo.getAllFolders();
     _loadSettings();
     _updateView();
@@ -81,10 +91,14 @@ class NotesController extends ChangeNotifier {
     final sortStr = _settingsRepository.getSortBy();
     final sort = SortBy.values.where((e) => e.name == sortStr).firstOrNull;
     if (sort != null) _sortBy = sort;
+    _includeArchived = _settingsRepository.getIncludeArchived();
   }
 
   void _updateView() {
-    _visibleNotes = _filterAndSort(_unfilteredNotes);
+    final source = _includeArchived
+        ? [..._unfilteredNotes, ..._archivedNotes]
+        : _unfilteredNotes;
+    _visibleNotes = _filterAndSort(source);
   }
 
   void setSearchTerm(String term) {
@@ -123,6 +137,37 @@ class NotesController extends ChangeNotifier {
 
   void setSelectedFolder(String? folderId) {
     _selectedFolderId = folderId;
+    _updateView();
+    notifyListeners();
+  }
+
+  Future<void> setIncludeArchived(bool value) async {
+    _includeArchived = value;
+    await _settingsRepository.setIncludeArchived(value);
+    _updateView();
+    notifyListeners();
+  }
+
+  /// Archives a note so it leaves the main list but is not deleted.
+  Future<void> archive(String id) async {
+    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    if (note == null) return;
+    final archived = note.copyWith(archivedAt: DateTime.now());
+    await _repo.upsert(archived);
+    _unfilteredNotes = _unfilteredNotes.where((n) => n.id != id).toList();
+    _archivedNotes = [archived, ..._archivedNotes];
+    _updateView();
+    notifyListeners();
+  }
+
+  /// Moves an archived note back to the main list.
+  Future<void> unarchive(String id) async {
+    final note = _archivedNotes.firstWhereOrNull((n) => n.id == id);
+    if (note == null) return;
+    final restored = note.copyWith(clearArchivedAt: true);
+    await _repo.upsert(restored);
+    _archivedNotes = _archivedNotes.where((n) => n.id != id).toList();
+    _unfilteredNotes = [..._unfilteredNotes, restored];
     _updateView();
     notifyListeners();
   }
@@ -207,6 +252,7 @@ class NotesController extends ChangeNotifier {
     );
     await _repo.upsert(note);
     _lastRemovedNote = null;
+    _archivedNotes = _archivedNotes.where((n) => n.id != note.id).toList();
     _unfilteredNotes = [
       ...(_unfilteredNotes.where((n) => n.id != note.id)),
       note,
@@ -230,11 +276,13 @@ class NotesController extends ChangeNotifier {
   }
 
   Future<void> remove(String id) async {
-    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id) ??
+        _archivedNotes.firstWhereOrNull((n) => n.id == id);
     if (note == null) return;
     await _repo.delete(id);
     _lastRemovedNote = note;
     _unfilteredNotes = _unfilteredNotes.where((n) => n.id != id).toList();
+    _archivedNotes = _archivedNotes.where((n) => n.id != id).toList();
     _updateView();
     notifyListeners();
   }
@@ -243,7 +291,11 @@ class NotesController extends ChangeNotifier {
     final note = _lastRemovedNote;
     if (note != null) {
       await _repo.upsert(note);
-      _unfilteredNotes = [..._unfilteredNotes, note];
+      if (note.archivedAt != null) {
+        _archivedNotes = [..._archivedNotes, note];
+      } else {
+        _unfilteredNotes = [..._unfilteredNotes, note];
+      }
       if (identical(_lastRemovedNote, note)) {
         _lastRemovedNote = null;
       }
@@ -252,7 +304,9 @@ class NotesController extends ChangeNotifier {
     }
   }
 
-  Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+  Note? find(String id) =>
+      _unfilteredNotes.firstWhereOrNull((n) => n.id == id) ??
+      _archivedNotes.firstWhereOrNull((n) => n.id == id);
 
   List<Note> _filterAndSort(List<Note> list) {
     final copy = [...list];

@@ -218,6 +218,25 @@ class _NoteListTile extends StatelessWidget {
                         color: colorScheme.primary,
                       ),
                     ],
+                    PopupMenuButton<String>(
+                      tooltip: note.isArchived ? l10n.restore : l10n.archive,
+                      icon: const Icon(Icons.more_vert, size: 18),
+                      onSelected: (_) async {
+                        if (note.isArchived) {
+                          await controller.unarchive(note.id);
+                        } else {
+                          await controller.archive(note.id);
+                        }
+                      },
+                      itemBuilder: (_) => [
+                        PopupMenuItem(
+                          value: 'archive',
+                          child: Text(
+                            note.isArchived ? l10n.restore : l10n.archive,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 if (controller.showContent && trimmedText.isNotEmpty) ...[

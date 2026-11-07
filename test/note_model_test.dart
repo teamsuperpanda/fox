@@ -206,6 +206,18 @@ void main() {
       expect(copy.color, '#00FF00');
     });
 
+    test('copyWith archivedAt sets and clears the archive timestamp', () {
+      final archivedAt = DateTime(2025, 4, 1, 9);
+      final archived = note.copyWith(archivedAt: archivedAt);
+      expect(archived.archivedAt, archivedAt);
+      expect(archived.isArchived, isTrue);
+
+      final restored = archived.copyWith(clearArchivedAt: true);
+      expect(restored.archivedAt, isNull);
+      expect(restored.isArchived, isFalse);
+      expect(restored.copyWith().archivedAt, isNull);
+    });
+
     // --- fromMap/toMap with all fields ---
 
     test('toMap and fromMap round-trip with all optional fields', () {
@@ -218,17 +230,20 @@ void main() {
         tags: ['x', 'y'],
         folderId: 'folder-42',
         color: '#AB47BC',
+        archivedAt: testDateTime,
       );
       final map = full.toMap();
       expect(map['folderId'], 'folder-42');
       expect(map['color'], '#AB47BC');
       expect(map['tags'], ['x', 'y']);
+      expect(map['archivedAt'], testDateTime.millisecondsSinceEpoch);
 
       final restored = Note.fromMap(map);
       expect(restored.folderId, 'folder-42');
       expect(restored.color, '#AB47BC');
       expect(restored.tags, ['x', 'y']);
       expect(restored.pinned, isTrue);
+      expect(restored.archivedAt, testDateTime);
     });
 
     test('fromMap handles null folderId and color', () {
@@ -242,6 +257,7 @@ void main() {
       final n = Note.fromMap(map);
       expect(n.folderId, isNull);
       expect(n.color, isNull);
+      expect(n.archivedAt, isNull);
     });
 
     // --- document with ops wrapped in Map ---

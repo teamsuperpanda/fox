@@ -175,6 +175,15 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     );
   }
 
+  Future<void> _archiveAndPop() async {
+    final existing = widget.existing;
+    if (existing == null) return;
+    final navigator = Navigator.of(context);
+    await widget.controller.archive(existing.id);
+    if (!mounted) return;
+    navigator.pop(const NoteDetailResult(changed: true));
+  }
+
   Future<void> _saveAndPop() async {
     if (_saving) return;
     _saving = true;
@@ -298,6 +307,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               icon: Icon(_pinned ? Icons.push_pin : Icons.push_pin_outlined),
               onPressed: () => setState(() => _pinned = !_pinned),
             ),
+            if (widget.existing != null)
+              IconButton(
+                tooltip: l10n.archive,
+                icon: const Icon(Icons.archive_outlined),
+                onPressed: _archiveAndPop,
+              ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -178,6 +178,16 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
             await widget.settingsService.setFabAnimation(val);
           },
         ),
+        _buildDivider(context),
+        _prefSwitchTile(
+          context: context,
+          setDialogState: setDialogState,
+          title: l10n.includeArchived,
+          value: widget.controller.includeArchived,
+          onChanged: (val) async {
+            await widget.controller.setIncludeArchived(val);
+          },
+        ),
       ]),
     ];
   }

@@ -12,6 +12,7 @@ class Note {
     this.tags = const [],
     this.folderId,
     this.color,
+    this.archivedAt,
   })  : _lowerTitle = title.toLowerCase(),
         _lowerTags = tags.map((t) => t.toLowerCase()).toList(growable: false);
   final String id;
@@ -22,6 +23,11 @@ class Note {
   final List<String> tags;
   final String? folderId;
   final String? color; // Hex string e.g. '#FF5252'
+
+  /// When the note was archived, or null while it is in the main list.
+  final DateTime? archivedAt;
+
+  bool get isArchived => archivedAt != null;
 
   String? _plainText;
   final String _lowerTitle;
@@ -85,8 +91,10 @@ class Note {
     List<String>? tags,
     String? folderId,
     String? color,
+    DateTime? archivedAt,
     bool clearFolder = false,
     bool clearColor = false,
+    bool clearArchivedAt = false,
   }) {
     return Note(
       id: id ?? this.id,
@@ -97,6 +105,7 @@ class Note {
       tags: tags ?? this.tags,
       folderId: clearFolder ? null : (folderId ?? this.folderId),
       color: clearColor ? null : (color ?? this.color),
+      archivedAt: clearArchivedAt ? null : (archivedAt ?? this.archivedAt),
     );
   }
 
@@ -114,6 +123,9 @@ class Note {
               const [],
       folderId: map['folderId'] as String?,
       color: map['color'] as String?,
+      archivedAt: map['archivedAt'] is int
+          ? DateTime.fromMillisecondsSinceEpoch(map['archivedAt']! as int)
+          : null,
     );
   }
 
@@ -128,6 +140,7 @@ class Note {
       'tags': tags,
       'folderId': folderId,
       'color': color,
+      'archivedAt': archivedAt?.millisecondsSinceEpoch,
     };
   }
 }

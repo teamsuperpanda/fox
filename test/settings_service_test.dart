@@ -28,6 +28,7 @@ void main() {
       expect(settingsService.getAlternatingColors(), isFalse);
       expect(settingsService.getFabAnimation(), isTrue);
       expect(settingsService.getSortBy(), 'dateDesc');
+      expect(settingsService.getIncludeArchived(), isFalse);
     });
 
     test('getThemeMode returns system by default', () {
@@ -145,6 +146,12 @@ void main() {
     test('setSortBy persists value', () async {
       await settingsService.setSortBy('titleAsc');
       expect(settingsService.getSortBy(), 'titleAsc');
+    });
+
+    test('setIncludeArchived persists value', () async {
+      expect(settingsService.getIncludeArchived(), isFalse);
+      await settingsService.setIncludeArchived(true);
+      expect(settingsService.getIncludeArchived(), isTrue);
     });
 
     test('getShowTags returns true by default', () {

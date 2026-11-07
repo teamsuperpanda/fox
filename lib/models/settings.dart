@@ -10,6 +10,7 @@ class Settings {
     this.fabAnimation = true,
     this.sortBy = 'dateDesc',
     this.accentColor,
+    this.includeArchived = false,
   });
   final String themeMode; // 'system'|'light'|'dark'
 
@@ -21,6 +22,9 @@ class Settings {
   final String sortBy; // 'dateDesc'|'dateAsc'|'titleAsc'|'titleDesc'
   // Hex string e.g. '#8B9A6B'
   final String? accentColor;
+
+  /// Whether archived notes appear in the main list and in search.
+  final bool includeArchived;
 
   ThemeMode get theme {
     return switch (themeMode) {
@@ -43,6 +47,7 @@ class Settings {
     String? sortBy,
     String? accentColor,
     bool clearAccentColor = false,
+    bool? includeArchived,
   }) {
     return Settings(
       themeMode: themeMode ?? this.themeMode,
@@ -53,6 +58,7 @@ class Settings {
       fabAnimation: fabAnimation ?? this.fabAnimation,
       sortBy: sortBy ?? this.sortBy,
       accentColor: clearAccentColor ? null : (accentColor ?? this.accentColor),
+      includeArchived: includeArchived ?? this.includeArchived,
     );
   }
 }
