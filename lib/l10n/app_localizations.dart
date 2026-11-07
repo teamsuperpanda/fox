@@ -548,6 +548,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @dataSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get dataSection;
+
+  /// No description provided for @exportNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all notes'**
+  String get exportNotes;
+
+  /// No description provided for @exportNotesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip with a JSON backup and Markdown files'**
+  String get exportNotesSubtitle;
+
+  /// No description provided for @exportInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting notes...'**
+  String get exportInProgress;
+
+  /// No description provided for @exportComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported {count} notes'**
+  String exportComplete(int count);
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed: {error}'**
+  String exportFailed(String error);
+
+  /// No description provided for @shareExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Share export'**
+  String get shareExport;
+
+  /// No description provided for @encryptExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt export'**
+  String get encryptExport;
+
+  /// No description provided for @encryptExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens only with your passphrase'**
+  String get encryptExportSubtitle;
+
+  /// No description provided for @encryptExportWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no recovery. If you lose this passphrase, the backup cannot be opened.'**
+  String get encryptExportWarning;
+
+  /// No description provided for @passphrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Passphrase'**
+  String get passphrase;
+
+  /// No description provided for @confirmPassphrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm passphrase'**
+  String get confirmPassphrase;
+
+  /// No description provided for @passphraseTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters'**
+  String get passphraseTooShort;
+
+  /// No description provided for @passphraseMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The passphrases do not match'**
+  String get passphraseMismatch;
+
+  /// No description provided for @encrypt.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt'**
+  String get encrypt;
 }
 
 class _AppLocalizationsDelegate

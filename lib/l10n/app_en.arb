@@ -93,9 +93,34 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "dataSection": "Data",
+  "exportNotes": "Export all notes",
+  "exportNotesSubtitle": "Zip with a JSON backup and Markdown files",
+  "exportInProgress": "Exporting notes...",
+  "exportComplete": "Exported {count} notes",
+  "@exportComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportFailed": "Export failed: {error}",
+  "@exportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "shareExport": "Share export",
+  "encryptExport": "Encrypt export",
+  "encryptExportSubtitle": "Opens only with your passphrase",
+  "encryptExportWarning": "There is no recovery. If you lose this passphrase, the backup cannot be opened.",
+  "passphrase": "Passphrase",
+  "confirmPassphrase": "Confirm passphrase",
+  "passphraseTooShort": "Use at least 8 characters",
+  "passphraseMismatch": "The passphrases do not match",
+  "encrypt": "Encrypt"
 }

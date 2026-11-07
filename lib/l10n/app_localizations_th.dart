@@ -214,4 +214,54 @@ class AppLocalizationsTh extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get dataSection => 'Data';
+
+  @override
+  String get exportNotes => 'Export all notes';
+
+  @override
+  String get exportNotesSubtitle => 'Zip with a JSON backup and Markdown files';
+
+  @override
+  String get exportInProgress => 'Exporting notes...';
+
+  @override
+  String exportComplete(int count) {
+    return 'Exported $count notes';
+  }
+
+  @override
+  String exportFailed(String error) {
+    return 'Export failed: $error';
+  }
+
+  @override
+  String get shareExport => 'Share export';
+
+  @override
+  String get encryptExport => 'Encrypt export';
+
+  @override
+  String get encryptExportSubtitle => 'Opens only with your passphrase';
+
+  @override
+  String get encryptExportWarning =>
+      'There is no recovery. If you lose this passphrase, the backup cannot be opened.';
+
+  @override
+  String get passphrase => 'Passphrase';
+
+  @override
+  String get confirmPassphrase => 'Confirm passphrase';
+
+  @override
+  String get passphraseTooShort => 'Use at least 8 characters';
+
+  @override
+  String get passphraseMismatch => 'The passphrases do not match';
+
+  @override
+  String get encrypt => 'Encrypt';
 }
