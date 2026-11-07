@@ -83,5 +83,42 @@ void main() {
 
       expect(find.byIcon(Icons.tune), findsOneWidget);
     });
+    testWidgets('creating a note clears an active search', (tester) async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Tax return', content: Document());
+      controller.setFabAnimation(false);
+
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
+      await tester.pump();
+
+      // Open the search bar and search for something the new note won't match.
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pump();
+      await tester.enterText(find.byType(TextField).first, 'tax');
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(controller.searchTerm, 'tax');
+      expect(controller.notes.map((n) => n.title), ['Tax return']);
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.enterText(
+        find
+            .descendant(
+              of: find.byType(NoteDetailPage),
+              matching: find.byType(TextField),
+            )
+            .first,
+        'Groceries',
+      );
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(controller.searchTerm, isEmpty);
+      expect(find.byType(TextField), findsNothing); // search bar closed
+      expect(find.text('Groceries'), findsOneWidget);
+      expect(find.text('Tax return'), findsOneWidget);
+    });
   });
 }
