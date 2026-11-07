@@ -11,26 +11,33 @@ class StorageService {
   static bool _inited = false;
 
   /// Initialize Hive, register adapters, and open core boxes.
+  ///
+  /// Resets on failure so a retry can run the whole sequence again.
   static Future<void> init() async {
     if (_inited) return;
-    await Hive.initFlutter();
+    try {
+      await Hive.initFlutter();
 
-    // Register adapters
-    if (!Hive.isAdapterRegistered(2)) {
-      Hive.registerAdapter(SettingsAdapter());
-    }
-    if (!Hive.isAdapterRegistered(3)) {
-      Hive.registerAdapter(NoteAdapter());
-    }
-    if (!Hive.isAdapterRegistered(4)) {
-      Hive.registerAdapter(FolderAdapter());
-    }
+      // Register adapters
+      if (!Hive.isAdapterRegistered(2)) {
+        Hive.registerAdapter(SettingsAdapter());
+      }
+      if (!Hive.isAdapterRegistered(3)) {
+        Hive.registerAdapter(NoteAdapter());
+      }
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(FolderAdapter());
+      }
 
-    // Open boxes
-    await Hive.openBox<Settings>(BoxNames.settings);
-    await Hive.openBox<Note>(BoxNames.notes);
-    await Hive.openBox<Folder>(BoxNames.folders);
+      // Open boxes
+      await Hive.openBox<Settings>(BoxNames.settings);
+      await Hive.openBox<Note>(BoxNames.notes);
+      await Hive.openBox<Folder>(BoxNames.folders);
 
-    _inited = true;
+      _inited = true;
+    } catch (_) {
+      _inited = false;
+      rethrow;
+    }
   }
 }

@@ -59,5 +59,6 @@
   "startupError": "Qualcosa è andato storto all'avvio di Fox.\n\nProva a cancellare i dati dell'app o reinstallarla.\n\nErrore: {error}",  "note": "Nota",
   "emptyNoteDiscarded": "Nota vuota scartata",
 
-  "nativeName": "Italiano"
+  "nativeName": "Italiano",
+  "retry": "Riprova"
 }
