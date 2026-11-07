@@ -35,6 +35,14 @@ flutter test test/golden_test.dart --update-goldens
 
 Golden test failures with small pixel diffs? Regenerate with `--update-goldens` and commit the new goldens.
 
+**Coverage:** measured on hand-written app code only (`lib/l10n/**` and generated sources are
+stripped) and enforced at a 55% floor in CI:
+
+```bash
+flutter test --coverage --exclude-tags golden
+tool/coverage_gate.sh coverage/lcov.info
+```
+
 ## Architecture
 
 - `lib/data/` - Local persistence and data sources
