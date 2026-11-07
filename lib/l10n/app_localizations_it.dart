@@ -214,4 +214,58 @@ class AppLocalizationsIt extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get dataSection => 'Data';
+
+  @override
+  String get exportNotes => 'Export all notes';
+
+  @override
+  String get exportNotesSubtitle => 'Zip with a JSON backup and Markdown files';
+
+  @override
+  String get exportInProgress => 'Exporting notes...';
+
+  @override
+  String exportComplete(int count) {
+    return 'Exported $count notes';
+  }
+
+  @override
+  String exportFailed(String error) {
+    return 'Export failed: $error';
+  }
+
+  @override
+  String get shareExport => 'Share export';
+
+  @override
+  String get importNotes => 'Import notes';
+
+  @override
+  String get importNotesSubtitle => 'Merge a Fox backup (.zip or .json)';
+
+  @override
+  String get importFolder => 'Import Markdown folder';
+
+  @override
+  String get importFolderSubtitle => 'One note per .md or .txt file';
+
+  @override
+  String get importInProgress => 'Importing...';
+
+  @override
+  String importSummary(int added, int updated, int skipped) {
+    return 'Import finished: $added added, $updated updated, $skipped skipped';
+  }
+
+  @override
+  String get importBackupSaved =>
+      'A backup of your library was saved before importing.';
+
+  @override
+  String importFailed(String error) {
+    return 'Import failed: $error';
+  }
 }

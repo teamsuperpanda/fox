@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/settings.dart';
 import 'package:fox/services/constants.dart';
+import 'package:fox/services/import/import_service.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:uuid/uuid.dart';
@@ -45,6 +49,21 @@ class NotesController extends ChangeNotifier {
   List<Note> _unfilteredNotes = const [];
   List<Note> _visibleNotes = const [];
   List<Note> get notes => _visibleNotes;
+
+  /// Every note, ignoring search and folder filters. Used by export.
+  List<Note> get allNotes => _unfilteredNotes;
+
+  /// Current settings, captured for export envelopes and import backups.
+  Settings get settingsSnapshot => Settings(
+        themeMode: _settingsRepository.getThemeMode().name,
+        locale: _settingsRepository.getLocale(),
+        showTags: _settingsRepository.getShowTags(),
+        showContent: _settingsRepository.getShowContent(),
+        alternatingColors: _settingsRepository.getAlternatingColors(),
+        fabAnimation: _settingsRepository.getFabAnimation(),
+        sortBy: _settingsRepository.getSortBy(),
+        accentColor: _settingsRepository.getAccentColor(),
+      );
 
   bool get hasNotes => _unfilteredNotes.isNotEmpty;
 
@@ -253,6 +272,37 @@ class NotesController extends ChangeNotifier {
   }
 
   Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+
+  /// Validates [files], writes a pre-import backup and merges them.
+  ///
+  /// Throws [ImportException] before writing anything when the input is
+  /// invalid. Existing notes are only replaced when the imported copy is
+  /// newer.
+  Future<ImportResult> importFromFiles({
+    required List<ImportFile> files,
+    required Directory backupDirectory,
+    FoxImporter? importer,
+  }) async {
+    final service = importer ?? FoxImporter();
+    final plan = service.previewFiles(
+      files: files,
+      existingNotes: _unfilteredNotes,
+      existingFolders: _folders,
+    );
+    final result = await service.apply(
+      plan: plan,
+      repository: _repo,
+      backupDirectory: backupDirectory,
+      settings: settingsSnapshot,
+    );
+    if (result.changed) {
+      _unfilteredNotes = await _repo.getAll();
+      _folders = await _repo.getAllFolders();
+      _updateView();
+      notifyListeners();
+    }
+    return result;
+  }
 
   List<Note> _filterAndSort(List<Note> list) {
     final copy = [...list];

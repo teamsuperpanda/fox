@@ -548,6 +548,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @dataSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get dataSection;
+
+  /// No description provided for @exportNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all notes'**
+  String get exportNotes;
+
+  /// No description provided for @exportNotesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip with a JSON backup and Markdown files'**
+  String get exportNotesSubtitle;
+
+  /// No description provided for @exportInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting notes...'**
+  String get exportInProgress;
+
+  /// No description provided for @exportComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported {count} notes'**
+  String exportComplete(int count);
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed: {error}'**
+  String exportFailed(String error);
+
+  /// No description provided for @shareExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Share export'**
+  String get shareExport;
+
+  /// No description provided for @importNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Import notes'**
+  String get importNotes;
+
+  /// No description provided for @importNotesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge a Fox backup (.zip or .json)'**
+  String get importNotesSubtitle;
+
+  /// No description provided for @importFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Markdown folder'**
+  String get importFolder;
+
+  /// No description provided for @importFolderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One note per .md or .txt file'**
+  String get importFolderSubtitle;
+
+  /// No description provided for @importInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing...'**
+  String get importInProgress;
+
+  /// No description provided for @importSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Import finished: {added} added, {updated} updated, {skipped} skipped'**
+  String importSummary(int added, int updated, int skipped);
+
+  /// No description provided for @importBackupSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'A backup of your library was saved before importing.'**
+  String get importBackupSaved;
+
+  /// No description provided for @importFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: {error}'**
+  String importFailed(String error);
 }
 
 class _AppLocalizationsDelegate
