@@ -178,6 +178,15 @@ class NotesController extends ChangeNotifier {
     return _folders.firstWhereOrNull((f) => f.id == folderId)?.name;
   }
 
+  /// True when a folder other than [exceptId] already uses [name], compared
+  /// trimmed and case-insensitively.
+  bool folderNameExists(String name, {String? exceptId}) {
+    final normalized = name.trim().toLowerCase();
+    return _folders.any(
+      (f) => f.id != exceptId && f.name.trim().toLowerCase() == normalized,
+    );
+  }
+
   Future<void> addOrUpdate({
     required String title,
     required Document content,
