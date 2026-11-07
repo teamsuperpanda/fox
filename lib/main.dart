@@ -6,6 +6,7 @@ import 'package:fox/home_page.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/providers/locale_provider.dart';
 import 'package:fox/providers/theme_provider.dart';
+import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
         FlutterQuillLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
+      localeResolutionCallback: resolveAppLocale,
       locale: localeProvider.locale,
       themeMode: themeProvider.themeMode,
       theme: AppTheme.light(themeProvider.accentColor),
