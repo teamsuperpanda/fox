@@ -1,1 +1,14 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
+contact_links:
+  - name: Question or configuration help
+    url: https://github.com/teamsuperpanda/fox/discussions/categories/q-a
+    about: Ask how to set up, build or configure Fox. Please do not open an issue for support questions.
+  - name: Ideas and feature discussion
+    url: https://github.com/teamsuperpanda/fox/discussions/categories/ideas
+    about: Float an idea and get feedback before writing a feature request.
+  - name: Report a security vulnerability
+    url: https://github.com/teamsuperpanda/fox/security/advisories/new
+    about: Report privately. Do not open a public issue for a vulnerability.
+  - name: Contributing guide
+    url: https://github.com/teamsuperpanda/fox/blob/v3/CONTRIBUTING.md
+    about: Setup, checks, branch and commit rules.
