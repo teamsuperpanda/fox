@@ -68,6 +68,7 @@ flutter test --coverage
 
 - Questions, ideas and show and tell: [Discussions](https://github.com/teamsuperpanda/fox/discussions)
 - How to set up, test and send a pull request: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Translating Fox: [docs/TRANSLATING.md](docs/TRANSLATING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ---

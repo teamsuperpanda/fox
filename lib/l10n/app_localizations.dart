@@ -195,13 +195,13 @@ abstract class AppLocalizations {
   /// **'No notes match your search.'**
   String get noNotesMatchSearch;
 
-  /// No description provided for @folders.
+  /// Title of the folder picker and the folder management dialog.
   ///
   /// In en, this message translates to:
   /// **'Folders'**
   String get folders;
 
-  /// No description provided for @viewOptions.
+  /// Title of the sheet with sort, view, theme and language settings.
   ///
   /// In en, this message translates to:
   /// **'View options'**
@@ -219,19 +219,19 @@ abstract class AppLocalizations {
   /// **'Clear folder filter'**
   String get clearFolderFilter;
 
-  /// No description provided for @unfiled.
+  /// Label for a note that belongs to no folder.
   ///
   /// In en, this message translates to:
   /// **'Unfiled'**
   String get unfiled;
 
-  /// No description provided for @unknown.
+  /// Fallback label when a value is not recognised.
   ///
   /// In en, this message translates to:
   /// **'Unknown'**
   String get unknown;
 
-  /// No description provided for @allNotes.
+  /// Filter option that shows notes from every folder.
   ///
   /// In en, this message translates to:
   /// **'All Notes'**
@@ -339,7 +339,7 @@ abstract class AppLocalizations {
   /// **'Tags'**
   String get tags;
 
-  /// No description provided for @noteColour.
+  /// Label for the highlight colour palette applied to a note in the editor.
   ///
   /// In en, this message translates to:
   /// **'Note Colour'**
@@ -369,37 +369,37 @@ abstract class AppLocalizations {
   /// **'Pin'**
   String get pin;
 
-  /// No description provided for @startTyping.
+  /// Placeholder shown in the body of an empty note.
   ///
   /// In en, this message translates to:
   /// **'Start typing...'**
   String get startTyping;
 
-  /// No description provided for @manageTags.
+  /// Title of the tag management dialog.
   ///
   /// In en, this message translates to:
   /// **'Manage Tags'**
   String get manageTags;
 
-  /// No description provided for @newTag.
+  /// Placeholder for the new tag input.
   ///
   /// In en, this message translates to:
   /// **'New tag...'**
   String get newTag;
 
-  /// No description provided for @moveToFolder.
+  /// Menu action that moves a note into a folder.
   ///
   /// In en, this message translates to:
   /// **'Move to Folder'**
   String get moveToFolder;
 
-  /// No description provided for @noFolder.
+  /// Option for a note that has no folder.
   ///
   /// In en, this message translates to:
   /// **'No Folder'**
   String get noFolder;
 
-  /// No description provided for @note.
+  /// Generic label for a single note.
   ///
   /// In en, this message translates to:
   /// **'Note'**
@@ -465,25 +465,25 @@ abstract class AppLocalizations {
   /// **'Show Tags'**
   String get showTags;
 
-  /// No description provided for @showNotePreviews.
+  /// Setting that shows part of the note body under its title in the list.
   ///
   /// In en, this message translates to:
   /// **'Show Note Previews'**
   String get showNotePreviews;
 
-  /// No description provided for @alternatingRowColors.
+  /// Setting that alternates the background colour of note list rows.
   ///
   /// In en, this message translates to:
   /// **'Alternating Row Colors'**
   String get alternatingRowColors;
 
-  /// No description provided for @animateAddButton.
+  /// Setting that rotates the add button when the editor opens.
   ///
   /// In en, this message translates to:
   /// **'Animate Add Button'**
   String get animateAddButton;
 
-  /// No description provided for @untitled.
+  /// Title shown for a note that has no title.
   ///
   /// In en, this message translates to:
   /// **'(Untitled)'**
@@ -501,13 +501,13 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get language;
 
-  /// No description provided for @accentColor.
+  /// Theme accent colour used for buttons and highlights.
   ///
   /// In en, this message translates to:
   /// **'Theme Color'**
   String get accentColor;
 
-  /// No description provided for @systemDefault.
+  /// Option that follows the operating system setting for theme or language.
   ///
   /// In en, this message translates to:
   /// **'System Default'**
@@ -525,19 +525,19 @@ abstract class AppLocalizations {
   /// **'Empty note discarded'**
   String get emptyNoteDiscarded;
 
-  /// No description provided for @nativeName.
+  /// Name of the current language shown in that language.
   ///
   /// In en, this message translates to:
   /// **'English'**
   String get nativeName;
 
-  /// No description provided for @folderAlreadyExists.
+  /// Validation error when a new folder duplicates an existing name.
   ///
   /// In en, this message translates to:
   /// **'A folder with this name already exists'**
   String get folderAlreadyExists;
 
-  /// No description provided for @searchLanguages.
+  /// Placeholder in the search field of the language picker.
   ///
   /// In en, this message translates to:
   /// **'Search languages'**

@@ -95,8 +95,9 @@ flutter gen-l10n
 
 When you add a key, add it to `app_en.arb` with a description, run `flutter gen-l10n`,
 and use `AppLocalizations.of(context)` in the widget. Do not edit the generated
-`app_localizations*.dart` files by hand. See [ARCHITECTURE.md](ARCHITECTURE.md)
-for the current locale list.
+`app_localizations*.dart` files by hand. Add the key to the five priority locales
+in the same pull request. The full workflow, rules and current status are in
+[docs/TRANSLATING.md](docs/TRANSLATING.md).
 
 ## Code style
 

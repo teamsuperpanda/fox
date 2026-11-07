@@ -19,7 +19,8 @@ Closes #
 - [ ] `flutter analyze` reports no issues.
 - [ ] `flutter test --exclude-tags golden` passes.
 - [ ] Tests were added or updated for the behaviour I changed.
-- [ ] User-facing text goes through `AppLocalizations` and new ARB keys have a description.
+- [ ] User-facing text goes through `AppLocalizations`.
+- [ ] New or changed strings are in `app_en.arb` with a `description`, and the same key was added to the five priority locales (see [docs/TRANSLATING.md](../docs/TRANSLATING.md)).
 - [ ] Documentation was updated if paths, commands, dependencies or architecture changed.
 - [ ] UI changes include a screenshot or recording, and the golden screenshots were regenerated if needed.
 
