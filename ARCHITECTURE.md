@@ -80,7 +80,7 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 
 **Name:** Fox
 
-**Description:** A simple, local-first notes app with rich text editing. Supports folders, search, dark mode, and 30+ languages. Zero cloud dependency.
+**Description:** A simple, local-first notes app with rich text editing. Supports folders, search, dark mode and 31 locales. Zero cloud dependency.
 
 **Technologies:** Flutter, Dart 3.6+, Provider, Hive, Flutter Quill
 
@@ -164,7 +164,9 @@ None. This is a fully offline, local-first application with no network dependenc
 ## 8. Security Considerations
 
 - **Data at rest:** Stored locally in Hive boxes via path_provider. No encryption.
-- **Network:** No network requests. No telemetry. No analytics.
+- **Network:** No network requests, no telemetry, no analytics. The Android
+  release manifest requests no `INTERNET` permission; the debug and profile
+  manifests add it for the Flutter tool.
 
 ## 9. Development & Testing
 
@@ -186,7 +188,7 @@ None. This is a fully offline, local-first application with no network dependenc
 
 **Repository URL:** https://github.com/teamsuperpanda/fox
 
-**License:** PolyForm Noncommercial 1.0.0
+**License:** MIT for the code; the Fox name and brand assets are proprietary, see ASSETS-LICENSE.md
 
 **Date of Last Update:** 2026-07-24
 
