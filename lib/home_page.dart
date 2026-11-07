@@ -9,6 +9,7 @@ import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
+import 'package:fox/widgets/broken_notes_dialog.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
 import 'package:fox/widgets/folders_dialog.dart';
@@ -143,6 +144,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {});
   }
 
+  Future<void> _showBrokenNotes() async {
+    await showBrokenNotesDialog(context, controller);
+    if (!mounted) return;
+    setState(() {});
+  }
+
   Future<void> _showViewOptions() async {
     await showModalBottomSheet(
       context: context,
@@ -216,6 +223,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
               ),
             ),
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) {
+              if (controller.brokenNotes.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              return IconButton(
+                icon: const Icon(Icons.report_outlined),
+                tooltip: l10n.repairNotes,
+                onPressed: _showBrokenNotes,
+              );
+            },
+          ),
           Semantics(
             label: l10n.folders,
             child: IconButton(

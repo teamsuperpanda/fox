@@ -43,6 +43,13 @@
   "noFolder": "No Folder",
   "note": "Note",
   "noteCannotBeEmpty": "Note cannot be empty",
+  "brokenNoteTitle": "This note could not be opened",
+  "brokenNoteMessage": "The saved content is not valid rich text. It is shown exactly as stored below and Fox will not overwrite it.",
+  "copyRawContent": "Copy raw content",
+  "rawContentCopied": "Raw content copied",
+  "repairNotes": "Repair notes",
+  "repairNotesMessage": "These notes contain content Fox cannot read. Copy the raw data out before deleting them.",
+  "noBrokenNotes": "No notes need repair",
   "savingTitleOnly": "Saving note with title only",
   "errorSavingNote": "Error saving note: {error}",
   "@errorSavingNote": {

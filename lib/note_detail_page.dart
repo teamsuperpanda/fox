@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
@@ -40,6 +41,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   late String? _folderId;
   late String? _color;
   bool _saving = false;
+
+  bool get _isBroken =>
+      widget.existing?.contentStatus == NoteContentStatus.unparseable;
 
   @override
   void initState() {
@@ -176,6 +180,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   }
 
   Future<void> _saveAndPop() async {
+    if (_isBroken) {
+      Navigator.of(context).pop(const NoteDetailResult());
+      return;
+    }
     if (_saving) return;
     _saving = true;
 
@@ -239,9 +247,65 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
   }
 
+  Widget _buildBroken(BuildContext context, AppLocalizations l10n) {
+    final raw = widget.existing?.content ?? '';
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: l10n.back,
+          onPressed: () => Navigator.of(context).pop(const NoteDetailResult()),
+        ),
+        title: Text(l10n.brokenNoteTitle),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.brokenNoteMessage),
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                onPressed: () async {
+                  await Clipboard.setData(ClipboardData(text: raw));
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                    SnackBar(content: Text(l10n.rawContentCopied)),
+                  );
+                },
+                icon: const Icon(Icons.copy),
+                label: Text(l10n.copyRawContent),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(12),
+                    child: SelectableText(
+                      raw,
+                      style: const TextStyle(fontFamily: 'monospace'),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+
+    if (_isBroken) return _buildBroken(context, l10n);
 
     return PopScope(
       canPop: false,

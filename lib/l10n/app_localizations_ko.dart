@@ -138,6 +138,29 @@ class AppLocalizationsKo extends AppLocalizations {
   String get noteCannotBeEmpty => '노트는 비어 있을 수 없습니다';
 
   @override
+  String get brokenNoteTitle => 'This note could not be opened';
+
+  @override
+  String get brokenNoteMessage =>
+      'The saved content is not valid rich text. It is shown exactly as stored below and Fox will not overwrite it.';
+
+  @override
+  String get copyRawContent => 'Copy raw content';
+
+  @override
+  String get rawContentCopied => 'Raw content copied';
+
+  @override
+  String get repairNotes => 'Repair notes';
+
+  @override
+  String get repairNotesMessage =>
+      'These notes contain content Fox cannot read. Copy the raw data out before deleting them.';
+
+  @override
+  String get noBrokenNotes => 'No notes need repair';
+
+  @override
   String get savingTitleOnly => '제목만으로 노트 저장';
 
   @override
