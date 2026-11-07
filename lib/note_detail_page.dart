@@ -239,6 +239,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     }
   }
 
+  Color _editorBackground(BuildContext context) {
+    final noteColor = parseHexColor(_color);
+    final scheme = Theme.of(context).colorScheme;
+    if (noteColor == null) return scheme.surface;
+    return noteEditorBackground(
+      noteColor: noteColor,
+      surface: scheme.surface,
+      onSurface: scheme.onSurface,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -348,82 +359,92 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             ],
           ),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-              child: TextField(
-                controller: _titleCtrl,
-                decoration: InputDecoration(
-                  hintText: l10n.noteTitle,
-                  border: InputBorder.none,
-                  isDense: true,
-                  contentPadding: EdgeInsets.zero,
+        body: AnimatedContainer(
+          key: const ValueKey('note-editor-tint'),
+          duration: (MediaQuery.maybeOf(context)?.disableAnimations ?? false)
+              ? Duration.zero
+              : const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          color: _editorBackground(context),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                child: TextField(
+                  controller: _titleCtrl,
+                  decoration: InputDecoration(
+                    hintText: l10n.noteTitle,
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  autofocus: widget.existing?.title.isEmpty ?? true,
                 ),
-                style: Theme.of(context).textTheme.headlineSmall,
-                autofocus: widget.existing?.title.isEmpty ?? true,
               ),
-            ),
-            const Divider(height: 1),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                child: Column(
-                  children: [
-                    if (_showToolbar)
-                      QuillSimpleToolbar(
-                        controller: _contentCtrl,
-                        config: QuillSimpleToolbarConfig(
-                          color: Theme.of(context).appBarTheme.backgroundColor,
-                          multiRowsDisplay: false,
-                          toolbarIconAlignment: WrapAlignment.start,
-                          showDividers: false,
-                          showFontFamily: false,
-                          showFontSize: false,
-                          showStrikeThrough: false,
-                          showInlineCode: false,
-                          showColorButton: false,
-                          showBackgroundColorButton: false,
-                          showLeftAlignment: false,
-                          showCenterAlignment: false,
-                          showRightAlignment: false,
-                          showJustifyAlignment: false,
-                          showHeaderStyle: false,
-                          showListCheck: false,
-                          showCodeBlock: false,
-                          showIndent: false,
-                          showLink: false,
-                          buttonOptions: QuillSimpleToolbarButtonOptions(
-                            base: QuillToolbarBaseButtonOptions(
-                              iconTheme: QuillIconTheme(
-                                iconButtonSelectedData: IconButtonData(
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withValues(alpha: 0.1),
+              const Divider(height: 1),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                  child: Column(
+                    children: [
+                      if (_showToolbar)
+                        QuillSimpleToolbar(
+                          controller: _contentCtrl,
+                          config: QuillSimpleToolbarConfig(
+                            color:
+                                Theme.of(context).appBarTheme.backgroundColor,
+                            multiRowsDisplay: false,
+                            toolbarIconAlignment: WrapAlignment.start,
+                            showDividers: false,
+                            showFontFamily: false,
+                            showFontSize: false,
+                            showStrikeThrough: false,
+                            showInlineCode: false,
+                            showColorButton: false,
+                            showBackgroundColorButton: false,
+                            showLeftAlignment: false,
+                            showCenterAlignment: false,
+                            showRightAlignment: false,
+                            showJustifyAlignment: false,
+                            showHeaderStyle: false,
+                            showListCheck: false,
+                            showCodeBlock: false,
+                            showIndent: false,
+                            showLink: false,
+                            buttonOptions: QuillSimpleToolbarButtonOptions(
+                              base: QuillToolbarBaseButtonOptions(
+                                iconTheme: QuillIconTheme(
+                                  iconButtonSelectedData: IconButtonData(
+                                    style: IconButton.styleFrom(
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withValues(alpha: 0.1),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    if (_showToolbar) const SizedBox(height: 8),
-                    Expanded(
-                      child: QuillEditor.basic(
-                        controller: _contentCtrl,
-                        config: QuillEditorConfig(
-                          placeholder: l10n.startTyping,
-                          autoFocus: widget.existing?.title.isNotEmpty ?? false,
+                      if (_showToolbar) const SizedBox(height: 8),
+                      Expanded(
+                        child: QuillEditor.basic(
+                          controller: _contentCtrl,
+                          config: QuillEditorConfig(
+                            placeholder: l10n.startTyping,
+                            autoFocus:
+                                widget.existing?.title.isNotEmpty ?? false,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

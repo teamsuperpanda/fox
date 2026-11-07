@@ -5,6 +5,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/note_colors.dart';
 import 'package:fox/note_detail_page.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'test_helpers.dart';
@@ -161,6 +162,38 @@ void main() {
 
       expect(find.textContaining(l10n.noteCannotBeEmpty), findsOneWidget);
       expect(mockRepo.notes.length, 1);
+    });
+
+    testWidgets('tints the editor for all eight note colours', (tester) async {
+      for (final hex in noteColorOptions.skip(1)) {
+        final note = makeNote(id: 'colour', title: 'Colour', color: hex);
+        await tester.pumpWidget(
+          buildTestApp(
+            NoteDetailPage(
+              existing: note,
+              controller: controller,
+              showToolbar: false,
+            ),
+          ),
+        );
+        await tester.pump();
+
+        final tintFinder = find.byKey(const ValueKey('note-editor-tint'));
+        expect(tintFinder, findsOneWidget, reason: hex);
+        final container = tester.widget<AnimatedContainer>(tintFinder);
+        final tint = (container.decoration! as BoxDecoration).color!;
+        final context = tester.element(tintFinder);
+        final scheme = Theme.of(context).colorScheme;
+
+        expect(tint, isNot(scheme.surface), reason: hex);
+        expect(
+          contrastRatio(scheme.onSurface, tint),
+          greaterThanOrEqualTo(4.5),
+          reason: hex,
+        );
+
+        await tester.pump(const Duration(milliseconds: 300));
+      }
     });
 
     testWidgets('pin button shows correct state', (tester) async {
