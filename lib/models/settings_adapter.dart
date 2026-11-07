@@ -23,12 +23,13 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       showContent: fields[5] as bool? ?? true,
       sortBy: fields[6] as String? ?? 'dateDesc',
       accentColor: fields[7] as String?,
+      searchScope: fields[8] as String? ?? 'all',
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
-    writer.writeByte(8); // Number of fields
+    writer.writeByte(9); // Number of fields
     writer.writeByte(0);
     writer.write(obj.themeMode);
     writer.writeByte(1);
@@ -45,6 +46,8 @@ class SettingsAdapter extends TypeAdapter<Settings> {
     writer.write(obj.sortBy);
     writer.writeByte(7);
     writer.write(obj.accentColor);
+    writer.writeByte(8);
+    writer.write(obj.searchScope);
   }
 
   @override

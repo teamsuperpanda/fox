@@ -165,6 +165,7 @@ void main() {
         alternatingColors: true,
         fabAnimation: false,
         sortBy: 'titleDesc',
+        searchScope: 'folder',
       );
       final copy = s.copyWith();
       expect(copy.themeMode, s.themeMode);
@@ -174,6 +175,27 @@ void main() {
       expect(copy.alternatingColors, s.alternatingColors);
       expect(copy.fabAnimation, s.fabAnimation);
       expect(copy.sortBy, s.sortBy);
+      expect(copy.searchScope, s.searchScope);
+    });
+
+    test('getSearchScope returns all by default', () {
+      expect(settingsService.getSearchScope(), 'all');
+    });
+
+    test('setSearchScope persists the scope', () async {
+      await settingsService.setSearchScope('folder');
+      expect(settingsService.getSearchScope(), 'folder');
+
+      await settingsService.setSearchScope('all');
+      expect(settingsService.getSearchScope(), 'all');
+    });
+
+    test('setSearchScope preserves other settings', () async {
+      await settingsService.setThemeMode(ThemeMode.dark);
+      await settingsService.setSearchScope('folder');
+
+      expect(settingsService.getThemeMode(), ThemeMode.dark);
+      expect(settingsService.getSearchScope(), 'folder');
     });
 
     test('Settings.copyWith clearLocale sets locale to null', () {

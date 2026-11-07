@@ -13,6 +13,7 @@ import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
 import 'package:fox/widgets/folders_dialog.dart';
 import 'package:fox/widgets/note_list.dart';
+import 'package:fox/widgets/search_filters_bar.dart';
 import 'package:fox/widgets/view_options_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -318,6 +319,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+              if (_isSearching ||
+                  controller.searchTerm.isNotEmpty ||
+                  controller.filters.isActive)
+                SearchFiltersBar(controller: controller),
               Expanded(
                 child: notes.isEmpty
                     ? EmptyState(

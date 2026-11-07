@@ -161,10 +161,10 @@ class MockRepository implements NoteAndFolderRepository {
   }
 
   @override
-  Future<List<Note>> getAll() async => notes;
+  Future<List<Note>> getAll() async => List.unmodifiable(notes);
 
   @override
-  Future<List<Folder>> getAllFolders() async => folders;
+  Future<List<Folder>> getAllFolders() async => List.unmodifiable(folders);
 
   @override
   Future<void> upsertFolder(Folder folder) async {

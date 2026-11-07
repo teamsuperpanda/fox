@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
+import 'package:fox/models/search_filters.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
@@ -13,6 +16,12 @@ enum SortBy {
   titleDesc,
   dateAsc,
   dateDesc,
+}
+
+/// Where a search looks. Browsing always respects the selected folder.
+enum SearchScope {
+  all,
+  folder,
 }
 
 class NotesController extends ChangeNotifier {
@@ -61,6 +70,24 @@ class NotesController extends ChangeNotifier {
   String? _selectedFolderId;
   String? get selectedFolderId => _selectedFolderId;
 
+  SearchScope _searchScope = SearchScope.all;
+  SearchScope get searchScope => _searchScope;
+
+  SearchFilters _filters = const SearchFilters();
+  SearchFilters get filters => _filters;
+
+  /// All tags in use, sorted for stable menus.
+  List<String> get allTags {
+    final tags = <String>{};
+    for (final note in _unfilteredNotes) {
+      for (final tag in note.tags) {
+        if (tag.trim().isNotEmpty) tags.add(tag);
+      }
+    }
+    return tags.toList()
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+  }
+
   Future<void> load() async {
     _loading = true;
     notifyListeners();
@@ -81,6 +108,10 @@ class NotesController extends ChangeNotifier {
     final sortStr = _settingsRepository.getSortBy();
     final sort = SortBy.values.where((e) => e.name == sortStr).firstOrNull;
     if (sort != null) _sortBy = sort;
+    final scopeStr = _settingsRepository.getSearchScope();
+    _searchScope =
+        SearchScope.values.where((e) => e.name == scopeStr).firstOrNull ??
+            SearchScope.all;
   }
 
   void _updateView() {
@@ -126,6 +157,23 @@ class NotesController extends ChangeNotifier {
     _updateView();
     notifyListeners();
   }
+
+  void setSearchScope(SearchScope scope) {
+    if (_searchScope == scope) return;
+    _searchScope = scope;
+    _updateView();
+    notifyListeners();
+    unawaited(_settingsRepository.setSearchScope(scope.name));
+  }
+
+  void setFilters(SearchFilters filters) {
+    if (_filters == filters) return;
+    _filters = filters;
+    _updateView();
+    notifyListeners();
+  }
+
+  void clearFilters() => setFilters(const SearchFilters());
 
   Future<void> addFolder(String name) async {
     final folder = Folder(
@@ -256,8 +304,11 @@ class NotesController extends ChangeNotifier {
 
   List<Note> _filterAndSort(List<Note> list) {
     final copy = [...list];
+    final searching = _searchTerm.isNotEmpty;
 
-    if (_selectedFolderId != null) {
+    // A search looks at every note unless the user scopes it to the folder.
+    final applyFolder = !searching || _searchScope == SearchScope.folder;
+    if (applyFolder && _selectedFolderId != null) {
       if (_selectedFolderId == AppConstants.unfiledFolderId) {
         copy.retainWhere((note) => note.folderId == null);
       } else {
@@ -265,7 +316,11 @@ class NotesController extends ChangeNotifier {
       }
     }
 
-    if (_searchTerm.isNotEmpty) {
+    if (_filters.isActive) {
+      copy.retainWhere(_matchesFilters);
+    }
+
+    if (searching) {
       final term = _searchTerm.toLowerCase();
       copy.retainWhere(
         (note) =>
@@ -290,5 +345,22 @@ class NotesController extends ChangeNotifier {
       }
     });
     return copy;
+  }
+
+  bool _matchesFilters(Note note) {
+    final filters = _filters;
+    if (filters.pinnedOnly && !note.pinned) return false;
+    final tag = filters.tag;
+    if (tag != null) {
+      final wanted = tag.toLowerCase();
+      if (!note.tags.any((t) => t.toLowerCase() == wanted)) return false;
+    }
+    final color = filters.color;
+    if (color != null && note.color != color) return false;
+    final from = filters.from;
+    if (from != null && note.updatedAt.isBefore(from)) return false;
+    final to = filters.to;
+    if (to != null && note.updatedAt.isAfter(to)) return false;
+    return true;
   }
 }

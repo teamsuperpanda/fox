@@ -214,4 +214,37 @@ class AppLocalizationsPl extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get searchScopeAll => 'All notes';
+
+  @override
+  String get searchScopeFolder => 'This folder';
+
+  @override
+  String get filterPinned => 'Pinned';
+
+  @override
+  String get filterTag => 'Tag';
+
+  @override
+  String get filterColor => 'Colour';
+
+  @override
+  String get filterDateRange => 'Date range';
+
+  @override
+  String get clearFilters => 'Clear filters';
+
+  @override
+  String searchResultCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count results',
+      one: '1 result',
+      zero: 'No results',
+    );
+    return '$_temp0';
+  }
 }

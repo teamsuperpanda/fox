@@ -10,6 +10,7 @@ class Settings {
     this.fabAnimation = true,
     this.sortBy = 'dateDesc',
     this.accentColor,
+    this.searchScope = 'all',
   });
   final String themeMode; // 'system'|'light'|'dark'
 
@@ -21,6 +22,7 @@ class Settings {
   final String sortBy; // 'dateDesc'|'dateAsc'|'titleAsc'|'titleDesc'
   // Hex string e.g. '#8B9A6B'
   final String? accentColor;
+  final String searchScope; // 'all'|'folder'
 
   ThemeMode get theme {
     return switch (themeMode) {
@@ -42,6 +44,7 @@ class Settings {
     bool? fabAnimation,
     String? sortBy,
     String? accentColor,
+    String? searchScope,
     bool clearAccentColor = false,
   }) {
     return Settings(
@@ -53,6 +56,7 @@ class Settings {
       fabAnimation: fabAnimation ?? this.fabAnimation,
       sortBy: sortBy ?? this.sortBy,
       accentColor: clearAccentColor ? null : (accentColor ?? this.accentColor),
+      searchScope: searchScope ?? this.searchScope,
     );
   }
 }
