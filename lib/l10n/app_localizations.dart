@@ -417,6 +417,48 @@ abstract class AppLocalizations {
   /// **'Saving note with title only'**
   String get savingTitleOnly;
 
+  /// No description provided for @linkAddLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add link'**
+  String get linkAddLabel;
+
+  /// No description provided for @linkEditLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit link'**
+  String get linkEditLabel;
+
+  /// No description provided for @invalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid URL'**
+  String get invalidUrl;
+
+  /// No description provided for @openLinkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open link'**
+  String get openLinkTitle;
+
+  /// No description provided for @openLinkAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get openLinkAction;
+
+  /// No description provided for @openLinkConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Open this link?\n\n{url}'**
+  String openLinkConfirm(String url);
+
+  /// No description provided for @errorOpeningLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open link: {error}'**
+  String errorOpeningLink(String error);
+
   /// No description provided for @errorSavingNote.
   ///
   /// In en, this message translates to:

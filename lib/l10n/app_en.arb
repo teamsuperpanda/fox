@@ -44,6 +44,27 @@
   "note": "Note",
   "noteCannotBeEmpty": "Note cannot be empty",
   "savingTitleOnly": "Saving note with title only",
+  "linkAddLabel": "Add link",
+  "linkEditLabel": "Edit link",
+  "invalidUrl": "Enter a valid URL",
+  "openLinkTitle": "Open link",
+  "openLinkAction": "Open",
+  "openLinkConfirm": "Open this link?\n\n{url}",
+  "@openLinkConfirm": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errorOpeningLink": "Could not open link: {error}",
+  "@errorOpeningLink": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "errorSavingNote": "Error saving note: {error}",
   "@errorSavingNote": {
     "placeholders": {

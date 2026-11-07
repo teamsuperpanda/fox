@@ -142,6 +142,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get savingTitleOnly => 'Сохранение заметки только с заголовком';
 
   @override
+  String get linkAddLabel => 'Add link';
+
+  @override
+  String get linkEditLabel => 'Edit link';
+
+  @override
+  String get invalidUrl => 'Enter a valid URL';
+
+  @override
+  String get openLinkTitle => 'Open link';
+
+  @override
+  String get openLinkAction => 'Open';
+
+  @override
+  String openLinkConfirm(String url) {
+    return 'Open this link?\n\n$url';
+  }
+
+  @override
+  String errorOpeningLink(String error) {
+    return 'Could not open link: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return 'Ошибка сохранения: $error';
   }
