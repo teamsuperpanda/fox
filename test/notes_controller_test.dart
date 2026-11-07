@@ -246,6 +246,44 @@ void main() {
       expect(controller.notes.map((n) => n.title), ['Zebra', 'Apple']);
     });
 
+    test('title sort ignores case', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Zebra', content: Document());
+      await controller.addOrUpdate(title: 'apple', content: Document());
+      await controller.addOrUpdate(title: 'Banana', content: Document());
+
+      controller.setSortBy(SortBy.titleAsc);
+      expect(
+          controller.notes.map((n) => n.title), ['apple', 'Banana', 'Zebra']);
+
+      controller.setSortBy(SortBy.titleDesc);
+      expect(
+          controller.notes.map((n) => n.title), ['Zebra', 'Banana', 'apple']);
+    });
+
+    test('title sort folds accents onto their base letter', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Zebra', content: Document());
+      await controller.addOrUpdate(title: 'Éclair', content: Document());
+      await controller.addOrUpdate(title: 'apple', content: Document());
+
+      controller.setSortBy(SortBy.titleAsc);
+      expect(
+          controller.notes.map((n) => n.title), ['apple', 'Éclair', 'Zebra']);
+    });
+
+    test('equal titles sort deterministically', () async {
+      await controller.load();
+      for (var i = 0; i < 4; i++) {
+        await controller.addOrUpdate(title: 'Same', content: Document());
+      }
+      controller.setSortBy(SortBy.titleAsc);
+      final first = controller.notes.map((n) => n.id).toList();
+      controller.setSortBy(SortBy.dateAsc);
+      controller.setSortBy(SortBy.titleAsc);
+      expect(controller.notes.map((n) => n.id), first);
+    });
+
     test('sort by date ascending', () async {
       await controller.load();
       await controller.addOrUpdate(title: 'Old', content: Document());

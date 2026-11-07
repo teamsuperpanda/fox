@@ -280,9 +280,9 @@ class NotesController extends ChangeNotifier {
 
       switch (_sortBy) {
         case SortBy.titleAsc:
-          return a.title.compareTo(b.title);
+          return _compareTitles(a, b);
         case SortBy.titleDesc:
-          return b.title.compareTo(a.title);
+          return _compareTitles(b, a);
         case SortBy.dateAsc:
           return a.updatedAt.compareTo(b.updatedAt);
         case SortBy.dateDesc:
@@ -291,4 +291,49 @@ class NotesController extends ChangeNotifier {
     });
     return copy;
   }
+
+  /// Case-insensitive title ordering. Equal titles fall back to newest first,
+  /// then to id, so the order is deterministic.
+  static int _compareTitles(Note a, Note b) {
+    final byTitle = _titleSortKey(a.title).compareTo(_titleSortKey(b.title));
+    if (byTitle != 0) return byTitle;
+    final byDate = b.updatedAt.compareTo(a.updatedAt);
+    if (byDate != 0) return byDate;
+    return a.id.compareTo(b.id);
+  }
+}
+
+/// Latin letters whose diacritic variants fold onto the plain letter for
+/// sorting, so "Éclair" sorts with "Eclair" instead of after "Zebra".
+const Map<String, String> _diacriticGroups = {
+  'a': 'áàâäãåāăą',
+  'c': 'çćč',
+  'd': 'ď',
+  'e': 'éèêëēėęě',
+  'g': 'ğ',
+  'i': 'íìîïīį',
+  'l': 'ł',
+  'n': 'ñńň',
+  'o': 'óòôöõōőø',
+  'r': 'ř',
+  's': 'śšş',
+  't': 'ť',
+  'u': 'úùûüūůű',
+  'y': 'ýÿ',
+  'z': 'źżž',
+};
+
+final Map<int, String> _diacriticFolds = {
+  for (final group in _diacriticGroups.entries)
+    for (final rune in group.value.runes) rune: group.key,
+};
+
+/// Lower-cases [title] and folds the diacritics above so titles compare
+/// case-insensitively and accented letters sort with their base letter.
+String _titleSortKey(String title) {
+  final buffer = StringBuffer();
+  for (final rune in title.toLowerCase().runes) {
+    buffer.write(_diacriticFolds[rune] ?? String.fromCharCode(rune));
+  }
+  return buffer.toString();
 }
