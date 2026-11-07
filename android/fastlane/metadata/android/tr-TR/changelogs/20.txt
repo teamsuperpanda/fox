@@ -1,0 +1,5 @@
+2.1.1 sürümündeki yenilikler:
+• Daha hızlı arama.
+• Klasör silinirken oluşan çökme hatası düzeltildi.
+• Başlangıç güvenilirliği iyileştirildi.
+• Ek hata düzeltmeleri ve performans iyileştirmeleri.

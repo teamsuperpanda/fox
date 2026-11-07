@@ -1,0 +1,5 @@
+Novità nella versione 2.1.1:
+• Ricerca più veloce.
+• Risolto un crash durante l'eliminazione delle cartelle.
+• Affidabilità di avvio migliorata.
+• Ulteriori correzioni di bug e miglioramenti delle prestazioni.

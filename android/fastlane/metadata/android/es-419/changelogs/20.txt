@@ -1,0 +1,5 @@
+Novedades en la versión 2.1.1:
+• Búsqueda más rápida.
+• Se corrigió un fallo al eliminar carpetas.
+• Mejora en la fiabilidad de inicio.
+• Correcciones de errores adicionales y mejoras de rendimiento.

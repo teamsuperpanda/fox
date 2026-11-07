@@ -9,9 +9,12 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       export_method: "app-store"
     )
-    upload_to_testflight(
-      skip_waiting_for_build_processing: true
-    )
+    testflight_options = { skip_waiting_for_build_processing: true }
+    changelog_path = "fastlane/metadata/en-US/release_notes.txt"
+    if File.exist?(changelog_path)
+      testflight_options[:changelog] = File.read(changelog_path)
+    end
+    upload_to_testflight(**testflight_options)
   end
 
   lane :release do

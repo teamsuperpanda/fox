@@ -1,0 +1,5 @@
+Có gì mới trong 2.1.1:
+• Tìm kiếm nhanh hơn.
+• Sửa lỗi treo khi xóa thư mục.
+• Cải thiện độ tin cậy khi khởi động.
+• Sửa lỗi bổ sung và cải thiện hiệu suất.
