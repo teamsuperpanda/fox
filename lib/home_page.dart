@@ -9,6 +9,7 @@ import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
+import 'package:fox/trash_page.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
 import 'package:fox/widgets/folders_dialog.dart';
@@ -143,6 +144,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {});
   }
 
+  Future<void> _openTrash() async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(builder: (_) => TrashPage(controller: controller)),
+    );
+    if (!mounted) return;
+    setState(() {});
+  }
+
   Future<void> _showViewOptions() async {
     await showModalBottomSheet(
       context: context,
@@ -230,6 +239,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               icon: const Icon(Icons.tune),
               onPressed: _showViewOptions,
               tooltip: l10n.viewOptions,
+            ),
+          ),
+          Semantics(
+            label: l10n.trash,
+            child: IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _openTrash,
+              tooltip: l10n.trash,
             ),
           ),
           Padding(

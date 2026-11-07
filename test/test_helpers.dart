@@ -63,6 +63,7 @@ Note makeNote({
   List<String> tags = const [],
   String? folderId,
   String? color,
+  DateTime? deletedAt,
 }) {
   return Note(
     id: id,
@@ -73,6 +74,7 @@ Note makeNote({
     tags: tags,
     folderId: folderId,
     color: color,
+    deletedAt: deletedAt,
   );
 }
 

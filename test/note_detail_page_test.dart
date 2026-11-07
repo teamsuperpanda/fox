@@ -18,17 +18,22 @@ class FailingSaveRepository extends MockRepository {
 
 class FailingDeleteRepository extends MockRepository {
   @override
-  Future<void> delete(String id) async {
-    throw Exception('delete failed');
+  Future<void> upsert(Note note) async {
+    if (note.deletedAt != null) {
+      throw Exception('delete failed');
+    }
+    await super.upsert(note);
   }
 }
 
 class DelayedRepository extends MockRepository {
   final Completer<void> upsertCompleter = Completer<void>();
   final Completer<void> deleteCompleter = Completer<void>();
+  final Completer<void> trashCompleter = Completer<void>();
 
   @override
   Future<void> upsert(Note note) async {
+    if (note.deletedAt != null) await trashCompleter.future;
     await upsertCompleter.future;
     await super.upsert(note);
   }
@@ -322,6 +327,7 @@ void main() {
       expect(find.byType(NoteDetailPage), findsOneWidget);
 
       delayedRepo.deleteCompleter.complete();
+      delayedRepo.trashCompleter.complete();
       await tester.pumpAndSettle();
 
       expect(find.byType(NoteDetailPage), findsNothing);

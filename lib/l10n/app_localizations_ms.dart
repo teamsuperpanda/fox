@@ -91,6 +91,32 @@ class AppLocalizationsMs extends AppLocalizations {
   String get undo => 'Buat asal';
 
   @override
+  String get trash => 'Trash';
+
+  @override
+  String get trashEmpty => 'The trash is empty.';
+
+  @override
+  String get trashRetentionInfo =>
+      'Notes in the trash are deleted permanently after 30 days.';
+
+  @override
+  String get restore => 'Restore';
+
+  @override
+  String get deleteForever => 'Delete permanently';
+
+  @override
+  String get deleteForeverConfirm =>
+      'Delete this note permanently? This cannot be undone.';
+
+  @override
+  String get emptyTrash => 'Empty trash';
+
+  @override
+  String get emptyTrashConfirm => 'Permanently delete every note in the trash?';
+
+  @override
   String get noteTitle => 'Tajuk nota...';
 
   @override
