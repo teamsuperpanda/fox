@@ -101,7 +101,7 @@ void main() {
 
     testWidgets('tapping All Notes clears folder filter', (tester) async {
       await controller.addFolder('TestFolder');
-      controller.setSelectedFolder(controller.folders.first.id);
+      await controller.setSelectedFolder(controller.folders.first.id);
       expect(controller.selectedFolderId, isNotNull);
 
       await tester.pumpWidget(

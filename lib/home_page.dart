@@ -161,6 +161,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final activeFilter = controller.selectedFolderId == null
+        ? null
+        : controller.selectedFolderId == AppConstants.unfiledFolderId
+            ? l10n.unfiled
+            : controller.getFolderName(controller.selectedFolderId) ??
+                l10n.unknown;
 
     return Scaffold(
       appBar: AppBar(
@@ -176,9 +182,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               )
-            : MediaQuery.of(context).size.width <= _searchBreakWidth
+            : MediaQuery.of(context).size.width <= _searchBreakWidth &&
+                    activeFilter == null
                 ? null
-                : Text(l10n.appTitle),
+                : Text(activeFilter ?? l10n.appTitle),
         centerTitle: true,
         leading: GestureDetector(
           onTap: _toggleRotation,
@@ -281,6 +288,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     child: Row(
                       children: [
+                        ActionChip(
+                          label: Text(l10n.allNotes),
+                          visualDensity: VisualDensity.compact,
+                          onPressed: () =>
+                              unawaited(controller.setSelectedFolder(null)),
+                        ),
+                        const SizedBox(width: 8),
                         Icon(
                           Icons.folder,
                           size: 16,
@@ -304,7 +318,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                         const SizedBox(width: 4),
                         IconButton(
-                          onPressed: () => controller.setSelectedFolder(null),
+                          onPressed: () =>
+                              unawaited(controller.setSelectedFolder(null)),
                           icon: Icon(
                             Icons.close,
                             size: 16,

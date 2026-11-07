@@ -154,6 +154,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sortBy => '並べ替え';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => '日付（新しい順）';
 
   @override

@@ -6,6 +6,18 @@ class SettingsAdapter extends TypeAdapter<Settings> {
   @override
   final int typeId = 2;
 
+  /// Number of fields written by this version. Append at this index next.
+  static const int fieldCount = 10;
+
+  /// Reads the per-folder sort map without trusting its runtime type.
+  Map<String, String> _readFolderSorts(Object? value) {
+    if (value is! Map) return const <String, String>{};
+    return {
+      for (final entry in value.entries)
+        entry.key.toString(): entry.value.toString(),
+    };
+  }
+
   @override
   Settings read(BinaryReader reader) {
     final numOfFields = reader.readByte();
@@ -23,12 +35,14 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       showContent: fields[5] as bool? ?? true,
       sortBy: fields[6] as String? ?? 'dateDesc',
       accentColor: fields[7] as String?,
+      selectedFolderId: fields[8] is String ? fields[8] as String : null,
+      folderSorts: _readFolderSorts(fields[9]),
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
-    writer.writeByte(8); // Number of fields
+    writer.writeByte(fieldCount); // Number of fields
     writer.writeByte(0);
     writer.write(obj.themeMode);
     writer.writeByte(1);
@@ -45,6 +59,10 @@ class SettingsAdapter extends TypeAdapter<Settings> {
     writer.write(obj.sortBy);
     writer.writeByte(7);
     writer.write(obj.accentColor);
+    writer.writeByte(8);
+    writer.write(obj.selectedFolderId);
+    writer.writeByte(9);
+    writer.write(obj.folderSorts);
   }
 
   @override

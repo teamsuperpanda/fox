@@ -28,7 +28,21 @@ class NotesController extends ChangeNotifier {
   bool get loading => _loading;
 
   SortBy _sortBy = SortBy.dateDesc;
-  SortBy get sortBy => _sortBy;
+
+  /// Sort used when the selected folder has no override.
+  SortBy get sortBy => sortByFor(_selectedFolderId);
+
+  SortBy get globalSortBy => _sortBy;
+
+  /// Per-folder sort overrides, keyed by folder id.
+  Map<String, SortBy> _folderSorts = {};
+
+  SortBy sortByFor(String? folderId) {
+    if (folderId == null || folderId == AppConstants.unfiledFolderId) {
+      return _sortBy;
+    }
+    return _folderSorts[folderId] ?? _sortBy;
+  }
 
   bool _showTags = true;
   bool get showTags => _showTags;
@@ -68,9 +82,35 @@ class NotesController extends ChangeNotifier {
     _unfilteredNotes = await _repo.getAll();
     _folders = await _repo.getAllFolders();
     _loadSettings();
+    await _restoreFolderFilter();
+    _loadFolderSorts();
     _updateView();
     _loading = false;
     notifyListeners();
+  }
+
+  Future<void> _restoreFolderFilter() async {
+    final stored = _settingsRepository.getSelectedFolderId();
+    if (stored == null) {
+      _selectedFolderId = null;
+      return;
+    }
+    final valid = stored == AppConstants.unfiledFolderId ||
+        _folders.any((f) => f.id == stored);
+    _selectedFolderId = valid ? stored : null;
+    if (!valid) {
+      await _settingsRepository.setSelectedFolderId(null);
+    }
+  }
+
+  void _loadFolderSorts() {
+    final sorts = <String, SortBy>{};
+    for (final entry in _settingsRepository.getFolderSorts().entries) {
+      final sort =
+          SortBy.values.where((e) => e.name == entry.value).firstOrNull;
+      if (sort != null) sorts[entry.key] = sort;
+    }
+    _folderSorts = sorts;
   }
 
   void _loadSettings() {
@@ -95,8 +135,15 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSortBy(SortBy value) {
-    _sortBy = value;
+  Future<void> setSortBy(SortBy value) async {
+    final folderId = _selectedFolderId;
+    if (folderId != null && folderId != AppConstants.unfiledFolderId) {
+      _folderSorts = {..._folderSorts, folderId: value};
+      await _settingsRepository.setFolderSort(folderId, value.name);
+    } else {
+      _sortBy = value;
+      await _settingsRepository.setSortBy(value.name);
+    }
     _updateView();
     notifyListeners();
   }
@@ -121,10 +168,11 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedFolder(String? folderId) {
+  Future<void> setSelectedFolder(String? folderId) async {
     _selectedFolderId = folderId;
     _updateView();
     notifyListeners();
+    await _settingsRepository.setSelectedFolderId(folderId);
   }
 
   Future<void> addFolder(String name) async {
@@ -167,7 +215,9 @@ class NotesController extends ChangeNotifier {
     _folders = _folders.where((f) => f.id != id).toList();
     if (_selectedFolderId == id) {
       _selectedFolderId = null;
+      await _settingsRepository.setSelectedFolderId(null);
     }
+    await _settingsRepository.clearFolderSort(id);
     _unfilteredNotes = cleared;
     _updateView();
     notifyListeners();
@@ -278,7 +328,7 @@ class NotesController extends ChangeNotifier {
     copy.sort((a, b) {
       if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
 
-      switch (_sortBy) {
+      switch (sortByFor(_selectedFolderId)) {
         case SortBy.titleAsc:
           return a.title.compareTo(b.title);
         case SortBy.titleDesc:

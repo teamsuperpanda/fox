@@ -234,7 +234,7 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Zebra', content: Document());
       await controller.addOrUpdate(title: 'Apple', content: Document());
-      controller.setSortBy(SortBy.titleAsc);
+      await controller.setSortBy(SortBy.titleAsc);
       expect(controller.notes.map((n) => n.title), ['Apple', 'Zebra']);
     });
 
@@ -242,7 +242,7 @@ void main() {
       await controller.load();
       await controller.addOrUpdate(title: 'Apple', content: Document());
       await controller.addOrUpdate(title: 'Zebra', content: Document());
-      controller.setSortBy(SortBy.titleDesc);
+      await controller.setSortBy(SortBy.titleDesc);
       expect(controller.notes.map((n) => n.title), ['Zebra', 'Apple']);
     });
 
@@ -251,7 +251,7 @@ void main() {
       await controller.addOrUpdate(title: 'Old', content: Document());
       await Future<void>.delayed(const Duration(milliseconds: 5));
       await controller.addOrUpdate(title: 'New', content: Document());
-      controller.setSortBy(SortBy.dateAsc);
+      await controller.setSortBy(SortBy.dateAsc);
       expect(controller.notes.map((n) => n.title), ['Old', 'New']);
     });
 
@@ -426,7 +426,7 @@ void main() {
       await controller.load();
       await controller.addFolder('Active');
       final folderId = controller.folders.first.id;
-      controller.setSelectedFolder(folderId);
+      await controller.setSelectedFolder(folderId);
       expect(controller.selectedFolderId, folderId);
 
       await controller.deleteFolder(folderId);
@@ -445,7 +445,7 @@ void main() {
         content: Document(),
         folderId: folderId,
       );
-      failingController.setSelectedFolder(folderId);
+      await failingController.setSelectedFolder(folderId);
 
       await expectLater(
         failingController.deleteFolder(folderId),
@@ -472,11 +472,11 @@ void main() {
           title: 'InFolder', content: Document(), folderId: folderId);
       await controller.addOrUpdate(title: 'NoFolder', content: Document());
 
-      controller.setSelectedFolder(folderId);
+      await controller.setSelectedFolder(folderId);
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'InFolder');
 
-      controller.setSelectedFolder(null);
+      await controller.setSelectedFolder(null);
       expect(controller.notes.length, 2);
     });
 
@@ -489,7 +489,7 @@ void main() {
           title: 'Filed', content: Document(), folderId: folderId);
       await controller.addOrUpdate(title: 'Unfiled', content: Document());
 
-      controller.setSelectedFolder(AppConstants.unfiledFolderId);
+      await controller.setSelectedFolder(AppConstants.unfiledFolderId);
       expect(controller.notes.length, 1);
       expect(controller.notes.first.title, 'Unfiled');
     });
@@ -534,9 +534,9 @@ void main() {
 
     test('sorting empty list does not crash', () async {
       await controller.load();
-      controller.setSortBy(SortBy.titleAsc);
+      await controller.setSortBy(SortBy.titleAsc);
       expect(controller.notes, isEmpty);
-      controller.setSortBy(SortBy.dateAsc);
+      await controller.setSortBy(SortBy.dateAsc);
       expect(controller.notes, isEmpty);
     });
 
@@ -551,7 +551,7 @@ void main() {
     test('folder filter with no matching notes shows empty', () async {
       await controller.load();
       await controller.addOrUpdate(title: 'Note', content: Document());
-      controller.setSelectedFolder('nonexistent');
+      await controller.setSelectedFolder('nonexistent');
       expect(controller.notes, isEmpty);
     });
 

@@ -111,8 +111,16 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
     StateSetter setDialogState,
   ) {
     final l10n = AppLocalizations.of(context);
+    final folderId = widget.controller.selectedFolderId;
+    final folderSort =
+        folderId != null && folderId != AppConstants.unfiledFolderId;
+    final title = folderSort
+        ? l10n.sortForFolder(
+            widget.controller.getFolderName(folderId) ?? l10n.unknown,
+          )
+        : l10n.sortBy;
     return [
-      _buildSectionHeader(context, l10n.sortBy),
+      _buildSectionHeader(context, title),
       _buildCardGroup(context, [
         _sortRadioTile(
             context, setDialogState, l10n.dateNewestFirst, SortBy.dateDesc),
@@ -319,8 +327,7 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
       groupValue: widget.controller.sortBy,
       onChanged: (val) async {
         try {
-          widget.controller.setSortBy(val);
-          await widget.settingsService.setSortBy(val.name);
+          await widget.controller.setSortBy(val);
         } catch (e) {
           debugPrint('ViewOptionsSheet: failed to persist sortBy: $e');
         }

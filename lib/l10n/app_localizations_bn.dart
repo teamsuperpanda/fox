@@ -155,6 +155,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get sortBy => 'সাজানোর ক্রম';
 
   @override
+  String sortForFolder(String folder) {
+    return 'Sort by ($folder)';
+  }
+
+  @override
   String get dateNewestFirst => 'তারিখ (নতুন আগে)';
 
   @override

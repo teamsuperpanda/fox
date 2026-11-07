@@ -10,6 +10,8 @@ class Settings {
     this.fabAnimation = true,
     this.sortBy = 'dateDesc',
     this.accentColor,
+    this.selectedFolderId,
+    this.folderSorts = const <String, String>{},
   });
   final String themeMode; // 'system'|'light'|'dark'
 
@@ -21,6 +23,12 @@ class Settings {
   final String sortBy; // 'dateDesc'|'dateAsc'|'titleAsc'|'titleDesc'
   // Hex string e.g. '#8B9A6B'
   final String? accentColor;
+
+  /// Last folder filter the user selected, restored on the next launch.
+  final String? selectedFolderId;
+
+  /// Per-folder sort overrides, keyed by folder id.
+  final Map<String, String> folderSorts;
 
   ThemeMode get theme {
     return switch (themeMode) {
@@ -43,6 +51,9 @@ class Settings {
     String? sortBy,
     String? accentColor,
     bool clearAccentColor = false,
+    String? selectedFolderId,
+    bool clearSelectedFolder = false,
+    Map<String, String>? folderSorts,
   }) {
     return Settings(
       themeMode: themeMode ?? this.themeMode,
@@ -53,6 +64,10 @@ class Settings {
       fabAnimation: fabAnimation ?? this.fabAnimation,
       sortBy: sortBy ?? this.sortBy,
       accentColor: clearAccentColor ? null : (accentColor ?? this.accentColor),
+      selectedFolderId: clearSelectedFolder
+          ? null
+          : (selectedFolderId ?? this.selectedFolderId),
+      folderSorts: folderSorts ?? this.folderSorts,
     );
   }
 }

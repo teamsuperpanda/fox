@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/services/constants.dart';
@@ -144,7 +146,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
                   contentPadding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
                   onTap: () {
-                    controller.setSelectedFolder(null);
+                    unawaited(controller.setSelectedFolder(null));
                     setState(() {});
                   },
                 ),
@@ -166,7 +168,8 @@ class _FoldersDialogState extends State<FoldersDialog> {
                   contentPadding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
                   onTap: () {
-                    controller.setSelectedFolder(AppConstants.unfiledFolderId);
+                    unawaited(controller
+                        .setSelectedFolder(AppConstants.unfiledFolderId));
                     setState(() {});
                   },
                 ),
@@ -186,7 +189,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
                     contentPadding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
                     onTap: () {
-                      controller.setSelectedFolder(folder.id);
+                      unawaited(controller.setSelectedFolder(folder.id));
                       setState(() {});
                     },
                     trailing: PopupMenuButton<String>(
