@@ -11,6 +11,11 @@ class _FailingUpsertRepository extends MockRepository {
   Future<void> upsert(Note note) => Future.error(StateError('upsert failed'));
 }
 
+class _FailingDeleteRepository extends MockRepository {
+  @override
+  Future<void> delete(String id) => Future.error(StateError('delete failed'));
+}
+
 void main() {
   group('NoteList Widget', () {
     late MockRepository mockRepo;
@@ -93,10 +98,10 @@ void main() {
       expect(find.byType(NoteList), findsOneWidget);
     });
 
-    testWidgets('pin gesture propagates persistence errors', (tester) async {
+    testWidgets('pin failure shows an error and keeps the row', (tester) async {
       final failingRepo = _FailingUpsertRepository();
       final failingController = NotesController(failingRepo);
-      final note = makeNote();
+      final note = makeNote(title: 'Pin Me');
       failingRepo.notes.add(note);
       await failingController.load();
 
@@ -110,12 +115,44 @@ void main() {
           ),
         ),
       );
-      final dismissible = tester.widget<Dismissible>(find.byType(Dismissible));
 
-      await expectLater(
-        dismissible.confirmDismiss!(DismissDirection.startToEnd),
-        throwsA(isA<StateError>()),
+      await tester.drag(find.text('Pin Me'), const Offset(500, 0));
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.textContaining('Error saving note'), findsOneWidget);
+      expect(find.text('Pin Me'), findsOneWidget);
+      expect(failingController.find(note.id)?.pinned, isFalse);
+    });
+
+    testWidgets('delete failure shows an error and keeps the row',
+        (tester) async {
+      final failingRepo = _FailingDeleteRepository();
+      final failingController = NotesController(failingRepo);
+      final note = makeNote(title: 'Delete Me');
+      failingRepo.notes.add(note);
+      await failingController.load();
+
+      await tester.pumpWidget(
+        buildTestApp(
+          Scaffold(
+            body: NoteList(
+              controller: failingController,
+              notes: [note],
+            ),
+          ),
+        ),
       );
+
+      await tester.drag(find.text('Delete Me'), const Offset(-500, 0));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.textContaining('Error deleting note'), findsOneWidget);
+      expect(find.text('Delete Me'), findsOneWidget);
+      expect(failingController.find(note.id), isNotNull);
     });
 
     testWidgets('note with empty title shows (Untitled)', (tester) async {

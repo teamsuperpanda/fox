@@ -119,17 +119,38 @@ class _NoteListTile extends StatelessWidget {
       // Deletion is handled inside confirmDismiss so Dismissible never removes
       // the widget itself — the list updates via notifyListeners instead.
       confirmDismiss: (direction) async {
+        final messenger = ScaffoldMessenger.maybeOf(context);
+        final errorColor = Theme.of(context).colorScheme.error;
         if (direction == DismissDirection.endToStart) {
           final confirmed = await showDeleteConfirmDialog(context);
           if (confirmed != true) return false;
-          await controller.remove(note.id);
+          try {
+            await controller.remove(note.id);
+          } catch (e) {
+            messenger?.showSnackBar(
+              SnackBar(
+                content: Text(l10n.errorDeletingNote(e.toString())),
+                backgroundColor: errorColor,
+              ),
+            );
+            return false;
+          }
           if (context.mounted) {
             showUndoDeleteSnackBar(context, controller);
           }
           return false; // Never let Dismissible remove the widget
         } else if (direction == DismissDirection.startToEnd) {
           // Pin action - toggle pin
-          await controller.setPinned(note.id, !note.pinned);
+          try {
+            await controller.setPinned(note.id, !note.pinned);
+          } catch (e) {
+            messenger?.showSnackBar(
+              SnackBar(
+                content: Text(l10n.errorSavingNote(e.toString())),
+                backgroundColor: errorColor,
+              ),
+            );
+          }
           return false;
         }
         return false;
