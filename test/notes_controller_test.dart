@@ -302,6 +302,31 @@ void main() {
       expect(controller.notes, isEmpty);
     });
 
+    test('undoRemove restores a note as unfiled when its folder is gone',
+        () async {
+      await controller.load();
+      await controller.addFolder('Temp');
+      final folderId = controller.folders.single.id;
+      await controller.addOrUpdate(
+        title: 'Filed',
+        content: Document(),
+        folderId: folderId,
+      );
+      final noteId = controller.notes.single.id;
+
+      await controller.remove(noteId);
+      await controller.deleteFolder(folderId);
+      expect(controller.folders, isEmpty);
+
+      await controller.undoRemove();
+      final restored = controller.find(noteId);
+      expect(restored, isNotNull);
+      expect(restored!.folderId, isNull);
+
+      controller.setSelectedFolder(AppConstants.unfiledFolderId);
+      expect(controller.notes.map((n) => n.id), [noteId]);
+    });
+
     test('undoRemove does not clear a newer concurrent undo target', () async {
       final blockingRepo = _BlockingUpsertRepo();
       final blockingController = NotesController(blockingRepo);

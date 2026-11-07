@@ -240,16 +240,20 @@ class NotesController extends ChangeNotifier {
   }
 
   Future<void> undoRemove() async {
-    final note = _lastRemovedNote;
-    if (note != null) {
-      await _repo.upsert(note);
-      _unfilteredNotes = [..._unfilteredNotes, note];
-      if (identical(_lastRemovedNote, note)) {
-        _lastRemovedNote = null;
-      }
-      _updateView();
-      notifyListeners();
+    final stashed = _lastRemovedNote;
+    if (stashed == null) return;
+    // The folder may have been deleted while the note sat in the undo slot.
+    final note = stashed.folderId != null &&
+            !_folders.any((f) => f.id == stashed.folderId)
+        ? stashed.copyWith(clearFolder: true)
+        : stashed;
+    await _repo.upsert(note);
+    _unfilteredNotes = [..._unfilteredNotes, note];
+    if (identical(_lastRemovedNote, stashed)) {
+      _lastRemovedNote = null;
     }
+    _updateView();
+    notifyListeners();
   }
 
   Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
