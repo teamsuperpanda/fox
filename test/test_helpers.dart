@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
@@ -38,6 +40,23 @@ Widget buildTestApp(
       home: child,
     ),
   );
+}
+
+/// Collects every non-empty semantics label in the subtree of [root].
+///
+/// Requires `tester.ensureSemantics()` to have been called.
+List<String> collectSemanticsLabels(WidgetTester tester, Finder root) {
+  final labels = <String>[];
+  void visit(SemanticsNode node) {
+    if (node.label.isNotEmpty) labels.add(node.label);
+    node.visitChildren((SemanticsNode child) {
+      visit(child);
+      return true;
+    });
+  }
+
+  visit(tester.getSemantics(root));
+  return labels;
 }
 
 Future<void> hiveTestSetup(String dir) async {
