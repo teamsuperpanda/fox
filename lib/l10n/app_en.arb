@@ -93,9 +93,28 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "renameTag": "Rename tag",
+  "tagName": "Tag name",
+  "deleteTag": "Delete tag?",
+  "deleteTagMessage": "This removes the tag from every note. The notes themselves are kept.",
+  "noTags": "No tags yet",
+  "tagNoteCount": "{count, plural, =1{1 note} other{{count} notes}}",
+  "@tagNoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagRenamed": "Tag renamed to {tag}",
+  "@tagRenamed": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "tagFilter": "Tag filter",
+  "clearTagFilter": "Clear tag filter"
 }

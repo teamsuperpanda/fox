@@ -61,6 +61,42 @@ class NotesController extends ChangeNotifier {
   String? _selectedFolderId;
   String? get selectedFolderId => _selectedFolderId;
 
+  String? _selectedTag;
+  String? get selectedTag => _selectedTag;
+
+  _TagRename? _lastTagRename;
+
+  /// Every tag in use, mapped to the number of notes carrying it. Ordered by
+  /// note count (descending) and then alphabetically, so the chip row and the
+  /// tag manager stay stable between rebuilds.
+  Map<String, int> get tagCounts {
+    final counts = <String, int>{};
+    for (final note in _unfilteredNotes) {
+      for (final tag in note.tags) {
+        counts[tag] = (counts[tag] ?? 0) + 1;
+      }
+    }
+    final entries = counts.entries.toList()
+      ..sort((a, b) {
+        final byCount = b.value.compareTo(a.value);
+        return byCount != 0 ? byCount : a.key.compareTo(b.key);
+      });
+    return {for (final entry in entries) entry.key: entry.value};
+  }
+
+  List<String> get allTags => tagCounts.keys.toList(growable: false);
+
+  /// Tag completions for [query]. Returns nothing until at least two
+  /// characters have been typed, and skips tags already in [exclude].
+  List<String> suggestTags(String query, {List<String> exclude = const []}) {
+    final needle = query.trim().toLowerCase();
+    if (needle.length < 2) return const [];
+    return allTags
+        .where((tag) => tag.startsWith(needle) && !exclude.contains(tag))
+        .take(5)
+        .toList(growable: false);
+  }
+
   Future<void> load() async {
     _loading = true;
     notifyListeners();
@@ -123,6 +159,93 @@ class NotesController extends ChangeNotifier {
 
   void setSelectedFolder(String? folderId) {
     _selectedFolderId = folderId;
+    _updateView();
+    notifyListeners();
+  }
+
+  void setSelectedTag(String? tag) {
+    _selectedTag = tag?.trim().toLowerCase();
+    _updateView();
+    notifyListeners();
+  }
+
+  /// Renames [from] to [to] across every note that carries it. Notes that
+  /// already have [to] are merged rather than duplicated.
+  Future<void> renameTag(String from, String to) async {
+    final source = from.trim().toLowerCase();
+    final target = to.trim().toLowerCase();
+    if (source.isEmpty || target.isEmpty || source == target) return;
+
+    final previous = <Note>[];
+    final updated = <Note>[];
+    for (final note in _unfilteredNotes) {
+      if (!note.tags.contains(source)) continue;
+      final tags = <String>[];
+      for (final tag in note.tags) {
+        final next = tag == source ? target : tag;
+        if (!tags.contains(next)) tags.add(next);
+      }
+      previous.add(note);
+      updated.add(note.copyWith(tags: tags, updatedAt: DateTime.now()));
+    }
+    if (updated.isEmpty) return;
+
+    await _repo.upsertAll(updated);
+    _lastTagRename = _TagRename(
+      previous: previous,
+      previousSelectedTag: _selectedTag,
+    );
+    final updatedIds = updated.map((note) => note.id).toSet();
+    _unfilteredNotes = [
+      ..._unfilteredNotes.where((note) => !updatedIds.contains(note.id)),
+      ...updated,
+    ];
+    if (_selectedTag == source) _selectedTag = target;
+    _updateView();
+    notifyListeners();
+  }
+
+  /// Reverses the last [renameTag], putting every affected note back.
+  Future<void> undoRenameTag() async {
+    final rename = _lastTagRename;
+    if (rename == null) return;
+    await _repo.upsertAll(rename.previous);
+    final restoredIds = rename.previous.map((note) => note.id).toSet();
+    _unfilteredNotes = [
+      ..._unfilteredNotes.where((note) => !restoredIds.contains(note.id)),
+      ...rename.previous,
+    ];
+    _selectedTag = rename.previousSelectedTag;
+    if (identical(_lastTagRename, rename)) _lastTagRename = null;
+    _updateView();
+    notifyListeners();
+  }
+
+  /// Removes [tag] from every note. The notes themselves are kept.
+  Future<void> deleteTag(String tag) async {
+    final target = tag.trim().toLowerCase();
+    if (target.isEmpty) return;
+
+    final updated = <Note>[];
+    for (final note in _unfilteredNotes) {
+      if (!note.tags.contains(target)) continue;
+      updated.add(
+        note.copyWith(
+          tags: note.tags.where((t) => t != target).toList(growable: false),
+          updatedAt: DateTime.now(),
+        ),
+      );
+    }
+    if (updated.isEmpty) return;
+
+    await _repo.upsertAll(updated);
+    _lastTagRename = null;
+    final updatedIds = updated.map((note) => note.id).toSet();
+    _unfilteredNotes = [
+      ..._unfilteredNotes.where((note) => !updatedIds.contains(note.id)),
+      ...updated,
+    ];
+    if (_selectedTag == target) _selectedTag = null;
     _updateView();
     notifyListeners();
   }
@@ -265,6 +388,10 @@ class NotesController extends ChangeNotifier {
       }
     }
 
+    if (_selectedTag != null) {
+      copy.retainWhere((note) => note.tags.contains(_selectedTag));
+    }
+
     if (_searchTerm.isNotEmpty) {
       final term = _searchTerm.toLowerCase();
       copy.retainWhere(
@@ -291,4 +418,16 @@ class NotesController extends ChangeNotifier {
     });
     return copy;
   }
+}
+
+/// Snapshot of the notes touched by the last tag rename, kept so the rename
+/// can be undone from the snackbar.
+class _TagRename {
+  _TagRename({
+    required this.previous,
+    required this.previousSelectedTag,
+  });
+
+  final List<Note> previous;
+  final String? previousSelectedTag;
 }

@@ -13,6 +13,7 @@ import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
 import 'package:fox/widgets/folders_dialog.dart';
 import 'package:fox/widgets/note_list.dart';
+import 'package:fox/widgets/tags_dialog.dart';
 import 'package:fox/widgets/view_options_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -143,6 +144,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {});
   }
 
+  Future<void> _showTagsDialog() async {
+    await showDialog(
+      context: context,
+      builder: (context) => TagsDialog(controller: controller),
+    );
+    if (!mounted) return;
+    setState(() {});
+  }
+
   Future<void> _showViewOptions() async {
     await showModalBottomSheet(
       context: context,
@@ -217,6 +227,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ),
           Semantics(
+            label: l10n.manageTags,
+            child: IconButton(
+              icon: const Icon(Icons.label_outline),
+              onPressed: _showTagsDialog,
+              tooltip: l10n.manageTags,
+            ),
+          ),
+          Semantics(
             label: l10n.folders,
             child: IconButton(
               icon: const Icon(Icons.folder_outlined),
@@ -270,6 +288,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           final notes = controller.notes;
           return Column(
             children: [
+              // Tag filter chip row
+              if (controller.tagCounts.isNotEmpty)
+                Semantics(
+                  label: l10n.tagFilter,
+                  child: SizedBox(
+                    height: 44,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      children: [
+                        for (final entry in controller.tagCounts.entries)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: FilterChip(
+                              label: Text('${entry.key} (${entry.value})'),
+                              selected: controller.selectedTag == entry.key,
+                              onSelected: (selected) => controller
+                                  .setSelectedTag(selected ? entry.key : null),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               // Folder filter chip bar
               if (controller.selectedFolderId != null)
                 Semantics(

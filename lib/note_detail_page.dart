@@ -69,6 +69,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       builder: (context) => _TagsDialog(
         tags: _tags,
         onChanged: (tags) => setState(() => _tags = tags),
+        suggest: (query, exclude) =>
+            widget.controller.suggestTags(query, exclude: exclude),
       ),
     );
   }
@@ -431,9 +433,11 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
 }
 
 class _TagsDialog extends StatefulWidget {
-  const _TagsDialog({required this.tags, required this.onChanged});
+  const _TagsDialog(
+      {required this.tags, required this.onChanged, this.suggest});
   final List<String> tags;
   final ValueChanged<List<String>> onChanged;
+  final List<String> Function(String query, List<String> exclude)? suggest;
 
   @override
   State<_TagsDialog> createState() => _TagsDialogState();
@@ -442,12 +446,16 @@ class _TagsDialog extends StatefulWidget {
 class _TagsDialogState extends State<_TagsDialog> {
   final _tagCtrl = TextEditingController();
   late List<String> _tags = List.of(widget.tags);
+  String _query = '';
 
   @override
   void dispose() {
     _tagCtrl.dispose();
     super.dispose();
   }
+
+  List<String> get _suggestions =>
+      widget.suggest?.call(_query, _tags) ?? const [];
 
   String? _normalizeTag(String raw) {
     final normalized = raw.trim().toLowerCase();
@@ -461,6 +469,7 @@ class _TagsDialogState extends State<_TagsDialog> {
     _tags = [..._tags, tag];
     widget.onChanged(_tags);
     _tagCtrl.clear();
+    _query = '';
     setState(() {});
   }
 
@@ -473,6 +482,7 @@ class _TagsDialogState extends State<_TagsDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final suggestions = _suggestions;
     return AlertDialog(
       title: Text(l10n.manageTags),
       content: SingleChildScrollView(
@@ -488,8 +498,25 @@ class _TagsDialogState extends State<_TagsDialog> {
                   onPressed: () => _addTag(null),
                 ),
               ),
+              onChanged: (value) => setState(() => _query = value),
               onSubmitted: _addTag,
             ),
+            if (suggestions.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Wrap(
+                  spacing: 8,
+                  children: suggestions
+                      .map(
+                        (tag) => ActionChip(
+                          avatar: const Icon(Icons.label_outline, size: 16),
+                          label: Text(tag),
+                          onPressed: () => _addTag(tag),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
