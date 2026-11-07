@@ -8,6 +8,7 @@ class LocaleDisplayNames {
     'el': 'Ελληνικά',
     'en': 'English',
     'es': 'Español',
+    'es_419': 'Español (Latinoamérica)',
     'fi': 'Suomi',
     'fr': 'Français',
     'he': 'עברית',

@@ -195,15 +195,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get systemDefault => 'Mặc định hệ thống';
 
   @override
-  String startupError(String error) {
-    return 'Đã xảy ra lỗi khi khởi động Fox.\n\nHãy thử xóa dữ liệu ứng dụng hoặc cài đặt lại.\n\nLỗi: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Ghi chú trống đã bị hủy';
-
-  @override
-  String get nativeName => 'Tiếng Việt';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

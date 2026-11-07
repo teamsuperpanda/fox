@@ -195,15 +195,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get systemDefault => 'Systemstandard';
 
   @override
-  String startupError(String error) {
-    return 'Något gick fel vid start av Fox.\n\nFörsök rensa appdata eller installera om.\n\nFel: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Tom anteckning kasserad';
-
-  @override
-  String get nativeName => 'Svenska';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

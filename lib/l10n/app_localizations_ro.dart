@@ -194,15 +194,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get systemDefault => 'Implicit sistem';
 
   @override
-  String startupError(String error) {
-    return 'A apărut o eroare la pornirea Fox.\n\nÎncercați să ștergeți datele aplicației sau să o reinstalați.\n\nEroare: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Nota goală a fost eliminată';
-
-  @override
-  String get nativeName => 'Română';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

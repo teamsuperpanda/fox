@@ -74,16 +74,7 @@
   "language": "Language",
   "accentColor": "Theme Color",
   "systemDefault": "System Default",
-  "startupError": "Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: {error}",
-  "@startupError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "emptyNoteDiscarded": "Empty note discarded",
-  "nativeName": "English",
   "folderAlreadyExists": "A folder with this name already exists",
   "searchLanguages": "Search languages",
   "startupFailed": "Startup failed: {error}",
@@ -94,8 +85,4 @@
       }
     }
   }
-
-
-
-
 }

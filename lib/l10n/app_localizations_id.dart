@@ -196,15 +196,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get systemDefault => 'Default sistem';
 
   @override
-  String startupError(String error) {
-    return 'Terjadi kesalahan saat memulai Fox.\n\nCoba hapus data aplikasi atau instal ulang.\n\nKesalahan: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Catatan kosong dibuang';
-
-  @override
-  String get nativeName => 'Bahasa Indonesia';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

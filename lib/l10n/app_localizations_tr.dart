@@ -194,15 +194,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get systemDefault => 'Sistem varsayılanı';
 
   @override
-  String startupError(String error) {
-    return 'Fox başlatılırken bir sorun oluştu.\n\nUygulama verilerini temizlemeyi veya yeniden yüklemeyi deneyin.\n\nHata: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Boş not atıldı';
-
-  @override
-  String get nativeName => 'Türkçe';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

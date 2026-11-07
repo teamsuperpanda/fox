@@ -56,8 +56,12 @@
   "language": "Lingua",
   "accentColor": "Colore di evidenziazione",
   "systemDefault": "Predefinito di sistema",
-  "startupError": "Qualcosa è andato storto all'avvio di Fox.\n\nProva a cancellare i dati dell'app o reinstallarla.\n\nErrore: {error}",  "note": "Nota",
+  "note": "Nota",
   "emptyNoteDiscarded": "Nota vuota scartata",
-
-  "nativeName": "Italiano"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

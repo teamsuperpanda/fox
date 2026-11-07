@@ -195,15 +195,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get systemDefault => 'Výchozí systémový';
 
   @override
-  String startupError(String error) {
-    return 'Při spuštění Fox došlo k chybě.\n\nZkuste vymazat data aplikace nebo ji znovu nainstalovat.\n\nChyba: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Prázdná poznámka zahozena';
-
-  @override
-  String get nativeName => 'Čeština';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

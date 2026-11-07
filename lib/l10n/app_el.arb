@@ -56,8 +56,12 @@
   "language": "Γλώσσα",
   "accentColor": "Χρώμα Τονισμού",
   "systemDefault": "Προεπιλογή συστήματος",
-  "startupError": "Παρουσιάστηκε σφάλμα κατά την εκκίνηση του Fox.\n\nΔοκιμάστε να εκκαθαρίσετε τα δεδομένα εφαρμογής ή να επανεγκαταστήσετε.\n\nΣφάλμα: {error}",  "note": "Σημείωση",
+  "note": "Σημείωση",
   "emptyNoteDiscarded": "Η κενή σημείωση απορρίφθηκε",
-
-  "nativeName": "Ελληνικά"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

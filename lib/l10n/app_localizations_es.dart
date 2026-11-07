@@ -195,15 +195,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get systemDefault => 'Predeterminado del sistema';
 
   @override
-  String startupError(String error) {
-    return 'Algo salió mal al iniciar Fox.\n\nIntenta borrar los datos de la app o reinstalarla.\n\nError: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Nota vacía descartada';
-
-  @override
-  String get nativeName => 'Español';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';
@@ -226,6 +218,15 @@ class AppLocalizationsEs419 extends AppLocalizationsEs {
 
   @override
   String get search => 'Buscar...';
+
+  @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
 
   @override
   String get noNotesYet => 'Aún no hay notas...';
@@ -400,13 +401,16 @@ class AppLocalizationsEs419 extends AppLocalizationsEs {
   String get systemDefault => 'Predeterminado del sistema';
 
   @override
-  String startupError(String error) {
-    return 'Algo salió mal al iniciar Fox.\n\nIntenta borrar los datos de la app o reinstalarla.\n\nError: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Nota vacía descartada';
 
   @override
-  String get nativeName => 'Español (Latinoamérica)';
+  String get folderAlreadyExists => 'A folder with this name already exists';
+
+  @override
+  String get searchLanguages => 'Search languages';
+
+  @override
+  String startupFailed(String error) {
+    return 'Startup failed: $error';
+  }
 }

@@ -194,15 +194,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get systemDefault => 'الافتراضي للنظام';
 
   @override
-  String startupError(String error) {
-    return 'حدث خطأ أثناء بدء تشغيل Fox.\n\nحاول مسح بيانات التطبيق أو إعادة تثبيته.\n\nخطأ: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'تم تجاهل الملاحظة الفارغة';
-
-  @override
-  String get nativeName => 'العربية';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

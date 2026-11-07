@@ -37,6 +37,9 @@ jobs:
       - name: Generate localization
         run: flutter gen-l10n
 
+      - name: Check localization key parity
+        run: dart run tool/check_l10n.dart
+
       - name: Format generated files
         run: dart format lib/ test/
 

@@ -193,15 +193,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get systemDefault => '系统默认';
 
   @override
-  String startupError(String error) {
-    return 'Fox 启动时出现问题。\n\n请尝试清除应用数据或重新安装。\n\n错误：$error';
-  }
-
-  @override
   String get emptyNoteDiscarded => '空笔记已丢弃';
-
-  @override
-  String get nativeName => '中文（简体）';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';
@@ -224,6 +216,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get search => '搜尋...';
+
+  @override
+  String get searchNotes => 'Search notes';
+
+  @override
+  String get addNote => 'Add note';
+
+  @override
+  String get folderFilter => 'Folder filter';
 
   @override
   String get noNotesYet => '還沒有筆記...';
@@ -395,13 +396,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get systemDefault => '系統預設';
 
   @override
-  String startupError(String error) {
-    return 'Fox 啟動時出現問題。\n\n請嘗試清除應用程式資料或重新安裝。\n\n錯誤：$error';
-  }
-
-  @override
   String get emptyNoteDiscarded => '空筆記已丢弃';
 
   @override
-  String get nativeName => '中文（繁體）';
+  String get folderAlreadyExists => 'A folder with this name already exists';
+
+  @override
+  String get searchLanguages => 'Search languages';
+
+  @override
+  String startupFailed(String error) {
+    return 'Startup failed: $error';
+  }
 }

@@ -56,8 +56,12 @@
   "language": "Kieli",
   "accentColor": "Korostusväri",
   "systemDefault": "Järjestelmän oletus",
-  "startupError": "Fox-sovelluksen käynnistämisessä tapahtui virhe.\n\nYritä tyhjentää sovellustiedot tai asenna uudelleen.\n\nVirhe: {error}",  "note": "Muistiinpano",
+  "note": "Muistiinpano",
   "emptyNoteDiscarded": "Tyhjä muistiinpano hylätty",
-
-  "nativeName": "Suomi"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

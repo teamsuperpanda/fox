@@ -196,15 +196,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get systemDefault => 'Systemstandard';
 
   @override
-  String startupError(String error) {
-    return 'Beim Starten von Fox ist ein Fehler aufgetreten.\n\nVersuche, die App-Daten zu löschen oder die App neu zu installieren.\n\nFehler: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Leere Notiz verworfen';
-
-  @override
-  String get nativeName => 'Deutsch';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

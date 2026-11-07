@@ -193,15 +193,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get systemDefault => '시스템 기본값';
 
   @override
-  String startupError(String error) {
-    return 'Fox 시작 중 문제가 발생했습니다.\n\n앱 데이터를 지우거나 다시 설치해 보세요.\n\n오류: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => '빈 노트가 삭제되었습니다';
-
-  @override
-  String get nativeName => '한국어';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

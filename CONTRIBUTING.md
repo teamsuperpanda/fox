@@ -58,12 +58,23 @@ This app supports 30+ languages via ARB files in `lib/l10n/`.
 **Adding a new locale:**
 1. Create `lib/l10n/app_{locale}.arb` (copy `app_en.arb` as a template)
 2. Run `flutter gen-l10n` to regenerate localizations
-3. Add the locale to any locale picker UI
+3. Add the locale to `lib/data/locale_display_names.dart`
+
+**Adding or changing a string:**
+1. Add the key to `app_en.arb` first (it is the source of truth).
+2. Add the same key to every other `app_*.arb`. If there is no translation
+   yet, copy the English value: the checker reports these as untranslated, and
+   a real translation can replace them later. Do not machine-translate.
+3. Run `flutter gen-l10n`.
+4. Run `dart run tool/check_l10n.dart`. It fails when an ARB key set differs
+   from `app_en.arb`, when a key is never used in `lib/`, or when a locale has
+   no display name, and it lists the keys that still carry the English text.
 
 **Rules:**
 - Always include all keys from `app_en.arb` (the source of truth)
 - Do not modify generated `AppLocalizations` files directly
 - Run `flutter gen-l10n` after any ARB change
+- Keep `tool/check_l10n.dart` green; CI runs it before the tests
 
 ## Release Screenshots
 

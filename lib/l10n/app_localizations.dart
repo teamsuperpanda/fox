@@ -141,6 +141,7 @@ abstract class AppLocalizations {
     Locale('nl'),
     Locale('pl'),
     Locale('pt'),
+    Locale('pt', 'BR'),
     Locale('pt', 'PT'),
     Locale('ro'),
     Locale('ru'),
@@ -513,23 +514,11 @@ abstract class AppLocalizations {
   /// **'System Default'**
   String get systemDefault;
 
-  /// No description provided for @startupError.
-  ///
-  /// In en, this message translates to:
-  /// **'Something went wrong starting Fox.\n\nPlease try clearing app data or reinstalling.\n\nError: {error}'**
-  String startupError(String error);
-
   /// No description provided for @emptyNoteDiscarded.
   ///
   /// In en, this message translates to:
   /// **'Empty note discarded'**
   String get emptyNoteDiscarded;
-
-  /// No description provided for @nativeName.
-  ///
-  /// In en, this message translates to:
-  /// **'English'**
-  String get nativeName;
 
   /// No description provided for @folderAlreadyExists.
   ///
@@ -609,6 +598,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'pt':
       {
         switch (locale.countryCode) {
+          case 'BR':
+            return AppLocalizationsPtBr();
           case 'PT':
             return AppLocalizationsPtPt();
         }

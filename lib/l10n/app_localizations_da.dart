@@ -195,15 +195,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get systemDefault => 'Systemstandard';
 
   @override
-  String startupError(String error) {
-    return 'Der opstod en fejl ved start af Fox.\n\nPrøv at rydde appdata eller geninstaller.\n\nFejl: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Tom note kasseret';
-
-  @override
-  String get nativeName => 'Dansk';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

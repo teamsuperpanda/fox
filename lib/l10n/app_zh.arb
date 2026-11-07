@@ -56,8 +56,12 @@
   "language": "语言",
   "accentColor": "强调色",
   "systemDefault": "系统默认",
-  "startupError": "Fox 启动时出现问题。\n\n请尝试清除应用数据或重新安装。\n\n错误：{error}",  "note": "笔记",
+  "note": "笔记",
   "emptyNoteDiscarded": "空笔记已丢弃",
-
-  "nativeName": "中文（简体）"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

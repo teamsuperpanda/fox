@@ -193,15 +193,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get systemDefault => 'システムのデフォルト';
 
   @override
-  String startupError(String error) {
-    return 'Foxの起動中にエラーが発生しました。\n\nアプリデータを消去するか再インストールしてください。\n\nエラー: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => '空のノートは破棄されました';
-
-  @override
-  String get nativeName => '日本語';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

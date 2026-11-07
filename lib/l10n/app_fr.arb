@@ -56,8 +56,12 @@
   "language": "Langue",
   "accentColor": "Couleur d'accentuation",
   "systemDefault": "Par défaut du système",
-  "startupError": "Une erreur est survenue au lancement de Fox.\n\nEssayez de vider les données de l'application ou de la réinstaller.\n\nErreur : {error}",  "note": "Note",
+  "note": "Note",
   "emptyNoteDiscarded": "Note vide abandonnée",
-
-  "nativeName": "Français"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }
