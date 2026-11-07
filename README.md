@@ -64,6 +64,13 @@ flutter test --coverage
 
 ---
 
+## Security
+
+Fox stores your notes on your device and sends nothing anywhere. Found a
+vulnerability? Report it privately, not in a public issue. See [SECURITY.md](SECURITY.md).
+
+---
+
 ## License
 
 The code is [PolyForm Noncommercial 1.0.0](LICENSE). Free for personal use, not for resale.  

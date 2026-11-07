@@ -75,6 +75,13 @@ flutter test test/golden_test.dart --update-goldens
 
 The `release_screenshots.yml` workflow copies generated goldens to Android/iOS Fastlane metadata on release commits. Generated images live in `assets/images/screenshots/`.
 
+## Security
+
+Do not open a public issue for a vulnerability. Report it privately through
+GitHub's [private vulnerability reporting](https://github.com/teamsuperpanda/fox/security/advisories/new).
+See [SECURITY.md](SECURITY.md) for the supported versions, response times, scope
+and the threat model.
+
 ## Pull Request Process
 
 1. Create a feature branch from `main`
