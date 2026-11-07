@@ -213,6 +213,31 @@ class AppLocalizationsZh extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get dataSection => 'Data';
+
+  @override
+  String get exportNotes => 'Export all notes';
+
+  @override
+  String get exportNotesSubtitle => 'Zip with a JSON backup and Markdown files';
+
+  @override
+  String get exportInProgress => 'Exporting notes...';
+
+  @override
+  String exportComplete(int count) {
+    return 'Exported $count notes';
+  }
+
+  @override
+  String exportFailed(String error) {
+    return 'Export failed: $error';
+  }
+
+  @override
+  String get shareExport => 'Share export';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

@@ -46,6 +46,9 @@ class NotesController extends ChangeNotifier {
   List<Note> _visibleNotes = const [];
   List<Note> get notes => _visibleNotes;
 
+  /// Every note, ignoring search and folder filters. Used by export.
+  List<Note> get allNotes => _unfilteredNotes;
+
   bool get hasNotes => _unfilteredNotes.isNotEmpty;
 
   Note? _lastRemovedNote;
