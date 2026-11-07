@@ -53,7 +53,7 @@ Golden test failures with small pixel diffs? Regenerate with `--update-goldens` 
 
 ## Localization
 
-This app supports 30+ languages via ARB files in `lib/l10n/`.
+This app supports 31 locales via ARB files in `lib/l10n/`.
 
 **Adding a new locale:**
 1. Create `lib/l10n/app_{locale}.arb` (copy `app_en.arb` as a template)

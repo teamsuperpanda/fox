@@ -4,7 +4,7 @@
 </picture>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/Dart-3.6+-blue?logo=dart" alt="Dart">
   <img src="https://img.shields.io/github/last-commit/teamsuperpanda/fox" alt="Last commit">
 </p>
@@ -14,7 +14,9 @@
   <a href="https://apps.apple.com/app/fox-list/id1625597940"><img src="https://img.shields.io/badge/App%20Store-0D96F6?logo=apple&logoColor=white" alt="App Store"></a>
 </p>
 
-Fox is a notes app that stays out of your way. Rich text, dark mode, offline-first. No account, no subscription, no cloud dependency.
+**Free, open-source, local-first notes. No account. No cloud. No internet permission.**
+
+Fox is a notes app with rich text, folders, search, dark mode and 31 languages. Your notes live on your device and the release build requests no internet permission, so there is nothing to sign in to and nothing to sync. The source is on [GitHub](https://github.com/teamsuperpanda/fox) under the MIT licence.
 
 Built by [Team Super Panda](https://www.teamsuperpanda.com).
 
@@ -25,10 +27,13 @@ Built by [Team Super Panda](https://www.teamsuperpanda.com).
 Fox is what happens when you strip a notes app down to what actually matters: writing, organising, and finding things fast.
 
 - **Rich text**: bold, italic, bullet lists, ordered lists, note colours. No markdown syntax to remember.
-- **Pin, tag, search**: find any note in seconds, even with hundreds of them.
-- **Dark mode**: light and dark themes that actually look good.
+- **Folders and tags**: pin, tag and file notes, then filter the list by folder.
+- **Search**: find any note in seconds, even with hundreds of them.
+- **Dark mode**: light and dark themes with ten accent colours.
+- **31 languages**: English plus 30 translations, with a searchable language picker.
 - **Offline-first**: it's a local app that happens to have an editor. Your notes live on your device, always available, no signal required.
 - **No accounts**: download it and start typing. There is no signup screen.
+- **No internet permission**: the release manifest does not request `android.permission.INTERNET`. The debug and profile builds add it for the Flutter tool, but the shipped app cannot reach the network.
 
 ---
 
@@ -43,7 +48,7 @@ Fox is a Flutter app with a deliberately simple stack:
 | Editor | Flutter Quill |
 | Fonts | Inter (bundled, no network calls) |
 
-No backend. No sync. No app data leaves your device.
+No backend. No sync. No analytics. No app data leaves your device.
 
 ---
 
@@ -66,5 +71,6 @@ flutter test --coverage
 
 ## License
 
-The code is [PolyForm Noncommercial 1.0.0](LICENSE). Free for personal use, not for resale.  
-Assets are copyright 2026 Team Super Panda (see [ASSETS-LICENSE.md](ASSETS-LICENSE.md)).
+Fox is free and open source. The code is [MIT licensed](LICENSE), so you can read it, build it and fork it, including commercially. The source lives at [github.com/teamsuperpanda/fox](https://github.com/teamsuperpanda/fox).
+
+The Fox name, logo and brand assets are proprietary and are not covered by the MIT licence (see [ASSETS-LICENSE.md](ASSETS-LICENSE.md)).
