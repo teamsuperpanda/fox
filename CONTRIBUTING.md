@@ -65,6 +65,11 @@ This app supports 30+ languages via ARB files in `lib/l10n/`.
 - Do not modify generated `AppLocalizations` files directly
 - Run `flutter gen-l10n` after any ARB change
 
+## Releasing
+
+Releases are tag driven. See [docs/ANDROID_SIGNING.md](docs/ANDROID_SIGNING.md)
+for the upload keystore setup used by release builds.
+
 ## Release Screenshots
 
 Store screenshots are auto-generated via golden tests. Run locally to preview:
