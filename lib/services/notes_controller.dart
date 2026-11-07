@@ -3,24 +3,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
-import 'package:fox/services/constants.dart';
+import 'package:fox/services/notes_query.dart';
 import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:uuid/uuid.dart';
 
-enum SortBy {
-  titleAsc,
-  titleDesc,
-  dateAsc,
-  dateDesc,
-}
+export 'package:fox/services/notes_query.dart' show SortBy;
 
 class NotesController extends ChangeNotifier {
-  NotesController(this._repo, {SettingsService? settingsRepository})
-      : _settingsRepository = settingsRepository ?? SettingsService();
+  NotesController(
+    this._repo, {
+    SettingsService? settingsRepository,
+    NotesQuery? query,
+  })  : _settingsRepository = settingsRepository ?? SettingsService(),
+        _query = query ?? const NotesQuery();
   final NoteAndFolderRepository _repo;
 
   final SettingsService _settingsRepository;
+
+  final NotesQuery _query;
 
   static const Uuid _uuid = Uuid();
 
@@ -84,7 +85,12 @@ class NotesController extends ChangeNotifier {
   }
 
   void _updateView() {
-    _visibleNotes = _filterAndSort(_unfilteredNotes);
+    _visibleNotes = _query.apply(
+      _unfilteredNotes,
+      folderId: _selectedFolderId,
+      searchTerm: _searchTerm,
+      sortBy: _sortBy,
+    );
   }
 
   void setSearchTerm(String term) {
@@ -253,42 +259,4 @@ class NotesController extends ChangeNotifier {
   }
 
   Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
-
-  List<Note> _filterAndSort(List<Note> list) {
-    final copy = [...list];
-
-    if (_selectedFolderId != null) {
-      if (_selectedFolderId == AppConstants.unfiledFolderId) {
-        copy.retainWhere((note) => note.folderId == null);
-      } else {
-        copy.retainWhere((note) => note.folderId == _selectedFolderId);
-      }
-    }
-
-    if (_searchTerm.isNotEmpty) {
-      final term = _searchTerm.toLowerCase();
-      copy.retainWhere(
-        (note) =>
-            note.lowerTitle.contains(term) ||
-            note.plainText.toLowerCase().contains(term) ||
-            note.lowerTags.any((t) => t.contains(term)),
-      );
-    }
-
-    copy.sort((a, b) {
-      if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
-
-      switch (_sortBy) {
-        case SortBy.titleAsc:
-          return a.title.compareTo(b.title);
-        case SortBy.titleDesc:
-          return b.title.compareTo(a.title);
-        case SortBy.dateAsc:
-          return a.updatedAt.compareTo(b.updatedAt);
-        case SortBy.dateDesc:
-          return b.updatedAt.compareTo(a.updatedAt);
-      }
-    });
-    return copy;
-  }
 }
