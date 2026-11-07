@@ -103,10 +103,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Future<void> _addNote() async {
+    // Start the new note in the folder the list is currently filtered to, so
+    // it does not vanish from view as soon as it is saved.
+    final selected = controller.selectedFolderId;
     final result = await Navigator.of(context).push<NoteDetailResult>(
       MaterialPageRoute(
         builder: (_) => NoteDetailPage(
           controller: controller,
+          initialFolderId:
+              selected == AppConstants.unfiledFolderId ? null : selected,
         ),
       ),
     );

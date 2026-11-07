@@ -141,6 +141,40 @@ void main() {
       expect(mockRepo.notes.length, 0);
     });
 
+    testWidgets('new note is saved in the folder it was started from',
+        (tester) async {
+      await controller.load();
+      await controller.addFolder('Work');
+      final folderId = controller.folders.first.id;
+
+      await tester.pumpWidget(
+        buildTestApp(
+          NoteDetailPage(controller: controller, initialFolderId: folderId),
+        ),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Filed note');
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(mockRepo.notes.single.folderId, folderId);
+    });
+
+    testWidgets('new note with no initial folder is saved unfiled',
+        (tester) async {
+      await controller.load();
+
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Loose note');
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(mockRepo.notes.single.folderId, isNull);
+    });
+
     testWidgets('shows error for empty title save', (tester) async {
       final existingNote = makeNote(id: 'existing', title: 'Existing');
       mockRepo.notes.add(existingNote);
