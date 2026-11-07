@@ -3,17 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
-import 'package:fox/models/note_colors.dart';
 import 'package:fox/note_detail_page.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
+import 'package:fox/settings_page.dart';
 import 'package:fox/widgets/dialogs.dart';
 import 'package:fox/widgets/empty_state.dart';
 import 'package:fox/widgets/folders_dialog.dart';
 import 'package:fox/widgets/note_list.dart';
-import 'package:fox/widgets/view_options_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -144,16 +143,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Future<void> _showViewOptions() async {
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      builder: (_) => ViewOptionsSheet(
-        controller: controller,
-        settingsService: widget.settingsService,
-        accentColorOptions: accentColorOptions,
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (_) => SettingsPage(
+          controller: controller,
+          settingsService: widget.settingsService,
+        ),
       ),
     );
   }
