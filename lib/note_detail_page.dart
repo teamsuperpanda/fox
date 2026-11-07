@@ -17,9 +17,14 @@ class NoteDetailPage extends StatefulWidget {
     required this.controller,
     super.key,
     this.existing,
+    this.initialFolderId,
     this.showToolbar = true,
   });
   final Note? existing;
+
+  /// Folder for a new note, e.g. the active folder filter. Ignored when
+  /// [existing] is set.
+  final String? initialFolderId;
   final NotesController controller;
   final bool showToolbar;
 
@@ -52,7 +57,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     _pinned = widget.existing?.pinned ?? false;
     _showToolbar = widget.showToolbar;
     _tags = List.from(widget.existing?.tags ?? []);
-    _folderId = widget.existing?.folderId;
+    _folderId = widget.existing?.folderId ?? widget.initialFolderId;
     _color = widget.existing?.color;
   }
 

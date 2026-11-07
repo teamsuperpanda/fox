@@ -3,6 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/home_page.dart';
 import 'package:fox/note_detail_page.dart';
+import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
 
@@ -82,6 +83,66 @@ void main() {
       await tester.pump();
 
       expect(find.byIcon(Icons.tune), findsOneWidget);
+    });
+
+    testWidgets('note created under a folder filter is filed in that folder',
+        (tester) async {
+      await controller.load();
+      await controller.addFolder('Work');
+      final folderId = controller.folders.first.id;
+      controller.setSelectedFolder(folderId);
+      controller.setFabAnimation(false);
+
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
+      await tester.pump();
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(
+        tester
+            .widget<NoteDetailPage>(find.byType(NoteDetailPage))
+            .initialFolderId,
+        folderId,
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Filed note');
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(controller.notes.single.title, 'Filed note');
+      expect(controller.notes.single.folderId, folderId);
+      expect(find.text('Filed note'), findsOneWidget);
+    });
+
+    testWidgets('note created under the Unfiled filter has no folder',
+        (tester) async {
+      await controller.load();
+      await controller.addFolder('Work');
+      controller.setSelectedFolder(AppConstants.unfiledFolderId);
+      controller.setFabAnimation(false);
+
+      await tester.pumpWidget(buildTestApp(_buildHome(controller: controller)));
+      await tester.pump();
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(
+        tester
+            .widget<NoteDetailPage>(find.byType(NoteDetailPage))
+            .initialFolderId,
+        isNull,
+      );
+
+      await tester.enterText(find.byType(TextField).first, 'Loose note');
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      expect(controller.notes.single.folderId, isNull);
+      expect(find.text('Loose note'), findsOneWidget);
     });
   });
 }
