@@ -186,7 +186,7 @@ None. This is a fully offline, local-first application with no network dependenc
 
 **Repository URL:** https://github.com/teamsuperpanda/fox
 
-**License:** PolyForm Noncommercial 1.0.0
+**License:** MIT (code); brand assets are proprietary, see ASSETS-LICENSE.md
 
 **Date of Last Update:** 2026-07-24
 
