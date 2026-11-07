@@ -194,15 +194,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get systemDefault => 'সিস্টেম ডিফল্ট';
 
   @override
-  String startupError(String error) {
-    return 'Fox শুরু করতে সমস্যা হয়েছে।\n\nঅনুগ্রহ করে অ্যাপ ডেটা মুছে আবার চেষ্টা করুন বা পুনরায় ইনস্টল করুন।\n\nত্রুটি: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'খালি নোট বাতিল করা হয়েছে';
-
-  @override
-  String get nativeName => 'বাংলা';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

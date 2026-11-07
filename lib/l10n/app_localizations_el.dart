@@ -196,15 +196,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get systemDefault => 'Προεπιλογή συστήματος';
 
   @override
-  String startupError(String error) {
-    return 'Παρουσιάστηκε σφάλμα κατά την εκκίνηση του Fox.\n\nΔοκιμάστε να εκκαθαρίσετε τα δεδομένα εφαρμογής ή να επανεγκαταστήσετε.\n\nΣφάλμα: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Η κενή σημείωση απορρίφθηκε';
-
-  @override
-  String get nativeName => 'Ελληνικά';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

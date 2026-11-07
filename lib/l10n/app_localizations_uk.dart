@@ -194,15 +194,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get systemDefault => 'Системна за замовчуванням';
 
   @override
-  String startupError(String error) {
-    return 'Помилка запуску Fox.\n\nСпробуйте очистити дані додатку або перевстановити.\n\nПомилка: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Порожню нотатку відхилено';
-
-  @override
-  String get nativeName => 'Українська';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

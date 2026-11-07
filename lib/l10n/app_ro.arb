@@ -56,8 +56,12 @@
   "language": "Limbă",
   "accentColor": "Culoare de accent",
   "systemDefault": "Implicit sistem",
-  "startupError": "A apărut o eroare la pornirea Fox.\n\nÎncercați să ștergeți datele aplicației sau să o reinstalați.\n\nEroare: {error}",  "note": "Notă",
+  "note": "Notă",
   "emptyNoteDiscarded": "Nota goală a fost eliminată",
-
-  "nativeName": "Română"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

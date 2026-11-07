@@ -194,15 +194,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get systemDefault => 'Lalai sistem';
 
   @override
-  String startupError(String error) {
-    return 'Ralat berlaku semasa memulakan Fox.\n\nSila cuba kosongkan data apl atau pasang semula.\n\nRalat: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Nota kosong dibuang';
-
-  @override
-  String get nativeName => 'Bahasa Melayu';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

@@ -56,8 +56,12 @@
   "language": "Språk",
   "accentColor": "Accentfärg",
   "systemDefault": "Systemstandard",
-  "startupError": "Något gick fel vid start av Fox.\n\nFörsök rensa appdata eller installera om.\n\nFel: {error}",  "note": "Anteckning",
+  "note": "Anteckning",
   "emptyNoteDiscarded": "Tom anteckning kasserad",
-
-  "nativeName": "Svenska"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

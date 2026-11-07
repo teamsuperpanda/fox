@@ -196,15 +196,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get systemDefault => 'Systeemstandaard';
 
   @override
-  String startupError(String error) {
-    return 'Er is iets misgegaan bij het starten van Fox.\n\nProbeer de app-gegevens te wissen of opnieuw te installeren.\n\nFout: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Lege notitie weggegooid';
-
-  @override
-  String get nativeName => 'Nederlands';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

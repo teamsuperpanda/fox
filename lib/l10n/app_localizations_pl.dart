@@ -194,15 +194,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get systemDefault => 'Domyślny systemowy';
 
   @override
-  String startupError(String error) {
-    return 'Coś poszło nie tak podczas uruchamiania Fox.\n\nSpróbuj wyczyścić dane aplikacji lub zainstalować ją ponownie.\n\nBłąd: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Pusta notatka odrzucona';
-
-  @override
-  String get nativeName => 'Polski';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

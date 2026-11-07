@@ -56,8 +56,12 @@
   "language": "भाषा",
   "accentColor": "एक्सेंट रंग",
   "systemDefault": "सिस्टम डिफ़ॉल्ट",
-  "startupError": "Fox शुरू करते समय कुछ गलत हो गया।\n\nऐप डेटा साफ़ करने या पुनः इंस्टॉल करने का प्रयास करें।\n\nत्रुटि: {error}",  "note": "नोट",
+  "note": "नोट",
   "emptyNoteDiscarded": "खाली नोट हटा दिया गया",
-
-  "nativeName": "हिन्दी"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

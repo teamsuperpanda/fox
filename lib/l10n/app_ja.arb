@@ -56,8 +56,12 @@
   "language": "言語",
   "accentColor": "アクセントカラー",
   "systemDefault": "システムのデフォルト",
-  "startupError": "Foxの起動中にエラーが発生しました。\n\nアプリデータを消去するか再インストールしてください。\n\nエラー: {error}",  "note": "ノート",
+  "note": "ノート",
   "emptyNoteDiscarded": "空のノートは破棄されました",
-
-  "nativeName": "日本語"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

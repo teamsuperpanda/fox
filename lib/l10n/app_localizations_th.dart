@@ -194,15 +194,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get systemDefault => 'ค่าเริ่มต้นระบบ';
 
   @override
-  String startupError(String error) {
-    return 'เกิดข้อผิดพลาดในการเริ่มต้น Fox\n\nกรุณาลองล้างข้อมูลแอปหรือติดตั้งใหม่\n\nข้อผิดพลาด: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'บันทึกที่ว่างเปล่าถูกละทิ้ง';
-
-  @override
-  String get nativeName => 'ภาษาไทย';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

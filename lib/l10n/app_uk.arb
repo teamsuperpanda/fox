@@ -56,8 +56,12 @@
   "language": "Мова",
   "accentColor": "Колір акценту",
   "systemDefault": "Системна за замовчуванням",
-  "startupError": "Помилка запуску Fox.\n\nСпробуйте очистити дані додатку або перевстановити.\n\nПомилка: {error}",  "note": "Нотатка",
+  "note": "Нотатка",
   "emptyNoteDiscarded": "Порожню нотатку відхилено",
-
-  "nativeName": "Українська"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

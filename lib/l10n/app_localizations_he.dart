@@ -194,15 +194,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get systemDefault => 'ברירת מחדל של המערכת';
 
   @override
-  String startupError(String error) {
-    return 'אירעה שגיאה בהפעלת Fox.\n\nנסה לנקות את נתוני האפליקציה או להתקין מחדש.\n\nשגיאה: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'פתק ריק נמחק';
-
-  @override
-  String get nativeName => 'עברית';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

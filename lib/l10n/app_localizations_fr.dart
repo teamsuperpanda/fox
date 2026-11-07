@@ -197,15 +197,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get systemDefault => 'Par défaut du système';
 
   @override
-  String startupError(String error) {
-    return 'Une erreur est survenue au lancement de Fox.\n\nEssayez de vider les données de l\'application ou de la réinstaller.\n\nErreur : $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Note vide abandonnée';
-
-  @override
-  String get nativeName => 'Français';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

@@ -194,15 +194,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get systemDefault => 'Системный по умолчанию';
 
   @override
-  String startupError(String error) {
-    return 'Произошла ошибка при запуске Fox.\n\nПопробуйте очистить данные приложения или переустановить его.\n\nОшибка: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Пустая заметка отброшена';
-
-  @override
-  String get nativeName => 'Русский';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

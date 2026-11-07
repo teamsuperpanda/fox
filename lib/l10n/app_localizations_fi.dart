@@ -196,15 +196,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get systemDefault => 'Järjestelmän oletus';
 
   @override
-  String startupError(String error) {
-    return 'Fox-sovelluksen käynnistämisessä tapahtui virhe.\n\nYritä tyhjentää sovellustiedot tai asenna uudelleen.\n\nVirhe: $error';
-  }
-
-  @override
   String get emptyNoteDiscarded => 'Tyhjä muistiinpano hylätty';
-
-  @override
-  String get nativeName => 'Suomi';
 
   @override
   String get folderAlreadyExists => 'A folder with this name already exists';

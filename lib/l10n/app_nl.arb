@@ -56,8 +56,12 @@
   "language": "Taal",
   "accentColor": "Accentkleur",
   "systemDefault": "Systeemstandaard",
-  "startupError": "Er is iets misgegaan bij het starten van Fox.\n\nProbeer de app-gegevens te wissen of opnieuw te installeren.\n\nFout: {error}",  "note": "Notitie",
+  "note": "Notitie",
   "emptyNoteDiscarded": "Lege notitie weggegooid",
-
-  "nativeName": "Nederlands"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }

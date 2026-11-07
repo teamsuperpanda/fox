@@ -56,8 +56,12 @@
   "language": "Sprache",
   "accentColor": "Akzentfarbe",
   "systemDefault": "Systemstandard",
-  "startupError": "Beim Starten von Fox ist ein Fehler aufgetreten.\n\nVersuche, die App-Daten zu löschen oder die App neu zu installieren.\n\nFehler: {error}",  "note": "Notiz",
+  "note": "Notiz",
   "emptyNoteDiscarded": "Leere Notiz verworfen",
-
-  "nativeName": "Deutsch"
+  "searchNotes": "Search notes",
+  "addNote": "Add note",
+  "folderFilter": "Folder filter",
+  "folderAlreadyExists": "A folder with this name already exists",
+  "searchLanguages": "Search languages",
+  "startupFailed": "Startup failed: {error}"
 }
