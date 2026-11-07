@@ -58,6 +58,24 @@ class NotesController extends ChangeNotifier {
   List<Folder> _folders = const [];
   List<Folder> get folders => _folders;
 
+  /// Top-level folders, in creation order.
+  List<Folder> get rootFolders =>
+      _folders.where((f) => f.parentId == null).toList();
+
+  /// Children of [parentId], in creation order.
+  List<Folder> childFolders(String parentId) =>
+      _folders.where((f) => f.parentId == parentId).toList();
+
+  /// Folder name with its parent as a breadcrumb, e.g. "Work / Recipes".
+  String folderPath(String id) {
+    final folder = _folders.firstWhereOrNull((f) => f.id == id);
+    if (folder == null) return '';
+    final parent = folder.parentId == null
+        ? null
+        : _folders.firstWhereOrNull((f) => f.id == folder.parentId);
+    return parent == null ? folder.name : '${parent.name} / ${folder.name}';
+  }
+
   String? _selectedFolderId;
   String? get selectedFolderId => _selectedFolderId;
 
@@ -127,11 +145,68 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addFolder(String name) async {
+  String? _lastMovedNoteId;
+  String? _lastMoveFromFolderId;
+  DateTime? _lastMoveFromUpdatedAt;
+
+  bool get canUndoMove => _lastMovedNoteId != null;
+
+  /// Files a note into [folderId], or unfiles it when [folderId] is null.
+  Future<void> moveToFolder(String noteId, String? folderId) async {
+    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == noteId);
+    if (note == null || note.folderId == folderId) return;
+    final updated = note.copyWith(
+      folderId: folderId,
+      clearFolder: folderId == null,
+      updatedAt: DateTime.now(),
+    );
+    await _repo.upsert(updated);
+    _lastMovedNoteId = note.id;
+    _lastMoveFromFolderId = note.folderId;
+    _lastMoveFromUpdatedAt = note.updatedAt;
+    _unfilteredNotes =
+        _unfilteredNotes.map((n) => n.id == noteId ? updated : n).toList();
+    _updateView();
+    notifyListeners();
+  }
+
+  /// Puts the last moved note back in its previous folder and position.
+  Future<void> undoMove() async {
+    final id = _lastMovedNoteId;
+    if (id == null) return;
+    final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
+    if (note != null) {
+      final restored = note.copyWith(
+        folderId: _lastMoveFromFolderId,
+        clearFolder: _lastMoveFromFolderId == null,
+        updatedAt: _lastMoveFromUpdatedAt,
+      );
+      await _repo.upsert(restored);
+      _unfilteredNotes =
+          _unfilteredNotes.map((n) => n.id == id ? restored : n).toList();
+      _updateView();
+    }
+    _lastMovedNoteId = null;
+    _lastMoveFromFolderId = null;
+    _lastMoveFromUpdatedAt = null;
+    notifyListeners();
+  }
+
+  Future<void> addFolder(String name, {String? parentId}) async {
+    if (parentId != null) {
+      final parent = _folders.firstWhereOrNull((f) => f.id == parentId);
+      if (parent == null) {
+        throw ArgumentError('Unknown parent folder: $parentId');
+      }
+      if (parent.parentId != null) {
+        throw ArgumentError('Folders can only nest one level deep');
+      }
+    }
     final folder = Folder(
       id: _uuid.v4(),
       name: name.trim(),
       createdAt: DateTime.now(),
+      parentId: parentId,
     );
     await _repo.upsertFolder(folder);
     _folders = [..._folders, folder];
@@ -147,25 +222,44 @@ class NotesController extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Note> _clearFolderFrom(List<Note> notes, String folderId, DateTime now) {
-    return notes
-        .map((n) => n.folderId == folderId
+  Future<void> deleteFolder(String id) async {
+    final now = DateTime.now();
+    final folder = _folders.firstWhereOrNull((f) => f.id == id);
+    if (folder == null) return;
+
+    // Children move up to the deleted folder's parent, never to a ghost id.
+    final children = _folders.where((f) => f.parentId == id).toList();
+    final reparented = [
+      for (final child in children)
+        child.copyWith(
+            parentId: folder.parentId, clearParent: folder.parentId == null),
+    ];
+    for (final child in reparented) {
+      await _repo.upsertFolder(child);
+    }
+
+    // Notes in the folder and in its children become unfiled.
+    final affectedIds = {id, ...children.map((c) => c.id)};
+    final cleared = _unfilteredNotes
+        .map((n) => affectedIds.contains(n.folderId)
             ? n.copyWith(clearFolder: true, updatedAt: now)
             : n)
         .toList();
-  }
-
-  Future<void> deleteFolder(String id) async {
-    final now = DateTime.now();
-    final cleared = _clearFolderFrom(_unfilteredNotes, id, now);
     final batch = [
       for (var i = 0; i < cleared.length; i++)
-        if (_unfilteredNotes[i].folderId == id) cleared[i],
+        if (affectedIds.contains(_unfilteredNotes[i].folderId)) cleared[i],
     ];
     if (batch.isNotEmpty) await _repo.upsertAll(batch);
+
     await _repo.deleteFolder(id);
-    _folders = _folders.where((f) => f.id != id).toList();
-    if (_selectedFolderId == id) {
+    _folders = _folders
+        .where((f) => f.id != id)
+        .map(
+          (f) =>
+              f.parentId == id ? reparented.firstWhere((r) => r.id == f.id) : f,
+        )
+        .toList();
+    if (affectedIds.contains(_selectedFolderId)) {
       _selectedFolderId = null;
     }
     _unfilteredNotes = cleared;

@@ -93,6 +93,15 @@ class AppLocalizationsEl extends AppLocalizations {
   String get undo => 'Αναίρεση';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Τίτλος σημείωσης...';
 
   @override

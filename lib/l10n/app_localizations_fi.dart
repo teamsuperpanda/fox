@@ -93,6 +93,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get undo => 'Kumoa';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Muistiinpanon otsikko...';
 
   @override

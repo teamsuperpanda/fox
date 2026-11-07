@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/models/folder.dart';
 import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 
@@ -73,6 +74,36 @@ class _FoldersDialogState extends State<FoldersDialog> {
       if (!mounted) return;
       setState(() {});
     }
+  }
+
+  Future<void> _addSubfolder(Folder parent) async {
+    final l10n = AppLocalizations.of(context);
+    final nameCtrl = TextEditingController();
+    final name = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.subfolder),
+        content: TextField(
+          controller: nameCtrl,
+          autofocus: true,
+          decoration: InputDecoration(hintText: l10n.folderName),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(nameCtrl.text),
+            child: Text(l10n.create),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || name == null || name.trim().isEmpty) return;
+    await controller.addFolder(name, parentId: parent.id);
+    if (!mounted) return;
+    setState(() {});
   }
 
   Future<void> _deleteFolder(String id) async {
@@ -171,42 +202,7 @@ class _FoldersDialogState extends State<FoldersDialog> {
                   },
                 ),
               ),
-              ...controller.folders.map((folder) {
-                return Semantics(
-                  label: 'Folder: ${folder.name}',
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.folder,
-                      color: controller.selectedFolderId == folder.id
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                    ),
-                    title: Text(folder.name),
-                    selected: controller.selectedFolderId == folder.id,
-                    contentPadding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                    onTap: () {
-                      controller.setSelectedFolder(folder.id);
-                      setState(() {});
-                    },
-                    trailing: PopupMenuButton<String>(
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                            value: 'rename', child: Text(l10n.rename)),
-                        PopupMenuItem(
-                            value: 'delete', child: Text(l10n.delete)),
-                      ],
-                      onSelected: (action) async {
-                        if (action == 'rename') {
-                          await _renameFolder(folder.id, folder.name);
-                        } else if (action == 'delete') {
-                          await _deleteFolder(folder.id);
-                        }
-                      },
-                    ),
-                  ),
-                );
-              }),
+              ..._folderTiles(context),
             ],
           ),
         ),
@@ -217,6 +213,68 @@ class _FoldersDialogState extends State<FoldersDialog> {
           child: Text(l10n.close),
         ),
       ],
+    );
+  }
+
+  List<Widget> _folderTiles(BuildContext context) {
+    final tiles = <Widget>[];
+    for (final root in controller.rootFolders) {
+      tiles.add(_folderTile(context, root, depth: 0));
+      for (final child in controller.childFolders(root.id)) {
+        tiles.add(_folderTile(context, child, depth: 1));
+      }
+    }
+    return tiles;
+  }
+
+  Widget _folderTile(
+    BuildContext context,
+    Folder folder, {
+    required int depth,
+  }) {
+    final l10n = AppLocalizations.of(context);
+    final selected = controller.selectedFolderId == folder.id;
+    return Semantics(
+      label: 'Folder: ${controller.folderPath(folder.id)}',
+      child: Padding(
+        padding: EdgeInsets.only(left: depth * 16),
+        child: ListTile(
+          leading: Icon(
+            depth == 0 ? Icons.folder : Icons.subdirectory_arrow_right,
+            color: selected ? Theme.of(context).colorScheme.primary : null,
+          ),
+          title: Text(
+            depth == 0 ? folder.name : controller.folderPath(folder.id),
+          ),
+          selected: selected,
+          contentPadding: EdgeInsets.zero,
+          visualDensity: VisualDensity.compact,
+          onTap: () {
+            controller.setSelectedFolder(folder.id);
+            setState(() {});
+          },
+          trailing: PopupMenuButton<String>(
+            itemBuilder: (_) => [
+              PopupMenuItem(value: 'rename', child: Text(l10n.rename)),
+              if (depth == 0)
+                PopupMenuItem(
+                  value: 'subfolder',
+                  child: Text(l10n.subfolder),
+                ),
+              PopupMenuItem(value: 'delete', child: Text(l10n.delete)),
+            ],
+            onSelected: (action) async {
+              if (action == 'rename') {
+                await _renameFolder(folder.id, folder.name);
+              } else if (action == 'subfolder') {
+                await _addSubfolder(folder);
+              } else if (action == 'delete') {
+                await _deleteFolder(folder.id);
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 }

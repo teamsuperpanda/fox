@@ -91,6 +91,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get undo => 'Отменить';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Заголовок заметки...';
 
   @override

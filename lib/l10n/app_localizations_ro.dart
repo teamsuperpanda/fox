@@ -91,6 +91,15 @@ class AppLocalizationsRo extends AppLocalizations {
   String get undo => 'Anulează';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Titlul notei...';
 
   @override

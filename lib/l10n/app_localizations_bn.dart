@@ -91,6 +91,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String get undo => 'পূর্বাবস্থায় ফেরান';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'নোটের শিরোনাম...';
 
   @override

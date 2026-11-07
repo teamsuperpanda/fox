@@ -90,6 +90,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get undo => '실행 취소';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => '노트 제목...';
 
   @override

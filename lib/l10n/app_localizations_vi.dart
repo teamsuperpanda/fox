@@ -92,6 +92,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get undo => 'Hoàn tác';
 
   @override
+  String get noteMoved => 'Note moved';
+
+  @override
+  String get subfolder => 'Subfolder';
+
+  @override
+  String get create => 'Create';
+
+  @override
   String get noteTitle => 'Tiêu đề ghi chú...';
 
   @override

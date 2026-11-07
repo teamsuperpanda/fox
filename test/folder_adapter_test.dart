@@ -35,6 +35,7 @@ void main() {
         id: 'abc-123',
         name: 'My Folder',
         createdAt: DateTime(2025, 7, 4, 15, 30),
+        parentId: 'parent-1',
       );
 
       await box.put('testFolder', original);
@@ -48,6 +49,7 @@ void main() {
       expect(restored.id, original.id);
       expect(restored.name, original.name);
       expect(restored.createdAt, original.createdAt);
+      expect(restored.parentId, 'parent-1');
 
       await box.close();
       await Hive.deleteFromDisk();
