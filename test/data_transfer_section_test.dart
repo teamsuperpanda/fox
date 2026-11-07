@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -8,6 +9,7 @@ import 'package:fox/models/folder.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/settings.dart';
 import 'package:fox/services/export/export_service.dart';
+import 'package:fox/services/import/import_service.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/widgets/data_transfer_section.dart';
@@ -115,5 +117,87 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('disk full'), findsOneWidget);
+  });
+
+  testWidgets('imports a picked Markdown file and reports the summary', (
+    tester,
+  ) async {
+    final controller = NotesController(MemoryRepo());
+    await controller.load();
+
+    await tester.pumpWidget(
+      buildTestApp(
+        Scaffold(
+          body: SingleChildScrollView(
+            child: DataTransferSection(
+              controller: controller,
+              settingsService: SettingsService(),
+              importer: FoxImporter(),
+              backupDirectoryProvider: () async => tempDir,
+              pickFiles: () async => [
+                ImportFile(
+                  name: 'hello.md',
+                  bytes: Uint8List.fromList(
+                    utf8.encode('---\ntitle: "Hello"\n---\n\nbody'),
+                  ),
+                ),
+              ],
+              pickFolder: () async => const [],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Import notes'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(controller.allNotes, hasLength(1));
+    expect(find.textContaining('1 added'), findsOneWidget);
+    expect(
+      find.text('A backup of your library was saved before importing.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('rejects an invalid import without writing', (tester) async {
+    final controller = NotesController(MemoryRepo());
+    await controller.load();
+
+    await tester.pumpWidget(
+      buildTestApp(
+        Scaffold(
+          body: SingleChildScrollView(
+            child: DataTransferSection(
+              controller: controller,
+              settingsService: SettingsService(),
+              importer: FoxImporter(),
+              backupDirectoryProvider: () async => tempDir,
+              pickFiles: () async => [
+                ImportFile(
+                  name: 'broken.zip',
+                  bytes: Uint8List.fromList([0x50, 0x4B, 0x00, 0x00]),
+                ),
+              ],
+              pickFolder: () async => const [],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Import notes'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(controller.allNotes, isEmpty);
+    expect(find.textContaining('Import failed'), findsOneWidget);
   });
 }

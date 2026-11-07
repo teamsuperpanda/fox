@@ -239,4 +239,33 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get shareExport => 'Share export';
+
+  @override
+  String get importNotes => 'Import notes';
+
+  @override
+  String get importNotesSubtitle => 'Merge a Fox backup (.zip or .json)';
+
+  @override
+  String get importFolder => 'Import Markdown folder';
+
+  @override
+  String get importFolderSubtitle => 'One note per .md or .txt file';
+
+  @override
+  String get importInProgress => 'Importing...';
+
+  @override
+  String importSummary(int added, int updated, int skipped) {
+    return 'Import finished: $added added, $updated updated, $skipped skipped';
+  }
+
+  @override
+  String get importBackupSaved =>
+      'A backup of your library was saved before importing.';
+
+  @override
+  String importFailed(String error) {
+    return 'Import failed: $error';
+  }
 }

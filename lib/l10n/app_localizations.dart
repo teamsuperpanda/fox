@@ -590,6 +590,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share export'**
   String get shareExport;
+
+  /// No description provided for @importNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Import notes'**
+  String get importNotes;
+
+  /// No description provided for @importNotesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge a Fox backup (.zip or .json)'**
+  String get importNotesSubtitle;
+
+  /// No description provided for @importFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Markdown folder'**
+  String get importFolder;
+
+  /// No description provided for @importFolderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One note per .md or .txt file'**
+  String get importFolderSubtitle;
+
+  /// No description provided for @importInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing...'**
+  String get importInProgress;
+
+  /// No description provided for @importSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Import finished: {added} added, {updated} updated, {skipped} skipped'**
+  String importSummary(int added, int updated, int skipped);
+
+  /// No description provided for @importBackupSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'A backup of your library was saved before importing.'**
+  String get importBackupSaved;
+
+  /// No description provided for @importFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: {error}'**
+  String importFailed(String error);
 }
 
 class _AppLocalizationsDelegate

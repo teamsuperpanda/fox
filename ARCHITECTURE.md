@@ -133,6 +133,8 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 
 **Technologies:** `archive` (zip), `share_plus` (OS share sheet), `path_provider` (exports directory). The codec lives in `lib/services/export/` and has no Flutter plugin dependency, so it is unit tested directly.
 
+**Import:** `FoxImporter` (`lib/services/import/`) validates an export zip or JSON file, single Markdown/plain-text files, or a folder of them before writing anything. Notes merge by id and only replace a local note when the imported copy is newer, so importing the same file twice adds nothing. Folders match by id first and then by case-insensitive name. A full JSON backup of the current library is written to the app's `backups/` folder before the first mutation, and the import is refused if that backup cannot be written.
+
 
 ## 4. Module Boundary Convention
 

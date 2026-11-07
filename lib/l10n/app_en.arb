@@ -114,5 +114,33 @@
       }
     }
   },
-  "shareExport": "Share export"
+  "shareExport": "Share export",
+  "importNotes": "Import notes",
+  "importNotesSubtitle": "Merge a Fox backup (.zip or .json)",
+  "importFolder": "Import Markdown folder",
+  "importFolderSubtitle": "One note per .md or .txt file",
+  "importInProgress": "Importing...",
+  "importSummary": "Import finished: {added} added, {updated} updated, {skipped} skipped",
+  "@importSummary": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "updated": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "importBackupSaved": "A backup of your library was saved before importing.",
+  "importFailed": "Import failed: {error}",
+  "@importFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
