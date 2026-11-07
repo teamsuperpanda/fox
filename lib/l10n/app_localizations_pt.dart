@@ -215,6 +215,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get copyBackup => 'Copy backup to clipboard';
+
+  @override
+  String get backupCopied => 'Backup copied to the clipboard';
+
+  @override
+  String backupFailed(String error) {
+    return 'Could not create a backup: $error';
+  }
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).

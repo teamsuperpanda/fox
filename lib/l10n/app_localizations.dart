@@ -548,6 +548,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @copyBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy backup to clipboard'**
+  String get copyBackup;
+
+  /// No description provided for @backupCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup copied to the clipboard'**
+  String get backupCopied;
+
+  /// No description provided for @backupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create a backup: {error}'**
+  String backupFailed(String error);
 }
 
 class _AppLocalizationsDelegate

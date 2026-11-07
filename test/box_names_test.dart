@@ -16,11 +16,16 @@ void main() {
       expect(BoxNames.settings, 'settings_db');
     });
 
+    test('schema constant equals schema_db', () {
+      expect(BoxNames.schema, 'schema_db');
+    });
+
     test('all box names are unique', () {
       final names = [
         BoxNames.notes,
         BoxNames.folders,
         BoxNames.settings,
+        BoxNames.schema,
       ];
       expect(names.toSet().length, names.length);
     });

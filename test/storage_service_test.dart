@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fox/models/settings.dart';
 import 'package:fox/services/box_names.dart';
+import 'package:fox/services/schema_migrations.dart';
+import 'package:fox/services/storage_service.dart';
 import 'package:hive/hive.dart';
 
 import 'test_helpers.dart';
@@ -22,6 +24,13 @@ void main() {
     test('can open and access settings box', () async {
       final box = Hive.box<Settings>(BoxNames.settings);
       expect(box, isNotNull);
+    });
+
+    test('records the schema version in its own box', () async {
+      await StorageService.openBoxes();
+
+      final schema = Hive.box<int>(BoxNames.schema);
+      expect(schema.get(schemaVersionKey), currentSchemaVersion);
     });
 
     test('can store and retrieve Settings object', () async {

@@ -50,6 +50,7 @@ coverage/
 # Hive test artifacts
 test/hive_*/
 test/**/*.hive
+!test/fixtures/**/*.hive
 
 # Golden test failure artifacts
 test/failures/

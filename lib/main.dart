@@ -11,14 +11,33 @@ import 'package:fox/services/repository_hive.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/services/storage_service.dart';
 import 'package:fox/theme/app_theme.dart';
+import 'package:fox/widgets/startup_failure_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+void main() {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  runApp(const FoxBootstrap());
 
-  late final Widget app;
-  try {
+  // Remove splash after the first frame is rendered to avoid a white flash.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    FlutterNativeSplash.remove();
+  });
+}
+
+/// Opens storage and builds the app, showing [StartupFailureScreen] instead of
+/// a dead end when that fails.
+class FoxBootstrap extends StatefulWidget {
+  const FoxBootstrap({super.key});
+
+  @override
+  State<FoxBootstrap> createState() => _FoxBootstrapState();
+}
+
+class _FoxBootstrapState extends State<FoxBootstrap> {
+  late Future<Widget> _bootstrap = _start();
+
+  Future<Widget> _start() async {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     await StorageService.init();
     final repository = HiveNoteRepository.create();
@@ -33,7 +52,7 @@ void main() async {
     final localeProvider = LocaleProvider(settingsRepository: settingsService);
     await localeProvider.load();
 
-    app = MultiProvider(
+    return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: themeProvider),
         ChangeNotifierProvider.value(value: localeProvider),
@@ -44,19 +63,56 @@ void main() async {
         settingsService: settingsService,
       ),
     );
-  } catch (e) {
-    final l10n = lookupAppLocalizations(const Locale('en'));
-    app = MaterialApp(
-      home: Scaffold(body: Center(child: Text(l10n.startupFailed('$e')))),
-    );
   }
 
-  runApp(app);
+  Future<void> _retry() async {
+    await StorageService.reset();
+    setState(() => _bootstrap = _start());
+  }
 
-  // Remove splash after the first frame is rendered to avoid a white flash.
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    FlutterNativeSplash.remove();
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Widget>(
+      future: _bootstrap,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return StartupFailureApp(
+            error: snapshot.error!,
+            onRetry: _retry,
+          );
+        }
+        final app = snapshot.data;
+        if (app == null) {
+          return const MaterialApp(
+            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+          );
+        }
+        return app;
+      },
+    );
+  }
+}
+
+/// The minimal app shell used while startup is broken.
+class StartupFailureApp extends StatelessWidget {
+  const StartupFailureApp({
+    required this.error,
+    required this.onRetry,
+    super.key,
   });
+
+  final Object error;
+  final Future<void> Function() onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: StartupFailureScreen(error: error, onRetry: onRetry),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

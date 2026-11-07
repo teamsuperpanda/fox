@@ -93,6 +93,17 @@
         "type": "String"
       }
     }
+  },
+  "retry": "Retry",
+  "copyBackup": "Copy backup to clipboard",
+  "backupCopied": "Backup copied to the clipboard",
+  "backupFailed": "Could not create a backup: {error}",
+  "@backupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 
 

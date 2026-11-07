@@ -117,7 +117,6 @@ class Note {
     );
   }
 
-  @visibleForTesting
   Map<String, Object?> toMap() {
     return {
       'id': id,
