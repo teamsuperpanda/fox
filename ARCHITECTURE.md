@@ -1,67 +1,70 @@
 # Architecture Overview
 
-[architecture.md](https://architecture.md/) template for rapid codebase comprehension. Update as the codebase evolves.
+A map of the Fox codebase, kept in step with the tree. If a change adds, removes
+or moves a module, a box, a dependency or a documented command, update this file
+in the same pull request.
 
 ## 1. Project Structure
 
 ```
 fox/
-├── lib/                    # Main application source code
-│   ├── main.dart           # App entry point, DI container, splash screen
-│   ├── home_page.dart      # Main note list view with search, FAB, folder filter
-│   ├── note_detail_page.dart # Note editor with Flutter Quill rich text
-│   ├── data/               # Static data
-│   │   └── locale_display_names.dart  # Native language name map for 31 locales
-│   ├── l10n/               # Localization (31 ARB files, generated code)
-│   ├── models/             # Data models
-│   │   ├── note.dart       # Note model with Quill Delta JSON content
+├── lib/                    # Application source
+│   ├── main.dart           # Entry point, DI wiring, splash and app shell
+│   ├── home_page.dart      # Note list with search, FAB and folder filter
+│   ├── note_detail_page.dart # Note editor with Flutter Quill
+│   ├── data/
+│   │   └── locale_display_names.dart # Native language names for the locale picker
+│   ├── l10n/               # 31 ARB files and generated AppLocalizations
+│   ├── models/
+│   │   ├── note.dart       # Note model, Quill Delta JSON content
 │   │   ├── folder.dart     # Folder model
 │   │   ├── settings.dart   # Settings model
-│   │   ├── note_colors.dart # 9 pre-defined note highlight colors
-│   │   └── *_adapter.dart  # Handwritten Hive TypeAdapters (note, folder, settings)
-│   ├── providers/           # ChangeNotifier providers (theme, locale)
-│   │   ├── theme_provider.dart
-│   │   └── locale_provider.dart
-│   ├── services/            # Business logic layer
-│   │   ├── notes_controller.dart   # Central business logic + sort/filter/search
-│   │   ├── repository_hive.dart    # Hive implementation of NoteAndFolderRepository
-│   │   ├── storage_service.dart    # Hive init, adapter registration, box opening
-│   │   ├── settings_service.dart   # Persisted settings CRUD via Hive
-│   │   ├── box_names.dart          # Hive box name constants
-│   │   └── constants.dart          # Locale helpers, app constants
-│   ├── theme/               # Material 3 light/dark theme with dynamic accent
-│   │   └── app_theme.dart
-│   └── widgets/             # Reusable UI widgets
-│       ├── note_list.dart          # Dismissible note list with search highlighting
-│       ├── dialogs.dart            # Delete confirmation, undo snackbar
-│       ├── empty_state.dart        # Empty state widget
-│       ├── folders_dialog.dart     # Folder management dialog
-│       ├── language_picker_dialog.dart # Language selector with search
-│       └── view_options_sheet.dart # Bottom sheet: sort, view, accent, language
-├── test/                   # Unit and widget tests (~28 test files)
-│   ├── flutter_test_config.dart    # Custom golden comparator, font preloading
-│   ├── golden_test.dart            # Store screenshot goldens
-│   ├── store_frame.dart            # Store listing screenshot frame widget
-│   ├── test_helpers.dart           # MemoryRepo, MockRepository
-│   └── hive_*/                     # Test Hive box fixtures
-├── integration_test/       # Smoke tests
-│   └── app_test.dart
-├── assets/                 # Static assets
-│   ├── fonts/              # Inter font family (4 weights)
-│   └── images/             # Icons, launch screen branding, GitHub banner
-├── tool/                   # Development tools
-│   └── ci_test.sh          # CI test script (excludes golden tests)
+│   │   ├── note_colors.dart # Accent and note colour palettes
+│   │   ├── note_adapter.dart     # Handwritten Hive adapter
+│   │   ├── folder_adapter.dart   # Handwritten Hive adapter
+│   │   └── settings_adapter.dart # Handwritten Hive adapter
+│   ├── providers/
+│   │   ├── theme_provider.dart   # Theme mode and accent colour
+│   │   └── locale_provider.dart  # Locale override, persisted through SettingsService
+│   ├── services/
+│   │   ├── notes_controller.dart  # Notes business logic: CRUD, sort, filter, search
+│   │   ├── repository_hive.dart   # Hive implementation of the note and folder repository
+│   │   ├── storage_service.dart   # Hive init, adapter registration, box opening
+│   │   ├── settings_service.dart  # Persisted settings CRUD via Hive
+│   │   ├── box_names.dart         # Hive box name constants
+│   │   └── constants.dart         # Locale helpers and app constants
+│   ├── theme/
+│   │   └── app_theme.dart  # Material 3 light and dark themes with dynamic accent
+│   └── widgets/            # Reusable UI widgets, no business logic
+│       ├── note_list.dart
+│       ├── dialogs.dart
+│       ├── empty_state.dart
+│       ├── folders_dialog.dart
+│       ├── language_picker_dialog.dart
+│       └── view_options_sheet.dart
+├── test/                   # 20 test files, 209 tests
+│   ├── flutter_test_config.dart # Font preloading, tolerant golden comparator
+│   ├── golden_test.dart         # Store screenshot goldens (tag: golden)
+│   ├── store_frame.dart
+│   ├── test_helpers.dart        # MemoryRepo, MockRepository
+│   └── hive_*/                  # Hive box fixtures used by storage tests
+├── integration_test/
+│   └── app_test.dart       # Smoke test
+├── assets/
+│   ├── fonts/              # Inter family (4 weights), bundled
+│   └── images/             # Icons, launch screen art, GitHub banner
+├── tool/
+│   └── ci_test.sh          # Test entrypoint used by CI (excludes golden tests)
 ├── android/                # Android platform files (Gradle, Fastlane, res)
 ├── ios/                    # iOS platform files (Xcode, Fastlane, Runner)
-├── web/                    # Web platform PWA artifacts
 ├── pubspec.yaml            # Project manifest
-├── analysis_options.yaml   # Linting rules (very_good_analysis + dart_code_linter)
+├── analysis_options.yaml   # very_good_analysis + dart_code_linter
 ├── l10n.yaml               # Localization config
-├── README.md               # Project overview
-├── CONTRIBUTING.md         # Contribution guidelines
-├── ASSETS-LICENSE.md       # Asset copyright notice
-└── ARCHITECTURE.md         # This document
+└── README.md, CONTRIBUTING.md, SECURITY.md, ASSETS-LICENSE.md, ARCHITECTURE.md
 ```
+
+There is no `web/` directory in the repository. `.gitignore` ignores `web/`
+because it is local Flutter output only, and web is not a supported target.
 
 ## 2. High-Level System Diagram
 
@@ -72,7 +75,8 @@ fox/
                   All data stays on device.
 ```
 
-Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline-first with no sync, no accounts, and no cloud dependency.
+Hive (key-value NoSQL) is the sole authoritative store. The app is offline-first
+with no sync, no accounts and no cloud dependency.
 
 ## 3. Core Components
 
@@ -80,41 +84,51 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 
 **Name:** Fox
 
-**Description:** A simple, local-first notes app with rich text editing. Supports folders, search, dark mode, and 30+ languages. Zero cloud dependency.
+**Description:** A local-first notes app with rich text editing, folders, search,
+dark mode and 31 locales.
 
 **Technologies:** Flutter, Dart 3.6+, Provider, Hive, Flutter Quill
 
-**Deployment:** GitHub Releases (web), App Store / Play Store (mobile)
+**Platforms and distribution:** Android and iOS, through Google Play and the App
+Store. Release builds are produced by CI and the platform toolchains.
 
 ### 3.2. Data Layer
 
 **Name:** Hive Storage
 
-**Description:** Three Hive boxes (`notes_db`, `folders_db`, `settings_db`) with handwritten TypeAdapters (no build_runner dependency). Note content stored as Quill Delta JSON.
+**Description:** Three Hive boxes (`notes_db`, `folders_db`, `settings_db`) with
+handwritten TypeAdapters. There is no `build_runner` step and no `*.g.dart`
+files. Note content is stored as Quill Delta JSON.
 
 **Technologies:** Hive, Hive Flutter
 
 **Storage boxes:**
-- `notes_db` — Note objects (UUID key, Quill Delta content, pinned, tags, folderId, color, timestamps)
-- `folders_db` — Folder objects (UUID key, name, timestamps)
-- `settings_db` — Single Settings object (theme, locale, view preferences, sort, accent color)
+
+- `notes_db`: Note objects (UUID key, Quill Delta content, pinned, tags, folderId,
+  colour, timestamps)
+- `folders_db`: Folder objects (UUID key, name, timestamps)
+- `settings_db`: a single Settings object (theme, locale, view preferences, sort,
+  accent colour)
 
 ### 3.3. Rich Text Editor
 
-**Name:** Flutter Quill Integration
+**Name:** Flutter Quill integration
 
-**Description:** Quill Delta-based rich text editor embedded in `NoteDetailPage`. Supports bold, italic, bullets, ordered lists. Toolbar provides formatting controls.
+**Description:** A Quill Delta-based editor embedded in `NoteDetailPage`, with
+bold, italic, bullet and ordered lists and a formatting toolbar.
 
-**Technologies:** Flutter Quill ^11.5.0
+**Technologies:** flutter_quill ^11.6.0
 
 ### 3.4. State Management
 
 **Name:** Provider (ChangeNotifier)
 
-**Description:** Three providers via the `provider` package:
-- `ThemeProvider` — Theme mode and accent color
-- `LocaleProvider` — Language override with SharedPreferences persistence
-- `NotesController` — Central notes business logic (sort, filter, search, CRUD)
+**Description:** Three ChangeNotifiers:
+
+- `ThemeProvider`: theme mode and accent colour
+- `LocaleProvider`: language override, persisted in the `settings_db` Hive box
+  through `SettingsService`
+- `NotesController`: notes business logic (sort, filter, search, CRUD)
 
 **Technologies:** provider ^6.1.5
 
@@ -122,21 +136,27 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 
 **Name:** AppTheme
 
-**Description:** Material 3 theme system with light/dark modes and dynamic accent colors. Single `AppTheme` class with `light(Color)` and `dark(Color)` factory methods.
+**Description:** Material 3 light and dark themes with a dynamic accent colour.
+A single `AppTheme` class exposes `light(Color)` and `dark(Color)`. Ten accent
+colours are defined in `models/note_colors.dart`.
 
-**Technologies:** Material 3, `ThemeData`, Google Fonts (Inter)
+**Technologies:** Material 3, `ThemeData`, the bundled Inter font family. There
+is no `google_fonts` dependency and no runtime font download.
 
 ## 4. Module Boundary Convention
 
-The app follows a simple layered architecture:
+- **`widgets/`**: reusable UI components. No business logic.
+- **Pages** (`home_page.dart`, `note_detail_page.dart`): full-screen pages that
+  compose widgets and may use providers and services.
+- **`providers/`**: ChangeNotifier providers for theme and locale state.
+- **`services/`**: business logic and data access. `NotesController` is the
+  central notes state holder (also a ChangeNotifier).
+- **`models/`**: pure data models with handwritten Hive adapters. No Flutter
+  widgets, no Hive box access.
 
-- **`widgets/`** — Reusable UI components that are shared across pages. No business logic.
-- **`pages/`** (root: `home_page.dart`, `note_detail_page.dart`) — Full-screen pages composing widgets. May use providers and services directly.
-- **`providers/`** — ChangeNotifier providers for theme and locale state.
-- **`services/`** — Business logic and data access. `NotesController` is the central state manager for notes (also a ChangeNotifier).
-- **`models/`** — Pure data models with Hive annotations.
-
-**Dependency rule:** `widgets/` never imports from `pages/`. `pages/` may import from `widgets/`, `providers/`, and `services/`. `services/` may import from `models/`.
+**Dependency rule:** `widgets/` never imports pages. Pages may import `widgets/`,
+`providers/` and `services/`. `services/` may import `models/`. `models/` imports
+no app code above it.
 
 ## 5. Data Stores
 
@@ -146,58 +166,67 @@ The app follows a simple layered architecture:
 
 **Type:** Key-value NoSQL (embedded)
 
-**Purpose:** Authoritative data store for all app data. Offline-first — never bypassed.
+**Purpose:** Authoritative store for all app data. Never bypassed.
 
-**Key Boxes:** notes_db, folders_db, settings_db
+**Key Boxes:** `notes_db`, `folders_db`, `settings_db`
 
 ## 6. External Integrations / APIs
 
-None. This is a fully offline, local-first application with no network dependencies.
+None. There are no network requests, no analytics and no telemetry at runtime.
 
-## 7. Deployment & Infrastructure
+## 7. Deployment and Infrastructure
 
-- **CI/CD:** GitHub Actions (`ci.yml`)
-- **Platforms:** Android, iOS, Web
-- **Code Generation:** Handwritten Hive TypeAdapters (no build_runner needed)
-- **Distribution:** Google Play, Apple App Store, GitHub Releases (web)
+- **CI:** GitHub Actions, `.github/workflows/ci.yml` (format check, analyze, tests)
+- **Platforms:** Android, iOS
+- **Code generation:** localization only (`flutter gen-l10n`). Hive adapters are
+  handwritten.
+- **Distribution:** Google Play, Apple App Store
 
 ## 8. Security Considerations
 
-- **Data at rest:** Stored locally in Hive boxes via path_provider. No encryption.
-- **Network:** No network requests. No telemetry. No analytics.
+- **Data at rest:** stored locally in Hive boxes under the app data directory, not
+  encrypted.
+- **Network:** no requests, no telemetry, no analytics.
+- **Threat model:** see `SECURITY.md` for what the app does and does not protect
+  against.
 
-## 9. Development & Testing
+## 9. Development and Testing
 
-- **Testing:** `flutter_test` for unit and widget tests (~28 test files). Golden screenshot tests for store listing. Integration smoke tests.
+- **Tests:** `flutter_test`. 20 test files, 209 tests. Golden screenshot tests are
+  tagged `golden` and excluded from the default run.
 - **Linting:** `very_good_analysis` + `dart_code_linter`
-- **Localization:** ARB-based (`l10n.yaml`, 31 ARB files, 31 supported locales)
-- **CI Script:** `tool/ci_test.sh` runs `flutter test --exclude-tags golden`
+- **Formatting:** `dart format lib/ test/`
+- **Localization:** ARB-based (`l10n.yaml`, 31 ARB files, 31 locales)
+- **CI script:** `tool/ci_test.sh` runs `flutter test --exclude-tags golden`
 
 ## 10. Future Considerations
 
-- **Named Routing:** Consider as pages grow beyond current two screens
-- **Data export/backup:** Add export to file or cloud backup
-- **Search improvements:** Full-text search across all notes
-- **Widget testing coverage:** Expand dialog and form interaction tests
+- Named routing as pages grow beyond the current two screens
+- Data export and backup
+- Search ranking and filters
+- Wider dialog and form test coverage
 
 ## 11. Project Identification
 
 **Project Name:** Fox
 
+**Version:** 2.1.1 (build 20)
+
 **Repository URL:** https://github.com/teamsuperpanda/fox
 
-**License:** PolyForm Noncommercial 1.0.0
+**License:** PolyForm Noncommercial 1.0.0 for the code; the Fox name and brand
+assets are proprietary, see `ASSETS-LICENSE.md`.
 
-**Date of Last Update:** 2026-07-24
+**Date of Last Update:** 2026-11-07
 
 ## 12. Glossary
 
-**Hive:** Lightweight, fast key-value database for Flutter/Dart
+**Hive:** fast key-value database for Flutter and Dart
 
-**Provider:** State management library using ChangeNotifier and InheritedWidget
+**Provider:** state management library built on ChangeNotifier and InheritedWidget
 
-**Flutter Quill:** Rich text editor based on the Quill Delta format
+**Flutter Quill:** rich text editor based on the Quill Delta format
 
-**ChangeNotifier:** Observable object that notifies listeners of state changes
+**ChangeNotifier:** observable object that notifies listeners of state changes
 
-**Delta:** JSON-based rich text format used by Quill editor
+**Delta:** JSON-based rich text format used by the Quill editor
