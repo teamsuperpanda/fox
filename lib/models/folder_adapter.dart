@@ -1,10 +1,20 @@
 // Handwritten Hive TypeAdapter for Folder to avoid build_runner.
+//
+// Stored-field rules (see lib/services/schema_migrations.dart):
+// - Field indices are permanent. Never reuse or renumber one.
+// - typeId 4 is permanent: it identifies Folder inside folders_db.
+// - Append new fields at the next free index and give them a default here.
+// - Bump currentSchemaVersion when a field is added or changed.
+import 'package:fox/models/adapter_utils.dart';
 import 'package:fox/models/folder.dart';
 import 'package:hive/hive.dart';
 
 class FolderAdapter extends TypeAdapter<Folder> {
   @override
   final int typeId = 4;
+
+  /// Number of fields written by this version. Append at this index next.
+  static const int fieldCount = 3;
 
   @override
   Folder read(BinaryReader reader) {
@@ -15,15 +25,15 @@ class FolderAdapter extends TypeAdapter<Folder> {
       fields[field] = reader.read();
     }
     return Folder(
-      id: fields[0] as String,
-      name: fields[1] as String? ?? '',
-      createdAt: DateTime.fromMillisecondsSinceEpoch(fields[2] as int),
+      id: readString(fields[0]) ?? '',
+      name: readString(fields[1]) ?? '',
+      createdAt: readDate(fields[2]) ?? DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 
   @override
   void write(BinaryWriter writer, Folder obj) {
-    writer.writeByte(3); // Number of fields
+    writer.writeByte(fieldCount);
     writer.writeByte(0);
     writer.write(obj.id);
     writer.writeByte(1);

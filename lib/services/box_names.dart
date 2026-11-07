@@ -5,4 +5,5 @@ class BoxNames {
   static const String notes = 'notes_db';
   static const String folders = 'folders_db';
   static const String settings = 'settings_db';
+  static const String schema = 'schema_db';
 }

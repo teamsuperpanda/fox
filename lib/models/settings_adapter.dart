@@ -1,10 +1,20 @@
 // Handwritten Hive TypeAdapter for Settings to avoid build_runner for now.
+//
+// Stored-field rules (see lib/services/schema_migrations.dart):
+// - Field indices are permanent. Never reuse or renumber one.
+// - typeId 2 is permanent: it identifies Settings inside settings_db.
+// - Append new fields at the next free index and give them a default here.
+// - Bump currentSchemaVersion when a field is added or changed.
+import 'package:fox/models/adapter_utils.dart';
 import 'package:fox/models/settings.dart';
 import 'package:hive/hive.dart';
 
 class SettingsAdapter extends TypeAdapter<Settings> {
   @override
   final int typeId = 2;
+
+  /// Number of fields written by this version. Append at this index next.
+  static const int fieldCount = 8;
 
   @override
   Settings read(BinaryReader reader) {
@@ -15,20 +25,20 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       fields[field] = reader.read();
     }
     return Settings(
-      themeMode: fields[0] as String? ?? 'system',
-      locale: fields[1] as String?,
-      showTags: fields[2] as bool? ?? true,
-      alternatingColors: fields[3] as bool? ?? false,
-      fabAnimation: fields[4] as bool? ?? true,
-      showContent: fields[5] as bool? ?? true,
-      sortBy: fields[6] as String? ?? 'dateDesc',
-      accentColor: fields[7] as String?,
+      themeMode: readString(fields[0]) ?? 'system',
+      locale: readString(fields[1]),
+      showTags: readBool(fields[2]) ?? true,
+      alternatingColors: readBool(fields[3]) ?? false,
+      fabAnimation: readBool(fields[4]) ?? true,
+      showContent: readBool(fields[5]) ?? true,
+      sortBy: readString(fields[6]) ?? 'dateDesc',
+      accentColor: readString(fields[7]),
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
-    writer.writeByte(8); // Number of fields
+    writer.writeByte(fieldCount);
     writer.writeByte(0);
     writer.write(obj.themeMode);
     writer.writeByte(1);

@@ -148,7 +148,30 @@ The app follows a simple layered architecture:
 
 **Purpose:** Authoritative data store for all app data. Offline-first — never bypassed.
 
-**Key Boxes:** notes_db, folders_db, settings_db
+**Key Boxes:** notes_db, folders_db, settings_db, schema_db
+
+### 5.2 Schema versioning
+
+`StorageService.init` registers the adapters, opens every box, then runs the
+ordered migrations in `lib/services/schema_migrations.dart` before the app
+reads data. `schema_db` stores the schema version; boxes written before
+versioning existed are treated as version 1.
+
+Rules for a stored model:
+
+1. Never reuse or renumber a field index that shipped in a release.
+2. Never renumber a `typeId`.
+3. Append new fields at the next free index and give the adapter a default.
+4. Bump `currentSchemaVersion` and add a step to `schemaMigrations`.
+
+Adapters read fields tolerantly (`lib/models/adapter_utils.dart`), so a missing
+field or an unexpected type falls back to a default instead of throwing. When a
+migration fails, startup shows a recovery screen with retry and a JSON backup
+copy, not a blank error page.
+
+Committed binary fixtures live in `test/fixtures/<version>/`; each shipped
+schema version keeps one so `test/schema_migrations_test.dart` can prove it
+still opens.
 
 ## 6. External Integrations / APIs
 
