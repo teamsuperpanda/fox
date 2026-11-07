@@ -1,6 +1,6 @@
 // Handwritten Hive TypeAdapter for Settings to avoid build_runner for now.
 import 'package:fox/models/settings.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 class SettingsAdapter extends TypeAdapter<Settings> {
   @override

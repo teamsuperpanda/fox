@@ -1,6 +1,6 @@
 // Handwritten Hive TypeAdapter for Note to avoid build_runner.
 import 'package:fox/models/note.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 class NoteAdapter extends TypeAdapter<Note> {
   @override

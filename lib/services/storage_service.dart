@@ -5,7 +5,7 @@ import 'package:fox/models/note_adapter.dart';
 import 'package:fox/models/settings.dart';
 import 'package:fox/models/settings_adapter.dart';
 import 'package:fox/services/box_names.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 class StorageService {
   static bool _inited = false;
