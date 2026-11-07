@@ -32,6 +32,32 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   static const _heroTagDelete = 'delete';
   static const _heroTagSave = 'save';
 
+  /// Code blocks get a monospace style that reads in both themes. The Quill
+  /// default is dark blue on near-white, which disappears in dark mode.
+  static DefaultStyles _editorStyles(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DefaultStyles.getInstance(context).merge(
+      DefaultStyles(
+        code: DefaultTextBlockStyle(
+          TextStyle(
+            fontFamily: 'monospace',
+            fontFamilyFallback: const ['Courier New', 'Courier'],
+            fontSize: 14,
+            height: 1.4,
+            color: colorScheme.onSurface,
+          ),
+          const HorizontalSpacing(8, 8),
+          const VerticalSpacing(4, 4),
+          VerticalSpacing.zero,
+          BoxDecoration(
+            color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+    );
+  }
+
   late final TextEditingController _titleCtrl;
   late QuillController _contentCtrl;
   late bool _pinned;
@@ -375,8 +401,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         controller: _contentCtrl,
                         config: QuillSimpleToolbarConfig(
                           color: Theme.of(context).appBarTheme.backgroundColor,
-                          multiRowsDisplay: false,
-                          toolbarIconAlignment: WrapAlignment.start,
+                          // Default multi-row layout, so the toolbar wraps
+                          // instead of overflowing on a 320 px screen.
                           showDividers: false,
                           showFontFamily: false,
                           showFontSize: false,
@@ -388,11 +414,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                           showCenterAlignment: false,
                           showRightAlignment: false,
                           showJustifyAlignment: false,
-                          showHeaderStyle: false,
-                          showListCheck: false,
-                          showCodeBlock: false,
-                          showIndent: false,
-                          showLink: false,
+                          // Headings stay H1-H3 and there is one code block
+                          // style: both are defaults, and the header dropdown
+                          // is restricted below.
                           buttonOptions: QuillSimpleToolbarButtonOptions(
                             base: QuillToolbarBaseButtonOptions(
                               iconTheme: QuillIconTheme(
@@ -406,6 +430,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                                 ),
                               ),
                             ),
+                            // H1-H3 only; the editor deliberately stays a
+                            // narrow set of block styles.
+                            selectHeaderStyleDropdownButton:
+                                QuillToolbarSelectHeaderStyleDropdownButtonOptions(
+                              attributes: const [
+                                Attribute.header,
+                                Attribute.h1,
+                                Attribute.h2,
+                                Attribute.h3,
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -416,6 +451,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         config: QuillEditorConfig(
                           placeholder: l10n.startTyping,
                           autoFocus: widget.existing?.title.isNotEmpty ?? false,
+                          customStyles: _editorStyles(context),
                         ),
                       ),
                     ),

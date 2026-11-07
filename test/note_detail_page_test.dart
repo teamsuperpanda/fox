@@ -326,5 +326,119 @@ void main() {
 
       expect(find.byType(NoteDetailPage), findsNothing);
     });
+
+    testWidgets('toolbar offers H1-H3 and a code block button', (tester) async {
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+      await tester.pump();
+
+      final dropdown =
+          tester.widget<QuillToolbarSelectHeaderStyleDropdownButton>(
+        find.byType(QuillToolbarSelectHeaderStyleDropdownButton),
+      );
+      expect(
+        dropdown.options.attributes,
+        [Attribute.header, Attribute.h1, Attribute.h2, Attribute.h3],
+      );
+
+      final codeBlockButtons = tester
+          .widgetList<QuillToolbarToggleStyleButton>(
+            find.byType(QuillToolbarToggleStyleButton),
+          )
+          .where((button) => button.attribute == Attribute.codeBlock);
+      expect(codeBlockButtons, hasLength(1));
+    });
+
+    testWidgets('code blocks use a monospace style', (tester) async {
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+      await tester.pump();
+
+      final editor = tester.widget<QuillEditor>(find.byType(QuillEditor));
+      expect(editor.config.customStyles?.code?.style.fontFamily, 'monospace');
+    });
+
+    testWidgets('headings and code blocks survive a save', (tester) async {
+      final doc = Document.fromJson([
+        {
+          'insert': 'Title\n',
+          'attributes': {'header': 1}
+        },
+        {
+          'insert': 'Code\n',
+          'attributes': {'code-block': true}
+        },
+      ]);
+      final note = makeNote(
+        id: 'rich',
+        title: 'Rich',
+        content: Note.documentToContent(doc),
+      );
+      mockRepo.notes.add(note);
+
+      await tester.pumpWidget(
+        buildTestApp(
+          NoteDetailPage(
+            existing: note,
+            controller: controller,
+            showToolbar: false,
+          ),
+        ),
+      );
+      await tester.tap(find.byIcon(Icons.save));
+      await tester.pumpAndSettle();
+
+      final saved = mockRepo.notes.single;
+      final ops = saved.document.toDelta().toJson();
+      expect(ops.first['attributes'], {'header': 1});
+      expect(ops[1]['attributes'], {'code-block': true});
+      expect(saved.plainText, 'Title\nCode\n');
+    });
+
+    testWidgets('toolbar stays usable at 320 px and 200% text in dark mode',
+        (tester) async {
+      final doc = Document.fromJson([
+        {
+          'insert': 'Title\n',
+          'attributes': {'header': 1}
+        },
+        {
+          'insert': 'Code\n',
+          'attributes': {'code-block': true}
+        },
+      ]);
+      final note = makeNote(
+        id: 'narrow',
+        title: 'Narrow',
+        content: Note.documentToContent(doc),
+      );
+
+      await tester.pumpWidget(
+        buildTestApp(
+          MediaQuery(
+            data: const MediaQueryData(
+              size: Size(320, 640),
+              textScaler: TextScaler.linear(2),
+            ),
+            child: NoteDetailPage(existing: note, controller: controller),
+          ),
+          themeMode: ThemeMode.dark,
+        ),
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(
+        find.byType(QuillToolbarSelectHeaderStyleDropdownButton),
+        findsOneWidget,
+      );
+      expect(find.byType(QuillEditor), findsOneWidget);
+
+      // Pop the page so the editor and its caret blink timer are disposed.
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+    });
   });
 }
