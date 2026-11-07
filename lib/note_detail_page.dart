@@ -3,6 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/note_links.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
 
@@ -392,7 +393,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                           showListCheck: false,
                           showCodeBlock: false,
                           showIndent: false,
-                          showLink: false,
+                          linkStyleType: LinkStyleType.alternative,
                           buttonOptions: QuillSimpleToolbarButtonOptions(
                             base: QuillToolbarBaseButtonOptions(
                               iconTheme: QuillIconTheme(
@@ -406,6 +407,14 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                                 ),
                               ),
                             ),
+                            linkStyle2: QuillToolbarLinkStyleButton2Options(
+                              addLinkLabel: l10n.linkAddLabel,
+                              editLinkLabel: l10n.linkEditLabel,
+                              validationMessage: l10n.invalidUrl,
+                              linkColor: Theme.of(context).colorScheme.primary,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                            ),
                           ),
                         ),
                       ),
@@ -416,6 +425,21 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                         config: QuillEditorConfig(
                           placeholder: l10n.startTyping,
                           autoFocus: widget.existing?.title.isNotEmpty ?? false,
+                          onLaunchUrl: (url) => openNoteLink(
+                            context: context,
+                            rawUrl: url,
+                          ),
+                          customStyles:
+                              DefaultStyles.getInstance(context).merge(
+                            DefaultStyles(
+                              link: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                                decorationColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),

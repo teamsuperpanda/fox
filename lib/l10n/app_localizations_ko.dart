@@ -141,6 +141,31 @@ class AppLocalizationsKo extends AppLocalizations {
   String get savingTitleOnly => '제목만으로 노트 저장';
 
   @override
+  String get linkAddLabel => 'Add link';
+
+  @override
+  String get linkEditLabel => 'Edit link';
+
+  @override
+  String get invalidUrl => 'Enter a valid URL';
+
+  @override
+  String get openLinkTitle => 'Open link';
+
+  @override
+  String get openLinkAction => 'Open';
+
+  @override
+  String openLinkConfirm(String url) {
+    return 'Open this link?\n\n$url';
+  }
+
+  @override
+  String errorOpeningLink(String error) {
+    return 'Could not open link: $error';
+  }
+
+  @override
   String errorSavingNote(String error) {
     return '저장 오류: $error';
   }

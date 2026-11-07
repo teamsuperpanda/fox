@@ -163,6 +163,25 @@ void main() {
       expect(mockRepo.notes.length, 1);
     });
 
+    testWidgets('toolbar link button opens the add link dialog',
+        (tester) async {
+      await tester.pumpWidget(
+        buildTestApp(NoteDetailPage(controller: controller)),
+      );
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NoteDetailPage)),
+      );
+
+      expect(find.byIcon(Icons.link), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.link));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text(l10n.linkAddLabel), findsOneWidget);
+      expect(find.text(l10n.invalidUrl), findsNothing);
+    });
+
     testWidgets('pin button shows correct state', (tester) async {
       final note = makeNote(title: '');
 
