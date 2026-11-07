@@ -7,6 +7,7 @@ import 'package:fox/services/constants.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/theme/app_theme.dart';
+import 'package:fox/widgets/data_transfer_section.dart';
 import 'package:fox/widgets/language_picker_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -89,6 +90,11 @@ class _ViewOptionsSheetState extends State<ViewOptionsSheet> {
                                 const SizedBox(height: 24),
                                 ..._buildLanguageSection(
                                     context, setDialogState),
+                                const SizedBox(height: 24),
+                                DataTransferSection(
+                                  controller: widget.controller,
+                                  settingsService: widget.settingsService,
+                                ),
                                 const SizedBox(height: 16),
                               ],
                             ),

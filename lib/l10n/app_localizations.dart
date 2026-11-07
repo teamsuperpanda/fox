@@ -548,6 +548,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Startup failed: {error}'**
   String startupFailed(String error);
+
+  /// No description provided for @dataSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get dataSection;
+
+  /// No description provided for @exportNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all notes'**
+  String get exportNotes;
+
+  /// No description provided for @exportNotesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip with a JSON backup and Markdown files'**
+  String get exportNotesSubtitle;
+
+  /// No description provided for @exportInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting notes...'**
+  String get exportInProgress;
+
+  /// No description provided for @exportComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported {count} notes'**
+  String exportComplete(int count);
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed: {error}'**
+  String exportFailed(String error);
+
+  /// No description provided for @shareExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Share export'**
+  String get shareExport;
 }
 
 class _AppLocalizationsDelegate

@@ -120,11 +120,19 @@ Hive (key-value NoSQL) is the sole authoritative store. The app is fully offline
 
 ### 3.5. Theme Engine
 
+
 **Name:** AppTheme
 
 **Description:** Material 3 theme system with light/dark modes and dynamic accent colors. Single `AppTheme` class with `light(Color)` and `dark(Color)` factory methods.
 
 **Technologies:** Material 3, `ThemeData`, Google Fonts (Inter)
+
+### 3.6. Export and Import
+
+**Description:** `FoxExporter` writes a `fox-export-YYYYMMDD-HHMM.zip` containing `fox-backup.json`, a `markdown/<folder>/<title>.md` tree and a `README.txt`. The JSON envelope is versioned (`format: fox-backup`, `schemaVersion: 1`) and carries notes, folders and settings plus a manifest of counts, so a partial archive is detectable. Markdown files start with YAML front matter and open without Fox installed.
+
+**Technologies:** `archive` (zip), `share_plus` (OS share sheet), `path_provider` (exports directory). The codec lives in `lib/services/export/` and has no Flutter plugin dependency, so it is unit tested directly.
+
 
 ## 4. Module Boundary Convention
 
@@ -176,7 +184,6 @@ None. This is a fully offline, local-first application with no network dependenc
 ## 10. Future Considerations
 
 - **Named Routing:** Consider as pages grow beyond current two screens
-- **Data export/backup:** Add export to file or cloud backup
 - **Search improvements:** Full-text search across all notes
 - **Widget testing coverage:** Expand dialog and form interaction tests
 
