@@ -44,3 +44,28 @@ Color? parseHexColor(String? hex) {
 /// [parseHexColor]).
 String colorToHex(Color color) =>
     '#${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}';
+
+/// WCAG AA contrast ratio between two opaque colours.
+double contrastRatio(Color a, Color b) {
+  final la = a.computeLuminance();
+  final lb = b.computeLuminance();
+  final lighter = la > lb ? la : lb;
+  final darker = la > lb ? lb : la;
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+/// Editor background for a note colour. The tint is reduced until body text
+/// ([onSurface]) keeps at least 4.5:1 contrast against the background.
+Color noteEditorBackground({
+  required Color noteColor,
+  required Color surface,
+  required Color onSurface,
+}) {
+  const alphas = [0.18, 0.14, 0.10, 0.06, 0.0];
+  for (final alpha in alphas) {
+    final blended =
+        Color.alphaBlend(noteColor.withValues(alpha: alpha), surface);
+    if (contrastRatio(onSurface, blended) >= 4.5) return blended;
+  }
+  return surface;
+}
