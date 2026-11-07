@@ -214,4 +214,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Tekrar dene';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Ayarlar kaydedilemedi: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'Değişiklikleriniz kaydedilemedi. Lütfen tekrar deneyin.';
 }

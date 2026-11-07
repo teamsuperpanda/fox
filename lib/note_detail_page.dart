@@ -3,6 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fox/l10n/app_localizations.dart';
 import 'package:fox/models/note.dart';
 import 'package:fox/models/note_colors.dart';
+import 'package:fox/services/feedback_service.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/widgets/dialogs.dart';
 
@@ -180,8 +181,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     _saving = true;
 
     final navigator = Navigator.of(context);
-    final messenger = ScaffoldMessenger.maybeOf(context);
-    final errorColor = Theme.of(context).colorScheme.error;
     final l10n = AppLocalizations.of(context);
 
     final title = _titleCtrl.text.trim();
@@ -189,31 +188,19 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     final plainText = content.toPlainText().trim();
 
     if (title.isEmpty && plainText.isEmpty && widget.existing == null) {
-      messenger?.showSnackBar(
-        SnackBar(content: Text(l10n.emptyNoteDiscarded)),
-      );
+      const FeedbackService().success(context, l10n.emptyNoteDiscarded);
       navigator.pop(const NoteDetailResult());
       return;
     }
 
     if (title.isEmpty && plainText.isEmpty && widget.existing != null) {
       _saving = false;
-      messenger?.showSnackBar(
-        SnackBar(
-          content: Text(l10n.noteCannotBeEmpty),
-          backgroundColor: errorColor,
-        ),
-      );
+      const FeedbackService().error(context, l10n.noteCannotBeEmpty);
       return;
     }
 
     if (title.isNotEmpty && plainText.isEmpty) {
-      messenger?.showSnackBar(
-        SnackBar(
-          content: Text(l10n.savingTitleOnly),
-          duration: _snackBarDuration,
-        ),
-      );
+      const FeedbackService().success(context, l10n.savingTitleOnly);
     }
 
     try {
@@ -230,11 +217,32 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       navigator.pop(const NoteDetailResult(changed: true));
     } catch (e) {
       _saving = false;
-      messenger?.showSnackBar(
-        SnackBar(
-          content: Text(l10n.errorSavingNote(e.toString())),
-          backgroundColor: errorColor,
-        ),
+      if (!mounted) return;
+      const FeedbackService().error(
+        context,
+        l10n.errorSavingNote(e.toString()),
+        retryLabel: l10n.retry,
+        onRetry: _saveAndPop,
+      );
+    }
+  }
+
+  Future<void> _confirmAndDelete() async {
+    final navigator = Navigator.of(context);
+    final confirmed = await showDeleteConfirmDialog(context);
+    if (confirmed != true || !mounted) return;
+    try {
+      await widget.controller.remove(widget.existing!.id);
+      if (!mounted) return;
+      navigator.pop(const NoteDetailResult(changed: true, deleted: true));
+    } catch (e) {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      const FeedbackService().error(
+        context,
+        l10n.errorDeletingNote(e.toString()),
+        retryLabel: l10n.retry,
+        onRetry: _confirmAndDelete,
       );
     }
   }
@@ -252,6 +260,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         try {
           await _saveAndPop().timeout(_snackBarDuration);
         } catch (_) {
+          // A save that outlived the timeout is resolved by _saveAndPop; leave
+          // the page rather than trapping the user on a stalled write.
           timedOut = true;
         }
         if (timedOut && mounted) {
@@ -312,29 +322,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 FloatingActionButton(
                   heroTag: _heroTagDelete,
                   backgroundColor: Theme.of(context).colorScheme.error,
-                  onPressed: () async {
-                    final navigator = Navigator.of(context);
-                    final messenger = ScaffoldMessenger.maybeOf(context);
-                    final errorColor = Theme.of(context).colorScheme.error;
-                    final l10nLocal = AppLocalizations.of(context);
-
-                    final confirmed = await showDeleteConfirmDialog(context);
-                    if (confirmed != true || !context.mounted) return;
-                    try {
-                      await widget.controller.remove(widget.existing!.id);
-                      if (!context.mounted) return;
-                      navigator.pop(
-                          const NoteDetailResult(changed: true, deleted: true));
-                    } catch (e) {
-                      messenger?.showSnackBar(
-                        SnackBar(
-                          content:
-                              Text(l10nLocal.errorDeletingNote(e.toString())),
-                          backgroundColor: errorColor,
-                        ),
-                      );
-                    }
-                  },
+                  onPressed: _confirmAndDelete,
                   child: Icon(
                     Icons.delete,
                     color: Theme.of(context).colorScheme.onError,

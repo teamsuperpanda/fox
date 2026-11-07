@@ -215,6 +215,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Tentar novamente';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Não foi possível guardar as definições: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'Não foi possível guardar as alterações. Tente novamente.';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -408,4 +420,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get nativeName => 'Português (Portugal)';
+
+  @override
+  String get retry => 'Tentar novamente';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Não foi possível guardar as definições: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'Não foi possível guardar as alterações. Tente novamente.';
 }

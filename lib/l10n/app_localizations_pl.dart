@@ -214,4 +214,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Spróbuj ponownie';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Nie udało się zapisać ustawień: $error';
+  }
+
+  @override
+  String get saveFailed => 'Nie udało się zapisać zmian. Spróbuj ponownie.';
 }

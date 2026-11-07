@@ -214,4 +214,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Не удалось сохранить настройки: $error';
+  }
+
+  @override
+  String get saveFailed => 'Не удалось сохранить изменения. Повторите попытку.';
 }

@@ -214,4 +214,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'ลองอีกครั้ง';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'ไม่สามารถบันทึกการตั้งค่า: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'ไม่สามารถบันทึกการเปลี่ยนแปลงของคุณได้ โปรดลองอีกครั้ง';
 }

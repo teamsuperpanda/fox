@@ -59,5 +59,8 @@
   "startupError": "Fox-sovelluksen käynnistämisessä tapahtui virhe.\n\nYritä tyhjentää sovellustiedot tai asenna uudelleen.\n\nVirhe: {error}",  "note": "Muistiinpano",
   "emptyNoteDiscarded": "Tyhjä muistiinpano hylätty",
 
-  "nativeName": "Suomi"
+  "nativeName": "Suomi",
+  "retry": "Yritä uudelleen",
+  "errorSavingSettings": "Asetusten tallentaminen epäonnistui: {error}",
+  "saveFailed": "Muutoksiasi ei voitu tallentaa. Yritä uudelleen."
 }

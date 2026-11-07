@@ -59,5 +59,8 @@
   "startupError": "Coś poszło nie tak podczas uruchamiania Fox.\n\nSpróbuj wyczyścić dane aplikacji lub zainstalować ją ponownie.\n\nBłąd: {error}",  "note": "Notatka",
   "emptyNoteDiscarded": "Pusta notatka odrzucona",
 
-  "nativeName": "Polski"
+  "nativeName": "Polski",
+  "retry": "Spróbuj ponownie",
+  "errorSavingSettings": "Nie udało się zapisać ustawień: {error}",
+  "saveFailed": "Nie udało się zapisać zmian. Spróbuj ponownie."
 }

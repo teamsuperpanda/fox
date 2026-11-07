@@ -59,5 +59,8 @@
   "startupError": "Der opstod en fejl ved start af Fox.\n\nPrøv at rydde appdata eller geninstaller.\n\nFejl: {error}",  "note": "Note",
   "emptyNoteDiscarded": "Tom note kasseret",
 
-  "nativeName": "Dansk"
+  "nativeName": "Dansk",
+  "retry": "Prøv igen",
+  "errorSavingSettings": "Indstillingerne kunne ikke gemmes: {error}",
+  "saveFailed": "Dine ændringer kunne ikke gemmes. Prøv igen."
 }

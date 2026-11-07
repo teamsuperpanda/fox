@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:fox/models/note_colors.dart';
 import 'package:fox/services/settings_service.dart';
@@ -22,21 +20,24 @@ class ThemeProvider extends ChangeNotifier {
       final accentColor = parseHexColor(_settingsRepository.getAccentColor());
       if (accentColor != null) _accentColor = accentColor;
     } catch (e) {
+      // Loading is best effort: fall back to the default theme in memory.
       debugPrint('ThemeProvider: failed to load theme: $e');
       _themeMode = ThemeMode.system;
     }
   }
 
-  /// Persist the current theme mode.
-  Future<void> _save() async {
+  /// Persist the current theme mode. Returns false when the write failed.
+  Future<bool> _save() async {
     try {
       await _settingsRepository.setThemeMode(_themeMode);
+      return true;
     } catch (e) {
       debugPrint('ThemeProvider: failed to save theme: $e');
+      return false;
     }
   }
 
-  Future<void> toggleTheme() async {
+  Future<bool> toggleTheme() async {
     if (_themeMode == ThemeMode.light) {
       _themeMode = ThemeMode.dark;
     } else if (_themeMode == ThemeMode.dark) {
@@ -44,23 +45,24 @@ class ThemeProvider extends ChangeNotifier {
     } else {
       _themeMode = ThemeMode.light;
     }
-    await _save();
+    final saved = await _save();
     notifyListeners();
+    return saved;
   }
 
-  /// Set a new accent colour and persist it.
-  void setAccentColor(Color color) {
+  /// Set a new accent colour and persist it. Returns false when the write
+  /// failed; the colour still applies for the rest of the session.
+  Future<bool> setAccentColor(Color color) async {
     _accentColor = color;
+    var saved = true;
     try {
-      final hex = colorToHex(color);
-      // Fire-and-forget but swallow async Hive errors (e.g. in tests).
-      unawaited(_settingsRepository.setAccentColor(hex).catchError((Object e) {
-        debugPrint('ThemeProvider: failed to persist accent color: $e');
-      }));
+      await _settingsRepository.setAccentColor(colorToHex(color));
     } catch (e) {
-      debugPrint('ThemeProvider: failed to set accent color: $e');
+      saved = false;
+      debugPrint('ThemeProvider: failed to persist accent color: $e');
     }
     notifyListeners();
+    return saved;
   }
 
   IconData getThemeIcon() {

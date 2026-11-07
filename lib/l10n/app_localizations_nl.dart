@@ -216,4 +216,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Opnieuw proberen';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Instellingen konden niet worden opgeslagen: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'Je wijzigingen konden niet worden opgeslagen. Probeer het opnieuw.';
 }

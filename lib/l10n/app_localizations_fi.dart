@@ -216,4 +216,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Yritä uudelleen';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Asetusten tallentaminen epäonnistui: $error';
+  }
+
+  @override
+  String get saveFailed => 'Muutoksiasi ei voitu tallentaa. Yritä uudelleen.';
 }

@@ -216,4 +216,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Δοκιμάστε ξανά';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Δεν ήταν δυνατή η αποθήκευση των ρυθμίσεων: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'Δεν ήταν δυνατή η αποθήκευση των αλλαγών σας. Δοκιμάστε ξανά.';
 }

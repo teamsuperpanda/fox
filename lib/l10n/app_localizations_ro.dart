@@ -214,4 +214,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Reîncearcă';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Setările nu au putut fi salvate: $error';
+  }
+
+  @override
+  String get saveFailed =>
+      'Modificările nu au putut fi salvate. Încearcă din nou.';
 }

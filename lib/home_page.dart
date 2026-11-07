@@ -7,6 +7,7 @@ import 'package:fox/models/note_colors.dart';
 import 'package:fox/note_detail_page.dart';
 import 'package:fox/providers/theme_provider.dart';
 import 'package:fox/services/constants.dart';
+import 'package:fox/services/feedback_service.dart';
 import 'package:fox/services/notes_controller.dart';
 import 'package:fox/services/settings_service.dart';
 import 'package:fox/widgets/dialogs.dart';
@@ -238,8 +239,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               label: l10n.toggleTheme,
               child: IconButton(
                 icon: Icon(context.watch<ThemeProvider>().getThemeIcon()),
-                onPressed: () {
-                  unawaited(context.read<ThemeProvider>().toggleTheme());
+                onPressed: () async {
+                  final l10n = AppLocalizations.of(context);
+                  final saved =
+                      await context.read<ThemeProvider>().toggleTheme();
+                  if (!saved && context.mounted) {
+                    const FeedbackService().error(context, l10n.saveFailed);
+                  }
                 },
                 tooltip: l10n.toggleTheme,
               ),

@@ -93,9 +93,15 @@
         "type": "String"
       }
     }
-  }
-
-
-
-
+  },
+  "retry": "Retry",
+  "errorSavingSettings": "Could not save settings: {error}",
+  "@errorSavingSettings": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "saveFailed": "Could not save your changes. Please try again."
 }

@@ -214,4 +214,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'تعذر حفظ الإعدادات: $error';
+  }
+
+  @override
+  String get saveFailed => 'تعذر حفظ تغييراتك. يرجى المحاولة مرة أخرى.';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fox/l10n/app_localizations.dart';
+import 'package:fox/services/feedback_service.dart';
 import 'package:fox/services/notes_controller.dart';
 
 /// Shows a confirmation dialog for deleting a note.
@@ -34,13 +35,10 @@ Future<bool?> showDeleteConfirmDialog(BuildContext context) {
 /// Shows a "Note deleted" snackbar with an Undo action.
 void showUndoDeleteSnackBar(BuildContext context, NotesController controller) {
   final l10n = AppLocalizations.of(context);
-  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-    SnackBar(
-      content: Text(l10n.noteDeleted),
-      action: SnackBarAction(
-        label: l10n.undo,
-        onPressed: () => controller.undoRemove(),
-      ),
-    ),
+  const FeedbackService().undo(
+    context,
+    message: l10n.noteDeleted,
+    actionLabel: l10n.undo,
+    onUndo: controller.undoRemove,
   );
 }

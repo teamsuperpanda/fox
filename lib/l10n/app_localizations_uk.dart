@@ -214,4 +214,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Повторити';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Не вдалося зберегти налаштування: $error';
+  }
+
+  @override
+  String get saveFailed => 'Не вдалося зберегти зміни. Спробуйте ще раз.';
 }

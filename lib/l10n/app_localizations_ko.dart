@@ -213,4 +213,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => '다시 시도';
+
+  @override
+  String errorSavingSettings(String error) {
+    return '설정을 저장하지 못했습니다: $error';
+  }
+
+  @override
+  String get saveFailed => '변경 사항을 저장하지 못했습니다. 다시 시도해 주세요.';
 }

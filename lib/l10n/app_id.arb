@@ -59,5 +59,8 @@
   "startupError": "Terjadi kesalahan saat memulai Fox.\n\nCoba hapus data aplikasi atau instal ulang.\n\nKesalahan: {error}",  "note": "Catatan",
   "emptyNoteDiscarded": "Catatan kosong dibuang",
 
-  "nativeName": "Bahasa Indonesia"
+  "nativeName": "Bahasa Indonesia",
+  "retry": "Coba lagi",
+  "errorSavingSettings": "Tidak dapat menyimpan pengaturan: {error}",
+  "saveFailed": "Perubahan Anda tidak dapat disimpan. Coba lagi."
 }

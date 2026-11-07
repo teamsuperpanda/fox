@@ -59,5 +59,8 @@
   "startupError": "Đã xảy ra lỗi khi khởi động Fox.\n\nHãy thử xóa dữ liệu ứng dụng hoặc cài đặt lại.\n\nLỗi: {error}",  "note": "Ghi chú",
   "emptyNoteDiscarded": "Ghi chú trống đã bị hủy",
 
-  "nativeName": "Tiếng Việt"
+  "nativeName": "Tiếng Việt",
+  "retry": "Thử lại",
+  "errorSavingSettings": "Không thể lưu cài đặt: {error}",
+  "saveFailed": "Không thể lưu thay đổi của bạn. Vui lòng thử lại."
 }

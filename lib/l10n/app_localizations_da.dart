@@ -215,4 +215,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String startupFailed(String error) {
     return 'Startup failed: $error';
   }
+
+  @override
+  String get retry => 'Prøv igen';
+
+  @override
+  String errorSavingSettings(String error) {
+    return 'Indstillingerne kunne ikke gemmes: $error';
+  }
+
+  @override
+  String get saveFailed => 'Dine ændringer kunne ikke gemmes. Prøv igen.';
 }
