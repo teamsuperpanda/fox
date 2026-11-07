@@ -48,8 +48,10 @@ class NotesController extends ChangeNotifier {
 
   bool get hasNotes => _unfilteredNotes.isNotEmpty;
 
-  Note? _lastRemovedNote;
-  Note? get lastRemovedNote => _lastRemovedNote;
+  static const int _maxUndoDepth = 20;
+  final List<Note> _removedNotes = [];
+  Note? get lastRemovedNote =>
+      _removedNotes.isEmpty ? null : _removedNotes.last;
 
   String _searchTerm = '';
   String get searchTerm => _searchTerm;
@@ -206,7 +208,6 @@ class NotesController extends ChangeNotifier {
       color: color,
     );
     await _repo.upsert(note);
-    _lastRemovedNote = null;
     _unfilteredNotes = [
       ...(_unfilteredNotes.where((n) => n.id != note.id)),
       note,
@@ -220,7 +221,6 @@ class NotesController extends ChangeNotifier {
     if (note == null) return;
     final updated = note.copyWith(pinned: pinned, updatedAt: DateTime.now());
     await _repo.upsert(updated);
-    _lastRemovedNote = null;
     _unfilteredNotes = [
       ...(_unfilteredNotes.where((n) => n.id != id)),
       updated,
@@ -233,23 +233,23 @@ class NotesController extends ChangeNotifier {
     final note = _unfilteredNotes.firstWhereOrNull((n) => n.id == id);
     if (note == null) return;
     await _repo.delete(id);
-    _lastRemovedNote = note;
+    _removedNotes.add(note);
+    if (_removedNotes.length > _maxUndoDepth) _removedNotes.removeAt(0);
     _unfilteredNotes = _unfilteredNotes.where((n) => n.id != id).toList();
     _updateView();
     notifyListeners();
   }
 
+  /// Restores the most recently deleted note. A newer delete that happens
+  /// during the write stays on the stack and is restored next.
   Future<void> undoRemove() async {
-    final note = _lastRemovedNote;
-    if (note != null) {
-      await _repo.upsert(note);
-      _unfilteredNotes = [..._unfilteredNotes, note];
-      if (identical(_lastRemovedNote, note)) {
-        _lastRemovedNote = null;
-      }
-      _updateView();
-      notifyListeners();
-    }
+    if (_removedNotes.isEmpty) return;
+    final note = _removedNotes.last;
+    await _repo.upsert(note);
+    _removedNotes.remove(note);
+    _unfilteredNotes = [..._unfilteredNotes, note];
+    _updateView();
+    notifyListeners();
   }
 
   Note? find(String id) => _unfilteredNotes.firstWhereOrNull((n) => n.id == id);

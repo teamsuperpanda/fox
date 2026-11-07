@@ -302,6 +302,59 @@ void main() {
       expect(controller.notes, isEmpty);
     });
 
+    test('undo survives an unrelated pin', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Doomed', content: Document());
+      await controller.addOrUpdate(title: 'Other', content: Document());
+      final doomed = controller.notes.firstWhere((n) => n.title == 'Doomed');
+      final other = controller.notes.firstWhere((n) => n.title == 'Other');
+
+      await controller.remove(doomed.id);
+      await controller.setPinned(other.id, true);
+
+      expect(controller.lastRemovedNote?.id, doomed.id);
+      await controller.undoRemove();
+      expect(controller.find(doomed.id), isNotNull);
+    });
+
+    test('undo survives an unrelated edit', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'Doomed', content: Document());
+      await controller.addOrUpdate(title: 'Other', content: Document());
+      final doomed = controller.notes.firstWhere((n) => n.title == 'Doomed');
+      final other = controller.notes.firstWhere((n) => n.title == 'Other');
+
+      await controller.remove(doomed.id);
+      await controller.addOrUpdate(
+        id: other.id,
+        title: 'Other edited',
+        content: Document(),
+      );
+
+      await controller.undoRemove();
+      expect(controller.find(doomed.id), isNotNull);
+    });
+
+    test('undo twice restores both deleted notes in order', () async {
+      await controller.load();
+      await controller.addOrUpdate(title: 'First', content: Document());
+      await controller.addOrUpdate(title: 'Second', content: Document());
+      final first = controller.notes.firstWhere((n) => n.title == 'First');
+      final second = controller.notes.firstWhere((n) => n.title == 'Second');
+
+      await controller.remove(first.id);
+      await controller.remove(second.id);
+      expect(controller.notes, isEmpty);
+
+      await controller.undoRemove();
+      expect(controller.notes.single.id, second.id);
+      expect(controller.lastRemovedNote?.id, first.id);
+
+      await controller.undoRemove();
+      expect(controller.notes.map((n) => n.id).toSet(), {first.id, second.id});
+      expect(controller.lastRemovedNote, isNull);
+    });
+
     test('undoRemove does not clear a newer concurrent undo target', () async {
       final blockingRepo = _BlockingUpsertRepo();
       final blockingController = NotesController(blockingRepo);
