@@ -172,6 +172,54 @@ void main() {
       expect(plainText.trim(), equals(''));
     });
 
+    test('plainText keeps headings and code blocks as readable text', () {
+      final doc = Document.fromJson([
+        {
+          'insert': 'Groceries\n',
+          'attributes': {'header': 1}
+        },
+        {'insert': 'Milk, eggs\n'},
+        {
+          'insert': 'print(1)\n',
+          'attributes': {'code-block': true}
+        },
+        {
+          'insert': 'print(2)\n',
+          'attributes': {'code-block': true}
+        },
+      ]);
+      final headingNote = note.copyWith(
+        content: Note.documentToContent(doc),
+      );
+
+      // Headings lose their marker, code block lines keep their own newlines.
+      expect(
+        headingNote.plainText,
+        'Groceries\nMilk, eggs\nprint(1)\nprint(2)\n',
+      );
+      expect(headingNote.plainText.contains('#'), isFalse);
+    });
+
+    test('plainText keeps each heading level as plain text', () {
+      final doc = Document.fromJson([
+        {
+          'insert': 'One\n',
+          'attributes': {'header': 1}
+        },
+        {
+          'insert': 'Two\n',
+          'attributes': {'header': 2}
+        },
+        {
+          'insert': 'Three\n',
+          'attributes': {'header': 3}
+        },
+      ]);
+      final headingNote = note.copyWith(content: Note.documentToContent(doc));
+
+      expect(headingNote.plainText, 'One\nTwo\nThree\n');
+    });
+
     test('documentToContent creates valid JSON string', () {
       final doc = Document();
       final content = Note.documentToContent(doc);
